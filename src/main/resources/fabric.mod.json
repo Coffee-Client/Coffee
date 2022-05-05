@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "coffee",
+  "version": "${version}",
+  "name": "Coffee client",
+  "description": "Very based utility mod",
+  "authors": [
+    "0x150"
+  ],
+  "contributors": [],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/coffee/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "cf.coffee.client.CoffeeMain"
+    ],
+    "client": [],
+    "server": []
+  },
+  "mixins": [
+    "coffee.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.12.12"
+  }
+}

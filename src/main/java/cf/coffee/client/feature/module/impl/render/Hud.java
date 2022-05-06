@@ -192,8 +192,8 @@ public class Hud extends Module {
         }
         double pad = 2;
 
-        double originalIconWidth = 782;
-        double originalIconHeight = 1000;
+        double originalIconWidth = 1024;
+        double originalIconHeight = 1024;
 
         double newWidth = 16;
         double delta = newWidth / originalIconWidth;

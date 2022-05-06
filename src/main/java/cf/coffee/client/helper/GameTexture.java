@@ -7,28 +7,24 @@ package cf.coffee.client.helper;
 import lombok.Getter;
 
 public enum GameTexture {
-    TEXTURE_ICON(new Texture("tex/icon"), "https://gitlab.com/0x151/coffee-fs/-/raw/main/icon.png"),
-    TEXTURE_BACKGROUND(new Texture("tex/background"), "https://gitlab.com/0x151/coffee-fs/-/raw/main/background.jpg?inline=false"),
-    TEXTURE_LOGO(new Texture("tex/logo"), "https://gitlab.com/0x151/coffee-fs/-/raw/main/shadow_logo.png"),
-    TEXTURE_ICON_FULL(new Texture("tex/iconFull"), "https://gitlab.com/0x151/coffee-fs/-/raw/main/shadowLogoFull.png?inline=false"),
+    TEXTURE_ICON(new Texture("tex/icon"), "https://github.com/Coffee-Client/Resources/raw/master/icon.png"),
+    TEXTURE_BACKGROUND(new Texture("tex/background"), "https://github.com/Coffee-Client/Resources/raw/master/background.png"),
 
-    NOTIF_ERROR(new Texture("notif/error"), "https://gitlab.com/0x151/coffee-fs/-/raw/main/error.png"),
-    NOTIF_INFO(new Texture("notif/info"), "https://gitlab.com/0x151/coffee-fs/-/raw/main/info.png"),
-    NOTIF_SUCCESS(new Texture("notif/success"), "https://gitlab.com/0x151/coffee-fs/-/raw/main/success.png"),
-    NOTIF_WARNING(new Texture("notif/warning"), "https://gitlab.com/0x151/coffee-fs/-/raw/main/warning.png"),
+    NOTIF_ERROR(new Texture("notif/error"), "https://github.com/Coffee-Client/Resources/raw/master/error.png"),
+    NOTIF_INFO(new Texture("notif/info"), "https://github.com/Coffee-Client/Resources/raw/master/info.png"),
+    NOTIF_SUCCESS(new Texture("notif/success"), "https://github.com/Coffee-Client/Resources/raw/master/success.png"),
+    NOTIF_WARNING(new Texture("notif/warning"), "https://github.com/Coffee-Client/Resources/raw/master/warning.png"),
 
-    ICONS_RENDER(new Texture("icons/render"), "https://gitlab.com/0x151/coffee-fs/-/raw/main/render.png"),
-    ICONS_CRASH(new Texture("icons/crash"), "https://gitlab.com/0x151/coffee-fs/-/raw/main/crash.png"),
-    ICONS_GRIEF(new Texture("icons/grief"), "https://github.com/Saturn5Vfive/shadow-fs/blob/main/grief.png?raw=true"),
-    ICONS_ADDON_PROVIDED(new Texture("icons/item"), "https://gitlab.com/0x151/coffee-fs/-/raw/main/addons.png"),
-    ICONS_MOVE(new Texture("icons/move"), "https://gitlab.com/0x151/coffee-fs/-/raw/main/movement.png"),
-    ICONS_MISC(new Texture("icons/misc"), "https://gitlab.com/0x151/coffee-fs/-/raw/main/misc.png"),
-    ICONS_WORLD(new Texture("icons/world"), "https://gitlab.com/0x151/coffee-fs/-/raw/main/world.png"),
-    ICONS_EXPLOIT(new Texture("icons/exploit"), "https://gitlab.com/0x151/coffee-fs/-/raw/main/exploit.png"),
-    ICONS_COMBAT(new Texture("icons/combat"), "https://gitlab.com/0x151/coffee-fs/-/raw/main/combat.png"),
+    ICONS_RENDER(new Texture("icons/render"), "https://github.com/Coffee-Client/Resources/raw/master/render.png"),
+    ICONS_ADDON_PROVIDED(new Texture("icons/item"), "https://github.com/Coffee-Client/Resources/raw/master/addons.png"),
+    ICONS_MOVE(new Texture("icons/move"), "https://github.com/Coffee-Client/Resources/raw/master/movement.png"),
+    ICONS_MISC(new Texture("icons/misc"), "https://github.com/Coffee-Client/Resources/raw/master/misc.png"),
+    ICONS_WORLD(new Texture("icons/world"), "https://github.com/Coffee-Client/Resources/raw/master/world.png"),
+    ICONS_EXPLOIT(new Texture("icons/exploit"), "https://github.com/Coffee-Client/Resources/raw/master/exploit.png"),
+    ICONS_COMBAT(new Texture("icons/combat"), "https://github.com/Coffee-Client/Resources/raw/master/combat.png"),
 
-    ACTION_RUNCOMMAND(new Texture("actions/runCommand"), "https://gitlab.com/0x151/coffee-fs/-/raw/main/command.png"),
-    ACTION_TOGGLEMODULE(new Texture("actions/toggleModule"), "https://gitlab.com/0x151/coffee-fs/-/raw/main/toggle.png");
+    ACTION_RUNCOMMAND(new Texture("actions/runCommand"), "https://github.com/Coffee-Client/Resources/raw/master/command.png"),
+    ACTION_TOGGLEMODULE(new Texture("actions/toggleModule"), "https://github.com/Coffee-Client/Resources/raw/master/toggle.png");
     @Getter
     final String downloadUrl;
     @Getter

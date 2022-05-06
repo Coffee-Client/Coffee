@@ -61,7 +61,7 @@ public class DiscordRPC extends Module {
         rp.setDetails(details.getValue());
         rp.setState(state.getValue());
         rp.setLargeImage("icon", "discord.gg/moles");
-        rp.setSmallImage("icon", "0x150 the 2nd#8918, saturn5Vfive#6767");
+        rp.setSmallImage("icon", "0x150#8918");
         rp.setStart(startTime);
         DiscordIPC.setActivity(rp);
     }
@@ -78,7 +78,7 @@ public class DiscordRPC extends Module {
         startTime = Instant.now().getEpochSecond();
         Notification.create(3000, "Discord RPC", Notification.Type.INFO, "Attempting to connect...");
         offThreadExec.execute(() -> {
-            boolean result = DiscordIPC.start(958479347390500874L, this::applyRpc);
+            boolean result = DiscordIPC.start(971849283911434271L, this::applyRpc);
             if (!result) {
                 Notification.create(5000, "Discord RPC", Notification.Type.ERROR, "Discord isn't open! Open discord and enable the module again.");
                 setEnabled(false);

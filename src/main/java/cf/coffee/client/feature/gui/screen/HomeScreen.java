@@ -106,23 +106,14 @@ public class HomeScreen extends ClientScreen {
         buttonsMap.add(new AbstractMap.SimpleEntry<>("Settings", () -> CoffeeMain.client.setScreen(new OptionsScreen(this, CoffeeMain.client.options))));
         buttonsMap.add(new AbstractMap.SimpleEntry<>("Quit", CoffeeMain.client::scheduleStop));
         //        buttonsMap.add(new AbstractMap.SimpleEntry<>("reinit", this::init));
-        double rowWidth = 150;
-        double rowHeight = 30;
-        double padding = 5;
-        int entriesPerRow = 2;
-        double rootX = width / 2d;
-        double rootY = height / 2d;
-        List<List<Map.Entry<String, Runnable>>> part = Lists.partition(buttonsMap, entriesPerRow);
-        for (int ii = 0; ii < part.size(); ii++) {
-            double currentY = ii * (rowHeight + padding);
-            List<Map.Entry<String, Runnable>> entries = part.get(ii);
-            double oneButtonWidth = (rowWidth - padding) / entries.size();
-            for (int i = 0; i < entries.size(); i++) {
-                Map.Entry<String, Runnable> e = entries.get(i);
-                double currentX = i * oneButtonWidth + i * padding;
-                RoundButton btn = new RoundButton(RoundButton.STANDARD, rootX - rowWidth / 2d + currentX, rootY + currentY, oneButtonWidth, rowHeight, e.getKey(), e.getValue());
-                addDrawableChild(btn);
-            }
+        double w = 60;
+        double rootX = padding*2+20+padding;
+        double rootY = this.height-padding*2-20;
+
+        for (Map.Entry<String, Runnable> stringRunnableEntry : buttonsMap) {
+            RoundButton rb = new RoundButton(RoundButton.STANDARD, rootX, rootY, w, 20, stringRunnableEntry.getKey(), stringRunnableEntry.getValue());
+            addDrawableChild(rb);
+            rootX += w+5;
         }
     }
 
@@ -171,13 +162,20 @@ public class HomeScreen extends ClientScreen {
             yoff += FontRenderers.getRenderer().getMarginHeight();
         }
 
-        double originalWidth = 2888;
-        double originalHeight = 1000;
-        double newWidth = 150;
-        double per = newWidth / originalWidth;
-        double newHeight = originalHeight * per;
-        RenderSystem.setShaderTexture(0, GameTexture.TEXTURE_LOGO.getWhere());
-        Renderer.R2D.renderTexture(stack, width / 2d - newWidth / 2d, height / 2d - newHeight - padding, newWidth, newHeight, 0, 0, newWidth, newHeight, newWidth, newHeight);
+        //double originalWidth = 2888;
+        //double originalHeight = 1000;
+        //double newWidth = 150;
+        //double per = newWidth / originalWidth;
+        //double newHeight = originalHeight * per;
+        //RenderSystem.setShaderTexture(0, GameTexture.TEXTURE_LOGO.getWhere());
+        //Renderer.R2D.renderTexture(stack, width / 2d - newWidth / 2d, height / 2d - newHeight - padding, newWidth, newHeight, 0, 0, newWidth, newHeight, newWidth, newHeight);
+        double origW = 1024, origH = 1024;
+        double newH = 20;
+        double per = newH/origH;
+        double newW = origW*per;
+        Renderer.R2D.renderRoundedQuadWithShadow(stack,new Color(0,0,10,200),padding,height-padding-padding-20-padding,width-padding,height-padding,10,20);
+        RenderSystem.setShaderTexture(0, GameTexture.TEXTURE_ICON.getWhere());
+        Renderer.R2D.renderTexture(stack,padding*2,height-padding*2-newH,newW,newH,0,0,newW,newH,newW,newH);
         super.renderInternal(stack, mouseX, mouseY, delta); // render bottom row widgets
 
         double texDim = 20;

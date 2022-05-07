@@ -53,7 +53,7 @@ public class RoundButton implements Element, Drawable, Selectable, FastTickable,
 
     @Override
     public boolean shouldApplyCustomCursor() {
-        return isHovered;
+        return isHovered && isVisible();
     }
 
     public void setText(String text) {

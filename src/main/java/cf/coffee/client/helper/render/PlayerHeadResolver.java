@@ -35,7 +35,7 @@ public class PlayerHeadResolver {
         imageCache.put(uuid, EMPTY);
         CoffeeMain.client.execute(() -> CoffeeMain.client.getTextureManager().registerTexture(texture, EMPTY));
         URI u = URI.create("https://mc-heads.net/avatar/" + uuid);
-        HttpRequest hr = HttpRequest.newBuilder().uri(u).header("user-agent", "shadow/1.0").build();
+        HttpRequest hr = HttpRequest.newBuilder().uri(u).header("user-agent", "coffee/1.0").build();
         System.out.println("getting " + uuid.toString());
         client.sendAsync(hr, HttpResponse.BodyHandlers.ofByteArray()).thenAccept(httpResponse -> {
             try {

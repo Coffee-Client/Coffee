@@ -75,7 +75,7 @@ public class NameTags extends Module {
         float width = nameDrawer.getStringWidth(text) + 4;
         width = Math.max(width, 60);
 
-        Renderer.R2D.renderRoundedQuad(stack1, new Color(0, 0, 5, 200), actual.x - width / 2d, actual.y, actual.x + width / 2d, actual.y + labelHeight, 3, 20);
+        Renderer.R2D.renderRoundedQuad(stack1, new Color(0, 0, 5, 100), actual.x - width / 2d, actual.y, actual.x + width / 2d, actual.y + labelHeight, 3, 20);
         nameDrawer.drawString(stack1, text, actual.x + width / 2d - nameDrawer.getStringWidth(text) - 2, actual.y + 2, 0xFFFFFF);
 
         infoDrawer.drawString(stack1, gmString, actual.x + width / 2d - infoDrawer.getStringWidth(gmString) - 2, actual.y + 2 + nameDrawer.getFontHeight(), 0xAAAAAA);

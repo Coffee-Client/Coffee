@@ -14,7 +14,6 @@ import cf.coffee.client.helper.font.adapter.FontAdapter;
 import cf.coffee.client.helper.render.MSAAFramebuffer;
 import cf.coffee.client.helper.render.PlayerHeadResolver;
 import cf.coffee.client.helper.render.Renderer;
-import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
@@ -107,13 +106,13 @@ public class HomeScreen extends ClientScreen {
         buttonsMap.add(new AbstractMap.SimpleEntry<>("Quit", CoffeeMain.client::scheduleStop));
         //        buttonsMap.add(new AbstractMap.SimpleEntry<>("reinit", this::init));
         double w = 60;
-        double rootX = padding*2+20+padding;
-        double rootY = this.height-padding*2-20;
+        double rootX = padding * 2 + 20 + padding;
+        double rootY = this.height - padding * 2 - 20;
 
         for (Map.Entry<String, Runnable> stringRunnableEntry : buttonsMap) {
             RoundButton rb = new RoundButton(RoundButton.STANDARD, rootX, rootY, w, 20, stringRunnableEntry.getKey(), stringRunnableEntry.getValue());
             addDrawableChild(rb);
-            rootX += w+5;
+            rootX += w + 5;
         }
     }
 
@@ -171,11 +170,11 @@ public class HomeScreen extends ClientScreen {
         //Renderer.R2D.renderTexture(stack, width / 2d - newWidth / 2d, height / 2d - newHeight - padding, newWidth, newHeight, 0, 0, newWidth, newHeight, newWidth, newHeight);
         double origW = 1024, origH = 1024;
         double newH = 20;
-        double per = newH/origH;
-        double newW = origW*per;
-        Renderer.R2D.renderRoundedQuadWithShadow(stack,new Color(0,0,10,200),padding,height-padding-padding-20-padding,width-padding,height-padding,10,20);
+        double per = newH / origH;
+        double newW = origW * per;
+        Renderer.R2D.renderRoundedQuadWithShadow(stack, new Color(0, 0, 10, 200), padding, height - padding - padding - 20 - padding, width - padding, height - padding, 10, 20);
         RenderSystem.setShaderTexture(0, GameTexture.TEXTURE_ICON.getWhere());
-        Renderer.R2D.renderTexture(stack,padding*2,height-padding*2-newH,newW,newH,0,0,newW,newH,newW,newH);
+        Renderer.R2D.renderTexture(stack, padding * 2, height - padding * 2 - newH, newW, newH, 0, 0, newW, newH, newW, newH);
         super.renderInternal(stack, mouseX, mouseY, delta); // render bottom row widgets
 
         double texDim = 20;

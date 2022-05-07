@@ -278,8 +278,8 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
     @Override
     public void renderInternal(MatrixStack stack, int mouseX, int mouseY, float delta) {
         Renderer.R2D.renderQuad(stack, bg, 0, 0, width, height);
-        title.drawString(stack, "Shadow", 10, 10, 0xFFFFFF, false);
-        titleSmall.drawString(stack, "Alt manager", 10 + title.getStringWidth("Shadow") + 5, 10 + title.getMarginHeight() - titleSmall.getMarginHeight() - 1, 0xFFFFFF, false);
+        title.drawString(stack, "Coffee", 10, 10, 0xFFFFFF, false);
+        titleSmall.drawString(stack, "Alt manager", 10 + title.getStringWidth("Coffee") + 5, 10 + title.getMarginHeight() - titleSmall.getMarginHeight() - 1, 0xFFFFFF, false);
 
         ClipStack.globalInstance.addWindow(stack, new Rectangle(getPadding() - 5, getHeaderHeight(), getPadding() + (width - (getPadding() + leftWidth + getPadding() * 2)) + 5, height));
         //Renderer.R2D.beginScissor(stack, getPadding(), getHeaderHeight(), getPadding() + (width - (getPadding() + leftWidth + getPadding() * 2)), height);
@@ -289,7 +289,12 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
         double x = getPadding();
         double y = getHeaderHeight();
         double wid = width - (getPadding() + leftWidth + getPadding() * 2);
-        for (AltContainer alt : getAlts()) {
+        List<AltContainer> altList = getAlts();
+        if (altList.isEmpty()) {
+            title.drawCenteredString(stack, "No alts", wid / 2d, height / 2d, 0xAAAAAA);
+            titleSmall.drawCenteredString(stack, "Add some with the \"Add\" button", wid / 2d, height / 2d + title.getMarginHeight(), 0xAAAAAAAA);
+        }
+        for (AltContainer alt : altList) {
             alt.x = x;
             alt.y = y;
             alt.width = wid;
@@ -356,6 +361,8 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
                 prop.cfr.drawString(stack, prop.name, (float) (fromX + padding + texDim + padding), propsOffset, prop.color, false);
                 propsOffset += prop.cfr.getMarginHeight();
             }
+        } else {
+            titleSmall.drawCenteredString(stack, "No alt selected", fromX + (toX - fromX) / 2d, fromY + (toY - fromY) / 2d - titleSmall.getFontHeight() / 2d, 0xAAAAAA);
         }
 
         toY = height - getPadding();
@@ -833,7 +840,7 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
                     storage.valid = true;
                     storage.cachedUuid = UUID.randomUUID();
                     storage.cachedName = storage.email;
-                    storage.accessToken = "shadow";
+                    storage.accessToken = "coffeelmao";
                     return;
                 }
                 if (token == null) {

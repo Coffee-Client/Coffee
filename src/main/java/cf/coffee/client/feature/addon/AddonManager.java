@@ -120,10 +120,10 @@ public class AddonManager {
                 CoffeeMain.log(Level.INFO, "(Some additional information about the error: ERR:CLASS_MISSING, class " + noClassDefFoundError.getMessage() + " not found)");
             }
             if (e instanceof IncompatibleClassChangeError) {
-                CoffeeMain.log(Level.INFO, "This error either occurs because the addon is heavily obfuscated and the obfuscator is bad, or because the addon is built on an outdated shadow SDK. Please report this error to the addon developer(s).");
+                CoffeeMain.log(Level.INFO, "This error either occurs because the addon is heavily obfuscated and the obfuscator is bad, or because the addon is built on an outdated coffee SDK. Please report this error to the addon developer(s).");
             }
             if (e instanceof ClassCastException) {
-                CoffeeMain.log(Level.INFO, "This error probably occurs because of an outdated shadow SDK. Please report this error to the addon developer(s).");
+                CoffeeMain.log(Level.INFO, "This error probably occurs because of an outdated coffee SDK. Please report this error to the addon developer(s).");
             }
         }
         return null;

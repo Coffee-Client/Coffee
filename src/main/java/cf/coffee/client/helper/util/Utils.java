@@ -211,8 +211,6 @@ public class Utils {
 
     public static class Players {
 
-        static final HttpClient client = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(10)).build();
-
         public static boolean isPlayerNameValid(String name) {
             if (name.length() < 3 || name.length() > 16) {
                 return false;

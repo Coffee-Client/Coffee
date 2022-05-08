@@ -62,7 +62,6 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
             // This file contains sensitive information about your accounts
             // Unless you REALLY KNOW WHAT YOU ARE DOING, DO NOT SEND THIS TO ANYONE
             """;
-    static final HttpClient downloader = HttpClient.newHttpClient();
     static final Color bg = new Color(20, 20, 20);
     static final Color pillColor = new Color(40, 40, 40, 100);
     static final Color widgetColor = new Color(40, 40, 40);
@@ -796,7 +795,6 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
     public class AltContainer {
         final AltStorage storage;
         Texture tex;
-        boolean texLoaded = false;
         float animProgress = 0;
         boolean isHovered = false;
         double x, y, width, renderX, renderY;

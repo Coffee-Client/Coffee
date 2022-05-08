@@ -57,11 +57,6 @@ public class GameRendererMixin {
             Events.fireEvent(EventType.WORLD_RENDER, new WorldRenderEvent(matrix));
             Renderer.R3D.renderFadingBlocks(matrix);
         });
-        for (Module module : ModuleRegistry.getModules()) {
-            if (module.isEnabled()) {
-                module.onWorldRenderNoMSAA(matrix);
-            }
-        }
     }
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;render(Lnet/minecraft/client/util/math/MatrixStack;IIF)V"))

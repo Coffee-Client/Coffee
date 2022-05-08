@@ -39,7 +39,6 @@ public class Flight extends Module {
     final DoubleSetting speed = this.config.create(new DoubleSetting.Builder(1).name("Speed").description("How fast you fly").min(0).max(10).get());
     final List<Packet<?>> queue = new ArrayList<>();
     final Timer lag = new Timer();
-    boolean capturePackets = false;
     int bypassTimer = 0;
     boolean flewBefore = false;
 

@@ -27,7 +27,6 @@ public class NotificationRenderer {
     public static final List<Notification> notifications = new ArrayList<>();
     public static final List<Notification> topBarNotifications = new ArrayList<>();
     static final Color topBg = new Color(28, 28, 28, 200);
-    static final Color rightBg = new Color(28, 28, 28);
 
     public static void render() {
         renderSide();

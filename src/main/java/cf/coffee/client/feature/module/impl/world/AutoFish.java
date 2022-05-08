@@ -24,7 +24,6 @@ import java.util.Random;
 public class AutoFish extends Module {
     static int delay = 0;
     final DoubleSetting lazytime = this.config.create(new DoubleSetting.Builder(1).min(1).max(40).name("Random").description("the randomness added to fishing times").get());
-    boolean enabled = false;
 
     public AutoFish() {
         super("AutoFish", "Automatically catches fish for you", ModuleType.WORLD);
@@ -67,12 +66,10 @@ public class AutoFish extends Module {
 
     @Override
     public void enable() {
-        enabled = true;
     }
 
     @Override
     public void disable() {
-        enabled = false;
     }
 
     @Override

@@ -124,7 +124,7 @@ public class CoffeeMain implements ModInitializer {
 
     public void postWindowInit() {
         initFonts();
-        ConfigManager.loadState();
+        //ConfigManager.loadState();
         MODULE_FTTICKER = new Thread(() -> {
             while (true) {
                 Utils.sleep(10);

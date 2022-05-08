@@ -32,11 +32,6 @@ public class MinecraftClientMixin {
     @Shadow
     private int itemUseCooldown;
 
-    @Mutable
-    @Shadow
-    @Final
-    private Session session;
-
     @Inject(method = "stop", at = @At("HEAD"))
     void real(CallbackInfo ci) {
         ConfigManager.saveState();

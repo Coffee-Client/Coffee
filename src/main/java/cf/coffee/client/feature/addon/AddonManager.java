@@ -129,13 +129,6 @@ public class AddonManager {
         return null;
     }
 
-    public void reload() {
-        dispatchReload();
-        dispatchDisable();
-        loadedAddons.clear();
-        initializeAddons();
-    }
-
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public void discoverNewAddons() {
         for (File file : Objects.requireNonNull(ADDON_DIRECTORY.listFiles())) {
@@ -190,12 +183,6 @@ public class AddonManager {
         }
     }
 
-    void dispatchReload() {
-        for (AddonEntry loadedAddon : loadedAddons) {
-            loadedAddon.registeredAddon.reloaded();
-        }
-    }
-
     public void disableAddon(Addon addon) {
         if (!addon.isEnabled()) throw new IllegalStateException("Addon already disabled");
         addon.onDisable();
@@ -216,13 +203,6 @@ public class AddonManager {
             CoffeeMain.log(Level.INFO, "Loading command " + customCommand.getName() + " from addon " + addon.name);
             CommandRegistry.registerCustomCommand(addon, customCommand);
         }
-    }
-
-    void dispatchDisable() {
-        for (AddonEntry loadedAddon : loadedAddons) {
-            disableAddon(loadedAddon.registeredAddon);
-        }
-        ClickGUI.reInit();
     }
 
     void dispatchEnable() {

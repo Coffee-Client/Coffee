@@ -113,7 +113,6 @@ public class AddonManagerScreen extends ClientScreen implements FastTickable {
         final Addon addon;
         final double width;
         final RoundButton reload;
-        double lastX, lastY;
         RoundButton disable;
 
         public AddonViewer(Addon addon, double width) {
@@ -133,8 +132,6 @@ public class AddonManagerScreen extends ClientScreen implements FastTickable {
         }
 
         public void render(MatrixStack stack, double x, double y, int mouseX, int mouseY) {
-            lastX = x;
-            lastY = y;
 
             Color background = new Color(30, 30, 30);
             Renderer.R2D.renderRoundedQuad(stack, background, x, y, x + width, y + getHeight(), 5, 20);

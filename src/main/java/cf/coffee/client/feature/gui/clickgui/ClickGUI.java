@@ -197,7 +197,6 @@ public class ClickGUI extends Screen implements FastTickable {
     }
 
     void renderIntern(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        int mouseY1 = mouseY;
         double wid = width / 2d;
         double hei = height / 2d;
         FontAdapter bigAssFr = FontRenderers.getCustomSize(70);
@@ -222,18 +221,11 @@ public class ClickGUI extends Screen implements FastTickable {
         List<Element> rev = new ArrayList<>(elements);
         Collections.reverse(rev);
         for (Element element : rev) {
-        //    int hashCode = element.hashCode();
-        //    double rad = Math.toRadians(hashCode%360);
-        //    double sin = Math.sin(rad)*(1-intp)*width;
-        //    double cos = Math.cos(rad)*(1-intp)*height;
-        //    matrices.push();
-            //matrices.multiply(new Quaternion((float) (intp*360f),0f, 0,true));
-            //matrices.translate(sin,cos,0);
-            element.render(matrices, mouseX, mouseY1, trackedScroll);
+            element.render(matrices, mouseX, mouseY, trackedScroll);
             //matrices.pop();
         }
         matrices.pop();
-        super.render(matrices, mouseX, mouseY1, delta);
+        super.render(matrices, mouseX, mouseY, delta);
         if (desc != null) {
 
             //            double width = FontRenderers.getNormal().getStringWidth(desc);

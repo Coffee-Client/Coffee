@@ -41,7 +41,6 @@ import java.util.UUID;
 public class HomeScreen extends ClientScreen {
     static final double padding = 6;
     static final Texture background = GameTexture.TEXTURE_BACKGROUND.getWhere();
-    static final HttpClient downloader = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(3)).build();
     static boolean isDev = false;
     static String version = "unknown";
     static String changelog = "";
@@ -161,13 +160,6 @@ public class HomeScreen extends ClientScreen {
             yoff += FontRenderers.getRenderer().getMarginHeight();
         }
 
-        //double originalWidth = 2888;
-        //double originalHeight = 1000;
-        //double newWidth = 150;
-        //double per = newWidth / originalWidth;
-        //double newHeight = originalHeight * per;
-        //RenderSystem.setShaderTexture(0, GameTexture.TEXTURE_LOGO.getWhere());
-        //Renderer.R2D.renderTexture(stack, width / 2d - newWidth / 2d, height / 2d - newHeight - padding, newWidth, newHeight, 0, 0, newWidth, newHeight, newWidth, newHeight);
         double origW = 1024, origH = 1024;
         double newH = 20;
         double per = newH / origH;

@@ -7,8 +7,8 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 public class AnnotationParser {
-    Object inst;
-    ModuleConfig config;
+    final Object inst;
+    final ModuleConfig config;
     public AnnotationParser(Object instance, ModuleConfig mc) {
         this.inst = instance;
         this.config = mc;
@@ -24,8 +24,8 @@ public class AnnotationParser {
             }
             if (annotation == null) continue;
             declaredField.setAccessible(true);
-            //Object defaultValue = declaredField.get(inst);
-            //if (defaultValue == null) throw new NullPointerException("Field annotated with @Setting needs a value as default");
+            Object defaultValue = declaredField.get(inst);
+            if (defaultValue == null) throw new NullPointerException("Field annotated with @Setting needs a value as default");
             SettingType typeToParse = null;
             for (SettingType value : SettingType.values()) {
                 if (value.getAcceptedType() == declaredField.getType()) {

@@ -18,12 +18,14 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(SignEditScreen.class)
-public class SignEditScreenMixin extends Screen {
+public abstract class SignEditScreenMixin extends Screen {
 
     @Mutable
     @Shadow
     @Final
     private String[] text;
+
+    @Shadow protected abstract void finishEditing();
 
     protected SignEditScreenMixin(Text title) {
         super(title);
@@ -35,10 +37,5 @@ public class SignEditScreenMixin extends Screen {
             text = ModuleRegistry.getByClass(AutoSign.class).getText();
             finishEditing();
         }
-    }
-
-    @Shadow
-    private void finishEditing() {
-
     }
 }

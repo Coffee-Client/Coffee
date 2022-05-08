@@ -16,7 +16,6 @@ public class BooleanSettingEditor extends ConfigBase<BooleanSetting> {
     final double rw = 12;
     final double rh = 2;
     final double rid = 4;
-    final double margin = .5;
     double animProgress = 0;
 
     public BooleanSettingEditor(double x, double y, double width, BooleanSetting configValue) {

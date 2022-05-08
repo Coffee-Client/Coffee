@@ -32,8 +32,6 @@ public class AddonClassLoader extends URLClassLoader {
     @Override
     public URL findResource(String name) {
         CoffeeMain.log(Level.DEBUG, "Finding texture "+name);
-        //System.out.println(resourceMap);
-        //System.out.println("find resource " + name);
         if (resourceMap.containsKey(name)) return resourceMap.get(name);
         return super.findResource(name);
     }

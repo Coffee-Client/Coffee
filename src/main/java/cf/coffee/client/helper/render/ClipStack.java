@@ -87,17 +87,6 @@ public class ClipStack {
         }
     }
 
-    public void renderOutsideClipStack(Runnable e) {
-        if (clipStack.empty()) {
-            e.run();
-        } else {
-            Renderer.R2D.endScissor();
-            e.run();
-            Rectangle r = clipStack.peek().rect;
-            Renderer.R2D.beginScissor(r.getX(), r.getY(), r.getX1(), r.getY1());
-        }
-    }
-
     record TransformationEntry(Rectangle rect, MatrixStack.Entry transformationEntry) {
     }
 }

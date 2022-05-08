@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.lang.reflect.Field;
 
+@SuppressWarnings("unchecked")
 @RequiredArgsConstructor
 public enum SettingType {
     STRING(String.class, (setting, inputField, defaultValue) -> new StringSetting.Builder((String) inputField.get(defaultValue))),
@@ -29,7 +30,7 @@ public enum SettingType {
                 .precision(0);
     }),
     BOOLEAN(boolean.class, (setting, inputField, defaultValue) -> new BooleanSetting.Builder(inputField.getBoolean(defaultValue))),
-    ENUM(Enum.class, (setting, inputField, defaultValue) -> new EnumSetting.Builder((Enum<?>) inputField.get(defaultValue)));
+    @SuppressWarnings("rawtypes") ENUM(Enum.class, (setting, inputField, defaultValue) -> new EnumSetting.Builder((Enum<?>) inputField.get(defaultValue)));
     @Getter
     final Class<?> acceptedType;
     @Getter

@@ -113,11 +113,6 @@ public class Hud extends Module {
     }
 
     @Override
-    public void onHudRenderNoMSAA() {
-
-    }
-
-    @Override
     public void onHudRender() {
         if (CoffeeMain.client.getNetworkHandler() == null) {
             return;

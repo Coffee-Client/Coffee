@@ -38,7 +38,6 @@
     "IMinecraftClientAccessor",
     "IPlayerMoveC2SPacketAccessor",
     "IRenderTickCounterAccessor",
-    "ISliderWidgetAccessor",
     "ItemStackMixin",
     "KeyboardMixin",
     "LivingEntityMixin",

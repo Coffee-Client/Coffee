@@ -163,7 +163,7 @@ public class ConfigManager {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 

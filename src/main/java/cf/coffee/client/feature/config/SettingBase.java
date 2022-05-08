@@ -146,7 +146,7 @@ public abstract class SettingBase<V> {
         /**
          * Event listener when the value changed
          */
-        List<Consumer<V>> changed = new ArrayList<>();
+        final List<Consumer<V>> changed = new ArrayList<>();
 
         /**
          * Constructs a new builder

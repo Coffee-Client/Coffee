@@ -8,6 +8,7 @@ import cf.coffee.client.CoffeeMain;
 import cf.coffee.client.helper.Texture;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.texture.NativeImageBackedTexture;
+import org.apache.logging.log4j.Level;
 import org.lwjgl.BufferUtils;
 
 import javax.imageio.ImageIO;
@@ -36,7 +37,8 @@ public class PlayerHeadResolver {
         CoffeeMain.client.execute(() -> CoffeeMain.client.getTextureManager().registerTexture(texture, EMPTY));
         URI u = URI.create("https://mc-heads.net/avatar/" + uuid);
         HttpRequest hr = HttpRequest.newBuilder().uri(u).header("user-agent", "coffee/1.0").build();
-        System.out.println("getting " + uuid.toString());
+        CoffeeMain.log(Level.DEBUG, "Getting player head for",uuid);
+        //System.out.println("getting " + uuid.toString());
         client.sendAsync(hr, HttpResponse.BodyHandlers.ofByteArray()).thenAccept(httpResponse -> {
             try {
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();

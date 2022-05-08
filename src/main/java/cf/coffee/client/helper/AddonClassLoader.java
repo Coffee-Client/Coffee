@@ -24,14 +24,14 @@ public class AddonClassLoader extends URLClassLoader {
     }
 
     public void defineResource(String name, URL location) {
-        CoffeeMain.log(Level.DEBUG, "Registering texture "+name+" to URL "+location.toString());
+        CoffeeMain.log(Level.DEBUG, "Registering texture " + name + " to URL " + location.toString());
         //System.out.println("register " + name + " with " + location.toString());
         resourceMap.put(name, location);
     }
 
     @Override
     public URL findResource(String name) {
-        CoffeeMain.log(Level.DEBUG, "Finding texture "+name);
+        CoffeeMain.log(Level.DEBUG, "Finding texture " + name);
         if (resourceMap.containsKey(name)) return resourceMap.get(name);
         return super.findResource(name);
     }

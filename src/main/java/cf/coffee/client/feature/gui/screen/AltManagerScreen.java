@@ -41,7 +41,6 @@ import org.lwjgl.opengl.GL40C;
 
 import java.awt.Color;
 import java.io.File;
-import java.net.http.HttpClient;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;

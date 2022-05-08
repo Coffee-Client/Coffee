@@ -79,7 +79,6 @@ public abstract class Module {
     }
 
 
-
     public abstract void tick();
 
     public abstract void enable();

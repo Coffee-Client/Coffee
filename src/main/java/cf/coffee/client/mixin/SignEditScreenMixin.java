@@ -25,11 +25,12 @@ public abstract class SignEditScreenMixin extends Screen {
     @Final
     private String[] text;
 
-    @Shadow protected abstract void finishEditing();
-
     protected SignEditScreenMixin(Text title) {
         super(title);
     }
+
+    @Shadow
+    protected abstract void finishEditing();
 
     @Inject(at = { @At("HEAD") }, method = { "init()V" })
     private void onInit(CallbackInfo ci) {

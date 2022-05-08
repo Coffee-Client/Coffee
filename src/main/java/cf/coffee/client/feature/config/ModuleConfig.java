@@ -4,12 +4,8 @@
 
 package cf.coffee.client.feature.config;
 
-import ca.weblite.objc.Runtime;
 import cf.coffee.client.feature.config.annotation.AnnotationParser;
-import cf.coffee.client.feature.config.annotation.Setting;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 

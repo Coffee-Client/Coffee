@@ -24,7 +24,7 @@ public class Test extends Module {
     static final Block searchTerm = Blocks.NETHER_PORTAL;
     final CopyOnWriteArrayList<BlockPos> discovered = new CopyOnWriteArrayList<>();
 
-    @Setting(name="Test1",description = "among us",min = 0,max = 69,precision = 1)
+    @Setting(name = "Test1", description = "among us", min = 0, max = 69, precision = 1)
     double testSetting = 6d;
 
     public Test() {

@@ -303,7 +303,7 @@ public class ModuleRegistry {
         for (Module module : getModules()) {
             module.postModuleInit();
         }
-        CoffeeMain.log(Level.INFO, "Initialized modules. Vanilla modules:",vanillaModules.size(),"Addon modules:",customModules.size());
+        CoffeeMain.log(Level.INFO, "Initialized modules. Vanilla modules:", vanillaModules.size(), "Addon modules:", customModules.size());
     }
 
     public static List<Module> getModules() {

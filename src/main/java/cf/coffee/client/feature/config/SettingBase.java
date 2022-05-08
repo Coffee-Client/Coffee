@@ -136,6 +136,10 @@ public abstract class SettingBase<V> {
     @SuppressWarnings("unchecked")
     public abstract static class Builder<B extends Builder<?, ?, ?>, V, S extends SettingBase<?>> {
         /**
+         * Event listener when the value changed
+         */
+        final List<Consumer<V>> changed = new ArrayList<>();
+        /**
          * Name and description
          */
         String name = "none", description = "";
@@ -143,10 +147,6 @@ public abstract class SettingBase<V> {
          * The default value
          */
         V defaultValue;
-        /**
-         * Event listener when the value changed
-         */
-        final List<Consumer<V>> changed = new ArrayList<>();
 
         /**
          * Constructs a new builder

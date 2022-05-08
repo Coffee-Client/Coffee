@@ -4,7 +4,6 @@
 
 package cf.coffee.client.feature.module.impl.misc;
 
-import cf.coffee.client.CoffeeMain;
 import cf.coffee.client.feature.module.Module;
 import cf.coffee.client.feature.module.ModuleType;
 import cf.coffee.client.helper.event.EventType;

@@ -240,7 +240,7 @@ public class Killaura extends Module {
             if (prio.getValue() == PriorityMode.Distance) {
                 tar = attacks.stream().sorted(Comparator.comparingDouble(value -> value.getPos().distanceTo(Objects.requireNonNull(CoffeeMain.client.player).getPos()))).toList().get(0);
             } else if (prio.getValue() == PriorityMode.Health_ascending || prio.getValue() == PriorityMode.Health_descending) { // almost missed this
-                // getExtern entity with the least health if mode is ascending, else getExtern most health
+                // get entity with the least health if mode is ascending, else get most health
                 tar = attacks.stream().sorted(Comparator.comparingDouble(value -> {
                     if (value instanceof LivingEntity e) {
                         return e.getHealth() * (prio.getValue() == PriorityMode.Health_ascending ? -1 : 1);
@@ -248,7 +248,7 @@ public class Killaura extends Module {
                     return Integer.MAX_VALUE; // not a living entity, discard
                 })).toList().get(0);
             } else if (prio.getValue() == PriorityMode.Angle) {
-                // getExtern entity in front of you (or closest to the front)
+                // get entity in front of you (or closest to the front)
                 tar = attacks.stream().sorted(Comparator.comparingDouble(value -> {
                     Vec3d center = value.getBoundingBox().getCenter();
                     double offX = center.x - CoffeeMain.client.player.getX();

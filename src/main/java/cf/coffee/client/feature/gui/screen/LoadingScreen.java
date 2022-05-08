@@ -72,11 +72,11 @@ public class LoadingScreen extends ClientScreen implements FastTickable {
 
     @Override
     public void onFastTick() {
-        //System.out.println(progressMap.values().stream().map(AtomicDouble::getExtern).reduce(Double::sum)+"-"+CoffeeClientMain.resources.size());
+        //System.out.println(progressMap.values().stream().map(AtomicDouble::get).reduce(Double::sum)+"-"+CoffeeClientMain.resources.size());
         progress.set(progressMap.values().stream().map(progressData -> progressData.getProgress().get()).reduce(Double::sum).orElse(0d) / GameTexture.values().length);
 
         smoothProgress = Transitions.transition(smoothProgress, progress.get(), 10, 0.0001);
-        //        smoothProgress = progress.getExtern();
+        //        smoothProgress = progress.get();
         if (CoffeeMain.client.getOverlay() == null) {
             if (!loadInProg.get()) {
                 load();

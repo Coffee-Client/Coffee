@@ -182,7 +182,7 @@ public class ModuleRegistry {
         if (instance == null) {
             throw new IllegalArgumentException("Failed to make instance of " + moduleClass.getName());
         }
-        CoffeeMain.log(Level.INFO, "Initialized " + instance.getName() + " via " + moduleClass.getName());
+        //CoffeeMain.log(Level.INFO, "Initialized " + instance.getName() + " via " + moduleClass.getName());
         vanillaModules.add(instance);
     }
 
@@ -299,6 +299,11 @@ public class ModuleRegistry {
         registerModule(Radar.class);
 
         rebuildSharedModuleList();
+
+        for (Module module : getModules()) {
+            module.postModuleInit();
+        }
+        CoffeeMain.log(Level.INFO, "Initialized modules. Vanilla modules:",vanillaModules.size(),"Addon modules:",customModules.size());
     }
 
     public static List<Module> getModules() {

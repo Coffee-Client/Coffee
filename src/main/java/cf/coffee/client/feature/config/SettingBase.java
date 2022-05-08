@@ -24,7 +24,7 @@ public abstract class SettingBase<V> {
      */
     final V defaultValue;
     final List<BooleanSupplier> suppliers = new ArrayList<>();
-    final Consumer<V> onChanged;
+    final List<Consumer<V>> onChanged;
     /**
      * The current value of this setting
      */
@@ -37,7 +37,7 @@ public abstract class SettingBase<V> {
      * @param name         The name
      * @param description  The description
      */
-    public SettingBase(V defaultValue, String name, String description, Consumer<V> onChanged) {
+    public SettingBase(V defaultValue, String name, String description, List<Consumer<V>> onChanged) {
         this.name = name;
         this.description = description;
         this.defaultValue = this.value = defaultValue;
@@ -90,7 +90,9 @@ public abstract class SettingBase<V> {
     public void setValue(V value) {
         //        System.out.println("SET "+this.value+" -> "+value);
         this.value = value;
-        if (this.onChanged != null) this.onChanged.accept(value);
+        if (this.onChanged != null) for (Consumer<V> vConsumer : this.onChanged) {
+            vConsumer.accept(value);
+        }
     }
 
     public void reset() {
@@ -144,7 +146,7 @@ public abstract class SettingBase<V> {
         /**
          * Event listener when the value changed
          */
-        Consumer<V> changed;
+        List<Consumer<V>> changed = new ArrayList<>();
 
         /**
          * Constructs a new builder
@@ -195,7 +197,7 @@ public abstract class SettingBase<V> {
          * @return The current builder
          */
         public B onChanged(Consumer<V> changed) {
-            this.changed = changed;
+            this.changed.add(changed);
             return getThis();
         }
 

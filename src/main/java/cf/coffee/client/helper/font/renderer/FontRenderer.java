@@ -174,7 +174,7 @@ public class FontRenderer {
     private double drawChar(BufferBuilder bufferBuilder, Matrix4f matrix, char c, float r, float g, float b, float a) {
         Glyph glyph = glyphMap.get(c);
         if (glyph == null) {
-            //            glyph = glyphMap.get('a');
+            //            glyph = glyphMap.getExtern('a');
             double missingW = 20;
             drawMissing(bufferBuilder, matrix, (float) missingW, getFontHeight() * 4);
             return missingW;

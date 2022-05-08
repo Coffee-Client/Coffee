@@ -4,6 +4,7 @@
 
 package cf.coffee.client.feature.config;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 public class DoubleSetting extends SettingBase<Double> {
@@ -11,7 +12,7 @@ public class DoubleSetting extends SettingBase<Double> {
     final double min;
     final double max;
 
-    public DoubleSetting(Double defaultValue, String name, String description, int precision, double min, double max, Consumer<Double> onChanged) {
+    public DoubleSetting(Double defaultValue, String name, String description, int precision, double min, double max, List<Consumer<Double>> onChanged) {
         super(defaultValue, name, description, onChanged);
         this.precision = precision;
         this.min = min;

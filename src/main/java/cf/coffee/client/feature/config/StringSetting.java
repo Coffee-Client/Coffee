@@ -4,11 +4,12 @@
 
 package cf.coffee.client.feature.config;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 public class StringSetting extends SettingBase<String> {
 
-    public StringSetting(String defaultValue, String name, String description, Consumer<String> onChange) {
+    public StringSetting(String defaultValue, String name, String description, List<Consumer<String>> onChange) {
         super(defaultValue, name, description, onChange);
     }
 

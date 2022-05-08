@@ -4,6 +4,7 @@
 
 package cf.coffee.client.feature.module.impl.misc;
 
+import cf.coffee.client.feature.config.annotation.Setting;
 import cf.coffee.client.feature.module.Module;
 import cf.coffee.client.feature.module.ModuleType;
 import cf.coffee.client.helper.event.EventListener;
@@ -22,6 +23,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class Test extends Module {
     static final Block searchTerm = Blocks.NETHER_PORTAL;
     final CopyOnWriteArrayList<BlockPos> discovered = new CopyOnWriteArrayList<>();
+
+    @Setting(name="Test1",description = "among us",min = 0,max = 69,precision = 1)
+    double testSetting = 6d;
 
     public Test() {
         super("Test", "Testing stuff with the client, can be ignored", ModuleType.MISC);

@@ -4,6 +4,7 @@
 
 package cf.coffee.client.feature.config;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -11,7 +12,7 @@ import java.util.function.Consumer;
  */
 public class BooleanSetting extends SettingBase<Boolean> {
 
-    public BooleanSetting(Boolean defaultValue, String name, String description, Consumer<Boolean> onChanged) {
+    public BooleanSetting(Boolean defaultValue, String name, String description, List<Consumer<Boolean>> onChanged) {
         super(defaultValue, name, description, onChanged);
     }
 

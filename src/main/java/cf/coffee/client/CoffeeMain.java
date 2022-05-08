@@ -31,13 +31,15 @@ import java.awt.FontFormatException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class CoffeeMain implements ModInitializer {
 
     public static final String MOD_NAME = "Coffee";
-    public static final Logger LOGGER = LogManager.getLogger();
+    public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
     public static final MinecraftClient client = MinecraftClient.getInstance();
     public static final File BASE = new File(MinecraftClient.getInstance().runDirectory, "coffee");
     public static long lastScreenChange = System.currentTimeMillis();
@@ -45,16 +47,14 @@ public class CoffeeMain implements ModInitializer {
     public static Thread MODULE_FTTICKER;
     public static Thread FAST_TICKER;
 
-    public static void log(Level level, String message) {
-        LOGGER.log(level, "[" + MOD_NAME + "] " + message);
+    public static void log(Level level, Object... message) {
+        LOGGER.log(level, Arrays.stream(message).map(Object::toString).collect(Collectors.joining(" ")));
     }
 
     @Override
     public void onInitialize() {
         INSTANCE = this;
         log(Level.INFO, "Initializing");
-
-        //Locker.init();
 
         Runtime.getRuntime().addShutdownHook(new Thread(ConfigManager::saveState));
         if (BASE.exists() && !BASE.isDirectory()) {
@@ -67,6 +67,7 @@ public class CoffeeMain implements ModInitializer {
         log(Level.INFO, "Loading addons");
         AddonManager.init();
 
+        log(Level.INFO, "Loading config");
         ConfigManager.loadState();
 
         log(Level.INFO, "Done initializing");

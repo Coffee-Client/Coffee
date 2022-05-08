@@ -11,6 +11,7 @@ import cf.coffee.client.feature.command.coloring.ArgumentType;
 import cf.coffee.client.feature.command.coloring.PossibleArgument;
 import cf.coffee.client.feature.command.exception.CommandException;
 import cf.coffee.client.helper.util.Utils;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.StringNbtReader;
@@ -41,16 +42,16 @@ public class Ban extends Command {
     public void onExecute(String[] args) throws CommandException {
         validateArgumentsLength(args, 1, "Provide ban target's username");
         PlayerFromNameArgumentParser parser = new PlayerFromNameArgumentParser(true);
-        String name = Utils.Players.completeName(args[0]);
-        int[] player = Utils.Players.decodeUUID(parser.parse(name).getUuid());
+        PlayerEntity playerN = parser.parse(args[0]);
+        int[] playerUuid = Utils.Players.decodeUUID(playerN.getUuid());
 
         ItemStack ban = new ItemStack(Items.ARMOR_STAND, 1);
-        message("Created Ban Stand for " + name);
+        message("Created Ban Stand for " + playerN.getGameProfile().getName());
         try {
-            ban.setNbt(StringNbtReader.parse("{EntityTag:{UUID:[I;" + player[0] + "," + player[1] + "," + player[2] + "," + player[3] + "],ArmorItems:[{},{},{},{id:\"minecraft:player_head\",Count:1b,tag:{SkullOwner:\"" + name + "\"}}]}}"));
+            ban.setNbt(StringNbtReader.parse("{EntityTag:{UUID:[I;" + playerUuid[0] + "," + playerUuid[1] + "," + playerUuid[2] + "," + playerUuid[3] + "],ArmorItems:[{},{},{},{id:\"minecraft:player_head\",Count:1b,tag:{SkullOwner:\"" + playerN.getGameProfile().getName() + "\"}}]}}"));
         } catch (Exception ignored) {
         }
-        ban.setCustomName(Text.of(name));
+        ban.setCustomName(Text.of(playerN.getGameProfile().getName()));
         CoffeeMain.client.player.networkHandler.sendPacket(new CreativeInventoryActionC2SPacket(36 + CoffeeMain.client.player.getInventory().selectedSlot, ban));
     }
 }

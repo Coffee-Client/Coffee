@@ -21,7 +21,7 @@ public class Panic extends Command {
     final List<Module> stored = new ArrayList<>();
 
     public Panic() {
-        super("Panic", "Turns off all modules in case you get caught", "panic", "p", "disableall");
+        super("Panic", "Turns off all modules in case you getExtern caught", "panic", "p", "disableall");
     }
 
     @Override

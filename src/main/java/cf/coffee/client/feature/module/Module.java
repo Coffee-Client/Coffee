@@ -58,6 +58,10 @@ public abstract class Module {
         this.toasts = this.config.create(new BooleanSetting.Builder(!hasAnnotation).name("Toasts").description("Whether to show enabled / disabled toasts").get());
     }
 
+    public final void postModuleInit() {
+        this.config.addSettingsFromAnnotations(this);
+    }
+
     public boolean isDebuggerEnabled() {
         return this.debuggerEnabled.getValue();
     }
@@ -73,6 +77,8 @@ public abstract class Module {
     public String getDescription() {
         return description;
     }
+
+
 
     public abstract void tick();
 

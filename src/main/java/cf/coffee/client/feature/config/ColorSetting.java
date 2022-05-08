@@ -5,6 +5,7 @@
 package cf.coffee.client.feature.config;
 
 import java.awt.Color;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class ColorSetting extends SettingBase<Color> {
@@ -15,7 +16,7 @@ public class ColorSetting extends SettingBase<Color> {
      * @param name         The name
      * @param description  The description
      */
-    public ColorSetting(Color defaultValue, String name, String description, Consumer<Color> onChanged) {
+    public ColorSetting(Color defaultValue, String name, String description, List<Consumer<Color>> onChanged) {
         super(defaultValue, name, description, onChanged);
     }
 

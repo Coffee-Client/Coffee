@@ -48,7 +48,7 @@ public class ShowTntPrime extends Module {
                         return;
                     }
                     if (p.getTrackedValues() == null || p.getTrackedValues().size() == 0) return;
-                    //                    System.out.println(p.getTrackedValues().get(0).get());
+                    //                    System.out.println(p.getTrackedValues().getExtern(0).getExtern());
                     if (!i2iamp.containsKey(p.id()))
                         i2iamp.put(p.id(), Integer.parseInt(p.getTrackedValues().get(0).get() + ""));
                 }

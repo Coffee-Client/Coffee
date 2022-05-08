@@ -4,6 +4,9 @@
 
 package cf.coffee.client.helper;
 
+import cf.coffee.client.CoffeeMain;
+import org.apache.logging.log4j.Level;
+
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Map;
@@ -21,14 +24,16 @@ public class AddonClassLoader extends URLClassLoader {
     }
 
     public void defineResource(String name, URL location) {
-        System.out.println("register " + name + " with " + location.toString());
+        CoffeeMain.log(Level.DEBUG, "Registering texture "+name+" to URL "+location.toString());
+        //System.out.println("register " + name + " with " + location.toString());
         resourceMap.put(name, location);
     }
 
     @Override
     public URL findResource(String name) {
-        System.out.println(resourceMap);
-        System.out.println("find resource " + name);
+        CoffeeMain.log(Level.DEBUG, "Finding texture "+name);
+        //System.out.println(resourceMap);
+        //System.out.println("find resource " + name);
         if (resourceMap.containsKey(name)) return resourceMap.get(name);
         return super.findResource(name);
     }

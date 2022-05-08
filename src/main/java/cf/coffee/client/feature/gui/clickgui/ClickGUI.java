@@ -24,6 +24,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec2f;
 import org.lwjgl.glfw.GLFW;
 
@@ -217,11 +218,19 @@ public class ClickGUI extends Screen implements FastTickable {
         matrices.translate((1 - intp) * width / 2, (1 - intp) * height / 2, 0);
         matrices.scale((float) intp, (float) intp, 1);
         matrices.translate(0, -trackedScroll, 0);
-        mouseY1 += trackedScroll;
+        //mouseY1 += trackedScroll;
         List<Element> rev = new ArrayList<>(elements);
         Collections.reverse(rev);
         for (Element element : rev) {
+        //    int hashCode = element.hashCode();
+        //    double rad = Math.toRadians(hashCode%360);
+        //    double sin = Math.sin(rad)*(1-intp)*width;
+        //    double cos = Math.cos(rad)*(1-intp)*height;
+        //    matrices.push();
+            //matrices.multiply(new Quaternion((float) (intp*360f),0f, 0,true));
+            //matrices.translate(sin,cos,0);
             element.render(matrices, mouseX, mouseY1, trackedScroll);
+            //matrices.pop();
         }
         matrices.pop();
         super.render(matrices, mouseX, mouseY1, delta);
@@ -305,7 +314,7 @@ public class ClickGUI extends Screen implements FastTickable {
 
     @Override
     public void onFastTick() {
-        double d = 0.03;
+        double d = 0.003;
         if (closing) {
             d *= -1;
         }

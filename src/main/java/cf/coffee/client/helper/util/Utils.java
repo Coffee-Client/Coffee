@@ -10,9 +10,6 @@ import cf.coffee.client.helper.Texture;
 import cf.coffee.client.helper.font.adapter.FontAdapter;
 import cf.coffee.client.mixin.IMinecraftClientAccessor;
 import cf.coffee.client.mixin.IRenderTickCounterAccessor;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.texture.NativeImageBackedTexture;
 import net.minecraft.entity.Entity;
@@ -38,39 +35,25 @@ import org.lwjgl.BufferUtils;
 import javax.imageio.ImageIO;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.net.URI;
 import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Queue;
-import java.util.Random;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class Utils {
 
     public static boolean sendPackets = true;
 
-    public static String rndStr(int size) {
-        StringBuilder buf = new StringBuilder();
-        String[] chars = new String[] { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z" };
-        Random r = new Random();
-        for (int i = 0; i < size; i++) {
-            buf.append(chars[r.nextInt(chars.length)]);
+    public static void throwIfAnyEquals(String message, Object ifEquals, Object... toCheck) {
+        for (Object o : toCheck) {
+            if (o == ifEquals) throw new IllegalArgumentException(message);
         }
-        return buf.toString();
     }
 
     public static void sleep(long ms) {
@@ -78,19 +61,6 @@ public class Utils {
             Thread.sleep(ms);
         } catch (Exception ignored) {
         }
-    }
-
-    public static void sendDiscordFile(String url, String msgContent, String filename, byte[] file) throws IOException, InterruptedException {
-        long e = System.currentTimeMillis();
-        byte[] body1 = ("----" + e + "\n" + "Content-Disposition: form-data; name=\"file\"; filename=\"" + filename + "\"\n" + "Content-Type: text/plain\n\n").getBytes(StandardCharsets.UTF_8);
-        byte[] body2 = ("\n" + "----" + e + "\n" + "Content-Disposition: form-data; name=\"payload_json\"\n" + "\n" + "{\"content\":\"" + msgContent + "\",\"tts\":false}\n" + "----" + e + "--\n").getBytes(StandardCharsets.UTF_8);
-        byte[] finalBody = new byte[body1.length + file.length + body2.length];
-        System.arraycopy(body1, 0, finalBody, 0, body1.length);
-        System.arraycopy(file, 0, finalBody, body1.length, file.length);
-        System.arraycopy(body2, 0, finalBody, body1.length + file.length, body2.length);
-        HttpClient real = HttpClient.newBuilder().build();
-        HttpRequest req = HttpRequest.newBuilder().POST(HttpRequest.BodyPublishers.ofByteArray(finalBody)).uri(URI.create(url)).header("User-Agent", "your mother").header("Content-Type", "multipart/form-data; boundary=--" + e).build();
-        System.out.println(real.send(req, HttpResponse.BodyHandlers.ofString()).body());
     }
 
 
@@ -160,52 +130,6 @@ public class Utils {
         }
     }
 
-    public static class Textures {
-        static final NativeImageBackedTexture EMPTY = new NativeImageBackedTexture(1, 1, false);
-        static final HttpClient downloader = HttpClient.newHttpClient();
-        static final Map<UUID, Texture> uCache = new ConcurrentHashMap<>();
-
-        public static Texture getSkinPreviewTexture(UUID uuid) {
-            if (uCache.containsKey(uuid)) {
-                return uCache.get(uuid);
-            }
-            // completely random id
-            // (hash code of uuid)(random numbers)
-            Texture texIdent = new Texture("preview/" + uuid.hashCode() + "");
-            uCache.put(uuid, texIdent);
-            HttpRequest hr = HttpRequest.newBuilder().uri(URI.create("https://crafatar.com/avatars/" + uuid + "?overlay")).header("User-Agent", "why").build();
-            CoffeeMain.client.execute(() -> CoffeeMain.client.getTextureManager().registerTexture(texIdent, EMPTY));
-            downloader.sendAsync(hr, HttpResponse.BodyHandlers.ofByteArray()).thenAccept(httpResponse -> {
-                try {
-                    BufferedImage bi = ImageIO.read(new ByteArrayInputStream(httpResponse.body()));
-                    registerBufferedImageTexture(bi, texIdent);
-                    uCache.put(uuid, texIdent);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            });
-
-            return texIdent;
-        }
-
-        public static void registerBufferedImageTexture(BufferedImage image, Texture tex) {
-            try {
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                ImageIO.write(image, "png", stream);
-                byte[] bytes = stream.toByteArray();
-
-                ByteBuffer data = BufferUtils.createByteBuffer(bytes.length).put(bytes);
-                data.flip();
-                NativeImage img = NativeImage.read(data);
-                NativeImageBackedTexture texture = new NativeImageBackedTexture(img);
-
-                CoffeeMain.client.execute(() -> CoffeeMain.client.getTextureManager().registerTexture(tex, texture));
-            } catch (Exception ignored) {
-
-            }
-        }
-    }
-
     public static class Inventory {
 
         public static int slotIndexToId(int index) {
@@ -231,15 +155,6 @@ public class Utils {
     }
 
     public static class Math {
-
-        public static boolean isNumber(String in) {
-            try {
-                Integer.parseInt(in);
-                return true;
-            } catch (Exception ignored) {
-                return false;
-            }
-        }
 
         public static double roundToDecimal(double n, int point) {
             if (point == 0) {
@@ -296,64 +211,7 @@ public class Utils {
 
     public static class Players {
 
-        static final Map<String, UUID> UUID_CACHE = new HashMap<>();
-        static final Map<UUID, String> NAME_CACHE = new HashMap<>();
         static final HttpClient client = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(10)).build();
-
-        public static String getNameFromUUID(UUID uuid) {
-            if (NAME_CACHE.containsKey(uuid)) {
-                return NAME_CACHE.get(uuid);
-            }
-            try {
-                HttpRequest req = HttpRequest.newBuilder().GET().uri(URI.create("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid)).build();
-                HttpResponse<String> response = client.send(req, HttpResponse.BodyHandlers.ofString());
-                if (response.statusCode() == 204 || response.statusCode() == 400) {
-                    return null; // no user / invalid username
-                }
-                JsonObject root = JsonParser.parseString(response.body()).getAsJsonObject();
-                return root.get("name").getAsString();
-            } catch (Exception ignored) {
-                return null;
-            }
-        }
-
-        public static String completeName(String smallname) {
-            String result = "none";
-            for (PlayerListEntry info : CoffeeMain.client.player.networkHandler.getPlayerList()) {
-                String name = info.getProfile().getName();
-
-                if (name.toLowerCase().startsWith(smallname.toLowerCase())) {
-                    result = name;
-                }
-            }
-            if (result.equals("none")) return smallname;
-            return result;
-        }
-
-        public static UUID getUUIDFromName(String name) {
-            String name1 = completeName(name); // this really helps trust me
-            if (!isPlayerNameValid(name1)) {
-                return null;
-            }
-            if (UUID_CACHE.containsKey(name1.toLowerCase())) {
-                return UUID_CACHE.get(name1.toLowerCase());
-            }
-            try {
-                HttpRequest req = HttpRequest.newBuilder().GET().uri(URI.create("https://api.mojang.com/users/profiles/minecraft/" + name1)).build();
-                HttpResponse<String> response = client.send(req, HttpResponse.BodyHandlers.ofString());
-                if (response.statusCode() == 204 || response.statusCode() == 400) {
-                    return null; // no user / invalid username
-                }
-                JsonObject root = JsonParser.parseString(response.body()).getAsJsonObject();
-                String id = root.get("id").getAsString();
-                String uuid = id.replaceAll("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})", "$1-$2-$3-$4-$5");
-                UUID u = UUID.fromString(uuid);
-                UUID_CACHE.put(name1.toLowerCase(), u);
-                return u;
-            } catch (Exception ignored) {
-                return null;
-            }
-        }
 
         public static boolean isPlayerNameValid(String name) {
             if (name.length() < 3 || name.length() > 16) {

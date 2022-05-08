@@ -6,13 +6,14 @@ package cf.coffee.client.feature.config;
 
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class EnumSetting<T extends Enum<?>> extends SettingBase<T> {
     private T[] values;
 
     @SuppressWarnings("unchecked")
-    public EnumSetting(T defaultValue, String name, String description, Consumer<T> onChanged) {
+    public EnumSetting(T defaultValue, String name, String description, List<Consumer<T>> onChanged) {
         super(defaultValue, name, description, onChanged);
         if (!Modifier.isPublic(defaultValue.getClass().getModifiers())) {
             throw new IllegalArgumentException("Enum has to be public!");

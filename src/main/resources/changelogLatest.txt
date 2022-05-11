@@ -1,4 +1,4 @@
-Added online services
-Added IRC
-Added ability to view other shadow users
-Ported over modules
+Made it coffee again
+New look
+New colors
+Slightly improved gui overall

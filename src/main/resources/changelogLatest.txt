@@ -1,4 +1,5 @@
-Made it coffee again
-New look
-New colors
-Slightly improved gui overall
++ Changed changelog style
++ Changed look to coffee again
++ Changed gui a bit
++ Improved generally
+- Removed obsolete library

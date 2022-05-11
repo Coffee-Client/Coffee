@@ -305,7 +305,7 @@ public class ClickGUI extends Screen implements FastTickable {
 
     @Override
     public void onFastTick() {
-        double d = 0.003;
+        double d = 0.03;
         if (closing) {
             d *= -1;
         }

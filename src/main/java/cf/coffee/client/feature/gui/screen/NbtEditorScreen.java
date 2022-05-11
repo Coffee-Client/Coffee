@@ -139,7 +139,7 @@ public class NbtEditorScreen extends ClientScreen implements FastTickable {
     protected void init() {
         RoundButton format = new RoundButton(RoundButton.STANDARD, 5, height - 30 + 5, 64, 20, "Format", this::format);
         addDrawableChild(format);
-        RoundButton save = new RoundButton(RoundButton.STANDARD, 5 + format.getWidth() + 5, height - 30 + 5, 64, 20, "Save", this::save);
+        RoundButton save = new RoundButton(RoundButton.SUCCESS, 5 + format.getWidth() + 5, height - 30 + 5, 64, 20, "Save", this::save);
         addDrawableChild(save);
         search = new RoundTextFieldWidget(width - 5 - 160, height - 30 + 5, 160, 20, "Search...");
         addDrawableChild(search);

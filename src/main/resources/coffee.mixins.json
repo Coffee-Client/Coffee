@@ -14,7 +14,7 @@
     "BlockRenderManagerMixin",
     "CameraMixin",
     "ChatHudMixin",
-    "ClickableWidgetMixin",
+
     "ClientConnection1Mixin",
     "ClientConnectionMixin",
     "ClientPlayerEntityMixin",
@@ -26,7 +26,7 @@
     "EntityModelMixin",
     "EntityRenderDispatcherMixin",
     "EntityRendererMixin",
-    "EntryListWidgetMixin",
+
     "GameMenuMixin",
     "GameRendererMixin",
     "IClientPlayerInteractionManagerAccessor",
@@ -59,7 +59,7 @@
     "SharedConstantsMixin",
     "SignEditScreenMixin",
     "SliderWidgetAccessor",
-    "SliderWidgetMixin",
+
     "TitleScreenMixin",
     "WorldRendererAccessor",
     "WorldRendererMixin"

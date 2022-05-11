@@ -41,23 +41,7 @@ public abstract class ScreenMixin extends AbstractParentElement {
     @Shadow
     protected abstract void insertText(String text, boolean override);
 
-    @Inject(method = "renderBackgroundTexture", at = @At("HEAD"), cancellable = true)
-    void real(int vOffset, CallbackInfo ci) {
-        float r = c.getRed() / 255f;
-        float g = c.getGreen() / 255f;
-        float b = c.getBlue() / 255f;
-        ci.cancel();
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferBuilder = tessellator.getBuffer();
-        RenderSystem.setShader(GameRenderer::getPositionColorShader);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
-        bufferBuilder.vertex(0.0D, this.height, 0.0D).color(r, g, b, 1f).next();
-        bufferBuilder.vertex(this.width, this.height, 0.0D).color(r, g, b, 1f).next();
-        bufferBuilder.vertex(this.width, 0.0D, 0.0D).color(r, g, b, 1f).next();
-        bufferBuilder.vertex(0.0D, 0.0D, 0.0D).color(r, g, b, 1f).next();
-        tessellator.draw();
-    }
+
 
     @Override
     public List<? extends Element> children() { // have to do this because java will shit itself when i dont overwrite this

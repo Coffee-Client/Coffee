@@ -10,6 +10,7 @@ import cf.coffee.client.feature.gui.HasSpecialCursor;
 import cf.coffee.client.helper.font.FontRenderers;
 import cf.coffee.client.helper.render.Cursor;
 import cf.coffee.client.helper.render.Renderer;
+import cf.coffee.client.helper.util.Transitions;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.client.gui.Drawable;
@@ -23,10 +24,12 @@ import java.awt.Color;
 
 public class RoundButton implements Element, Drawable, Selectable, FastTickable, DoesMSAA, HasSpecialCursor {
 
-    public static final Color STANDARD = new Color(40, 40, 40);
+    public static final Color STANDARD = new Color(255,255,255);
+    public static final Color SUCCESS = new Color(0x24FC2B);
+    public static final Color DANGER = new Color(0xFF5722);
 
     final Runnable onPress;
-    final Color color;
+    final Color textColor;
     String text;
     double x, y, width, height;
     double animProgress = 0;
@@ -43,7 +46,7 @@ public class RoundButton implements Element, Drawable, Selectable, FastTickable,
         this.width = w;
         this.height = h;
         this.text = t;
-        this.color = color;
+        this.textColor = color;
     }
 
     @Override
@@ -124,12 +127,13 @@ public class RoundButton implements Element, Drawable, Selectable, FastTickable,
         if (!isVisible()) return;
         matrices.push();
         matrices.translate(x + width / 2d, y + height / 2d, 0);
-        float animProgress = (float) easeInOutQuint(this.animProgress);
-        matrices.scale(MathHelper.lerp(animProgress, 1f, 0.95f), MathHelper.lerp(animProgress, 1f, 0.95f), 1f);
+        float animProgress = (float) Transitions.easeOutExpo(this.animProgress);
+        matrices.scale(MathHelper.lerp(animProgress, 1f, 1.01f), MathHelper.lerp(animProgress, 1f, 1.01f), 1f);
         double originX = -width / 2d;
         double originY = -height / 2d;
-        Renderer.R2D.renderRoundedQuad(matrices, color, originX, originY, width / 2d, height / 2d, Math.min(height / 2d, 5), 20);
-        FontRenderers.getRenderer().drawString(matrices, text, -(FontRenderers.getRenderer().getStringWidth(text)) / 2f, -FontRenderers.getRenderer().getMarginHeight() / 2f, isEnabled() ? 0xFFFFFF : 0xAAAAAA, false);
+        Renderer.R2D.renderRoundedQuad(matrices, new Color(30,30,30), originX, originY, width / 2d, height / 2d, Math.min(height / 2d, 5), 20);
+        if (animProgress != 0) Renderer.R2D.renderRoundedShadow(matrices, new Color(10, 10, 10, 100), originX, originY, width/2d, height/2d, Math.min(height / 2d, 5), 20, animProgress*3);
+        FontRenderers.getRenderer().drawString(matrices, text, -(FontRenderers.getRenderer().getStringWidth(text)) / 2f, -FontRenderers.getRenderer().getMarginHeight() / 2f, isEnabled() ? textColor.getRGB() : 0xAAAAAA, false);
         matrices.pop();
     }
 

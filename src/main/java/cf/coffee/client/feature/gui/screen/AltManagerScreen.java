@@ -935,7 +935,7 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
                 float h = FontRenderers.getRenderer().getMarginHeight();
                 float pad = 2;
                 w += pad * 2;
-                Renderer.R2D.renderRoundedQuad(stack, new Color(30,30,30), originX + padding + texWidth + padding + xOff, originY + getHeight() - h - pad * 2 - padding, originX + padding + texWidth + padding + xOff + w, originY + getHeight() - padding, 5, 10);
+                Renderer.R2D.renderRoundedQuad(stack, new Color(30, 30, 30), originX + padding + texWidth + padding + xOff, originY + getHeight() - h - pad * 2 - padding, originX + padding + texWidth + padding + xOff + w, originY + getHeight() - padding, 5, 10);
                 FontRenderers.getRenderer().drawString(stack, v, originX + padding + texWidth + padding + xOff + pad, originY + getHeight() - pad - FontRenderers.getRenderer().getMarginHeight() - padding, 0xFFFFFF);
                 xOff += w + 2;
             }

@@ -27,12 +27,13 @@ public abstract class AInGameHudMixin extends DrawableHelper {
     public void postRender(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
         AccurateFrameRateCounter.globalInstance.recordFrame();
         MSAAFramebuffer.use(MSAAFramebuffer.MAX_SAMPLES, () -> {
+            Utils.TickManager.render();
             for (Module module : ModuleRegistry.getModules()) {
                 if (module.isEnabled()) {
                     module.onHudRender();
                 }
             }
-            Utils.TickManager.render();
+
             NotificationRenderer.render();
 
             Events.fireEvent(EventType.HUD_RENDER, new NonCancellableEvent());

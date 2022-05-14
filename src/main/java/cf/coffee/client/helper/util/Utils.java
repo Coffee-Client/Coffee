@@ -181,7 +181,7 @@ public class Utils {
         }
 
         public static boolean isABObstructed(Vec3d a, Vec3d b, World world, Entity requester) {
-            RaycastContext rcc = new RaycastContext(a, b, RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, requester);
+            RaycastContext rcc = new RaycastContext(a, b, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, requester);
             BlockHitResult bhr = world.raycast(rcc);
             return !bhr.getPos().equals(b);
         }

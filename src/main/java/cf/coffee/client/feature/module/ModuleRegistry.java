@@ -11,6 +11,7 @@ import cf.coffee.client.feature.module.impl.combat.AimAssist;
 import cf.coffee.client.feature.module.impl.combat.AutoAttack;
 import cf.coffee.client.feature.module.impl.combat.AutoTrap;
 import cf.coffee.client.feature.module.impl.combat.Criticals;
+import cf.coffee.client.feature.module.impl.combat.CrystalAura;
 import cf.coffee.client.feature.module.impl.combat.FireballDeflector;
 import cf.coffee.client.feature.module.impl.combat.Killaura;
 import cf.coffee.client.feature.module.impl.combat.Reach;
@@ -297,6 +298,7 @@ public class ModuleRegistry {
         registerModule(ChestHighlighter.class);
         registerModule(MoreChatHistory.class);
         registerModule(Radar.class);
+        registerModule(CrystalAura.class);
 
         rebuildSharedModuleList();
 

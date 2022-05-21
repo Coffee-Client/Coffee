@@ -1,5 +1,1 @@
-+ Changed changelog style
-+ Changed look to coffee again
-+ Changed gui a bit
-+ Improved generally
-- Removed obsolete library
+a

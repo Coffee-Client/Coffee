@@ -299,7 +299,6 @@ public class ModuleRegistry {
         registerModule(MoreChatHistory.class);
         registerModule(Radar.class);
         registerModule(CrystalAura.class);
-        registerModule(VulkanCrash.class);
 
         rebuildSharedModuleList();
 

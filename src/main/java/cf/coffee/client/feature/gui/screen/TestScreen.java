@@ -4,12 +4,10 @@
 
 package cf.coffee.client.feature.gui.screen;
 
-import cf.coffee.client.feature.gui.FastTickable;
 import cf.coffee.client.feature.gui.element.impl.ButtonElement;
-import cf.coffee.client.feature.gui.element.impl.DirectionalLayout;
+import cf.coffee.client.feature.gui.element.impl.FlexLayout;
 import cf.coffee.client.feature.gui.element.impl.RoundTextFieldWidget;
 import cf.coffee.client.helper.render.Renderer;
-import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 
 import java.awt.Color;
@@ -38,7 +36,7 @@ public class TestScreen extends AAScreen {
         tf1.changeListener = () -> {
             button3.setText(tf1.getText());
         };
-        DirectionalLayout layout = new DirectionalLayout(DirectionalLayout.LayoutDirection.DOWN,5,5,100,500,5,button1,button2,tf1,button3);
+        FlexLayout layout = new FlexLayout(FlexLayout.LayoutDirection.DOWN,5,5,100,50,5,button1,button2,tf1,button3);
         addChild(layout);
     }
 

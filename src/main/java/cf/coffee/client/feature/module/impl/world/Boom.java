@@ -34,9 +34,21 @@ import net.minecraft.util.math.Vec3d;
 import java.util.Objects;
 
 public class Boom extends Module {
-    final DoubleSetting speed = this.config.create(new DoubleSetting.Builder(2).name("Speed").description("How fast the fireball goes").min(1).max(10).precision(1).get());
-    final DoubleSetting power = this.config.create(new DoubleSetting.Builder(20).precision(0).name("Power").description("How big the fireball will be").min(0).max(127).get());
-    final EnumSetting<Mode> mode = this.config.create(new EnumSetting.Builder<>(Mode.FireballGhast).name("Mode").description("How to send the fireball off").get());
+    final DoubleSetting speed = this.config.create(new DoubleSetting.Builder(2).name("Speed")
+            .description("How fast the fireball goes")
+            .min(1)
+            .max(10)
+            .precision(1)
+            .get());
+    final DoubleSetting power = this.config.create(new DoubleSetting.Builder(20).precision(0)
+            .name("Power")
+            .description("How big the fireball will be")
+            .min(0)
+            .max(127)
+            .get());
+    final EnumSetting<Mode> mode = this.config.create(new EnumSetting.Builder<>(Mode.FireballGhast).name("Mode")
+            .description("How to send the fireball off")
+            .get());
     long lastFired = 0L;
 
     public Boom() {

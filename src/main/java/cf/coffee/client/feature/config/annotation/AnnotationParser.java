@@ -36,8 +36,8 @@ public class AnnotationParser {
                     break;
                 }
             }
-            if (typeToParse == null)
-                throw new IllegalArgumentException("Type " + declaredField.getType().getName() + " is not recognized as setting type");
+            if (typeToParse == null) throw new IllegalArgumentException("Type " + declaredField.getType()
+                    .getName() + " is not recognized as setting type");
             SettingBase.Builder<?, ?, ?> base = typeToParse.getProvider().getExtern(annotation, declaredField, inst);
             config.create(base.name(annotation.name()).description(annotation.description()).onChanged(o -> {
                 try {

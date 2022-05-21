@@ -60,7 +60,8 @@ public class Effect extends Command {
                 CoffeeMain.client.player.addStatusEffect(inst);
             }
             case "clear" -> {
-                for (StatusEffectInstance statusEffect : CoffeeMain.client.player.getStatusEffects().toArray(new StatusEffectInstance[0])) {
+                for (StatusEffectInstance statusEffect : CoffeeMain.client.player.getStatusEffects()
+                        .toArray(new StatusEffectInstance[0])) {
                     CoffeeMain.client.player.removeStatusEffect(statusEffect.getEffectType());
                 }
             }

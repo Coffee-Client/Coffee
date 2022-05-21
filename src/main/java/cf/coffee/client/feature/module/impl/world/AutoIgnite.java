@@ -2,7 +2,7 @@
  * Copyright (c) 2022 Coffee client, 0x150 and contributors. See copyright file in project root.
  */
 
-package cf.coffee.client.feature.module.impl.grief;
+package cf.coffee.client.feature.module.impl.world;
 
 import cf.coffee.client.CoffeeMain;
 import cf.coffee.client.feature.module.Module;
@@ -61,7 +61,8 @@ public class AutoIgnite extends Module {
         CoffeeMain.client.getNetworkHandler().sendPacket(new UpdateSelectedSlotC2SPacket(lighterSlot));
 
         for (BlockPos blockPos : blocksToIgnite) {
-            BlockHitResult bhr = new BlockHitResult(Vec3d.of(blockPos).add(0.5, 0.5, 0.5), Direction.DOWN, blockPos, false);
+            BlockHitResult bhr = new BlockHitResult(Vec3d.of(blockPos)
+                    .add(0.5, 0.5, 0.5), Direction.DOWN, blockPos, false);
             PlayerInteractBlockC2SPacket interact = new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, bhr);
             CoffeeMain.client.getNetworkHandler().sendPacket(interact);
         }

@@ -8,13 +8,11 @@ import cf.coffee.client.CoffeeMain;
 import cf.coffee.client.feature.command.Command;
 import cf.coffee.client.feature.command.CommandRegistry;
 import cf.coffee.client.feature.command.coloring.ArgumentType;
-import cf.coffee.client.feature.gui.screen.ConsoleScreen;
 import cf.coffee.client.feature.module.ModuleRegistry;
 import cf.coffee.client.feature.module.impl.misc.ClientSettings;
 import cf.coffee.client.feature.module.impl.misc.InfChatLength;
 import cf.coffee.client.helper.font.FontRenderers;
 import cf.coffee.client.helper.render.Renderer;
-import cf.coffee.client.helper.util.Utils;
 import lombok.val;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.screen.CommandSuggestor;
@@ -63,11 +61,7 @@ public class AChatScreenMixin extends Screen {
         String p = getPrefix();
         if (s.startsWith(p)) { // filter all messages starting with .
             CoffeeMain.client.inGameHud.getChatHud().addToMessageHistory(s);
-            if (s.equalsIgnoreCase(p + "console")) {
-                Utils.TickManager.runInNTicks(2, () -> CoffeeMain.client.setScreen(ConsoleScreen.instance()));
-            } else {
-                CommandRegistry.execute(s.substring(p.length())); // cut off prefix
-            }
+            CommandRegistry.execute(s.substring(p.length())); // cut off prefix
         } else {
             instance.sendMessage(s); // else, go
         }
@@ -102,7 +96,9 @@ public class AChatScreenMixin extends Screen {
             }
         }
         String[] finalArgs = args;
-        return finalArgs.length > 0 ? a.stream().filter(s -> s.toLowerCase().startsWith(finalArgs[finalArgs.length - 1].toLowerCase())).collect(Collectors.toList()) : a;
+        return finalArgs.length > 0 ? a.stream()
+                .filter(s -> s.toLowerCase().startsWith(finalArgs[finalArgs.length - 1].toLowerCase()))
+                .collect(Collectors.toList()) : a;
     }
 
     double padding() {
@@ -163,9 +159,6 @@ public class AChatScreenMixin extends Screen {
         String p = getPrefix();
         String t = chatField.getText();
         if (t.startsWith(p)) {
-            String note = "If you need a bigger console, do \"" + p + "console\"";
-            double len = FontRenderers.getRenderer().getStringWidth(note);
-            FontRenderers.getRenderer().drawString(matrices, note, width - len - 2, height - 15 - FontRenderers.getRenderer().getMarginHeight(), 0xFFFFFF);
             renderSuggestions(matrices);
         }
     }

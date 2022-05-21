@@ -25,8 +25,12 @@ import net.minecraft.util.math.Vec3d;
 public class ClickTP extends Module {
 
     private static BlockPos targeted = new BlockPos(0, 0, 0);
-    final EnumSetting<Mode> mode = this.config.create(new EnumSetting.Builder<>(Mode.Normal).name("Mode").description("The way to teleport").get());
-    final BooleanSetting onlyctrl = this.config.create(new BooleanSetting.Builder(false).name("Only Ctrl").description("Only teleport when the control key is pressed").get());
+    final EnumSetting<Mode> mode = this.config.create(new EnumSetting.Builder<>(Mode.Normal).name("Mode")
+            .description("The way to teleport")
+            .get());
+    final BooleanSetting onlyctrl = this.config.create(new BooleanSetting.Builder(false).name("Only Ctrl")
+            .description("Only teleport when the control key is pressed")
+            .get());
 
     public ClickTP() {
         super("ClickTP", "Teleport somewhere you clicked to", ModuleType.MOVEMENT);

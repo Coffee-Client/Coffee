@@ -34,10 +34,6 @@ public class LivingEntityMixin {
         }
     }
 
-    //    @Redirect(method="travel",at=@At(value="INVOKE",target="Lnet/minecraft/entity/LivingEntity;setVelocity(DDD)V"))
-    //    void mulVel(LivingEntity instance, double x, double y, double z)
-    //        instance.setVelocity(x,y,z);
-    //    }
     @Inject(method = "canWalkOnFluid", at = @At("HEAD"), cancellable = true)
     public void atomic_overwriteCanWalkOnFluid(FluidState fluidState, CallbackInfoReturnable<Boolean> cir) {
         if (CoffeeMain.client.player == null) {
@@ -54,7 +50,8 @@ public class LivingEntityMixin {
 
     @Redirect(method = "travel", at = @At(value = "INVOKE", target = "net/minecraft/entity/LivingEntity.hasStatusEffect(Lnet/minecraft/entity/effect/StatusEffect;)Z"), require = 0)
     boolean atomic_stopLevitationEffect(LivingEntity instance, StatusEffect effect) {
-        if (instance.equals(CoffeeMain.client.player) && ModuleRegistry.getByClass(NoLevitation.class).isEnabled() && effect == StatusEffects.LEVITATION) {
+        if (instance.equals(CoffeeMain.client.player) && ModuleRegistry.getByClass(NoLevitation.class)
+                .isEnabled() && effect == StatusEffects.LEVITATION) {
             return false;
         } else {
             return instance.hasStatusEffect(effect);

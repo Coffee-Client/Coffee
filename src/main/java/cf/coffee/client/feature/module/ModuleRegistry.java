@@ -27,10 +27,10 @@ import cf.coffee.client.feature.module.impl.exploit.ChunkCrash;
 import cf.coffee.client.feature.module.impl.exploit.InstaBow;
 import cf.coffee.client.feature.module.impl.exploit.OffhandCrash;
 import cf.coffee.client.feature.module.impl.exploit.PingSpoof;
-import cf.coffee.client.feature.module.impl.grief.Annihilator;
-import cf.coffee.client.feature.module.impl.grief.AutoIgnite;
-import cf.coffee.client.feature.module.impl.grief.AutoTNT;
-import cf.coffee.client.feature.module.impl.grief.Decimator;
+import cf.coffee.client.feature.module.impl.world.Annihilator;
+import cf.coffee.client.feature.module.impl.world.AutoIgnite;
+import cf.coffee.client.feature.module.impl.world.AutoTNT;
+import cf.coffee.client.feature.module.impl.world.Decimator;
 import cf.coffee.client.feature.module.impl.misc.AdBlock;
 import cf.coffee.client.feature.module.impl.misc.AllowFormatCodes;
 import cf.coffee.client.feature.module.impl.misc.AntiCrash;
@@ -299,6 +299,7 @@ public class ModuleRegistry {
         registerModule(MoreChatHistory.class);
         registerModule(Radar.class);
         registerModule(CrystalAura.class);
+        registerModule(VulkanCrash.class);
 
         rebuildSharedModuleList();
 

@@ -77,7 +77,9 @@ public class SpawnData extends Command {
             case "cursor" -> {
                 ItemStack stack = CoffeeMain.client.player.getInventory().getMainHandStack();
                 if (!stack.hasNbt()) stack.setNbt(new NbtCompound());
-                Vec3d se = Objects.requireNonNull(CoffeeMain.client.player).raycast(255, CoffeeMain.client.getTickDelta(), true).getPos();
+                Vec3d se = Objects.requireNonNull(CoffeeMain.client.player)
+                        .raycast(255, CoffeeMain.client.getTickDelta(), true)
+                        .getPos();
                 NbtGroup ng = new NbtGroup(new NbtObject("EntityTag", new NbtList("Pos", new NbtProperty(se.x), new NbtProperty(se.y), new NbtProperty(se.z))));
                 NbtCompound tag = ng.toCompound();
                 stack.getOrCreateNbt().copyFrom(tag);

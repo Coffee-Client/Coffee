@@ -73,10 +73,12 @@ public class CrystalAura extends Module {
                 List<Vec3d> potentialTargets = new ArrayList<>();
                 for (BlockPos obsidianPosition : obsidianPositions) {
                     Vec3d center = Vec3d.of(obsidianPosition);
-                    if (!isABObstructed(center.add(.5, 1, .5), entity.getPos()) || !isABObstructed(center.add(.5, 1, .5), entity.getPos().add(0, entity.getHeight(), 0)))
-                        potentialTargets.add(center);
+                    if (!isABObstructed(center.add(.5, 1, .5), entity.getPos()) || !isABObstructed(center.add(.5, 1, .5), entity.getPos()
+                            .add(0, entity.getHeight(), 0))) potentialTargets.add(center);
                 }
-                Vec3d t = potentialTargets.stream().min(Comparator.comparingDouble(value -> value.distanceTo(entity.getPos()))).orElse(null);
+                Vec3d t = potentialTargets.stream()
+                        .min(Comparator.comparingDouble(value -> value.distanceTo(entity.getPos())))
+                        .orElse(null);
                 if (t == null) continue;
                 targets.add(new EntityEntry(entity, new BlockPos(t)));
             }
@@ -103,15 +105,11 @@ public class CrystalAura extends Module {
         for (EntityEntry target : targets) {
             Renderer.R3D.renderLine(target.target().getPos(), target.target().getEyePos(), Color.WHITE, matrices);
             if (target.freeAB() != null) {
-                Renderer.R3D.renderLine(Vec3d.of(target.freeAB()).add(.5, 1, .5), target.target().getPos(), Color.RED, matrices);
+                Renderer.R3D.renderLine(Vec3d.of(target.freeAB()).add(.5, 1, .5), target.target()
+                        .getPos(), Color.RED, matrices);
                 Renderer.R3D.renderFadingBlock(Color.WHITE, new Color(255, 50, 50, 100), Vec3d.of(target.freeAB()), new Vec3d(1, 1, 1), 1000);
             }
         }
-        //Color c = Color.GREEN;
-        //if (isABObstructed(client.player.getPos(), client.player.getPos().add(1,0,0))) {
-        //    c = Color.RED;
-        //}
-        //Renderer.R3D.renderLine(client.player.getPos(),client.player.getPos().add(1,0,0),c,matrices);
     }
 
     @Override

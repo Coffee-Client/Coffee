@@ -20,12 +20,33 @@ import java.util.Objects;
 
 public class FreeLook extends Module {
 
-    final BooleanSetting hold = this.config.create(new BooleanSetting.Builder(true).name("Hold").description("Disables the module after you unpress the keybind").get());
-    final BooleanSetting enableAA = this.config.create(new BooleanSetting.Builder(false).name("Enable Anti-Aim").description("Hvh toggle rage nn noob").get());
-    final EnumSetting<AntiAimMode> aaMode = this.config.create(new EnumSetting.Builder<>(AntiAimMode.Spin).name("AA Mode").description("How to aim").get());
-    final DoubleSetting aaSpeed = this.config.create(new DoubleSetting.Builder(1).name("AA Speed").description("How fast to aim").min(0.1).max(6).precision(1).get());
-    final DoubleSetting jitterRange = this.config.create(new DoubleSetting.Builder(90).name("Jitter range").description("How far to jitter").min(15).max(90).precision(0).get());
-    final DoubleSetting swayRange = this.config.create(new DoubleSetting.Builder(45).name("Sway range").description("How far to sway").min(15).max(60).precision(0).get());
+    final BooleanSetting hold = this.config.create(new BooleanSetting.Builder(true).name("Hold")
+            .description("Disables the module after you unpress the keybind")
+            .get());
+    final BooleanSetting enableAA = this.config.create(new BooleanSetting.Builder(false).name("Enable Anti-Aim")
+            .description("Hvh toggle rage nn noob")
+            .get());
+    final EnumSetting<AntiAimMode> aaMode = this.config.create(new EnumSetting.Builder<>(AntiAimMode.Spin).name("AA Mode")
+            .description("How to aim")
+            .get());
+    final DoubleSetting aaSpeed = this.config.create(new DoubleSetting.Builder(1).name("AA Speed")
+            .description("How fast to aim")
+            .min(0.1)
+            .max(6)
+            .precision(1)
+            .get());
+    final DoubleSetting jitterRange = this.config.create(new DoubleSetting.Builder(90).name("Jitter range")
+            .description("How far to jitter")
+            .min(15)
+            .max(90)
+            .precision(0)
+            .get());
+    final DoubleSetting swayRange = this.config.create(new DoubleSetting.Builder(45).name("Sway range")
+            .description("How far to sway")
+            .min(15)
+            .max(60)
+            .precision(0)
+            .get());
     public float newyaw, newpitch, oldyaw, oldpitch;
     Perspective before = Perspective.FIRST_PERSON;
     Keybind kb;
@@ -121,7 +142,9 @@ public class FreeLook extends Module {
                 newyaw = MathHelper.wrapDegrees(Objects.requireNonNull(client.player).getYaw() + 180 + temp);
             }
         }
-        Objects.requireNonNull(client.getNetworkHandler()).sendPacket(new PlayerMoveC2SPacket.LookAndOnGround(newyaw, newpitch, Objects.requireNonNull(client.player).isOnGround()));
+        Objects.requireNonNull(client.getNetworkHandler())
+                .sendPacket(new PlayerMoveC2SPacket.LookAndOnGround(newyaw, newpitch, Objects.requireNonNull(client.player)
+                        .isOnGround()));
     }
 
     public enum AntiAimMode {

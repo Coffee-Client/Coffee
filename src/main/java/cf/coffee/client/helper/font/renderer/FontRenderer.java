@@ -56,7 +56,10 @@ public class FontRenderer {
         this.f = f;
         this.size = size;
         init();
-        cachedHeight = (float) glyphMap.values().stream().max(Comparator.comparingDouble(value -> value.dimensions.getHeight())).orElseThrow().dimensions.getHeight() * 0.25f;
+        cachedHeight = (float) glyphMap.values()
+                .stream()
+                .max(Comparator.comparingDouble(value -> value.dimensions.getHeight()))
+                .orElseThrow().dimensions.getHeight() * 0.25f;
     }
 
     public int getSize() {
@@ -87,7 +90,6 @@ public class FontRenderer {
 
         RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
         BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
-        //        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
         boolean isInSelector = false;
         for (char c : s.toCharArray()) {
             if (isInSelector) {
@@ -174,21 +176,15 @@ public class FontRenderer {
     private double drawChar(BufferBuilder bufferBuilder, Matrix4f matrix, char c, float r, float g, float b, float a) {
         Glyph glyph = glyphMap.get(c);
         if (glyph == null) {
-            //            glyph = glyphMap.get('a');
             double missingW = 20;
             drawMissing(bufferBuilder, matrix, (float) missingW, getFontHeight() * 4);
             return missingW;
         }
         RenderSystem.setShaderTexture(0, glyph.getImageTex());
 
-
-        //        Matrix4f matrix = matrices.peek().getPositionMatrix();
-
         float height = (float) glyph.dimensions.getHeight();
         float width = (float) glyph.dimensions.getWidth();
 
-
-        //        drawMissing(bufferBuilder,matrix, width,height);
         bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
         bufferBuilder.vertex(matrix, 0, height, 0).texture(0, 1).color(r, g, b, a).next();
         bufferBuilder.vertex(matrix, width, height, 0).texture(1, 1).color(r, g, b, a).next();
@@ -197,8 +193,6 @@ public class FontRenderer {
         bufferBuilder.end();
         BufferRenderer.draw(bufferBuilder);
 
-
-        //        matrices.pop();
         return width;
     }
 }

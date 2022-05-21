@@ -24,7 +24,7 @@ public class Taco extends HudElement {
         }
         cf.coffee.client.feature.command.impl.Taco.Frame frame = cf.coffee.client.feature.command.impl.Taco.getCurrentFrame();
         if (frame == null) {
-            FontRenderers.getRenderer().drawString(stack, "Nothing to taco", 0, 0, 0xFFFFFF);
+            FontRenderers.getRenderer().drawString(stack, "Nichts anzuzeigen", 0, 0, 0xFFFFFF);
             return;
         }
         Texture current = frame.getI();

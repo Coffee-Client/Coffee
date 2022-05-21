@@ -2,7 +2,7 @@
  * Copyright (c) 2022 Coffee client, 0x150 and contributors. See copyright file in project root.
  */
 
-package cf.coffee.client.feature.module.impl.grief;
+package cf.coffee.client.feature.module.impl.world;
 
 import cf.coffee.client.CoffeeMain;
 import cf.coffee.client.feature.config.DoubleSetting;
@@ -20,8 +20,18 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Decimator extends Module {
-    final DoubleSetting radius = this.config.create(new DoubleSetting.Builder(100).precision(0).name("Radius").description("How much to erase on X and Z").min(20).max(500).get());
-    final DoubleSetting delay = this.config.create(new DoubleSetting.Builder(30).precision(0).name("Delay").description("How much delay to use while erasing").min(0).max(1000).get());
+    final DoubleSetting radius = this.config.create(new DoubleSetting.Builder(100).precision(0)
+            .name("Radius")
+            .description("How much to erase on X and Z")
+            .min(20)
+            .max(500)
+            .get());
+    final DoubleSetting delay = this.config.create(new DoubleSetting.Builder(30).precision(0)
+            .name("Delay")
+            .description("How much delay to use while erasing")
+            .min(0)
+            .max(1000)
+            .get());
     final AtomicBoolean cancel = new AtomicBoolean(false);
     Thread runner;
     Vec3d startPos = null;
@@ -45,7 +55,8 @@ public class Decimator extends Module {
                 Vec3d root = startPos.add(ox, 0, oz);
                 BlockPos pp = new BlockPos(root);
                 latest = Vec3d.of(pp);
-                String chat = String.format("/fill %d %d %d %d %d %d minecraft:air", pp.getX() - 2, Objects.requireNonNull(CoffeeMain.client.world).getBottomY(), pp.getZ() - 2, pp.getX() + 2, CoffeeMain.client.world.getTopY() - 1, pp.getZ() + 2);
+                String chat = String.format("/fill %d %d %d %d %d %d minecraft:air", pp.getX() - 2, Objects.requireNonNull(CoffeeMain.client.world)
+                        .getBottomY(), pp.getZ() - 2, pp.getX() + 2, CoffeeMain.client.world.getTopY() - 1, pp.getZ() + 2);
                 Objects.requireNonNull(CoffeeMain.client.player).sendChatMessage(chat);
                 Utils.sleep((long) (delay.getValue() + 0));
             }
@@ -75,7 +86,8 @@ public class Decimator extends Module {
     @Override
     public void onWorldRender(MatrixStack matrices) {
         if (latest != null) {
-            Renderer.R3D.renderFilled(new Vec3d(latest.x - 2, Objects.requireNonNull(CoffeeMain.client.world).getBottomY(), latest.z - 2), new Vec3d(5, 0.001, 5), Utils.getCurrentRGB(), matrices);
+            Renderer.R3D.renderFilled(new Vec3d(latest.x - 2, Objects.requireNonNull(CoffeeMain.client.world)
+                    .getBottomY(), latest.z - 2), new Vec3d(5, 0.001, 5), Utils.getCurrentRGB(), matrices);
             Renderer.R3D.renderLine(new Vec3d(latest.x + .5, CoffeeMain.client.world.getBottomY(), latest.z + .5), new Vec3d(latest.x + .5, CoffeeMain.client.world.getTopY(), latest.z + .5), Color.RED, matrices);
         }
     }

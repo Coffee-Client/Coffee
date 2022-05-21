@@ -2,7 +2,7 @@
  * Copyright (c) 2022 Coffee client, 0x150 and contributors. See copyright file in project root.
  */
 
-package cf.coffee.client.feature.module.impl.grief;
+package cf.coffee.client.feature.module.impl.world;
 
 import cf.coffee.client.CoffeeMain;
 import cf.coffee.client.feature.config.DoubleSetting;
@@ -31,7 +31,12 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class AutoTNT extends Module {
-    final DoubleSetting placeDistance = this.config.create(new DoubleSetting.Builder(4).name("Place distance").description("How far to place the blocks apart").min(1).max(4).precision(0).get());
+    final DoubleSetting placeDistance = this.config.create(new DoubleSetting.Builder(4).name("Place distance")
+            .description("How far to place the blocks apart")
+            .min(1)
+            .max(4)
+            .precision(0)
+            .get());
     boolean missingTntAck = false;
 
     public AutoTNT() {
@@ -63,7 +68,8 @@ public class AutoTNT extends Module {
             for (double z = -10; z < 11; z++) {
                 List<Map.Entry<BlockPos, Double>> airs = new ArrayList<>();
 
-                for (int y = Objects.requireNonNull(CoffeeMain.client.world).getTopY(); y > CoffeeMain.client.world.getBottomY(); y--) {
+                for (int y = Objects.requireNonNull(CoffeeMain.client.world)
+                        .getTopY(); y > CoffeeMain.client.world.getBottomY(); y--) {
                     Vec3d currentOffset = new Vec3d(x, y, z);
                     BlockPos bp = new BlockPos(new Vec3d(ppos.x + currentOffset.x, y, ppos.z + currentOffset.z));
                     BlockState bs = CoffeeMain.client.world.getBlockState(bp);
@@ -72,8 +78,13 @@ public class AutoTNT extends Module {
                         airs.add(new AbstractMap.SimpleEntry<>(bp, dist));
                     }
                 }
-                airs = airs.stream().filter(blockPosDoubleEntry -> CoffeeMain.client.world.getBlockState(blockPosDoubleEntry.getKey().down()).getMaterial().blocksMovement()).collect(Collectors.toList());
-                Map.Entry<BlockPos, Double> best1 = airs.stream().min(Comparator.comparingDouble(Map.Entry::getValue)).orElse(null);
+                airs = airs.stream()
+                        .filter(blockPosDoubleEntry -> CoffeeMain.client.world.getBlockState(blockPosDoubleEntry.getKey()
+                                .down()).getMaterial().blocksMovement())
+                        .collect(Collectors.toList());
+                Map.Entry<BlockPos, Double> best1 = airs.stream()
+                        .min(Comparator.comparingDouble(Map.Entry::getValue))
+                        .orElse(null);
                 if (best1 == null) {
                     continue; // just void here, cancel
                 }
@@ -91,7 +102,8 @@ public class AutoTNT extends Module {
                         int sel = CoffeeMain.client.player.getInventory().selectedSlot;
                         CoffeeMain.client.player.getInventory().selectedSlot = finalTntSlot;
                         BlockHitResult bhr = new BlockHitResult(lmao, Direction.DOWN, best, false);
-                        Objects.requireNonNull(CoffeeMain.client.interactionManager).interactBlock(CoffeeMain.client.player, CoffeeMain.client.world, Hand.MAIN_HAND, bhr);
+                        Objects.requireNonNull(CoffeeMain.client.interactionManager)
+                                .interactBlock(CoffeeMain.client.player, CoffeeMain.client.world, Hand.MAIN_HAND, bhr);
                         CoffeeMain.client.player.getInventory().selectedSlot = sel;
                     });
                 }
@@ -125,7 +137,8 @@ public class AutoTNT extends Module {
             for (double z = -10; z < 11; z++) {
                 List<Map.Entry<BlockPos, Double>> airs = new ArrayList<>();
 
-                for (int y = Objects.requireNonNull(CoffeeMain.client.world).getTopY(); y > CoffeeMain.client.world.getBottomY(); y--) {
+                for (int y = Objects.requireNonNull(CoffeeMain.client.world)
+                        .getTopY(); y > CoffeeMain.client.world.getBottomY(); y--) {
                     Vec3d currentOffset = new Vec3d(x, y, z);
                     BlockPos bp = new BlockPos(new Vec3d(ppos.x + currentOffset.x, y, ppos.z + currentOffset.z));
                     BlockState bs = CoffeeMain.client.world.getBlockState(bp);
@@ -134,8 +147,13 @@ public class AutoTNT extends Module {
                         airs.add(new AbstractMap.SimpleEntry<>(bp, dist));
                     }
                 }
-                airs = airs.stream().filter(blockPosDoubleEntry -> CoffeeMain.client.world.getBlockState(blockPosDoubleEntry.getKey().down()).getMaterial().blocksMovement()).collect(Collectors.toList());
-                Map.Entry<BlockPos, Double> best1 = airs.stream().min(Comparator.comparingDouble(Map.Entry::getValue)).orElse(null);
+                airs = airs.stream()
+                        .filter(blockPosDoubleEntry -> CoffeeMain.client.world.getBlockState(blockPosDoubleEntry.getKey()
+                                .down()).getMaterial().blocksMovement())
+                        .collect(Collectors.toList());
+                Map.Entry<BlockPos, Double> best1 = airs.stream()
+                        .min(Comparator.comparingDouble(Map.Entry::getValue))
+                        .orElse(null);
                 if (best1 == null) {
                     continue; // just void here, cancel
                 }

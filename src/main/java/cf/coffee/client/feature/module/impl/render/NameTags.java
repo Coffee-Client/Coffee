@@ -104,7 +104,12 @@ public class NameTags extends Module {
     @Override
     public void onWorldRender(MatrixStack matrices) {
         // sort the entire thing based on the most distant to the least distant because thats how rendering works
-        for (AbstractClientPlayerEntity player : client.world.getPlayers().stream().sorted(Comparator.comparingDouble(value -> -value.getPos().distanceTo(client.gameRenderer.getCamera().getPos()))).filter(abstractClientPlayerEntity -> !abstractClientPlayerEntity.equals(client.player)).toList()) {
+        for (AbstractClientPlayerEntity player : client.world.getPlayers()
+                .stream()
+                .sorted(Comparator.comparingDouble(value -> -value.getPos()
+                        .distanceTo(client.gameRenderer.getCamera().getPos())))
+                .filter(abstractClientPlayerEntity -> !abstractClientPlayerEntity.equals(client.player))
+                .toList()) {
             //            String t = player.getEntityName();
             render(matrices, player, player.getName());
         }

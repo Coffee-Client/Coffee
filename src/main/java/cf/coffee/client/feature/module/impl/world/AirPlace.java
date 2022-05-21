@@ -30,11 +30,12 @@ public class AirPlace extends Module {
             if (enabled && ((MouseEvent) event).getButton() == 1 && ((MouseEvent) event).getAction() == 1) {
                 if (CoffeeMain.client.currentScreen != null) return;
                 try {
-                    if (!client.world.getBlockState(((BlockHitResult) CoffeeMain.client.crosshairTarget).getBlockPos()).isAir())
-                        return;
+                    if (!client.world.getBlockState(((BlockHitResult) CoffeeMain.client.crosshairTarget).getBlockPos())
+                            .isAir()) return;
                     CoffeeMain.client.player.networkHandler.sendPacket(new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, (BlockHitResult) CoffeeMain.client.crosshairTarget));
                     if ((client.player.getMainHandStack().getItem() instanceof BlockItem))
-                        Renderer.R3D.renderFadingBlock(Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 255), Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 100).darker(), Vec3d.of(((BlockHitResult) CoffeeMain.client.crosshairTarget).getBlockPos()), new Vec3d(1, 1, 1), 1000);
+                        Renderer.R3D.renderFadingBlock(Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 255), Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 100)
+                                .darker(), Vec3d.of(((BlockHitResult) CoffeeMain.client.crosshairTarget).getBlockPos()), new Vec3d(1, 1, 1), 1000);
                     CoffeeMain.client.player.swingHand(Hand.MAIN_HAND);
                     event.setCancelled(true);
                 } catch (Exception ignored) {

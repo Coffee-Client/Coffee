@@ -30,7 +30,8 @@ public class PlayerHeadResolver {
 
     public static void resolve(UUID uuid, Texture texture) {
         if (imageCache.containsKey(uuid)) {
-            CoffeeMain.client.execute(() -> CoffeeMain.client.getTextureManager().registerTexture(texture, imageCache.get(uuid)));
+            CoffeeMain.client.execute(() -> CoffeeMain.client.getTextureManager()
+                    .registerTexture(texture, imageCache.get(uuid)));
             return;
         }
         imageCache.put(uuid, EMPTY);
@@ -38,7 +39,6 @@ public class PlayerHeadResolver {
         URI u = URI.create("https://mc-heads.net/avatar/" + uuid);
         HttpRequest hr = HttpRequest.newBuilder().uri(u).header("user-agent", "coffee/1.0").build();
         CoffeeMain.log(Level.DEBUG, "Getting player head for", uuid);
-        //System.out.println("getting " + uuid.toString());
         client.sendAsync(hr, HttpResponse.BodyHandlers.ofByteArray()).thenAccept(httpResponse -> {
             try {
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();

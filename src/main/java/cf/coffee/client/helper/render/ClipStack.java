@@ -20,7 +20,6 @@ public class ClipStack {
     public static final ClipStack globalInstance = new ClipStack();
     final Stack<TransformationEntry> clipStack = new Stack<>();
 
-    //Rectangle lastStack = null;
     public void addWindow(MatrixStack stack, Rectangle r1) {
         Matrix4f matrix = stack.peek().getPositionMatrix();
         Vector4f coord = new Vector4f((float) r1.getX(), (float) r1.getY(), 0, 1);
@@ -34,7 +33,6 @@ public class ClipStack {
         Rectangle r = new Rectangle(x, y, endX, endY);
         if (clipStack.empty()) {
             clipStack.push(new TransformationEntry(r, stack.peek()));
-            //            renderDebug(r.getX(),r.getY(),r.getX1(),r.getY1());
 
             Renderer.R2D.beginScissor(r.getX(), r.getY(), r.getX1(), r.getY1());
         } else {
@@ -48,9 +46,6 @@ public class ClipStack {
             double nstx = MathHelper.clamp(r.getX1(), nsx, lstx);
             double nsty = MathHelper.clamp(r.getY1(), nsy, lsty); // totally intended varname
             clipStack.push(new TransformationEntry(new Rectangle(nsx, nsy, nstx, nsty), stack.peek()));
-
-
-            //            renderDebug(nsx,nsy,nstx,nsty);
 
             Renderer.R2D.beginScissor(nsx, nsy, nstx, nsty);
         }
@@ -77,7 +72,6 @@ public class ClipStack {
         } else {
             TransformationEntry r1 = clipStack.peek();
             Rectangle r = r1.rect;
-            //            Renderer.R2D.renderLine(stack,Color.BLUE,r.getX1(),r.getY(),r.getX(),r.getY1());
             MatrixStack s = new MatrixStack();
             Deque<MatrixStack.Entry> p = ((MatrixStackAccessor) s).getStack();
             p.clear();

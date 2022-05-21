@@ -24,7 +24,9 @@ public class Glyph {
     Rectangle2D dimensions;
 
     public Glyph(char c, Font f) {
-        this.imageTex = new Texture("font/glyphs/" + ((int) c) + "-" + f.getName().toLowerCase().hashCode() + (int) Math.floor(Math.random() * 0xFFFF));
+        this.imageTex = new Texture("font/glyphs/" + ((int) c) + "-" + f.getName()
+                .toLowerCase()
+                .hashCode() + (int) Math.floor(Math.random() * 0xFFFF));
         this.f = f;
         this.c = c;
         generateTexture();

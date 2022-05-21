@@ -55,7 +55,10 @@ public class AddonManagerScreen extends ClientScreen implements FastTickable {
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
         if (new Rectangle(width / 2d - WIDGET_WIDTH / 2d, height / 2d - WIDGET_HEIGHT / 2d, width / 2d + WIDGET_WIDTH / 2d, height / 2d + WIDGET_HEIGHT / 2d).contains(mouseX, mouseY)) {
-            double contentHeight = viewerList.stream().map(addonViewer -> addonViewer.getHeight() + 5).reduce(Double::sum).orElse(0d) + 5;
+            double contentHeight = viewerList.stream()
+                    .map(addonViewer -> addonViewer.getHeight() + 5)
+                    .reduce(Double::sum)
+                    .orElse(0d) + 5;
             double entitledScroll = Math.max(0, contentHeight - WIDGET_HEIGHT);
             scroller.setBounds(0, entitledScroll);
             scroller.scroll(amount);
@@ -67,7 +70,8 @@ public class AddonManagerScreen extends ClientScreen implements FastTickable {
     @Override
     protected void init() {
         reInitViewers();
-        RoundButton openFolder = new RoundButton(RoundButton.STANDARD, 5, 5, 100, 20, "Open folder", () -> Util.getOperatingSystem().open(AddonManager.ADDON_DIRECTORY));
+        RoundButton openFolder = new RoundButton(RoundButton.STANDARD, 5, 5, 100, 20, "Open folder", () -> Util.getOperatingSystem()
+                .open(AddonManager.ADDON_DIRECTORY));
         this.addDrawableChild(openFolder);
     }
 
@@ -141,7 +145,8 @@ public class AddonManagerScreen extends ClientScreen implements FastTickable {
             RenderSystem.clear(GL40C.GL_COLOR_BUFFER_BIT, false);
             RenderSystem.colorMask(true, true, true, true);
             RenderSystem.setShader(GameRenderer::getPositionColorShader);
-            Renderer.R2D.renderRoundedQuadInternal(stack.peek().getPositionMatrix(), background.getRed() / 255f, background.getGreen() / 255f, background.getBlue() / 255f, 1, x + padding, y + padding, x + padding + iconDimensions, y + padding + iconDimensions, 6, 10);
+            Renderer.R2D.renderRoundedQuadInternal(stack.peek()
+                    .getPositionMatrix(), background.getRed() / 255f, background.getGreen() / 255f, background.getBlue() / 255f, 1, x + padding, y + padding, x + padding + iconDimensions, y + padding + iconDimensions, 6, 10);
 
             RenderSystem.blendFunc(GL40C.GL_DST_ALPHA, GL40C.GL_ONE_MINUS_DST_ALPHA);
             Identifier icon = addon.getIcon();

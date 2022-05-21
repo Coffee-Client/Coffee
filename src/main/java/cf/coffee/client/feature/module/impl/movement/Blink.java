@@ -20,7 +20,9 @@ import java.util.List;
 public class Blink extends Module {
 
     final List<Packet<?>> queue = new ArrayList<>();
-    final EnumSetting<Mode> mode = this.config.create(new EnumSetting.Builder<>(Mode.Delay).name("Mode").description("Whether to delay or remove the packets being sent").get());
+    final EnumSetting<Mode> mode = this.config.create(new EnumSetting.Builder<>(Mode.Delay).name("Mode")
+            .description("Whether to delay or remove the packets being sent")
+            .get());
 
     public Blink() {
         super("Blink", "Delay or cancel outgoing packets", ModuleType.MOVEMENT);
@@ -80,7 +82,6 @@ public class Blink extends Module {
 
     }
 
-    //    final MultiValue      mode  = (MultiValue) this.config.create("Mode", "delay", "delay", "drop").description("Whether or not to delay or drop the packets");
     public enum Mode {
         Delay, Drop
     }

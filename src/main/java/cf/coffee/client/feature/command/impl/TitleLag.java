@@ -27,7 +27,12 @@ public class TitleLag extends Command {
 
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
-        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.PLAYER, Objects.requireNonNull(CoffeeMain.client.world).getPlayers().stream().map(abstractClientPlayerEntity -> abstractClientPlayerEntity.getGameProfile().getName()).toList().toArray(String[]::new)));
+        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.PLAYER, Objects.requireNonNull(CoffeeMain.client.world)
+                .getPlayers()
+                .stream()
+                .map(abstractClientPlayerEntity -> abstractClientPlayerEntity.getGameProfile().getName())
+                .toList()
+                .toArray(String[]::new)));
     }
 
     @Override
@@ -35,9 +40,12 @@ public class TitleLag extends Command {
         validateArgumentsLength(args, 1, "Provide target player");
         PlayerEntity target = new PlayerFromNameArgumentParser(true).parse(args[0]);
         String targetName = target.getGameProfile().getName();
-        CoffeeMain.client.getNetworkHandler().sendPacket(new ChatMessageC2SPacket("/gamerule sendCommandFeedback false"));
-        CoffeeMain.client.getNetworkHandler().sendPacket(new ChatMessageC2SPacket("/title " + targetName + " times 0 999999999 0"));
-        CoffeeMain.client.getNetworkHandler().sendPacket(new ChatMessageC2SPacket("/gamerule sendCommandFeedback true"));
+        CoffeeMain.client.getNetworkHandler()
+                .sendPacket(new ChatMessageC2SPacket("/gamerule sendCommandFeedback false"));
+        CoffeeMain.client.getNetworkHandler()
+                .sendPacket(new ChatMessageC2SPacket("/title " + targetName + " times 0 999999999 0"));
+        CoffeeMain.client.getNetworkHandler()
+                .sendPacket(new ChatMessageC2SPacket("/gamerule sendCommandFeedback true"));
         ItemStack stack = new ItemStack(Items.COMMAND_BLOCK, 1);
         try {
             stack.setNbt(StringNbtReader.parse("{BlockEntityTag:{Command:\"/title " + targetName + " title {\\\"text\\\":\\\"" + "l".repeat(32767) + "\\\",\\\"obfuscated\\\":true}\",powered:0b,auto:1b,conditionMet:1b}}"));

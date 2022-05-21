@@ -88,7 +88,6 @@ public abstract class SettingBase<V> {
      * @param value The new value
      */
     public void setValue(V value) {
-        //        System.out.println("SET "+this.value+" -> "+value);
         this.value = value;
         if (this.onChanged != null) for (Consumer<V> vConsumer : this.onChanged) {
             vConsumer.accept(value);

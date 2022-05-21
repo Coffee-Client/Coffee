@@ -97,7 +97,10 @@ public class ClickGUI extends Screen implements FastTickable {
                 disp.setOpen(entry.expanded);
                 List<ModuleDisplay> mdList = disp.getMd();
                 for (ClickguiConfigContainer.ModuleEntry moduleEntry : entry.entries) {
-                    ModuleDisplay mde = mdList.stream().filter(moduleDisplay -> moduleDisplay.getModule().getName().equals(moduleEntry.name)).findFirst().orElse(null);
+                    ModuleDisplay mde = mdList.stream()
+                            .filter(moduleDisplay -> moduleDisplay.getModule().getName().equals(moduleEntry.name))
+                            .findFirst()
+                            .orElse(null);
                     if (mde == null) continue;
                     mde.setExtended(moduleEntry.expanded);
                 }
@@ -168,7 +171,12 @@ public class ClickGUI extends Screen implements FastTickable {
         double x = 5;
         double y = 5;
         double tallestInTheRoom = 0;
-        for (ModuleType value : Arrays.stream(ModuleType.values()).sorted(Comparator.comparingLong(value -> -ModuleRegistry.getModules().stream().filter(module -> module.getModuleType() == value).count())).toList()) {
+        for (ModuleType value : Arrays.stream(ModuleType.values())
+                .sorted(Comparator.comparingLong(value -> -ModuleRegistry.getModules()
+                        .stream()
+                        .filter(module -> module.getModuleType() == value)
+                        .count()))
+                .toList()) {
             CategoryDisplay cd = new CategoryDisplay(x, y, value);
             tallestInTheRoom = Math.max(tallestInTheRoom, cd.getHeight());
             x += cd.getWidth() + 5;
@@ -233,7 +241,8 @@ public class ClickGUI extends Screen implements FastTickable {
             for (String s : text) {
                 width = Math.max(width, FontRenderers.getRenderer().getStringWidth(s));
             }
-            Vec2f root = Renderer.R2D.renderTooltip(matrices, descX, descY, width + 4, FontRenderers.getRenderer().getMarginHeight() + 4, tooltipColor);
+            Vec2f root = Renderer.R2D.renderTooltip(matrices, descX, descY, width + 4, FontRenderers.getRenderer()
+                    .getMarginHeight() + 4, tooltipColor);
             float yOffset = 2;
             for (String s : text) {
                 FontRenderers.getRenderer().drawString(matrices, s, root.x + 1, root.y + yOffset, 0xFFFFFF, false);

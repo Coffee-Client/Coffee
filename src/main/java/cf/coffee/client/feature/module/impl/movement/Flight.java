@@ -34,9 +34,17 @@ import java.util.Random;
 
 public class Flight extends Module {
 
-    final EnumSetting<FlightMode> mode = this.config.create(new EnumSetting.Builder<>(FlightMode.Static).name("Mode").description("How you fly").get());
-    final BooleanSetting bypassVanillaAc = this.config.create(new BooleanSetting.Builder(true).name("Bypass vanilla AC").description("Whether to bypass the vanilla anticheat").get());
-    final DoubleSetting speed = this.config.create(new DoubleSetting.Builder(1).name("Speed").description("How fast you fly").min(0).max(10).get());
+    final EnumSetting<FlightMode> mode = this.config.create(new EnumSetting.Builder<>(FlightMode.Static).name("Mode")
+            .description("How you fly")
+            .get());
+    final BooleanSetting bypassVanillaAc = this.config.create(new BooleanSetting.Builder(true).name("Bypass vanilla AC")
+            .description("Whether to bypass the vanilla anticheat")
+            .get());
+    final DoubleSetting speed = this.config.create(new DoubleSetting.Builder(1).name("Speed")
+            .description("How fast you fly")
+            .min(0)
+            .max(10)
+            .get());
     final List<Packet<?>> queue = new ArrayList<>();
     final Timer lag = new Timer();
     int bypassTimer = 0;
@@ -68,8 +76,10 @@ public class Flight extends Module {
             if (bypassTimer > 10) {
                 bypassTimer = 0;
                 Vec3d p = CoffeeMain.client.player.getPos();
-                CoffeeMain.client.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(p.x, p.y - 0.2, p.z, false));
-                CoffeeMain.client.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(p.x, p.y + 0.2, p.z, false));
+                CoffeeMain.client.getNetworkHandler()
+                        .sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(p.x, p.y - 0.2, p.z, false));
+                CoffeeMain.client.getNetworkHandler()
+                        .sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(p.x, p.y + 0.2, p.z, false));
             }
         }
         switch (mode.getValue()) {
@@ -194,7 +204,8 @@ public class Flight extends Module {
         bypassTimer = 0;
         flewBefore = Objects.requireNonNull(CoffeeMain.client.player).getAbilities().flying;
         CoffeeMain.client.player.setOnGround(false);
-        Objects.requireNonNull(CoffeeMain.client.getNetworkHandler()).sendPacket(new ClientCommandC2SPacket(CoffeeMain.client.player, ClientCommandC2SPacket.Mode.RELEASE_SHIFT_KEY));
+        Objects.requireNonNull(CoffeeMain.client.getNetworkHandler())
+                .sendPacket(new ClientCommandC2SPacket(CoffeeMain.client.player, ClientCommandC2SPacket.Mode.RELEASE_SHIFT_KEY));
     }
 
     @EventListener(type = EventType.PACKET_SEND)

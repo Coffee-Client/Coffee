@@ -35,7 +35,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class SpotLightScreen extends ClientScreen implements FastTickable {
+public class SpotlightScreen extends ClientScreen implements FastTickable {
     CommandTextField command;
     List<SuggestionsEntry> entries = new ArrayList<>();
     double anim = 0;
@@ -111,7 +111,10 @@ public class SpotLightScreen extends ClientScreen implements FastTickable {
         command.opacity = 1f;
 
 
-        double suggestionsHeight = entries.stream().map(suggestionsEntry -> suggestionsEntry.height() + 2).reduce(Double::sum).orElse(0d);
+        double suggestionsHeight = entries.stream()
+                .map(suggestionsEntry -> suggestionsEntry.height() + 2)
+                .reduce(Double::sum)
+                .orElse(0d);
         this.suggestionsHeight = suggestionsHeight;
         suggestionsHeight = Math.min(suggestionsHeight, 200);
 
@@ -125,8 +128,6 @@ public class SpotLightScreen extends ClientScreen implements FastTickable {
         }
         Renderer.R2D.renderRoundedQuad(stack, new Color(20, 20, 20), command.x, command.y, command.x + command.width, command.y + totalHeight, 5, 20);
         Renderer.R2D.renderRoundedQuad(stack, new Color(30, 30, 30), command.x, command.y, command.x + command.width, command.y + command.height, 5, 20);
-
-        //        useSelectingIndex = !(mouseX >= suggestionsField.getX() && mouseX <= suggestionsField.getX1() && mouseY >= suggestionsField.getY() && mouseY <= suggestionsField.getY1());
 
         double yOffset = 0;
         stack.push();
@@ -562,7 +563,6 @@ public class SpotLightScreen extends ClientScreen implements FastTickable {
             double centerY = y + height / 2d - innerHeight / 2d;
 
             ClipStack.globalInstance.addWindow(stack, new Rectangle(x + pad, y, x + width - pad, y + height));
-            //Renderer.R2D.beginScissor(stack, x + pad, y, x + width - pad, y + height);
             // Text content
             if (!text.isEmpty()) {
                 fa.drawString(stack, text, (float) (x + pad - overflowWidth), (float) (centerY), 1f, 1f, 1f, opacity, false);
@@ -577,7 +577,6 @@ public class SpotLightScreen extends ClientScreen implements FastTickable {
                 Renderer.R2D.renderQuad(stack, new Color(50, 50, 255, (int) (100 * opacity)), selStart, centerY, selEnd, centerY + fa.getMarginHeight());
             }
             ClipStack.globalInstance.popWindow();
-            //Renderer.R2D.endScissor();
             boolean renderCursor = (System.currentTimeMillis() % 1000) / 500d > 1;
             if (focused && renderCursor) {
                 Renderer.R2D.renderQuad(stack, new Color(1f, 1f, 1f, opacity), x + pad + getTextWidth(cursor) - overflowWidth, centerY, x + pad + getTextWidth(cursor) - overflowWidth + 1, centerY + fa.getMarginHeight());
@@ -772,8 +771,11 @@ public class SpotLightScreen extends ClientScreen implements FastTickable {
             }
             RenderSystem.setShaderTexture(0, icon);
             Renderer.R2D.renderTexture(stack, x + padUpDown, yCenter - contentSize / 2d, contentSize, contentSize, 0, 0, contentSize, contentSize, contentSize, contentSize);
-            FontRenderers.getRenderer().drawString(stack, title, x + padUpDown + contentSize + padUpDown, yCenter - contentSize / 2d, 0xAAAAAA);
-            FontRenderers.getRenderer().drawString(stack, text, x + padUpDown + contentSize + padUpDown, yCenter - contentSize / 2d + FontRenderers.getRenderer().getMarginHeight(), 0xFFFFFF);
+            FontRenderers.getRenderer()
+                    .drawString(stack, title, x + padUpDown + contentSize + padUpDown, yCenter - contentSize / 2d, 0xAAAAAA);
+            FontRenderers.getRenderer()
+                    .drawString(stack, text, x + padUpDown + contentSize + padUpDown, yCenter - contentSize / 2d + FontRenderers.getRenderer()
+                            .getMarginHeight(), 0xFFFFFF);
         }
 
         public double height() {

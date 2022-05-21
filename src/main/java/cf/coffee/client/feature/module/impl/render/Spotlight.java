@@ -4,7 +4,7 @@
 
 package cf.coffee.client.feature.module.impl.render;
 
-import cf.coffee.client.feature.gui.screen.SpotLightScreen;
+import cf.coffee.client.feature.gui.screen.SpotlightScreen;
 import cf.coffee.client.feature.module.Module;
 import cf.coffee.client.feature.module.ModuleType;
 import cf.coffee.client.feature.module.NoNotificationDefault;
@@ -18,7 +18,7 @@ public class Spotlight extends Module {
 
     @Override
     public void tick() {
-        client.setScreen(new SpotLightScreen());
+        client.setScreen(new SpotlightScreen());
         setEnabled(false);
     }
 

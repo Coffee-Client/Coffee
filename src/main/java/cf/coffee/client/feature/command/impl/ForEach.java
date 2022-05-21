@@ -66,11 +66,16 @@ public class ForEach extends Command {
         int delay = new IntegerArgumentParser().parse(args[1]);
         switch (args[0]) {
             case "player" -> {
-                for (PlayerListEntry playerListEntry : Objects.requireNonNull(CoffeeMain.client.getNetworkHandler()).getPlayerList()) {
-                    if (Utils.Players.isPlayerNameValid(playerListEntry.getProfile().getName()) && !playerListEntry.getProfile().getId().equals(Objects.requireNonNull(CoffeeMain.client.player).getUuid())) {
+                for (PlayerListEntry playerListEntry : Objects.requireNonNull(CoffeeMain.client.getNetworkHandler())
+                        .getPlayerList()) {
+                    if (Utils.Players.isPlayerNameValid(playerListEntry.getProfile()
+                            .getName()) && !playerListEntry.getProfile()
+                            .getId()
+                            .equals(Objects.requireNonNull(CoffeeMain.client.player).getUuid())) {
                         runner.execute(() -> {
                             try {
-                                CoffeeMain.client.player.sendChatMessage(String.join(" ", Arrays.copyOfRange(args, 2, args.length)).replaceAll("%s", playerListEntry.getProfile().getName()));
+                                CoffeeMain.client.player.sendChatMessage(String.join(" ", Arrays.copyOfRange(args, 2, args.length))
+                                        .replaceAll("%s", playerListEntry.getProfile().getName()));
                                 Thread.sleep(delay);
                             } catch (Exception ignored) {
                             }

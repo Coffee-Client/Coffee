@@ -5,7 +5,6 @@
 package cf.coffee.client.helper.util;
 
 import cf.coffee.client.CoffeeMain;
-import cf.coffee.client.feature.gui.screen.ConsoleScreen;
 import cf.coffee.client.helper.Texture;
 import cf.coffee.client.helper.font.adapter.FontAdapter;
 import cf.coffee.client.mixin.IMinecraftClientAccessor;
@@ -142,11 +141,13 @@ public class Utils {
 
         public static void drop(int index) {
             int translatedSlotId = slotIndexToId(index);
-            Objects.requireNonNull(CoffeeMain.client.interactionManager).clickSlot(Objects.requireNonNull(CoffeeMain.client.player).currentScreenHandler.syncId, translatedSlotId, 1, SlotActionType.THROW, CoffeeMain.client.player);
+            Objects.requireNonNull(CoffeeMain.client.interactionManager)
+                    .clickSlot(Objects.requireNonNull(CoffeeMain.client.player).currentScreenHandler.syncId, translatedSlotId, 1, SlotActionType.THROW, CoffeeMain.client.player);
         }
 
         public static void moveStackToOther(int slotIdFrom, int slotIdTo) {
-            Objects.requireNonNull(CoffeeMain.client.interactionManager).clickSlot(0, slotIdFrom, 0, SlotActionType.PICKUP, CoffeeMain.client.player); // pick up item from stack
+            Objects.requireNonNull(CoffeeMain.client.interactionManager)
+                    .clickSlot(0, slotIdFrom, 0, SlotActionType.PICKUP, CoffeeMain.client.player); // pick up item from stack
             CoffeeMain.client.interactionManager.clickSlot(0, slotIdTo, 0, SlotActionType.PICKUP, CoffeeMain.client.player); // put item to target
             CoffeeMain.client.interactionManager.clickSlot(0, slotIdFrom, 0, SlotActionType.PICKUP, CoffeeMain.client.player); // (in case target slot had item) put item from target back to from
         }
@@ -266,9 +267,7 @@ public class Utils {
         public static void message(String n, Color c) {
             LiteralText t = new LiteralText(n);
             t.setStyle(t.getStyle().withColor(TextColor.fromRgb(c.getRGB())));
-            if (!(CoffeeMain.client.currentScreen instanceof ConsoleScreen)) message(t);
-            //            if (c.equals(Color.WHITE)) c = Color.BLACK;
-            ConsoleScreen.instance().addLog(new ConsoleScreen.LogEntry(n, c));
+            message(t);
         }
 
     }

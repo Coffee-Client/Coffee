@@ -12,6 +12,8 @@ import cf.coffee.client.feature.module.Module;
 import cf.coffee.client.feature.module.ModuleType;
 import cf.coffee.client.helper.render.Renderer;
 import cf.coffee.client.helper.util.Utils;
+import cf.coffee.client.helper.vertex.DumpVertexConsumer;
+import cf.coffee.client.helper.vertex.DumpVertexProvider;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.BufferRenderer;
@@ -20,6 +22,7 @@ import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormats;
+import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -33,11 +36,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ESP extends Module {
-    public final EnumSetting<Mode> outlineMode = this.config.create(new EnumSetting.Builder<>(Mode.Filled).name("Outline mode").description("How to render the outline").get());
-    public final BooleanSetting entities = this.config.create(new BooleanSetting.Builder(false).name("Show entities").description("Render entities").get());
-    public final BooleanSetting players = this.config.create(new BooleanSetting.Builder(true).name("Show players").description("Render players").get());
+    //static DumpVertexConsumer consumer = new DumpVertexConsumer();
+    static DumpVertexProvider provider;
+    public final EnumSetting<Mode> outlineMode = this.config.create(new EnumSetting.Builder<>(Mode.Filled).name("Outline mode")
+            .description("How to render the outline")
+            .get());
+    public final BooleanSetting entities = this.config.create(new BooleanSetting.Builder(false).name("Show entities")
+            .description("Render entities")
+            .get());
+    public final BooleanSetting players = this.config.create(new BooleanSetting.Builder(true).name("Show players")
+            .description("Render players")
+            .get());
     public final List<double[]> vertexDumps = new ArrayList<>();
-    final DoubleSetting range = this.config.create(new DoubleSetting.Builder(64).name("Range").description("How far to render the entities").min(32).max(128).precision(1).get());
+    final DoubleSetting range = this.config.create(new DoubleSetting.Builder(64).name("Range")
+            .description("How far to render the entities")
+            .min(32)
+            .max(128)
+            .precision(1)
+            .get());
     public boolean recording = false;
 
     public ESP() {
@@ -96,7 +112,6 @@ public class ESP extends Module {
             buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
             for (double[][] vert : verts) {
 
-
                 for (double[] vertexDump : vert) {
                     p = (((/*vertexDump[0]+vertexDump[1]+*/vertexDump[2]) % 10) / 10 + (System.currentTimeMillis() % 2000) / 2000d) % 1;
                     int col = Color.HSBtoRGB((float) p, .6f, 1f);
@@ -141,16 +156,32 @@ public class ESP extends Module {
     }
 
     void renderShaderOutline(Entity e, MatrixStack stack) {
-        Vec3d origin = Utils.getInterpolatedEntityPosition(e);
-        float w = e.getWidth();
-        float h = e.getHeight();
-
-        Vec3d[] boxPoints = new Vec3d[] { origin.add(-w / 2d, 0, -w / 2d), origin.add(-w / 2d, 0, w / 2d), origin.add(w / 2d, 0, w / 2d), origin.add(w / 2d, 0, -w / 2d), origin.add(-w / 2d, h, -w / 2d), origin.add(-w / 2d, h, w / 2d), origin.add(w / 2d, h, w / 2d), origin.add(w / 2d, h, -w / 2d), };
-        Vec3d[] screenSpace = new Vec3d[boxPoints.length];
-        for (int i = 0; i < boxPoints.length; i++) {
-            Vec3d boxP = boxPoints[i];
-            screenSpace[i] = Renderer.R2D.getScreenSpaceCoordinate(boxP, stack);
+        if (provider == null) {
+            provider = new DumpVertexProvider();
         }
+        //consumer.clear();
+
+        Vec3d origin = Utils.getInterpolatedEntityPosition(e);
+
+        EntityRenderer<? super Entity> eRenderer = client.getEntityRenderDispatcher().getRenderer(e);
+        eRenderer.render(e, e.getYaw(), client.getTickDelta(), Renderer.R3D.getEmptyMatrixStack(), provider, 0);
+        List<Vec3d> boxPoints = new ArrayList<>();
+        for (DumpVertexConsumer consumer : provider.getBuffers()) {
+            for (DumpVertexConsumer.VertexData vertexData : consumer.getStack()) {
+                if (vertexData.getPosition() != null) boxPoints.add(vertexData.getPosition().add(origin));
+            }
+            consumer.clear();
+        }
+        //for (DumpVertexConsumer.VertexData vertexData : consumer.getStack()) {
+        //
+        //}
+        Vec3d[] screenSpace = boxPoints.stream()
+                .map(ee -> Renderer.R2D.getScreenSpaceCoordinate(ee, stack))
+                .toList()
+                .toArray(Vec3d[]::new);
+
+        if (screenSpace.length == 0) return;
+
         Vec3d leastX = screenSpace[0];
         Vec3d mostX = screenSpace[0];
         Vec3d leastY = screenSpace[0];
@@ -187,7 +218,6 @@ public class ESP extends Module {
             renderCorner(bufferBuilder, matrix, r, g, b, a, x2, y2, desiredHeight, desiredWidth, -1, -1);
             renderCorner(bufferBuilder, matrix, r, g, b, a, x1, y2, desiredHeight, desiredWidth, 1, -1);
 
-
             Renderer.endRender();
 
         });
@@ -197,8 +227,6 @@ public class ESP extends Module {
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
         bb.begin(VertexFormat.DrawMode.TRIANGLE_FAN, VertexFormats.POSITION_COLOR);
         float width = 1;
-        //float height = 50;
-        //float topWidth = 30;
         /*
         4---------5
         |         |
@@ -209,22 +237,10 @@ public class ESP extends Module {
         */
         //matrix.multiply(new Quaternion(0,0,(float) rotation,true));
         float[][] verts = new float[][] { new float[] { 0, 0 }, new float[] { 0, height }, new float[] { -width, height }, new float[] { -width, -width }, new float[] { topWidth, -width }, new float[] { topWidth, 0 }, new float[] { 0, 0 } };
-        //double rad = Math.toRadians(rotation);
-        //double sin = Math.sin(rad);
-        //double cos = Math.cos(rad);
-        //double sin = .5;
-        //double cos = 1;
         for (float[] vert : verts) {
 
             bb.vertex(matrix, x + vert[0] * xMul, y + vert[1] * yMul, 0f).color(r, g, b, a).next();
         }
-        //bb.vertex(matrix,x,y,0f).color(r,g,b,a).next();
-        //bb.vertex(matrix,x,y+height,0).color(r,g,b,a).next();
-        //bb.vertex(matrix,x-width,y+height,0).color(r,g,b,a).next();
-        //bb.vertex(matrix,x-width,y-width,0).color(r,g,b,a).next();
-        //bb.vertex(matrix,x+topWidth,y-width,0).color(r,g,b,a).next();
-        //bb.vertex(matrix,x+topWidth,y,0).color(r,g,b,a).next();
-        //bb.vertex(matrix,x,y,0f).color(r,g,b,a).next();
         bb.end();
         BufferRenderer.draw(bb);
     }

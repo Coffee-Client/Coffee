@@ -201,7 +201,10 @@ public class NbtEditorScreen extends ClientScreen implements FastTickable {
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
-        double contentWidth = initial.stream().map(s -> FontRenderers.getMono().getStringWidth(s)).max(Comparator.comparingDouble(value -> value)).orElse(0f);
+        double contentWidth = initial.stream()
+                .map(s -> FontRenderers.getMono().getStringWidth(s))
+                .max(Comparator.comparingDouble(value -> value))
+                .orElse(0f);
         double windowWidth = width - 14;
         double entitledX = contentWidth - windowWidth;
         entitledX = Math.max(0, entitledX);
@@ -387,7 +390,6 @@ public class NbtEditorScreen extends ClientScreen implements FastTickable {
     public void renderInternal(MatrixStack stack, int mouseX, int mouseY, float delta) {
         Renderer.R2D.renderRoundedQuad(stack, new Color(20, 20, 20, 200), 5, 5, width - 5, height - 30, 5, 20);
         ClipStack.globalInstance.addWindow(stack, new Rectangle(5, 5, width - 5, height - 30));
-        //Renderer.R2D.beginScissor(stack, 5, 5, width - 5, height - 30);
         double initY = 7 - smoothScroll;
 
         double initX = 7 - smoothScrollX;
@@ -400,23 +402,24 @@ public class NbtEditorScreen extends ClientScreen implements FastTickable {
                 if (searchLen > 0) {
                     int currentResult = s.toLowerCase().indexOf(search.get().toLowerCase());
                     if (currentResult != -1) {
-                        Renderer.R2D.renderQuad(stack, new Color(0x50AB5909, true), 5, y, width - 5, y + FontRenderers.getMono().getMarginHeight());
+                        Renderer.R2D.renderQuad(stack, new Color(0x50AB5909, true), 5, y, width - 5, y + FontRenderers.getMono()
+                                .getMarginHeight());
                     }
                     while (currentResult >= 0) {
-                        double paddingX = FontRenderers.getMono().getStringWidth(s.substring(0, currentResult)) + 7 - smoothScrollX;
-                        double markedTextWidth = FontRenderers.getMono().getStringWidth(s.substring(currentResult, currentResult + searchLen)) + 2;
-                        Renderer.R2D.renderRoundedQuad(stack, new Color(0xAB5907), paddingX, y, paddingX + markedTextWidth, y + FontRenderers.getMono().getMarginHeight(), 2, 10);
+                        double paddingX = FontRenderers.getMono()
+                                .getStringWidth(s.substring(0, currentResult)) + 7 - smoothScrollX;
+                        double markedTextWidth = FontRenderers.getMono()
+                                .getStringWidth(s.substring(currentResult, currentResult + searchLen)) + 2;
+                        Renderer.R2D.renderRoundedQuad(stack, new Color(0xAB5907), paddingX, y, paddingX + markedTextWidth, y + FontRenderers.getMono()
+                                .getMarginHeight(), 2, 10);
                         currentResult = s.toLowerCase().indexOf(search.get().toLowerCase(), currentResult + 1);
                     }
                 }
                 for (int i = 0; i < s.toCharArray().length; i++) {
-                    //                    boolean isInSearch = indexOfSearch != -1 && i >= indexOfSearch && i < indexOfSearch+searchLen;
                     char c = s.charAt(i);
                     double cw = FontRenderers.getMono().getStringWidth(c + "");
-                    //                    double cw = 8;
                     if (x > 5 - cw && x < width - 5) {
                         int color = getColor(s, i, c);
-                        //                        int color = 0xFFFFFF;
                         FontRenderers.getMono().drawString(stack, c + "", x, y, color);
                     } else if (x > width - 5) {
                         break;
@@ -433,7 +436,6 @@ public class NbtEditorScreen extends ClientScreen implements FastTickable {
         String before = index.substring(0, editorX);
         double cx = FontRenderers.getMono().getStringWidth(before) + initX + 0.5;
         double cy = FontRenderers.getMono().getMarginHeight() * editorY + initY;
-        //Renderer.R2D.endScissor();
         ClipStack.globalInstance.popWindow();
         Renderer.R2D.renderQuad(stack, Color.WHITE, cx, cy, cx + 1, cy + FontRenderers.getMono().getMarginHeight());
         super.renderInternal(stack, mouseX, mouseY, delta);

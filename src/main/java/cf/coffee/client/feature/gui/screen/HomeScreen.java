@@ -60,7 +60,6 @@ public class HomeScreen extends ClientScreen {
         if (instance == null) {
             instance = new HomeScreen();
         }
-        //        instance = new HomeScreen();
         return instance;
     }
 
@@ -69,9 +68,10 @@ public class HomeScreen extends ClientScreen {
         try {
             File execF = new File(HomeScreen.class.getProtectionDomain().getCodeSource().getLocation().toURI());
             isDev = execF.isDirectory();
-            HomeScreen.version = IOUtils.toString(Objects.requireNonNull(HomeScreen.class.getClassLoader().getResourceAsStream("version.txt")), StandardCharsets.UTF_8);
-            HomeScreen.changelog = IOUtils.toString(Objects.requireNonNull(HomeScreen.class.getClassLoader().getResourceAsStream("changelogLatest.txt")), StandardCharsets.UTF_8);
-            //            System.out.println("updating acc");
+            HomeScreen.version = IOUtils.toString(Objects.requireNonNull(HomeScreen.class.getClassLoader()
+                    .getResourceAsStream("version.txt")), StandardCharsets.UTF_8);
+            HomeScreen.changelog = IOUtils.toString(Objects.requireNonNull(HomeScreen.class.getClassLoader()
+                    .getResourceAsStream("changelogLatest.txt")), StandardCharsets.UTF_8);
             updateCurrentAccount(() -> {
 
             });
@@ -96,12 +96,11 @@ public class HomeScreen extends ClientScreen {
         buttonsMap.add(new AbstractMap.SimpleEntry<>("Multiplayer", () -> CoffeeMain.client.setScreen(new MultiplayerScreen(this))));
         buttonsMap.add(new AbstractMap.SimpleEntry<>("Realms", () -> CoffeeMain.client.setScreen(new RealmsMainScreen(this))));
         buttonsMap.add(new AbstractMap.SimpleEntry<>("Alts", () -> {
-            CoffeeMain.client.setScreen(AltManagerScreen.instance());
-            //            Notification.create(RandomStringUtils.randomPrint(20), RandomUtils.nextLong(4000, 7000), Notification.Type.INFO);
+            //CoffeeMain.client.setScreen(AltManagerScreen.instance());
+            CoffeeMain.client.setScreen(new TestScreen());
         }));
         buttonsMap.add(new AbstractMap.SimpleEntry<>("Settings", () -> CoffeeMain.client.setScreen(new OptionsScreen(this, CoffeeMain.client.options))));
         buttonsMap.add(new AbstractMap.SimpleEntry<>("Quit", CoffeeMain.client::scheduleStop));
-        //        buttonsMap.add(new AbstractMap.SimpleEntry<>("reinit", this::init));
         double w = 60;
         double rootX = padding * 2 + 20 + padding;
         double rootY = this.height - padding * 2 - 20;
@@ -174,7 +173,8 @@ public class HomeScreen extends ClientScreen {
         RenderSystem.clear(GL40C.GL_COLOR_BUFFER_BIT, false);
         RenderSystem.colorMask(true, true, true, true);
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
-        Renderer.R2D.renderRoundedQuadInternal(stack.peek().getPositionMatrix(), 0, 0, 0, 1, width - padding - texDim, padding, width - padding, padding + texDim, 3, 10);
+        Renderer.R2D.renderRoundedQuadInternal(stack.peek()
+                .getPositionMatrix(), 0, 0, 0, 1, width - padding - texDim, padding, width - padding, padding + texDim, 3, 10);
 
         RenderSystem.blendFunc(GL40C.GL_DST_ALPHA, GL40C.GL_ONE_MINUS_DST_ALPHA);
         RenderSystem.setShaderTexture(0, currentAccountTextureLoaded ? currentAccountTexture : DefaultSkinHelper.getTexture());

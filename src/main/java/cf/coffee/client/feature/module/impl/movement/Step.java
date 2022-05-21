@@ -14,8 +14,12 @@ import java.util.Objects;
 
 public class Step extends Module {
 
-    //    final SliderValue height = (SliderValue) this.config.create("Step height", 3, 1, 50, 0).description("How high to step");
-    final DoubleSetting height = this.config.create(new DoubleSetting.Builder(3).name("Height").description("How high to step").min(1).max(50).precision(0).get());
+    final DoubleSetting height = this.config.create(new DoubleSetting.Builder(3).name("Height")
+            .description("How high to step")
+            .min(1)
+            .max(50)
+            .precision(0)
+            .get());
 
     public Step() {
         super("Step", "Allows you to step up full blocks", ModuleType.MOVEMENT);

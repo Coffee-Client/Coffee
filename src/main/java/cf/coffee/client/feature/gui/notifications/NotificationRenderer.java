@@ -57,7 +57,8 @@ public class NotificationRenderer {
         float minWidth = 50;
         long c = System.currentTimeMillis();
         ArrayList<Notification> nf = new ArrayList<>(topBarNotifications);
-        nf.sort(Comparator.comparingDouble(value -> -FontRenderers.getRenderer().getStringWidth(String.join(" ", value.contents))));
+        nf.sort(Comparator.comparingDouble(value -> -FontRenderers.getRenderer()
+                .getStringWidth(String.join(" ", value.contents))));
         for (Notification notification : nf) {
             double timeRemaining = Math.abs(c - notification.creationDate - notification.duration) / (double) notification.duration;
             timeRemaining = MathHelper.clamp(timeRemaining, 0, 1);
@@ -92,7 +93,9 @@ public class NotificationRenderer {
             ClipStack.globalInstance.addWindow(Renderer.R3D.getEmptyMatrixStack(), new Rectangle(notification.renderPosX - width * notification.animationProgress, notification.renderPosY, notification.renderPosX + width * notification.animationProgress + 1, notification.renderPosY + height + 1));
             //Renderer.R2D.beginScissor(Renderer.R3D.getEmptyMatrixStack(), notification.renderPosX - width * notification.animationProgress, notification.renderPosY, notification.renderPosX + width * notification.animationProgress + 1, notification.renderPosY + height + 1);
             Renderer.R2D.renderQuad(ms, topBg, notification.renderPosX - width, notification.renderPosY, notification.renderPosX + width + 1, notification.renderPosY + height);
-            FontRenderers.getRenderer().drawCenteredString(ms, contents, notification.renderPosX, notification.renderPosY + height / 2f - FontRenderers.getRenderer().getFontHeight() / 2f, 0xFFFFFF);
+            FontRenderers.getRenderer()
+                    .drawCenteredString(ms, contents, notification.renderPosX, notification.renderPosY + height / 2f - FontRenderers.getRenderer()
+                            .getFontHeight() / 2f, 0xFFFFFF);
             double timeRemainingInv = 1 - timeRemaining;
             if (!notification.shouldDoAnimation && notification.animationProgress == 0 && notificationExpired) {
                 timeRemainingInv = 1;
@@ -100,12 +103,16 @@ public class NotificationRenderer {
             if (notification.duration == -1) {
                 double seedR = (System.currentTimeMillis() % 2000) / 2000d;
                 double seed = Math.abs((Math.sin(Math.toRadians(seedR * 360)) + 1) / 2);
-                Color start = Renderer.Util.lerp(ThemeManager.getMainTheme().getActive(), ThemeManager.getMainTheme().getAccent(), seed);
-                Color end = Renderer.Util.lerp(ThemeManager.getMainTheme().getActive(), ThemeManager.getMainTheme().getAccent(), 1 - seed);
+                Color start = Renderer.Util.lerp(ThemeManager.getMainTheme().getActive(), ThemeManager.getMainTheme()
+                        .getAccent(), seed);
+                Color end = Renderer.Util.lerp(ThemeManager.getMainTheme().getActive(), ThemeManager.getMainTheme()
+                        .getAccent(), 1 - seed);
                 Renderer.R2D.renderQuadGradient(ms, end, start, notification.renderPosX - width, notification.renderPosY + height - 1, notification.renderPosX + width + 1, notification.renderPosY + height);
             } else {
-                Renderer.R2D.renderQuad(ms, ThemeManager.getMainTheme().getActive(), notification.renderPosX - width, notification.renderPosY + height - 1, notification.renderPosX + width + 1, notification.renderPosY + height);
-                Renderer.R2D.renderQuad(ms, ThemeManager.getMainTheme().getAccent(), notification.renderPosX - width, notification.renderPosY + height - 1, notification.renderPosX - width + ((width + 1) * 2 * timeRemainingInv), notification.renderPosY + height);
+                Renderer.R2D.renderQuad(ms, ThemeManager.getMainTheme()
+                        .getActive(), notification.renderPosX - width, notification.renderPosY + height - 1, notification.renderPosX + width + 1, notification.renderPosY + height);
+                Renderer.R2D.renderQuad(ms, ThemeManager.getMainTheme()
+                        .getAccent(), notification.renderPosX - width, notification.renderPosY + height - 1, notification.renderPosX - width + ((width + 1) * 2 * timeRemainingInv), notification.renderPosY + height);
             }
             ClipStack.globalInstance.popWindow();
             //Renderer.R2D.endScissor();
@@ -138,7 +145,10 @@ public class NotificationRenderer {
                 contentWidth = fontRenderer.getStringWidth(notification.title);
                 content.add(notification.title);
             }
-            String[] nonEmptyContents = Arrays.stream(notification.contents).filter(s -> s != null && !s.isEmpty()).toList().toArray(String[]::new);
+            String[] nonEmptyContents = Arrays.stream(notification.contents)
+                    .filter(s -> s != null && !s.isEmpty())
+                    .toList()
+                    .toArray(String[]::new);
             if (nonEmptyContents.length > 0) { // is the array non-null and is any string in there NOT empty?
                 contentHeight += nonEmptyContents.length * fontRenderer.getFontHeight();
                 for (String contentStr : nonEmptyContents) {

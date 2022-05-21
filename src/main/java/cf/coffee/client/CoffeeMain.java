@@ -76,7 +76,8 @@ public class CoffeeMain implements ModInitializer {
     void initFonts() {
         try {
             int fsize = 18 * 2;
-            FontRenderers.setRenderer(new QuickFontAdapter(new FontRenderer(Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(CoffeeMain.class.getClassLoader().getResourceAsStream("Font.ttf"))).deriveFont(Font.PLAIN, fsize), fsize)));
+            FontRenderers.setRenderer(new QuickFontAdapter(new FontRenderer(Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(CoffeeMain.class.getClassLoader()
+                    .getResourceAsStream("Font.ttf"))).deriveFont(Font.PLAIN, fsize), fsize)));
         } catch (FontFormatException | IOException e) {
             e.printStackTrace();
         }
@@ -124,7 +125,6 @@ public class CoffeeMain implements ModInitializer {
 
     public void postWindowInit() {
         initFonts();
-        //ConfigManager.loadState();
         MODULE_FTTICKER = new Thread(() -> {
             while (true) {
                 Utils.sleep(10);
@@ -139,7 +139,6 @@ public class CoffeeMain implements ModInitializer {
             while (true) {
                 Utils.sleep(10);
                 tickGuiSystem(); // ticks gui elements
-                //                Themes.tickThemes(); // Tick themes
                 if (client.player == null || client.world == null) {
                     continue;
                 }
@@ -148,7 +147,6 @@ public class CoffeeMain implements ModInitializer {
         }, "Animation ticker");
         MODULE_FTTICKER.start();
         FAST_TICKER.start();
-        //        ModuleRegistry.sortModulesPostInit();
         CommandRegistry.init();
         log(Level.INFO, "Sending post window init");
         Events.fireEvent(EventType.POST_INIT, new NonCancellableEvent());

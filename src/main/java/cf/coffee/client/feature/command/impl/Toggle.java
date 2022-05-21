@@ -20,7 +20,11 @@ public class Toggle extends Command {
 
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
-        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.STRING, ModuleRegistry.getModules().stream().map(Module::getName).toList().toArray(String[]::new)));
+        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.STRING, ModuleRegistry.getModules()
+                .stream()
+                .map(Module::getName)
+                .toList()
+                .toArray(String[]::new)));
     }
 
     @Override

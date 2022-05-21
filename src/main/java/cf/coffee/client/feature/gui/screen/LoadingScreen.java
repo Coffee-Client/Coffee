@@ -41,7 +41,6 @@ public class LoadingScreen extends ClientScreen implements FastTickable {
     static LoadingScreen INSTANCE = null;
     final AtomicBoolean loaded = new AtomicBoolean(false);
     final AtomicBoolean loadInProg = new AtomicBoolean(false);
-    //    double progress = 0;
     final AtomicDouble progress = new AtomicDouble();
     final FontAdapter title = FontRenderers.getCustomSize(40);
     final Map<GameTexture, ProgressData> progressMap = new ConcurrentHashMap<>();
@@ -72,11 +71,13 @@ public class LoadingScreen extends ClientScreen implements FastTickable {
 
     @Override
     public void onFastTick() {
-        //System.out.println(progressMap.values().stream().map(AtomicDouble::get).reduce(Double::sum)+"-"+CoffeeClientMain.resources.size());
-        progress.set(progressMap.values().stream().map(progressData -> progressData.getProgress().get()).reduce(Double::sum).orElse(0d) / GameTexture.values().length);
+        progress.set(progressMap.values()
+                .stream()
+                .map(progressData -> progressData.getProgress().get())
+                .reduce(Double::sum)
+                .orElse(0d) / GameTexture.values().length);
 
         smoothProgress = Transitions.transition(smoothProgress, progress.get(), 10, 0.0001);
-        //        smoothProgress = progress.get();
         if (CoffeeMain.client.getOverlay() == null) {
             if (!loadInProg.get()) {
                 load();
@@ -86,7 +87,6 @@ public class LoadingScreen extends ClientScreen implements FastTickable {
             opacity -= 0.01;
             opacity = MathHelper.clamp(opacity, 0.001, 1);
         }
-        //        HomeScreen.instance().onFastTick();
     }
 
     void load() {
@@ -116,7 +116,6 @@ public class LoadingScreen extends ClientScreen implements FastTickable {
                         downloadedFileSize += x;
 
                         double currentProgress = ((double) downloadedFileSize) / ((double) completeFileSize);
-                        //                        progress.set(MathHelper.lerp(currentProgress, progressBefore, completedProgress));
                         progressMap.get(resource).getProgress().set(currentProgress * 0.8 + 0.1);
 
                         bout.write(data, 0, x);
@@ -187,7 +186,6 @@ public class LoadingScreen extends ClientScreen implements FastTickable {
         Renderer.R2D.renderRoundedQuad(stack, new Color(40, 40, 40, (int) (opacity * 255)), centerX - maxWidth / 2d, centerY1 + textHeight / 2d + pad, centerX + maxWidth / 2d, centerY1 + textHeight / 2d + pad + barHeight, barHeight / 2d, 10);
         Renderer.R2D.renderRoundedQuad(stack, Renderer.Util.modify(MID_END, -1, -1, -1, (int) (opacity * 255)), centerX - maxWidth / 2d, centerY1 + textHeight / 2d + pad, centerX - maxWidth / 2d + rWidth, centerY1 + textHeight / 2d + pad + barHeight, barHeight / 2d, 10);
         double currentY = centerY1 + textHeight / 2d + pad + barHeight + 5;
-        //double xOffset = 0;
         for (ProgressData value : progressMap.values()) {
             if (value.getWorkingOnIt().get()) {
                 double prg = value.getProgress().get() * maxWidth;
@@ -197,12 +195,13 @@ public class LoadingScreen extends ClientScreen implements FastTickable {
                 currentY += barHeight + 2;
             }
         }
-        //Renderer.R2D.renderQuad(stack,Color.BLACK,width/2d-pslen/2d,centerY1 + textHeight / 2d + pad,width/2d+pslen/2d,centerY1 + textHeight / 2d + pad + barHeight);
-        FontRenderers.getRenderer().drawCenteredString(stack, perStr, width / 2d, currentY + 3, 1f, 1f, 1f, (float) opacity);
+        FontRenderers.getRenderer()
+                .drawCenteredString(stack, perStr, width / 2d, currentY + 3, 1f, 1f, 1f, (float) opacity);
         String[] warningLines = Utils.splitLinesToWidth(warningIfPresent, 300, FontRenderers.getRenderer());
         double yOffset = FontRenderers.getRenderer().getFontHeight() * warningLines.length;
         for (String warningLine : warningLines) {
-            FontRenderers.getRenderer().drawCenteredString(stack, warningLine, width / 2d, height - 20 - yOffset, 1f, 1f, 1f, (float) opacity);
+            FontRenderers.getRenderer()
+                    .drawCenteredString(stack, warningLine, width / 2d, height - 20 - yOffset, 1f, 1f, 1f, (float) opacity);
             yOffset += FontRenderers.getRenderer().getFontHeight();
         }
         super.renderInternal(stack, mouseX, mouseY, delta);

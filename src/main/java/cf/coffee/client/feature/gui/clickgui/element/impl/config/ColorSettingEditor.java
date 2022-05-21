@@ -28,7 +28,8 @@ public class ColorSettingEditor extends ConfigBase<ColorSetting> {
 
     public ColorSettingEditor(double x, double y, double width, ColorSetting configValue) {
         super(x, y, width, 0, configValue);
-        red = new DoubleSettingEditor(x + 4, y, width - 4, new DoubleSetting((double) configValue.getValue().getRed(), "Red", "", 0, 0, 255, null) {
+        red = new DoubleSettingEditor(x + 4, y, width - 4, new DoubleSetting((double) configValue.getValue()
+                .getRed(), "Red", "", 0, 0, 255, null) {
             @Override
             public Double getValue() {
                 return (double) configValue.getValue().getRed();
@@ -42,7 +43,8 @@ public class ColorSettingEditor extends ConfigBase<ColorSetting> {
 
 
         });
-        green = new DoubleSettingEditor(x + 4, y + red.getHeight(), width - 4, new DoubleSetting((double) configValue.getValue().getGreen(), "Green", "", 0, 0, 255, null) {
+        green = new DoubleSettingEditor(x + 4, y + red.getHeight(), width - 4, new DoubleSetting((double) configValue.getValue()
+                .getGreen(), "Green", "", 0, 0, 255, null) {
             @Override
             public Double getValue() {
                 return (double) configValue.getValue().getGreen();
@@ -56,7 +58,8 @@ public class ColorSettingEditor extends ConfigBase<ColorSetting> {
 
 
         });
-        blue = new DoubleSettingEditor(x + 4, y + red.getHeight() + green.getHeight(), width - 4, new DoubleSetting((double) configValue.getValue().getBlue(), "Blue", "", 0, 0, 255, null) {
+        blue = new DoubleSettingEditor(x + 4, y + red.getHeight() + green.getHeight(), width - 4, new DoubleSetting((double) configValue.getValue()
+                .getBlue(), "Blue", "", 0, 0, 255, null) {
             @Override
             public Double getValue() {
                 return (double) configValue.getValue().getBlue();
@@ -70,7 +73,8 @@ public class ColorSettingEditor extends ConfigBase<ColorSetting> {
 
 
         });
-        alpha = new DoubleSettingEditor(x + 4, y + red.getHeight() + green.getHeight() + blue.getHeight(), width - 4, new DoubleSetting((double) configValue.getValue().getAlpha(), "Alpha", "", 0, 0, 255, null) {
+        alpha = new DoubleSettingEditor(x + 4, y + red.getHeight() + green.getHeight() + blue.getHeight(), width - 4, new DoubleSetting((double) configValue.getValue()
+                .getAlpha(), "Alpha", "", 0, 0, 255, null) {
             @Override
             public Double getValue() {
                 return (double) configValue.getValue().getAlpha();
@@ -143,7 +147,9 @@ public class ColorSettingEditor extends ConfigBase<ColorSetting> {
     public void render(MatrixStack matrices, double mouseX, double mouseY, double scrollBeingUsed) {
         double expandProg = this.expandProg < 0.5 ? 16 * this.expandProg * this.expandProg * this.expandProg * this.expandProg * this.expandProg : 1 - pow(-2 * this.expandProg + 2, 5) / 2;
         Renderer.R2D.renderRoundedQuad(matrices, new Color(0, 0, 20, 60), x, y, x + width, y + getHeight() - 2, 5, 20);
-        FontRenderers.getRenderer().drawString(matrices, configValue.getName(), x + 2, y + headerHeight() / 2d - FontRenderers.getRenderer().getMarginHeight() / 2d, 0xFFFFFF);
+        FontRenderers.getRenderer()
+                .drawString(matrices, configValue.getName(), x + 2, y + headerHeight() / 2d - FontRenderers.getRenderer()
+                        .getMarginHeight() / 2d, 0xFFFFFF);
         double yOff = headerHeight();
         if (expandProg != 0) {
             ClipStack.globalInstance.addWindow(matrices, new Rectangle(x, y + headerHeight(), x + width, y + headerHeight() + childHeight() * expandProg));

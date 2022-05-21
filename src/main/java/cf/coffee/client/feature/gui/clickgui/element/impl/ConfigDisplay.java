@@ -67,7 +67,9 @@ public class ConfigDisplay extends Element {
     }
 
     public List<ConfigBase<?>> getBases() {
-        return bases.stream().filter(configBase -> configBase.getConfigValue().shouldShow()).collect(Collectors.toList());
+        return bases.stream()
+                .filter(configBase -> configBase.getConfigValue().shouldShow())
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -80,7 +82,8 @@ public class ConfigDisplay extends Element {
         }
         if (returnTrue) return true;
         for (ConfigBase<?> basis : getBases()) {
-            if (!(basis instanceof StringSettingEditor) && basis.getConfigValue().shouldShow() && basis.clicked(x, y, button)) {
+            if (!(basis instanceof StringSettingEditor) && basis.getConfigValue()
+                    .shouldShow() && basis.clicked(x, y, button)) {
                 return true;
             }
         }

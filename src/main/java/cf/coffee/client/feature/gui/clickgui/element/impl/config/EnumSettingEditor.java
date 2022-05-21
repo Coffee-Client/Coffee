@@ -23,7 +23,8 @@ public class EnumSettingEditor extends ConfigBase<EnumSetting<?>> {
         super(x, y, width, 0, configValue);
         double h = FontRenderers.getRenderer().getFontHeight() + 3;
         for (Enum<?> value : configValue.getValues()) {
-            EnumSelectorClickable<?> a = new EnumSelectorClickable<>(this, 0, 0, width - 2, FontRenderers.getRenderer().getMarginHeight() + 2, value);
+            EnumSelectorClickable<?> a = new EnumSelectorClickable<>(this, 0, 0, width - 2, FontRenderers.getRenderer()
+                    .getMarginHeight() + 2, value);
             values.add(a);
             h += a.height;
         }
@@ -109,7 +110,9 @@ public class EnumSettingEditor extends ConfigBase<EnumSetting<?>> {
         }
 
         void render(MatrixStack stack) {
-            FontRenderers.getRenderer().drawCenteredString(stack, value.name(), x + width / 2d, y + height / 2d - FontRenderers.getRenderer().getMarginHeight() / 2d, instance.getColor(value));
+            FontRenderers.getRenderer()
+                    .drawCenteredString(stack, value.name(), x + width / 2d, y + height / 2d - FontRenderers.getRenderer()
+                            .getMarginHeight() / 2d, instance.getColor(value));
         }
 
         boolean inBounds(double cx, double cy) {

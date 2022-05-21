@@ -18,12 +18,33 @@ import java.util.Objects;
 
 public class LongJump extends Module {
 
-    final DoubleSetting xz = this.config.create(new DoubleSetting.Builder(5).name("Speed").description("How fast to throw you forwards").min(0).max(20).precision(2).get());
-    final EnumSetting<FocusType> focus = this.config.create(new EnumSetting.Builder<>(FocusType.Direction).name("Focus on").description("What to focus on when throwing you forwards").get());
-    final BooleanSetting glide = this.config.create(new BooleanSetting.Builder(true).name("Glide").description("Whether to glide after the initial jump").get());
-    final DoubleSetting glideVelocity = this.config.create(new DoubleSetting.Builder(0.05).name("Glide velocity").description("How strong to glide").min(-0.08).max(0.07).precision(2).get());
-    final BooleanSetting keepApplying = this.config.create(new BooleanSetting.Builder(true).name("Keep applying").description("Whether to keep applying velocity after the jump").get());
-    final DoubleSetting applyStrength = this.config.create(new DoubleSetting.Builder(0.3).name("Apply strength").description("How much to apply after the jump").min(0.01).max(0.3).precision(3).get());
+    final DoubleSetting xz = this.config.create(new DoubleSetting.Builder(5).name("Speed")
+            .description("How fast to throw you forwards")
+            .min(0)
+            .max(20)
+            .precision(2)
+            .get());
+    final EnumSetting<FocusType> focus = this.config.create(new EnumSetting.Builder<>(FocusType.Direction).name("Focus on")
+            .description("What to focus on when throwing you forwards")
+            .get());
+    final BooleanSetting glide = this.config.create(new BooleanSetting.Builder(true).name("Glide")
+            .description("Whether to glide after the initial jump")
+            .get());
+    final DoubleSetting glideVelocity = this.config.create(new DoubleSetting.Builder(0.05).name("Glide velocity")
+            .description("How strong to glide")
+            .min(-0.08)
+            .max(0.07)
+            .precision(2)
+            .get());
+    final BooleanSetting keepApplying = this.config.create(new BooleanSetting.Builder(true).name("Keep applying")
+            .description("Whether to keep applying velocity after the jump")
+            .get());
+    final DoubleSetting applyStrength = this.config.create(new DoubleSetting.Builder(0.3).name("Apply strength")
+            .description("How much to apply after the jump")
+            .min(0.01)
+            .max(0.3)
+            .precision(3)
+            .get());
     boolean jumped = false;
 
     public LongJump() {
@@ -37,8 +58,8 @@ public class LongJump extends Module {
         double scaled = xz.getValue() / 5;
         return switch (focus.getValue()) {
             case Direction -> new Vec3d(-MathHelper.sin(f) * scaled, 0.0D, MathHelper.cos(f) * scaled);
-            case Velocity ->
-                    new Vec3d(CoffeeMain.client.player.getVelocity().normalize().x * scaled, 0.0D, CoffeeMain.client.player.getVelocity().normalize().z * scaled);
+            case Velocity -> new Vec3d(CoffeeMain.client.player.getVelocity()
+                    .normalize().x * scaled, 0.0D, CoffeeMain.client.player.getVelocity().normalize().z * scaled);
         };
     }
 
@@ -53,7 +74,8 @@ public class LongJump extends Module {
         if (!client.options.jumpKey.isPressed()) {
             jumped = false;
         }
-        if (Objects.requireNonNull(client.player).getVelocity().y < 0 && !client.player.isOnGround() && client.player.fallDistance > 0 && jumped) {
+        if (Objects.requireNonNull(client.player)
+                .getVelocity().y < 0 && !client.player.isOnGround() && client.player.fallDistance > 0 && jumped) {
             if (glide.getValue()) {
                 client.player.addVelocity(0, glideVelocity.getValue(), 0);
             }

@@ -24,8 +24,12 @@ import java.util.stream.StreamSupport;
 
 public class Tracers extends Module {
 
-    final BooleanSetting entities = this.config.create(new BooleanSetting.Builder(false).name("Show entities").description("Render entities").get());
-    final BooleanSetting players = this.config.create(new BooleanSetting.Builder(true).name("Show players").description("Render players").get());
+    final BooleanSetting entities = this.config.create(new BooleanSetting.Builder(false).name("Show entities")
+            .description("Render entities")
+            .get());
+    final BooleanSetting players = this.config.create(new BooleanSetting.Builder(true).name("Show players")
+            .description("Render players")
+            .get());
 
     public Tracers() {
         super("Tracers", "Shows where entities are in relation to you", ModuleType.RENDER);
@@ -51,7 +55,9 @@ public class Tracers extends Module {
         if (CoffeeMain.client.world == null || CoffeeMain.client.player == null) {
             return null;
         }
-        return StreamSupport.stream(CoffeeMain.client.world.getEntities().spliterator(), false).filter(entity -> entity.squaredDistanceTo(CoffeeMain.client.player) < 4096 && entity.getUuid() != CoffeeMain.client.player.getUuid() && isEntityApplicable(entity)).count() + "";
+        return StreamSupport.stream(CoffeeMain.client.world.getEntities().spliterator(), false)
+                .filter(entity -> entity.squaredDistanceTo(CoffeeMain.client.player) < 4096 && entity.getUuid() != CoffeeMain.client.player.getUuid() && isEntityApplicable(entity))
+                .count() + "";
     }
 
     @Override
@@ -59,7 +65,9 @@ public class Tracers extends Module {
         if (CoffeeMain.client.world == null || CoffeeMain.client.player == null) {
             return;
         }
-        for (Entity entity : StreamSupport.stream(CoffeeMain.client.world.getEntities().spliterator(), false).sorted(Comparator.comparingDouble(value -> -value.distanceTo(CoffeeMain.client.player))).toList()) {
+        for (Entity entity : StreamSupport.stream(CoffeeMain.client.world.getEntities().spliterator(), false)
+                .sorted(Comparator.comparingDouble(value -> -value.distanceTo(CoffeeMain.client.player)))
+                .toList()) {
             if (entity.squaredDistanceTo(CoffeeMain.client.player) > 4096) {
                 continue;
             }

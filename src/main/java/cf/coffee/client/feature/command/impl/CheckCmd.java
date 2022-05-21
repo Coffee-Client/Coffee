@@ -18,6 +18,7 @@ public class CheckCmd extends Command {
     @Override
     public void onExecute(String[] args) {
         message("Checking command blocks");
-        CoffeeMain.client.player.networkHandler.sendPacket(new UpdateCommandBlockC2SPacket(CoffeeMain.client.player.getBlockPos().offset(Direction.DOWN, 1), "/", CommandBlockBlockEntity.Type.AUTO, false, false, false));
+        CoffeeMain.client.player.networkHandler.sendPacket(new UpdateCommandBlockC2SPacket(CoffeeMain.client.player.getBlockPos()
+                .offset(Direction.DOWN, 1), "/", CommandBlockBlockEntity.Type.AUTO, false, false, false));
     }
 }

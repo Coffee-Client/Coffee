@@ -40,11 +40,13 @@ public class Backtrack extends Module {
     }
 
     boolean shouldBacktrack() {
-        return InputUtil.isKeyPressed(CoffeeMain.client.getWindow().getHandle(), GLFW.GLFW_KEY_LEFT_ALT) && CoffeeMain.client.currentScreen == null;
+        return InputUtil.isKeyPressed(CoffeeMain.client.getWindow()
+                .getHandle(), GLFW.GLFW_KEY_LEFT_ALT) && CoffeeMain.client.currentScreen == null;
     }
 
     void shouldCommit() {
-        boolean a = !committed && InputUtil.isKeyPressed(CoffeeMain.client.getWindow().getHandle(), GLFW.GLFW_KEY_ENTER) && CoffeeMain.client.currentScreen == null;
+        boolean a = !committed && InputUtil.isKeyPressed(CoffeeMain.client.getWindow()
+                .getHandle(), GLFW.GLFW_KEY_ENTER) && CoffeeMain.client.currentScreen == null;
         if (a) {
             committed = true;
         }

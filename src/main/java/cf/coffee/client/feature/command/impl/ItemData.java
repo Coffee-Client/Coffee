@@ -26,7 +26,12 @@ public class ItemData extends Command {
 
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
-        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.PLAYER, Objects.requireNonNull(CoffeeMain.client.world).getPlayers().stream().map(abstractClientPlayerEntity -> abstractClientPlayerEntity.getGameProfile().getName()).toList().toArray(String[]::new)), new PossibleArgument(ArgumentType.STRING, "hand", "offhand", "head", "chest", "legs", "feet"), new PossibleArgument(ArgumentType.STRING, "--onlyShow"));
+        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.PLAYER, Objects.requireNonNull(CoffeeMain.client.world)
+                .getPlayers()
+                .stream()
+                .map(abstractClientPlayerEntity -> abstractClientPlayerEntity.getGameProfile().getName())
+                .toList()
+                .toArray(String[]::new)), new PossibleArgument(ArgumentType.STRING, "hand", "offhand", "head", "chest", "legs", "feet"), new PossibleArgument(ArgumentType.STRING, "--onlyShow"));
     }
 
     @Override

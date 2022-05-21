@@ -25,7 +25,6 @@ public class AddonClassLoader extends URLClassLoader {
 
     public void defineResource(String name, URL location) {
         CoffeeMain.log(Level.DEBUG, "Registering texture " + name + " to URL " + location.toString());
-        //System.out.println("register " + name + " with " + location.toString());
         resourceMap.put(name, location);
     }
 

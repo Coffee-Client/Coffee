@@ -33,14 +33,39 @@ public class SurvivalNuker extends Module {
     final List<BlockPos> renders = new ArrayList<>();
     final Block[] WOOD = new Block[] { Blocks.ACACIA_LOG, Blocks.BIRCH_LOG, Blocks.DARK_OAK_LOG, Blocks.JUNGLE_LOG, Blocks.OAK_LOG, Blocks.SPRUCE_LOG, Blocks.STRIPPED_ACACIA_LOG, Blocks.STRIPPED_BIRCH_LOG, Blocks.STRIPPED_DARK_OAK_LOG, Blocks.STRIPPED_JUNGLE_LOG, Blocks.STRIPPED_OAK_LOG, Blocks.STRIPPED_SPRUCE_LOG };
 
-    final DoubleSetting range = this.config.create(new DoubleSetting.Builder(4).name("Range").description("How far to break blocks").min(0).max(4).precision(1).get());
-    final DoubleSetting blocksPerTick = this.config.create(new DoubleSetting.Builder(1).name("Blocks per tick").description("How many blocks to break per tick").min(1).max(20).precision(0).get());
-    final DoubleSetting delay = this.config.create(new DoubleSetting.Builder(0).name("Delay").description("How much to wait between ticks").min(0).max(20).precision(0).get());
-    final BooleanSetting ignoreXray = this.config.create(new BooleanSetting.Builder(true).name("Ignore XRAY").description("Ignores XRAY blocks").get());
-    final EnumSetting<Mode> mode = this.config.create(new EnumSetting.Builder<>(Mode.Everything).name("Mode").description("What to break").get());
-    final BooleanSetting autoTool = this.config.create(new BooleanSetting.Builder(true).name("Auto tool").description("Automatically picks the best tool for the block").get());
-    final EnumSetting<SortMode> mv = this.config.create(new EnumSetting.Builder<>(SortMode.OutIn).name("Sorting").description("In which order to break the blocks").get());
-    final BooleanSetting ignoreUnbreakable = this.config.create(new BooleanSetting.Builder(true).name("Ignore unbreakable").description("Ignores unbreakable blocks").get());
+    final DoubleSetting range = this.config.create(new DoubleSetting.Builder(4).name("Range")
+            .description("How far to break blocks")
+            .min(0)
+            .max(4)
+            .precision(1)
+            .get());
+    final DoubleSetting blocksPerTick = this.config.create(new DoubleSetting.Builder(1).name("Blocks per tick")
+            .description("How many blocks to break per tick")
+            .min(1)
+            .max(20)
+            .precision(0)
+            .get());
+    final DoubleSetting delay = this.config.create(new DoubleSetting.Builder(0).name("Delay")
+            .description("How much to wait between ticks")
+            .min(0)
+            .max(20)
+            .precision(0)
+            .get());
+    final BooleanSetting ignoreXray = this.config.create(new BooleanSetting.Builder(true).name("Ignore XRAY")
+            .description("Ignores XRAY blocks")
+            .get());
+    final EnumSetting<Mode> mode = this.config.create(new EnumSetting.Builder<>(Mode.Everything).name("Mode")
+            .description("What to break")
+            .get());
+    final BooleanSetting autoTool = this.config.create(new BooleanSetting.Builder(true).name("Auto tool")
+            .description("Automatically picks the best tool for the block")
+            .get());
+    final EnumSetting<SortMode> mv = this.config.create(new EnumSetting.Builder<>(SortMode.OutIn).name("Sorting")
+            .description("In which order to break the blocks")
+            .get());
+    final BooleanSetting ignoreUnbreakable = this.config.create(new BooleanSetting.Builder(true).name("Ignore unbreakable")
+            .description("Ignores unbreakable blocks")
+            .get());
     int delayPassed = 0;
 
     public SurvivalNuker() {
@@ -107,7 +132,8 @@ public class SurvivalNuker extends Module {
             }
             BlockState bs = client.world.getBlockState(np);
             boolean b = !ignoreXray.getValue() || !XRAY.blocks.contains(bs.getBlock());
-            if (!bs.isAir() && bs.getBlock() != Blocks.WATER && bs.getBlock() != Blocks.LAVA && !isUnbreakable(bs.getBlock()) && b && client.world.getWorldBorder().contains(np) && isBlockApplicable(bs.getBlock())) {
+            if (!bs.isAir() && bs.getBlock() != Blocks.WATER && bs.getBlock() != Blocks.LAVA && !isUnbreakable(bs.getBlock()) && b && client.world.getWorldBorder()
+                    .contains(np) && isBlockApplicable(bs.getBlock())) {
                 renders.add(np);
                 if (autoTool.getValue()) {
                     AutoTool.pick(bs);
@@ -141,7 +167,8 @@ public class SurvivalNuker extends Module {
         for (BlockPos render : renders) {
             Vec3d vp = new Vec3d(render.getX(), render.getY(), render.getZ());
             //            Renderer.R3D.renderFilled(vp, new Vec3d(1, 1, 1), Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 50), matrices);
-            Renderer.R3D.renderFadingBlock(Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 255), Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 100).darker(), vp, new Vec3d(1, 1, 1), 1000);
+            Renderer.R3D.renderFadingBlock(Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 255), Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 100)
+                    .darker(), vp, new Vec3d(1, 1, 1), 1000);
         }
     }
 

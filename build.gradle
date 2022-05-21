@@ -56,7 +56,7 @@ dependencies {
 
 	impl("meteordevelopment:discord-ipc:1.1")
 
-	impl(name: "xauthlib-1.0.0")
+	impl(name: "xauthlib-1.0.1")
 //	impl 'org.java-websocket:Java-WebSocket:1.5.3'
 
 	configurations.impl.dependencies.each {

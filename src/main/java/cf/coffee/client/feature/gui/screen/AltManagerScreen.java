@@ -879,7 +879,8 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
                 storage.cachedUuid = profile.getUuid();
                 downloadTexture();
                 storage.valid = true;
-            } catch (Exception ignored) {
+            } catch (Exception e) {
+                e.printStackTrace();
                 storage.valid = false;
             }
         }

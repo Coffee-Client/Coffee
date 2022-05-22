@@ -20,5 +20,5 @@ export JAVA_HOME="$HOME/.jdks/openjdk-17.0.2/"
 if [[ ! -d bin ]]; then
   mkdir bin
   fi
-mv ./build/libs/shadow-1.0.0.jar bin
+mv ./build/libs/coffee-1.0.0.jar bin
 echo "Made release"

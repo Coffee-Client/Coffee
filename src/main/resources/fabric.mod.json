@@ -8,13 +8,16 @@
     "0x150"
   ],
   "contributors": [],
-  "contact": {},
+  "contact": {
+    "homepage": "https://client.coffee",
+    "sources": "https://github.com/Coffee-Client/Coffee"
+  },
   "license": "All-Rights-Reserved",
   "icon": "assets/coffee/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "cf.coffee.client.CoffeeMain"
+      "coffee.client.CoffeeMain"
     ],
     "client": [],
     "server": []

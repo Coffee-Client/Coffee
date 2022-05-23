@@ -1,4 +1,2 @@
-Refactored most of the client
-Changed base package
-Renamed the jar (finally)
-Added new domain - client.coffee
+Added SuperheroFX
+Added SelfDestruct back

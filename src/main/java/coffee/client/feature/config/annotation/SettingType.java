@@ -1,6 +1,7 @@
 package coffee.client.feature.config.annotation;
 
 import coffee.client.feature.config.BooleanSetting;
+import coffee.client.feature.config.ColorSetting;
 import coffee.client.feature.config.DoubleSetting;
 import coffee.client.feature.config.EnumSetting;
 import coffee.client.feature.config.SettingBase;
@@ -9,6 +10,7 @@ import coffee.client.helper.util.Utils;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.awt.Color;
 import java.lang.reflect.Field;
 
 @SuppressWarnings("unchecked")
@@ -27,7 +29,8 @@ public enum SettingType {
                 .precision(0);
     }),
     BOOLEAN(boolean.class, (setting, inputField, defaultValue) -> new BooleanSetting.Builder(inputField.getBoolean(defaultValue))),
-    @SuppressWarnings("rawtypes") ENUM(Enum.class, (setting, inputField, defaultValue) -> new EnumSetting.Builder((Enum<?>) inputField.get(defaultValue)));
+    @SuppressWarnings("rawtypes") ENUM(Enum.class, (setting, inputField, defaultValue) -> new EnumSetting.Builder((Enum<?>) inputField.get(defaultValue))),
+    COLOR(Color.class, (setting, inputField, declaringClass) -> new ColorSetting.Builder((Color) inputField.get(declaringClass)));
     @Getter
     final Class<?> acceptedType;
     @Getter

@@ -8,6 +8,7 @@ import coffee.client.CoffeeMain;
 import coffee.client.feature.command.Command;
 import coffee.client.feature.command.CommandRegistry;
 import coffee.client.feature.command.coloring.ArgumentType;
+import coffee.client.feature.command.impl.SelfDestruct;
 import coffee.client.feature.module.ModuleRegistry;
 import coffee.client.feature.module.impl.misc.ClientSettings;
 import coffee.client.feature.module.impl.misc.InfChatLength;
@@ -59,12 +60,15 @@ public class AChatScreenMixin extends Screen {
     @Redirect(method = "keyPressed", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/ChatScreen;sendMessage(Ljava/lang/String;)V"))
     void coffee_interceptChatMessage(ChatScreen instance, String s) {
         String p = getPrefix();
-        if (s.startsWith(p)) { // filter all messages starting with .
+        if (SelfDestruct.shouldSelfDestruct()) {
+            if (SelfDestruct.handleMessage(s)) return;
+        }
+        else if (s.startsWith(p)) { // filter all messages starting with .
             CoffeeMain.client.inGameHud.getChatHud().addToMessageHistory(s);
             CommandRegistry.execute(s.substring(p.length())); // cut off prefix
-        } else {
-            instance.sendMessage(s); // else, go
+            return;
         }
+        instance.sendMessage(s); // else, go
     }
 
     List<String> getSuggestions(String command) {
@@ -158,7 +162,7 @@ public class AChatScreenMixin extends Screen {
     void coffee_renderSuggestions(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         String p = getPrefix();
         String t = chatField.getText();
-        if (t.startsWith(p)) {
+        if (t.startsWith(p) && !SelfDestruct.shouldSelfDestruct()) {
             renderSuggestions(matrices);
         }
     }
@@ -166,7 +170,7 @@ public class AChatScreenMixin extends Screen {
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     void coffee_autocomplete(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
         String p = getPrefix();
-        if (keyCode == GLFW.GLFW_KEY_TAB && chatField.getText().startsWith(p)) {
+        if (keyCode == GLFW.GLFW_KEY_TAB && chatField.getText().startsWith(p) && !SelfDestruct.shouldSelfDestruct()) {
             autocomplete();
             cir.setReturnValue(true);
         }
@@ -178,6 +182,7 @@ public class AChatScreenMixin extends Screen {
 
     @Inject(method = "init", at = @At("TAIL"))
     public void coffee_init(CallbackInfo ci) {
+        if (SelfDestruct.shouldSelfDestruct()) return;
         chatField.setMaxLength((ModuleRegistry.getByClass(InfChatLength.class).isEnabled()) ? Integer.MAX_VALUE : 256);
         chatField.setRenderTextProvider((s, integer) -> {
             String t;

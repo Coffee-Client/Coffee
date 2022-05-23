@@ -5,6 +5,7 @@
 package coffee.client.mixin;
 
 import coffee.client.CoffeeMain;
+import coffee.client.feature.command.impl.SelfDestruct;
 import coffee.client.helper.event.EventType;
 import coffee.client.helper.event.Events;
 import coffee.client.helper.event.events.KeyboardEvent;
@@ -30,7 +31,7 @@ public class KeyboardMixin {
     @Inject(method = "onKey", at = @At("RETURN"))
     void coffee_postKeyPressed(long window, int key, int scancode, int action, int modifiers, CallbackInfo ci) {
         if (window == this.client.getWindow()
-                .getHandle() && CoffeeMain.client.currentScreen == null && System.currentTimeMillis() - CoffeeMain.lastScreenChange > 10) { // make sure we are in game and the screen has been there for at least 10 ms
+                .getHandle() && CoffeeMain.client.currentScreen == null && System.currentTimeMillis() - CoffeeMain.lastScreenChange > 10 && !SelfDestruct.shouldSelfDestruct()) { // make sure we are in game and the screen has been there for at least 10 ms
             if (CoffeeMain.client.player == null || CoffeeMain.client.world == null) {
                 return; // again, make sure we are in game and exist
             }

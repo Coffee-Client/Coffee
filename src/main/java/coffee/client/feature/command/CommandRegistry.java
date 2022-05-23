@@ -35,6 +35,7 @@ import coffee.client.feature.command.impl.RageQuit;
 import coffee.client.feature.command.impl.RandomBook;
 import coffee.client.feature.command.impl.Rename;
 import coffee.client.feature.command.impl.Say;
+import coffee.client.feature.command.impl.SelfDestruct;
 import coffee.client.feature.command.impl.SocketKick;
 import coffee.client.feature.command.impl.SpawnData;
 import coffee.client.feature.command.impl.Taco;
@@ -121,6 +122,7 @@ public class CommandRegistry {
         vanillaCommands.add(new MessageSpam());
         vanillaCommands.add(new RandomBook());
         vanillaCommands.add(new SocketKick());
+        vanillaCommands.add(new SelfDestruct());
 
         rebuildSharedCommands();
     }

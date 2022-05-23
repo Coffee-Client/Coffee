@@ -21,6 +21,15 @@ public class AAScreen extends Screen implements FastTickable {
     @Getter
     private final CopyOnWriteArrayList<Element> elements = new CopyOnWriteArrayList<>();
 
+    public AAScreen(int samples) {
+        super(Text.of(""));
+        this.samples = samples;
+    }
+
+    public AAScreen() {
+        this(MSAAFramebuffer.MAX_SAMPLES);
+    }
+
     @Override
     public void onFastTick() {
         for (Element element : getElements()) {
@@ -51,15 +60,6 @@ public class AAScreen extends Screen implements FastTickable {
         throw new NotImplementedException("Use AAScreen#addChild or #removeChild instead of the legacy screen api");
     }
 
-    public AAScreen(int samples) {
-        super(Text.of(""));
-        this.samples = samples;
-    }
-
-    public AAScreen() {
-        this(MSAAFramebuffer.MAX_SAMPLES);
-    }
-
     public void renderInternal(MatrixStack stack, int mouseX, int mouseY, float delta) {
 
         for (Element element : getElements()) {
@@ -79,7 +79,7 @@ public class AAScreen extends Screen implements FastTickable {
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
-        return iterateOverChildren(element -> element.mouseDragged(mouseX, mouseY,deltaX, deltaY, button));
+        return iterateOverChildren(element -> element.mouseDragged(mouseX, mouseY, deltaX, deltaY, button));
     }
 
     @Override

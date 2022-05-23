@@ -10,15 +10,15 @@ public abstract class Element {
     @Setter
     protected double positionX, positionY, width, height;
 
-    public Rectangle getBounds() {
-        return new Rectangle(getPositionX(), getPositionY(), getPositionX()+getWidth(), getPositionY()+getHeight());
-    }
-
     public Element(double x, double y, double width, double height) {
         setPositionX(x);
         setPositionY(y);
         setWidth(width);
         setHeight(height);
+    }
+
+    public Rectangle getBounds() {
+        return new Rectangle(getPositionX(), getPositionY(), getPositionX() + getWidth(), getPositionY() + getHeight());
     }
 
     public abstract void tickAnimations();

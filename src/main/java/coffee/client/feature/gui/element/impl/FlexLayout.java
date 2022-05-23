@@ -18,6 +18,7 @@ public class FlexLayout extends Element {
     double padding;
     double viewportHeight, viewportWidth;
     Scroller scroller = new Scroller(0);
+
     public FlexLayout(FlexLayout.LayoutDirection direction, double x, double y, double width, double height, double padding, Element... elements) {
         super(x, y, width, height);
         this.elements = List.of(elements);
@@ -30,12 +31,18 @@ public class FlexLayout extends Element {
     }
 
     double getActualHeight() {
-        if (direction == LayoutDirection.DOWN) return elements.stream().map(element -> element.getHeight()+padding).reduce(Double::sum).orElse(0d)-padding;
+        if (direction == LayoutDirection.DOWN) return elements.stream()
+                .map(element -> element.getHeight() + padding)
+                .reduce(Double::sum)
+                .orElse(0d) - padding;
         else return elements.stream().max(Comparator.comparingDouble(Element::getHeight)).orElseThrow().getHeight();
     }
 
     double getActualWidth() {
-        if (direction == LayoutDirection.RIGHT) return elements.stream().map(element -> element.getWidth()+padding).reduce(Double::sum).orElse(0d)-padding;
+        if (direction == LayoutDirection.RIGHT) return elements.stream()
+                .map(element -> element.getWidth() + padding)
+                .reduce(Double::sum)
+                .orElse(0d) - padding;
         else return elements.stream().max(Comparator.comparingDouble(Element::getWidth)).orElseThrow().getWidth();
     }
 
@@ -54,11 +61,11 @@ public class FlexLayout extends Element {
         stack.push();
         stack.translate(0, scroller.getScroll(), 0);
         for (Element element : elements) {
-            element.setPositionX(getPositionX()+posX* direction.mulX);
-            element.setPositionY(getPositionY()+posY* direction.mulY);
-            element.render(stack, mouseX, mouseY- scroller.getScroll());
-            posX += element.getWidth()+padding;
-            posY += element.getHeight()+padding;
+            element.setPositionX(getPositionX() + posX * direction.mulX);
+            element.setPositionY(getPositionY() + posY * direction.mulY);
+            element.render(stack, mouseX, mouseY - scroller.getScroll());
+            posX += element.getWidth() + padding;
+            posY += element.getHeight() + padding;
         }
         stack.pop();
         ClipStack.globalInstance.popWindow();
@@ -66,17 +73,17 @@ public class FlexLayout extends Element {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        return iterateOverChildren(element -> element.mouseClicked(mouseX, mouseY-scroller.getScroll(), button));
+        return iterateOverChildren(element -> element.mouseClicked(mouseX, mouseY - scroller.getScroll(), button));
     }
 
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
-        return iterateOverChildren(element -> element.mouseReleased(mouseX, mouseY-scroller.getScroll(), button));
+        return iterateOverChildren(element -> element.mouseReleased(mouseX, mouseY - scroller.getScroll(), button));
     }
 
     @Override
-    public boolean mouseDragged(double mouseX, double mouseY,double deltaX, double deltaY, int button) {
-        return iterateOverChildren(element -> element.mouseDragged(mouseX, mouseY- scroller.getScroll(),deltaX, deltaY, button));
+    public boolean mouseDragged(double mouseX, double mouseY, double deltaX, double deltaY, int button) {
+        return iterateOverChildren(element -> element.mouseDragged(mouseX, mouseY - scroller.getScroll(), deltaX, deltaY, button));
     }
 
     @Override
@@ -85,7 +92,7 @@ public class FlexLayout extends Element {
     }
 
     @Override
-    public boolean keyPressed(int keyCode,int modifiers) {
+    public boolean keyPressed(int keyCode, int modifiers) {
         return iterateOverChildren(element -> element.keyPressed(keyCode, modifiers));
     }
 
@@ -100,7 +107,7 @@ public class FlexLayout extends Element {
         if (inBounds(mouseX, mouseY)) {
             double viewport = getActualHeight();
             double current = getHeight();
-            double scrollToAllow = Math.max(viewport-current, 0);
+            double scrollToAllow = Math.max(viewport - current, 0);
             scroller.setBounds(0, scrollToAllow);
             scroller.scroll(amount);
             return true;

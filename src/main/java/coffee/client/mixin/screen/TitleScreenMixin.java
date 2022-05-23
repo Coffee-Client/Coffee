@@ -4,6 +4,7 @@
 
 package coffee.client.mixin.screen;
 
+import coffee.client.feature.command.impl.SelfDestruct;
 import coffee.client.feature.gui.screen.LoadingScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
@@ -23,6 +24,7 @@ public class TitleScreenMixin extends Screen {
 
     @Inject(method = "init", at = @At("RETURN"))
     void coffee_postInit(CallbackInfo ci) {
+        if (SelfDestruct.shouldSelfDestruct()) return;
         Objects.requireNonNull(client).setScreen(LoadingScreen.instance());
     }
 }

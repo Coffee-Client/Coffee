@@ -5,12 +5,14 @@
 package coffee.client.mixin;
 
 import coffee.client.CoffeeMain;
+import coffee.client.feature.command.impl.SelfDestruct;
 import coffee.client.feature.module.ModuleRegistry;
 import coffee.client.feature.module.impl.world.FastUse;
 import coffee.client.helper.event.EventType;
 import coffee.client.helper.event.Events;
 import coffee.client.helper.event.events.base.NonCancellableEvent;
 import coffee.client.helper.manager.ConfigManager;
+import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
 import net.minecraft.client.gui.screen.Screen;
@@ -21,6 +23,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Objects;
 
@@ -53,4 +56,15 @@ public class MinecraftClientMixin {
             return this.itemUseCooldown;
         }
     }
+
+    @Inject(method = "getGameVersion", at = @At("HEAD"), cancellable = true)
+    void coffee_replaceGameVersion(CallbackInfoReturnable<String> cir) {
+        if (SelfDestruct.shouldSelfDestruct()) cir.setReturnValue(SharedConstants.getGameVersion().getName());
+    }
+
+    @Inject(method = "getVersionType", at = @At("HEAD"), cancellable = true)
+    void coffee_replaceVersionType(CallbackInfoReturnable<String> cir) {
+        if (SelfDestruct.shouldSelfDestruct()) cir.setReturnValue("release");
+    }
+
 }

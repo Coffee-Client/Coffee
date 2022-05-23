@@ -73,7 +73,7 @@ public class Utils {
     }
 
     public static Color getCurrentRGB() {
-        return new Color(Color.HSBtoRGB((System.currentTimeMillis() % 4750) / 4750f, 0.5f, 1));
+        return Color.getHSBColor((System.currentTimeMillis() % 4750) / 4750f, 0.5f, 1);
     }
 
     public static Vec3d getInterpolatedEntityPosition(Entity entity) {

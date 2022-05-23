@@ -4,6 +4,7 @@
 
 package coffee.client.mixin.screen;
 
+import coffee.client.feature.command.impl.SelfDestruct;
 import coffee.client.feature.gui.screen.AddonManagerScreen;
 import coffee.client.feature.gui.screen.HudEditorScreen;
 import coffee.client.feature.gui.widget.RoundButton;
@@ -23,6 +24,7 @@ public class GameMenuMixin extends Screen {
 
     @Inject(method = "initWidgets", at = @At("RETURN"))
     void coffee_addClientButtons(CallbackInfo ci) {
+        if (SelfDestruct.shouldSelfDestruct()) return;
         addDrawableChild(new RoundButton(RoundButton.STANDARD, 5, 5, 60, 20, "Addons", () -> {
             assert client != null;
             client.setScreen(new AddonManagerScreen());

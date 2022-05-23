@@ -5,6 +5,7 @@
 package coffee.client.helper.event;
 
 import coffee.client.CoffeeMain;
+import coffee.client.feature.command.impl.SelfDestruct;
 import coffee.client.helper.event.events.base.Event;
 import org.apache.logging.log4j.Level;
 
@@ -89,6 +90,8 @@ public class Events {
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public static boolean fireEvent(EventType event, Event argument) {
+        if (SelfDestruct.shouldSelfDestruct()) return false; // dont fire any events when self destruct is active
+
         if (!event.getExpectedType().equals(argument.getClass()))
             throw new IllegalArgumentException(String.format("Attempted to invoke event %s with %s as event data, expected %s", event.name(), argument.getClass()
                     .getName(), event.getExpectedType().getName()));

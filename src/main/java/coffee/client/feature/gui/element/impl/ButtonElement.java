@@ -30,6 +30,7 @@ public class ButtonElement extends Element {
     @Setter
     @Getter
     boolean visible = true;
+
     public ButtonElement(Color color, double x, double y, double w, double h, String t, Runnable a) {
         super(x, y, w, h);
         this.onPress = a;

@@ -4,6 +4,7 @@
 
 package coffee.client.mixin.screen;
 
+import coffee.client.feature.command.impl.SelfDestruct;
 import coffee.client.feature.gui.HasSpecialCursor;
 import coffee.client.helper.render.Cursor;
 import net.minecraft.client.gui.AbstractParentElement;
@@ -35,9 +36,11 @@ public abstract class ScreenMixin extends AbstractParentElement {
 
     void handleCursor(double x, double y) {
         long c = Cursor.STANDARD;
-        for (Element child : this.children) {
-            if (child instanceof HasSpecialCursor specialCursor) {
-                if (specialCursor.shouldApplyCustomCursor()) c = specialCursor.getCursor();
+        if (!SelfDestruct.shouldSelfDestruct()) {
+            for (Element child : this.children) {
+                if (child instanceof HasSpecialCursor specialCursor) {
+                    if (specialCursor.shouldApplyCustomCursor()) c = specialCursor.getCursor();
+                }
             }
         }
         Cursor.setGlfwCursor(c);

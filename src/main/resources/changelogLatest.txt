@@ -1,2 +1,2 @@
-Added SuperheroFX
-Added SelfDestruct back
+Improved superherofx
+Added dev sdk to public release

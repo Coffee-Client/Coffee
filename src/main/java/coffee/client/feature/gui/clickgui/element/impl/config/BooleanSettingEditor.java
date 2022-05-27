@@ -9,13 +9,22 @@ import coffee.client.feature.gui.clickgui.theme.Theme;
 import coffee.client.feature.gui.clickgui.theme.ThemeManager;
 import coffee.client.helper.font.FontRenderers;
 import coffee.client.helper.render.Renderer;
+import coffee.client.helper.util.Transitions;
+import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.BufferRenderer;
+import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.VertexFormat;
+import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Matrix4f;
+import net.minecraft.util.math.Quaternion;
+
+import java.awt.Color;
 
 public class BooleanSettingEditor extends ConfigBase<BooleanSetting> {
-    final double rw = 12;
-    final double rh = 2;
-    final double rid = 4;
     double animProgress = 0;
 
     public BooleanSettingEditor(double x, double y, double width, BooleanSetting configValue) {
@@ -43,14 +52,6 @@ public class BooleanSettingEditor extends ConfigBase<BooleanSetting> {
         return false;
     }
 
-    double getPreferredX() {
-        double smoothAnimProgress = easeInOutCubic(animProgress);
-        return MathHelper.lerp(smoothAnimProgress, x, x + rw - rid);
-        //        return configValue.getValue() ? x + rw - rid - margin : x + margin;
-    }
-
-    //    double xSmooth = -1;
-
 
     @Override
     public boolean keyPressed(int keycode, int modifiers) {
@@ -60,25 +61,67 @@ public class BooleanSettingEditor extends ConfigBase<BooleanSetting> {
     @Override
     public void render(MatrixStack matrices, double mouseX, double mouseY, double scrollBeingUsed) {
         Theme theme = ThemeManager.getMainTheme();
-        double smoothAnimProgress = easeInOutCubic(animProgress);
-        Renderer.R2D.renderRoundedQuad(matrices, Renderer.Util.lerp(theme.getActive(), theme.getInactive(), smoothAnimProgress), x, y + height / 2d - rh / 2d, x + rw, y + height / 2d + rh / 2d, rh / 2d, 5);
-        double rix = getPreferredX();
-        //        Renderer.R2D.fill(matrices, theme.getAccent(), rix, y + height / 2d - rh / 2d + margin, rix + rid, y + height / 2d - rh / 2d + margin + rid);
-        Renderer.R2D.renderCircle(matrices, theme.getAccent(), rix + rid / 2, y + height / 2d, rid / 2d, 15);
-        //        Renderer.R2D.renderCircle(matrices, Theme.ACCENT,);
+        double smoothAnimProgress = Transitions.easeOutExpo(animProgress);
+
+        double dimensionsWeCanUse = 8;
+        Renderer.R2D.renderRoundedQuad(matrices, Renderer.Util.lerp(theme.getInactive(), theme.getActive(), 1 - smoothAnimProgress), x, y + height / 2d - dimensionsWeCanUse / 2d, x + dimensionsWeCanUse, y + height / 2d + dimensionsWeCanUse / 2d, 2, 20);
+        matrices.push();
+
+        float rotateDeg = 45;
+        double radians = Math.toRadians(rotateDeg);
+        double sin = Math.sin(radians);
+        double cos = Math.cos(radians);
+        double totalWidth = 2 * cos;
+        double hookHeight = 6 * cos;
+        double extraHeight = 2 * sin;
+        double totalHeight = Math.max(hookHeight, extraHeight);
+
+        matrices.translate(x + dimensionsWeCanUse / 2d - totalWidth / 2d, y + height / 2d + totalHeight / 2d, 0);
+        matrices.multiply(new Quaternion(0, 0, rotateDeg, true));
+
+        renderHook(matrices, Color.WHITE, 0, 0, 3 * smoothAnimProgress, 5 * smoothAnimProgress, 0.75);
+        matrices.pop();
         FontRenderers.getRenderer()
-                .drawString(matrices, configValue.getName(), x + rw + 2, y + height / 2d - FontRenderers.getRenderer()
+                .drawString(matrices, configValue.getName(), x + dimensionsWeCanUse + 2, y + height / 2d - FontRenderers.getRenderer()
                         .getMarginHeight() / 2d, 0xFFFFFF);
     }
 
-    double easeInOutCubic(double x) {
-        return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+    void renderHook(MatrixStack matrices, Color color, double x, double y, double hookWidth, double extendHeight, double thickness) {
+        Matrix4f matrix = matrices.peek().getPositionMatrix();
 
+        BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
+        Renderer.setupRender();
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
+
+        /*
+         *      4 -- 3
+         *      |    |
+         *      |    |
+         * 6 -- 5    |
+         * |         |
+         * 1 ------- 2 - origin
+         * */
+
+        double[][] verts = new double[][] { new double[] { 0, 0 }, new double[] { 0, -extendHeight }, new double[] { -thickness, -extendHeight }, new double[] { -thickness, 0 },
+
+                new double[] { 0, 0 }, new double[] { 0, -thickness }, new double[] { -hookWidth, -thickness }, new double[] { -hookWidth, 0 } };
+        for (double[] vert : verts) {
+            double xOffset = vert[0];
+            double yOffset = vert[1];
+            bufferBuilder.vertex(matrix, (float) (x + xOffset), (float) (y + yOffset), 0)
+                    .color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha())
+                    .next();
+        }
+
+        bufferBuilder.end();
+        BufferRenderer.draw(bufferBuilder);
+        Renderer.endRender();
     }
 
     @Override
     public void tickAnim() {
-        double a = 0.03;
+        double a = 0.04;
         if (!configValue.getValue()) {
             a *= -1;
         }

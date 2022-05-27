@@ -1,8 +1,6 @@
 # Coffee client
 A very based 1.18.2 client that was recently discontinued, now reuploaded and even better.
 
-This is still in development and textures might be different / not present because this was ported over to a client called "shadow" and now ported back to coffee without the textures, so I need to fix that still. You can use it, but the experience might not be as good.
-
 ## Installing
 ### You will need
 - Minecraft java

@@ -62,8 +62,7 @@ public class AChatScreenMixin extends Screen {
         String p = getPrefix();
         if (SelfDestruct.shouldSelfDestruct()) {
             if (SelfDestruct.handleMessage(s)) return;
-        }
-        else if (s.startsWith(p)) { // filter all messages starting with .
+        } else if (s.startsWith(p)) { // filter all messages starting with .
             CoffeeMain.client.inGameHud.getChatHud().addToMessageHistory(s);
             CommandRegistry.execute(s.substring(p.length())); // cut off prefix
             return;

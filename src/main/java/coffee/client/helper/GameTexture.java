@@ -4,8 +4,11 @@
 
 package coffee.client.helper;
 
+import coffee.client.helper.render.Rectangle;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+@AllArgsConstructor
 public enum GameTexture {
     TEXTURE_ICON(new Texture("tex/icon"), "https://github.com/Coffee-Client/Resources/raw/master/icon.png"),
     TEXTURE_BACKGROUND(new Texture("tex/background"), "https://github.com/Coffee-Client/Resources/raw/master/background.png"),
@@ -26,12 +29,12 @@ public enum GameTexture {
     ACTION_RUNCOMMAND(new Texture("actions/runCommand"), "https://github.com/Coffee-Client/Resources/raw/master/command.png"),
     ACTION_TOGGLEMODULE(new Texture("actions/toggleModule"), "https://github.com/Coffee-Client/Resources/raw/master/toggle.png");
     @Getter
-    final String downloadUrl;
-    @Getter
     final Texture where;
 
-    GameTexture(Texture where, String downloadUrl) {
-        this.where = where;
-        this.downloadUrl = downloadUrl;
-    }
+    @Getter
+    final String downloadUrl;
+
+    @Getter
+    final Rectangle dimensions = new Rectangle(0, 0, 0, 0);
+
 }

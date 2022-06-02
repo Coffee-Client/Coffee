@@ -27,6 +27,7 @@ import coffee.client.feature.command.impl.Hologram;
 import coffee.client.feature.command.impl.Inject;
 import coffee.client.feature.command.impl.Invsee;
 import coffee.client.feature.command.impl.ItemData;
+import coffee.client.feature.command.impl.ItemExploit;
 import coffee.client.feature.command.impl.ItemSpoof;
 import coffee.client.feature.command.impl.Kickall;
 import coffee.client.feature.command.impl.MessageSpam;
@@ -123,6 +124,7 @@ public class CommandRegistry {
         vanillaCommands.add(new RandomBook());
         vanillaCommands.add(new SocketKick());
         vanillaCommands.add(new SelfDestruct());
+        vanillaCommands.add(new ItemExploit());
 
         rebuildSharedCommands();
     }

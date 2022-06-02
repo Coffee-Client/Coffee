@@ -490,7 +490,7 @@ public class Renderer {
 
             setupRender();
             RenderSystem.setShader(GameRenderer::getPositionColorShader);
-            renderRoundedQuadInternal(mat, color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f, roundStartX, roundStartY, roundStartX + width, roundStartY + height, 5, 20);
+            renderRoundedQuadInternal(mat, color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f, roundStartX, roundStartY, roundStartX + width, roundStartY + height, 5, 5, 5, 5, 20);
             Tessellator t = Tessellator.getInstance();
             BufferBuilder bb = t.getBuffer();
             bb.begin(VertexFormat.DrawMode.TRIANGLES, VertexFormats.POSITION_COLOR);
@@ -814,17 +814,18 @@ public class Renderer {
         }
 
         public static void renderRoundedQuadInternal(Matrix4f matrix, float cr, float cg, float cb, float ca, double fromX, double fromY, double toX, double toY, double rad, double samples) {
+            renderRoundedQuadInternal(matrix, cr, cg, cb, ca, fromX, fromY, toX, toY, rad, rad, rad, rad, samples);
+        }
+
+        public static void renderRoundedQuadInternal(Matrix4f matrix, float cr, float cg, float cb, float ca, double fromX, double fromY, double toX, double toY, double radC1, double radC2, double radC3, double radC4, double samples) {
             BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
             bufferBuilder.begin(VertexFormat.DrawMode.TRIANGLE_FAN, VertexFormats.POSITION_COLOR);
 
-            double toX1 = toX - rad;
-            double toY1 = toY - rad;
-            double fromX1 = fromX + rad;
-            double fromY1 = fromY + rad;
-            double[][] map = new double[][] { new double[] { toX1, toY1 }, new double[] { toX1, fromY1 }, new double[] { fromX1, fromY1 }, new double[] { fromX1, toY1 } };
+            double[][] map = new double[][] { new double[] { toX - radC4, toY - radC4, radC4 }, new double[] { toX - radC2, fromY + radC2, radC2 }, new double[] { fromX + radC1, fromY + radC1, radC1 }, new double[] { fromX + radC3, toY - radC3, radC3 } };
             for (int i = 0; i < 4; i++) {
                 double[] current = map[i];
                 for (double r = i * 90d; r < (360 / 4d + i * 90d); r += (90 / samples)) {
+                    double rad = current[2];
                     float rad1 = (float) Math.toRadians(r);
                     float sin = (float) (Math.sin(rad1) * rad);
                     float cos = (float) (Math.cos(rad1) * rad);
@@ -847,13 +848,13 @@ public class Renderer {
             setupRender();
             RenderSystem.setShader(GameRenderer::getPositionColorShader);
 
-            renderRoundedQuadInternal(matrix, g, h, k, f, fromX, fromY, toX, toY, rad, samples);
+            renderRoundedQuadInternal(matrix, g, h, k, f, fromX, fromY, toX, toY, rad, rad, rad, rad, samples);
 
             renderRoundedShadow(matrices, new Color(10, 10, 10, 100), fromX, fromY, toX, toY, rad, samples, 3);
             endRender();
         }
 
-        public static void renderRoundedQuad(MatrixStack matrices, Color c, double fromX, double fromY, double toX, double toY, double rad, double samples) {
+        public static void renderRoundedQuad(MatrixStack matrices, Color c, double fromX, double fromY, double toX, double toY, double radC1, double radC2, double radC3, double radC4, double samples) {
             int color = c.getRGB();
             Matrix4f matrix = matrices.peek().getPositionMatrix();
             float f = (float) (color >> 24 & 255) / 255.0F;
@@ -863,8 +864,12 @@ public class Renderer {
             setupRender();
             RenderSystem.setShader(GameRenderer::getPositionColorShader);
 
-            renderRoundedQuadInternal(matrix, g, h, k, f, fromX, fromY, toX, toY, rad, samples);
+            renderRoundedQuadInternal(matrix, g, h, k, f, fromX, fromY, toX, toY, radC1, radC2, radC3, radC4, samples);
             endRender();
+        }
+
+        public static void renderRoundedQuad(MatrixStack stack, Color c, double x, double y, double x1, double y1, double rad, double samples) {
+            renderRoundedQuad(stack, c, x, y, x1, y1, rad, rad, rad, rad, samples);
         }
 
         public static void renderLine(MatrixStack stack, Color c, double x, double y, double x1, double y1) {

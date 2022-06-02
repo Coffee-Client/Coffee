@@ -124,6 +124,10 @@ public class LoadingScreen extends ClientScreen implements FastTickable {
                     in.close();
                     byte[] imageBuffer = bout.toByteArray();
                     BufferedImage bi = ImageIO.read(new ByteArrayInputStream(imageBuffer));
+                    resource.getDimensions().setX(0);
+                    resource.getDimensions().setY(0);
+                    resource.getDimensions().setX1(bi.getWidth());
+                    resource.getDimensions().setY1(bi.getHeight());
                     Utils.registerBufferedImageTexture(resource.getWhere(), bi);
                     CoffeeMain.log(Level.INFO, "Downloaded " + resource.getDownloadUrl());
                 } catch (Exception e) {

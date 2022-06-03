@@ -15,7 +15,6 @@ echo "Version: $ver -> $verNew"
 echo -n "$verNew" > ./src/main/resources/version.txt
 
 echo "Running build"
-export JAVA_HOME="$HOME/.jdks/openjdk-17.0.2/"
 ./gradlew build
 if [[ ! -d bin ]]; then
   mkdir bin

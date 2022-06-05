@@ -22,6 +22,7 @@ public class ButtonGroup extends Element {
 
     void createButtons(ButtonEntry[] e) {
         double widthForOneButton = getWidth() / e.length;
+        double heightForOneButton = getHeight() / e.length;
         for (int i = 0; i < e.length; i++) {
             boolean isFirst = i == 0;
             boolean isLast = i == (e.length - 1);
@@ -43,7 +44,7 @@ public class ButtonGroup extends Element {
                 rad3 = 0;
                 rad4 = 0;
             }
-            SingleButton btn = new SingleButton(0, 0, widthForOneButton, height, be.content, be.onClicked, rad1 * 5, rad2 * 5, rad3 * 5, rad4 * 5, new Color(30, 30, 30), new Color(50, 50, 50));
+            SingleButton btn = new SingleButton(0, 0, dir== LayoutDirection.RIGHT?widthForOneButton:width, dir==LayoutDirection.RIGHT?height:heightForOneButton, be.content, be.onClicked, rad1 * 5, rad2 * 5, rad3 * 5, rad4 * 5, new Color(30, 30, 30), new Color(50, 50, 50));
             els.add(btn);
         }
     }

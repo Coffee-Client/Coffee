@@ -21,7 +21,7 @@ public class TestScreen extends AAScreen {
 
     @Override
     protected void initInternal() {
-        ButtonGroup bg = new ButtonGroup(5, 5, 300, 20, ButtonGroup.LayoutDirection.RIGHT, new ButtonGroup.ButtonEntry("abc", () -> {
+        ButtonGroup bg = new ButtonGroup(5, 5, 200, 20, ButtonGroup.LayoutDirection.RIGHT, new ButtonGroup.ButtonEntry("abc", () -> {
             System.out.println("abc");
         }), new ButtonGroup.ButtonEntry("def", () -> {
             System.out.println("def");

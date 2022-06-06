@@ -13,6 +13,8 @@ public class BossBarHudMixin {
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
     void coffee_disableRender(MatrixStack matrices, CallbackInfo ci) {
         AntiCrash ac = AntiCrash.instance();
-        if (ac.getDisableBossbars().getValue() && ac.isEnabled()) ci.cancel();
+        if (ac.getDisableBossbars().getValue() && ac.isEnabled()) {
+            ci.cancel();
+        }
     }
 }

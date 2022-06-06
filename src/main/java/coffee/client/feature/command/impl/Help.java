@@ -34,7 +34,8 @@ public class Help extends Command {
         for (Command command : CommandRegistry.getCommands()) {
             holyShitThisIsComplex.addAll(Arrays.asList(command.getAliases()));
         }
-        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.STRING, holyShitThisIsComplex.toArray(String[]::new)));
+        return StaticArgumentServer.serveFromStatic(index,
+                new PossibleArgument(ArgumentType.STRING, holyShitThisIsComplex.toArray(String[]::new)));
     }
 
     @Override
@@ -48,8 +49,9 @@ public class Help extends Command {
         } else {
             String s = args[0];
             Command c = CommandRegistry.getByAlias(s);
-            if (c == null) error("Command \"" + s + "\" was not found");
-            else {
+            if (c == null) {
+                error("Command \"" + s + "\" was not found");
+            } else {
                 message("Command " + c.getName());
                 message(c.getDescription(), Color.GRAY);
                 message("Aliases: " + String.join(", ", c.getAliases()), Color.GRAY);

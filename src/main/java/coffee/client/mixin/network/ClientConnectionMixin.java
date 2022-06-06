@@ -37,7 +37,9 @@ public class ClientConnectionMixin {
 
     @Inject(method = "send(Lnet/minecraft/network/Packet;)V", cancellable = true, at = @At("HEAD"))
     public void coffee_sendPacket(Packet<?> packet, CallbackInfo ci) {
-        if (!Utils.sendPackets) return;
+        if (!Utils.sendPackets) {
+            return;
+        }
         if (Events.fireEvent(EventType.PACKET_SEND, new PacketEvent(packet))) {
             ci.cancel();
         }

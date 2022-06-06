@@ -126,8 +126,12 @@ public class BlockTagViewer extends Module {
             double prog = e(entry.animProg);
             double c = prog * (FontRenderers.getRenderer().getMarginHeight() + 1);
             s.scale(1, (float) prog, 1);
-            Renderer.R2D.renderQuad(s, new Color(0, 0, 0, (int) (prog * 100)), 0, 0, mw, FontRenderers.getRenderer()
-                    .getMarginHeight() + 1);
+            Renderer.R2D.renderQuad(s,
+                    new Color(0, 0, 0, (int) (prog * 100)),
+                    0,
+                    0,
+                    mw,
+                    FontRenderers.getRenderer().getMarginHeight() + 1);
             FontRenderers.getRenderer()
                     .drawString(s, entry.v, 1, 0.5f, new Color(255, 255, 255, (int) (prog * 255)).getRGB());
             s.pop();

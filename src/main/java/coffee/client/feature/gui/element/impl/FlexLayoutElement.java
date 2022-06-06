@@ -26,8 +26,12 @@ public class FlexLayoutElement extends Element {
         this.padding = padding;
         this.viewportHeight = getActualHeight();
         this.viewportWidth = getActualWidth();
-        if (width < 0) setWidth(viewportWidth);
-        if (height < 0) setHeight(viewportHeight);
+        if (width < 0) {
+            setWidth(viewportWidth);
+        }
+        if (height < 0) {
+            setHeight(viewportHeight);
+        }
     }
 
     public FlexLayoutElement(LayoutDirection direction, double x, double y, double padding, Element... elements) {
@@ -42,19 +46,25 @@ public class FlexLayoutElement extends Element {
     }
 
     double getActualHeight() {
-        if (direction == LayoutDirection.DOWN) return elements.stream()
-                .map(element -> element.getHeight() + padding)
-                .reduce(Double::sum)
-                .orElse(0d) - padding;
-        else return elements.stream().max(Comparator.comparingDouble(Element::getHeight)).orElseThrow().getHeight();
+        if (direction == LayoutDirection.DOWN) {
+            return elements.stream()
+                    .map(element -> element.getHeight() + padding)
+                    .reduce(Double::sum)
+                    .orElse(0d) - padding;
+        } else {
+            return elements.stream().max(Comparator.comparingDouble(Element::getHeight)).orElseThrow().getHeight();
+        }
     }
 
     double getActualWidth() {
-        if (direction == LayoutDirection.RIGHT) return elements.stream()
-                .map(element -> element.getWidth() + padding)
-                .reduce(Double::sum)
-                .orElse(0d) - padding;
-        else return elements.stream().max(Comparator.comparingDouble(Element::getWidth)).orElseThrow().getWidth();
+        if (direction == LayoutDirection.RIGHT) {
+            return elements.stream()
+                    .map(element -> element.getWidth() + padding)
+                    .reduce(Double::sum)
+                    .orElse(0d) - padding;
+        } else {
+            return elements.stream().max(Comparator.comparingDouble(Element::getWidth)).orElseThrow().getWidth();
+        }
     }
 
     @Override
@@ -94,7 +104,11 @@ public class FlexLayoutElement extends Element {
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, double deltaX, double deltaY, int button) {
-        return iterateOverChildren(element -> element.mouseDragged(mouseX, mouseY - scroller.getScroll(), deltaX, deltaY, button));
+        return iterateOverChildren(element -> element.mouseDragged(mouseX,
+                mouseY - scroller.getScroll(),
+                deltaX,
+                deltaY,
+                button));
     }
 
     @Override
@@ -114,7 +128,9 @@ public class FlexLayoutElement extends Element {
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
-        if (iterateOverChildren(element -> element.mouseScrolled(mouseX, mouseY, amount))) return true;
+        if (iterateOverChildren(element -> element.mouseScrolled(mouseX, mouseY, amount))) {
+            return true;
+        }
         if (inBounds(mouseX, mouseY)) {
             double viewport = getActualHeight();
             double current = getHeight();
@@ -128,7 +144,9 @@ public class FlexLayoutElement extends Element {
 
     private boolean iterateOverChildren(Function<Element, Boolean> supp) {
         for (Element element : getElements()) {
-            if (supp.apply(element)) return true;
+            if (supp.apply(element)) {
+                return true;
+            }
         }
         return false;
     }

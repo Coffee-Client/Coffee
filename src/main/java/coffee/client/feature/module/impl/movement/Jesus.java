@@ -40,7 +40,9 @@ public class Jesus extends Module {
             switch (mode.getValue()) {
                 case Jump -> Objects.requireNonNull(client.player).jump();
                 case Velocity -> Objects.requireNonNull(client.player)
-                        .setVelocity(client.player.getVelocity().x, velStrength.getValue(), client.player.getVelocity().z);
+                        .setVelocity(client.player.getVelocity().x,
+                                velStrength.getValue(),
+                                client.player.getVelocity().z);
                 case Legit -> Objects.requireNonNull(client.player)
                         .addVelocity(0, 0.03999999910593033, 0); // LivingEntity:1978, vanilla velocity
             }

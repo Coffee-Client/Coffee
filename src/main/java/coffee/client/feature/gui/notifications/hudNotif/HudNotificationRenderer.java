@@ -28,7 +28,9 @@ public class HudNotificationRenderer {
             for (HudNotification notif : notifs) {
                 notif.render(stack, x, y[0]);
 
-                double moveAnim = MathHelper.clamp(notif.easeInOutBack(MathHelper.clamp(notif.getAnimProg(), 0, 0.5) * 2), 0, 1);
+                double moveAnim = MathHelper.clamp(notif.easeInOutBack(MathHelper.clamp(notif.getAnimProg(),
+                        0,
+                        0.5) * 2), 0, 1);
                 y[0] += (notif.getHeight() + 5) * moveAnim;
             }
         });

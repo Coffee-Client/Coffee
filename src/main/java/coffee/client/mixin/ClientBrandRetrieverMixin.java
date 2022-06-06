@@ -11,6 +11,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class ClientBrandRetrieverMixin {
     @Inject(method = "getClientModName", at = @At("HEAD"), cancellable = true, remap = false)
     private static void coffee_replaceClientModName(CallbackInfoReturnable<String> cir) {
-        if (SelfDestruct.shouldSelfDestruct()) cir.setReturnValue("vanilla");
+        if (SelfDestruct.shouldSelfDestruct()) {
+            cir.setReturnValue("vanilla");
+        }
     }
 }

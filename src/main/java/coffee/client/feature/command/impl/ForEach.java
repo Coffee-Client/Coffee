@@ -34,13 +34,17 @@ public class ForEach extends Command {
     public ForEach() {
         super("ForEach", "Do something for each player", "forEach", "for", "fe");
         Events.registerEventHandler(EventType.PACKET_RECEIVE, event -> {
-            if (!recieving) return;
+            if (!recieving) {
+                return;
+            }
             PacketEvent pe = (PacketEvent) event;
             if (pe.getPacket() instanceof CommandSuggestionsS2CPacket packet) {
                 Suggestions all = packet.getSuggestions();
                 for (Suggestion i : all.getList()) {
                     String name = i.getText();
-                    if (name.contains(CoffeeMain.client.player.getName().toString())) continue;
+                    if (name.contains(CoffeeMain.client.player.getName().toString())) {
+                        continue;
+                    }
                     CoffeeMain.client.player.sendChatMessage(partial.replaceAll("%s", name));
                     message(partial.replaceAll("%s", name));
                 }
@@ -52,12 +56,17 @@ public class ForEach extends Command {
 
     @Override
     public ExamplesEntry getExampleArguments() {
-        return new ExamplesEntry("player 1000 /msg %s you stink", "tab 10 /kick %s Server wipe", "tab 0 /ban %s MOLED LLLLL");
+        return new ExamplesEntry("player 1000 /msg %s you stink",
+                "tab 10 /kick %s Server wipe",
+                "tab 0 /ban %s MOLED LLLLL");
     }
 
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
-        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.STRING, "player", "tab"), new PossibleArgument(ArgumentType.NUMBER, "(delay)"), new PossibleArgument(ArgumentType.NUMBER, "(message)"));
+        return StaticArgumentServer.serveFromStatic(index,
+                new PossibleArgument(ArgumentType.STRING, "player", "tab"),
+                new PossibleArgument(ArgumentType.NUMBER, "(delay)"),
+                new PossibleArgument(ArgumentType.NUMBER, "(message)"));
     }
 
     @Override
@@ -74,7 +83,8 @@ public class ForEach extends Command {
                             .equals(Objects.requireNonNull(CoffeeMain.client.player).getUuid())) {
                         runner.execute(() -> {
                             try {
-                                CoffeeMain.client.player.sendChatMessage(String.join(" ", Arrays.copyOfRange(args, 2, args.length))
+                                CoffeeMain.client.player.sendChatMessage(String.join(" ",
+                                                Arrays.copyOfRange(args, 2, args.length))
                                         .replaceAll("%s", playerListEntry.getProfile().getName()));
                                 Thread.sleep(delay);
                             } catch (Exception ignored) {
@@ -85,7 +95,8 @@ public class ForEach extends Command {
             }
             case "tab" -> {
                 partial = String.join(" ", Arrays.copyOfRange(args, 2, args.length));
-                CoffeeMain.client.player.networkHandler.sendPacket(new RequestCommandCompletionsC2SPacket(0, partial + " "));
+                CoffeeMain.client.player.networkHandler.sendPacket(new RequestCommandCompletionsC2SPacket(0,
+                        partial + " "));
                 recieving = true;
             }
             default -> error("Argument 1 has to be either player or tab");

@@ -61,7 +61,9 @@ public abstract class Module {
                 .get());
         boolean hasAnnotation = false;
         for (Annotation declaredAnnotation : this.getClass().getDeclaredAnnotations()) {
-            if (declaredAnnotation.annotationType() == NoNotificationDefault.class) hasAnnotation = true;
+            if (declaredAnnotation.annotationType() == NoNotificationDefault.class) {
+                hasAnnotation = true;
+            }
         }
         this.toasts = this.config.create(new BooleanSetting.Builder(!hasAnnotation).name("Toasts")
                 .description("Whether to show enabled / disabled toasts")
@@ -124,7 +126,10 @@ public abstract class Module {
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
         if (toasts.getValue()) {
-            Notification.create(1000, "Module toggle", Notification.Type.INFO, (this.enabled ? "§aEn" : "§cDis") + "abled §r" + this.getName());
+            Notification.create(1000,
+                    "Module toggle",
+                    Notification.Type.INFO,
+                    (this.enabled ? "§aEn" : "§cDis") + "abled §r" + this.getName());
         }
         if (this.enabled) {
             Events.registerEventHandlerClass(this);

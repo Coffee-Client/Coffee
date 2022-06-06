@@ -61,9 +61,8 @@ public class Killaura extends Module {
             .precision(1)
             .get());
 
-    final BooleanSetting attackOnlyCombatPartner = this.config.create(new BooleanSetting.Builder(true).name("Attack only combat")
-            .description("Whether or not to only aim at the combat partner")
-            .get());
+    final BooleanSetting attackOnlyCombatPartner = this.config.create(new BooleanSetting.Builder(true).name(
+            "Attack only combat").description("Whether or not to only aim at the combat partner").get());
     final BooleanSetting attackPlayers = this.config.create(new BooleanSetting.Builder(true).name("Attack players")
             .description("Whether or not to aim at players")
             .get());
@@ -89,20 +88,17 @@ public class Killaura extends Module {
             .max(10)
             .precision(0)
             .get());
-    final EnumSetting<PriorityMode> prio = this.config.create(new EnumSetting.Builder<>(PriorityMode.Distance).name("Priority")
-            .description("What to prioritize when aiming")
-            .get());
+    final EnumSetting<PriorityMode> prio = this.config.create(new EnumSetting.Builder<>(PriorityMode.Distance).name(
+            "Priority").description("What to prioritize when aiming").get());
 
 
     final BooleanSetting enableConfuse = this.config.create(new BooleanSetting.Builder(false).name("Enable confuse")
             .description("Whether or not to enable confuse")
             .get());
-    final EnumSetting<ConfuseMode> confuseMode = this.config.create(new EnumSetting.Builder<>(ConfuseMode.TP).name("Confuse mode")
-            .description("How to confuse the enemy")
-            .get());
-    final BooleanSetting confuseAllowClip = this.config.create(new BooleanSetting.Builder(false).name("Confuse into solid")
-            .description("Allow confuse to tp into blocks")
-            .get());
+    final EnumSetting<ConfuseMode> confuseMode = this.config.create(new EnumSetting.Builder<>(ConfuseMode.TP).name(
+            "Confuse mode").description("How to confuse the enemy").get());
+    final BooleanSetting confuseAllowClip = this.config.create(new BooleanSetting.Builder(false).name(
+            "Confuse into solid").description("Allow confuse to tp into blocks").get());
     final List<Entity> attacks = new ArrayList<>();
     Entity combatPartner;
     double circleProg = 0;
@@ -168,8 +164,9 @@ public class Killaura extends Module {
                 p = new Vec3d(p.x, 0, p.z).normalize().multiply(1.5);
                 updatePos = e.getPos().add(p.multiply(-1));
             }
-            case TP ->
-                    updatePos = new Vec3d(e.getX() + (Math.random() * 4 - 2), e.getY(), e.getZ() + (Math.random() * 4 - 2));
+            case TP -> updatePos = new Vec3d(e.getX() + (Math.random() * 4 - 2),
+                    e.getY(),
+                    e.getZ() + (Math.random() * 4 - 2));
             case Circle -> {
                 circleProg += 20;
                 circleProg %= 360;
@@ -303,8 +300,10 @@ public class Killaura extends Module {
                             double offX = center.x - CoffeeMain.client.player.getX();
                             double offZ = center.z - CoffeeMain.client.player.getZ();
                             float yaw = (float) Math.toDegrees(Math.atan2(offZ, offX)) - 90F;
-                            float pitch = (float) -Math.toDegrees(Math.atan2(center.y - CoffeeMain.client.player.getEyeY(), Math.sqrt(offX * offX + offZ * offZ)));
-                            return Math.abs(MathHelper.wrapDegrees(yaw - CoffeeMain.client.player.getYaw())) + Math.abs(MathHelper.wrapDegrees(pitch - CoffeeMain.client.player.getPitch()));
+                            float pitch = (float) -Math.toDegrees(Math.atan2(center.y - CoffeeMain.client.player.getEyeY(),
+                                    Math.sqrt(offX * offX + offZ * offZ)));
+                            return Math.abs(MathHelper.wrapDegrees(yaw - CoffeeMain.client.player.getYaw())) + Math.abs(
+                                    MathHelper.wrapDegrees(pitch - CoffeeMain.client.player.getPitch()));
                         }))
                         .sorted(Comparator.comparingDouble(value -> value.getPos()
                                 .distanceTo(Objects.requireNonNull(CoffeeMain.client.player).getPos())))

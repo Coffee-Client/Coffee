@@ -90,14 +90,28 @@ public class ModuleDisplay extends Element {
                     .renderDescription(Utils.Mouse.getMouseX(), Utils.Mouse.getMouseY() + 10, module.getDescription());
         }
         hoveredBefore = hovered;
-        Renderer.R2D.renderQuad(matrices, hovered ? theme.getModule()
-                .darker() : theme.getModule(), x, y, x + width, y + height);
+        Renderer.R2D.renderQuad(matrices,
+                hovered ? theme.getModule().darker() : theme.getModule(),
+                x,
+                y,
+                x + width,
+                y + height);
         FontRenderers.getRenderer()
-                .drawCenteredString(matrices, module.getName(), x + width / 2d, y + height / 2d - FontRenderers.getRenderer()
-                        .getMarginHeight() / 2d, 0xFFFFFF);
+                .drawCenteredString(matrices,
+                        module.getName(),
+                        x + width / 2d,
+                        y + height / 2d - FontRenderers.getRenderer().getMarginHeight() / 2d,
+                        0xFFFFFF);
         if (module.isEnabled()) {
             double wid = 1.5;
-            Renderer.R2D.renderRoundedQuad(matrices, theme.getAccent(), x + 1, y + 1, x + 1 + wid, y + height - 1, wid / 2d, 6);
+            Renderer.R2D.renderRoundedQuad(matrices,
+                    theme.getAccent(),
+                    x + 1,
+                    y + 1,
+                    x + 1 + wid,
+                    y + height - 1,
+                    wid / 2d,
+                    6);
         }
         cd.setX(this.x);
         cd.setY(this.y + height);
@@ -122,7 +136,9 @@ public class ModuleDisplay extends Element {
     @Override
     public boolean scroll(double mouseX, double mouseY, double amount) {
         if (extendAnim > 0) {
-            if (cd.scroll(mouseX, mouseY, amount)) return true;
+            if (cd.scroll(mouseX, mouseY, amount)) {
+                return true;
+            }
         }
         return super.scroll(mouseX, mouseY, amount);
     }

@@ -26,12 +26,17 @@ public class Hologram extends Command {
 
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
-        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.STRING, "(flags)"), new PossibleArgument(ArgumentType.STRING, "(message)"));
+        return StaticArgumentServer.serveFromStatic(index,
+                new PossibleArgument(ArgumentType.STRING, "(flags)"),
+                new PossibleArgument(ArgumentType.STRING, "(message)"));
     }
 
     @Override
     public ExamplesEntry getExampleArguments() {
-        return new ExamplesEntry("E Hello spawn egg", "EB I am baby", "BVM You can see and interact with me", "BGVM Help I'm a falling child which you can interact with!");
+        return new ExamplesEntry("E Hello spawn egg",
+                "EB I am baby",
+                "BVM You can see and interact with me",
+                "BGVM Help I'm a falling child which you can interact with!");
     }
 
     @Override

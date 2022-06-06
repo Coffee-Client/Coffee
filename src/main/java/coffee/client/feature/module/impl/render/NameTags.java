@@ -61,31 +61,67 @@ public class NameTags extends Module {
         }
         String pingStr = (ping == 0 ? "?" : ping) + " ms";
         String gmString = "§cBot";
-        if (gamemode != null) switch (gamemode) {
-            case ADVENTURE -> gmString = "Adventure";
-            case CREATIVE -> gmString = "Creative";
-            case SURVIVAL -> gmString = "Survival";
-            case SPECTATOR -> gmString = "Spectator";
+        if (gamemode != null) {
+            switch (gamemode) {
+                case ADVENTURE -> gmString = "Adventure";
+                case CREATIVE -> gmString = "Creative";
+                case SURVIVAL -> gmString = "Survival";
+                case SPECTATOR -> gmString = "Spectator";
+            }
         }
         MatrixStack stack1 = Renderer.R3D.getEmptyMatrixStack();
         Vec3d actual = new Vec3d(screenPos.x, screenPos.y - labelHeight, screenPos.z);
         float width = nameDrawer.getStringWidth(text) + 4;
         width = Math.max(width, 60);
 
-        Renderer.R2D.renderRoundedQuad(stack1, new Color(0, 0, 5, 100), actual.x - width / 2d, actual.y, actual.x + width / 2d, actual.y + labelHeight, 3, 20);
-        nameDrawer.drawString(stack1, text, actual.x + width / 2d - nameDrawer.getStringWidth(text) - 2, actual.y + 2, 0xFFFFFF);
+        Renderer.R2D.renderRoundedQuad(stack1,
+                new Color(0, 0, 5, 100),
+                actual.x - width / 2d,
+                actual.y,
+                actual.x + width / 2d,
+                actual.y + labelHeight,
+                3,
+                20);
+        nameDrawer.drawString(stack1,
+                text,
+                actual.x + width / 2d - nameDrawer.getStringWidth(text) - 2,
+                actual.y + 2,
+                0xFFFFFF);
 
-        infoDrawer.drawString(stack1, gmString, actual.x + width / 2d - infoDrawer.getStringWidth(gmString) - 2, actual.y + 2 + nameDrawer.getFontHeight(), 0xAAAAAA);
-        if (ping != -1)
-            infoDrawer.drawString(stack1, pingStr, actual.x - width / 2d + 2, actual.y + 2 + nameDrawer.getFontHeight(), 0xAAAAAA);
-        Renderer.R2D.renderRoundedQuad(stack1, new Color(60, 60, 60, 255), actual.x - width / 2d + 2, actual.y + labelHeight - 2 - healthHeight, actual.x + width / 2d - 2, actual.y + labelHeight - 2, healthHeight / 2d, 10);
+        infoDrawer.drawString(stack1,
+                gmString,
+                actual.x + width / 2d - infoDrawer.getStringWidth(gmString) - 2,
+                actual.y + 2 + nameDrawer.getFontHeight(),
+                0xAAAAAA);
+        if (ping != -1) {
+            infoDrawer.drawString(stack1,
+                    pingStr,
+                    actual.x - width / 2d + 2,
+                    actual.y + 2 + nameDrawer.getFontHeight(),
+                    0xAAAAAA);
+        }
+        Renderer.R2D.renderRoundedQuad(stack1,
+                new Color(60, 60, 60, 255),
+                actual.x - width / 2d + 2,
+                actual.y + labelHeight - 2 - healthHeight,
+                actual.x + width / 2d - 2,
+                actual.y + labelHeight - 2,
+                healthHeight / 2d,
+                10);
         float health = entity.getHealth();
         float maxHealth = entity.getMaxHealth();
         float healthPer = health / maxHealth;
         healthPer = MathHelper.clamp(healthPer, 0, 1);
         double drawTo = MathHelper.lerp(healthPer, actual.x - width / 2d + 2 + healthHeight, actual.x + width / 2d - 2);
         Color MID_END = Renderer.Util.lerp(TargetHud.GREEN, TargetHud.RED, healthPer);
-        Renderer.R2D.renderRoundedQuad(stack1, MID_END, actual.x - width / 2d + 2, actual.y + labelHeight - 2 - healthHeight, drawTo, actual.y + labelHeight - 2, healthHeight / 2d, 10);
+        Renderer.R2D.renderRoundedQuad(stack1,
+                MID_END,
+                actual.x - width / 2d + 2,
+                actual.y + labelHeight - 2 - healthHeight,
+                drawTo,
+                actual.y + labelHeight - 2,
+                healthHeight / 2d,
+                10);
     }
 
     @Override

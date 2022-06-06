@@ -31,14 +31,16 @@ public class ShulkerDeflector extends Module {
     boolean inHitRange(Entity attacker, Entity target) {
         return attacker.getCameraPosVec(1f)
                 .distanceTo(target.getPos()
-                        .add(0, target.getHeight() / 2, 0)) <= Objects.requireNonNull(CoffeeMain.client.interactionManager)
-                .getReachDistance();
+                        .add(0,
+                                target.getHeight() / 2,
+                                0)) <= Objects.requireNonNull(CoffeeMain.client.interactionManager).getReachDistance();
     }
 
     @Override
     public void onFastTick() {
         for (Entity entity : Objects.requireNonNull(CoffeeMain.client.world).getEntities()) {
-            if (entity instanceof ShulkerBulletEntity sbe && inHitRange(Objects.requireNonNull(CoffeeMain.client.player), sbe)) {
+            if (entity instanceof ShulkerBulletEntity sbe && inHitRange(Objects.requireNonNull(CoffeeMain.client.player),
+                    sbe)) {
                 if (checkOwner.getValue() && sbe.getOwner() != null && sbe.getOwner()
                         .equals(CoffeeMain.client.player)) {
                     continue;

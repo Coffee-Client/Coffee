@@ -24,7 +24,9 @@ public class TitleScreenMixin extends Screen {
 
     @Inject(method = "init", at = @At("RETURN"))
     void coffee_postInit(CallbackInfo ci) {
-        if (SelfDestruct.shouldSelfDestruct()) return;
+        if (SelfDestruct.shouldSelfDestruct()) {
+            return;
+        }
         Objects.requireNonNull(client).setScreen(LoadingScreen.instance());
     }
 }

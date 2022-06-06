@@ -49,9 +49,8 @@ public class AimAssist extends Module {
     final BooleanSetting aimAtCombatPartner = this.config.create(new BooleanSetting.Builder(true).name("Aim at combat")
             .description("Whether or not to only aim at the combat partner")
             .get());
-    final EnumSetting<PriorityMode> priority = this.config.create(new EnumSetting.Builder<>(PriorityMode.Distance).name("Priority")
-            .description("What to prioritize when aiminig")
-            .get());
+    final EnumSetting<PriorityMode> priority = this.config.create(new EnumSetting.Builder<>(PriorityMode.Distance).name(
+            "Priority").description("What to prioritize when aiminig").get());
     final DoubleSetting laziness = this.config.create(new DoubleSetting.Builder(1).name("Laziness")
             .description("How lazy to get when aiming")
             .min(0.1)

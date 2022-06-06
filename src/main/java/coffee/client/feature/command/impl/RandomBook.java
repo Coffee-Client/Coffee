@@ -27,7 +27,9 @@ public class RandomBook extends Command {
 
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
-        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.STRING, "ascii", "raw", "unicode"), new PossibleArgument(ArgumentType.NUMBER, "(pages)"));
+        return StaticArgumentServer.serveFromStatic(index,
+                new PossibleArgument(ArgumentType.STRING, "ascii", "raw", "unicode"),
+                new PossibleArgument(ArgumentType.NUMBER, "(pages)"));
     }
 
     @Override
@@ -42,7 +44,9 @@ public class RandomBook extends Command {
                 }
 
                 Optional<String> pages = Optional.of("Raw");
-                client.player.networkHandler.sendPacket(new BookUpdateC2SPacket(client.player.getInventory().selectedSlot, title, pages));
+                client.player.networkHandler.sendPacket(new BookUpdateC2SPacket(client.player.getInventory().selectedSlot,
+                        title,
+                        pages));
             }
 
             case "ascii" -> {
@@ -58,7 +62,9 @@ public class RandomBook extends Command {
 
 
                 Optional<String> pages3 = Optional.of("Ascii");
-                client.player.networkHandler.sendPacket(new BookUpdateC2SPacket(client.player.getInventory().selectedSlot, title3, pages3));
+                client.player.networkHandler.sendPacket(new BookUpdateC2SPacket(client.player.getInventory().selectedSlot,
+                        title3,
+                        pages3));
             }
 
             case "unicode" -> {
@@ -73,7 +79,9 @@ public class RandomBook extends Command {
                     title2.add(text.substring(t * 210, (t + 1) * 210));
                 }
 
-                client.player.networkHandler.sendPacket(new BookUpdateC2SPacket(client.player.getInventory().selectedSlot, title2, pages2));
+                client.player.networkHandler.sendPacket(new BookUpdateC2SPacket(client.player.getInventory().selectedSlot,
+                        title2,
+                        pages2));
             }
         }
     }

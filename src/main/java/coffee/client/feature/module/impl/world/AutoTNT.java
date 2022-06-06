@@ -55,7 +55,11 @@ public class AutoTNT extends Module {
         }
         if (tntSlot == -1) {
             if (!missingTntAck) {
-                Notification.create(6000, "AutoTNT", false, Notification.Type.WARNING, "Ran out of tnt! Get more in your hotbar");
+                Notification.create(6000,
+                        "AutoTNT",
+                        false,
+                        Notification.Type.WARNING,
+                        "Ran out of tnt! Get more in your hotbar");
             }
             missingTntAck = true;
             return;
@@ -126,7 +130,8 @@ public class AutoTNT extends Module {
     }
 
     boolean shouldPlace(BlockPos b) {
-        return b.getX() % ((int) Math.floor(placeDistance.getValue())) == 0 && b.getZ() % ((int) Math.floor(placeDistance.getValue())) == 0;
+        return b.getX() % ((int) Math.floor(placeDistance.getValue())) == 0 && b.getZ() % ((int) Math.floor(
+                placeDistance.getValue())) == 0;
     }
 
     @Override

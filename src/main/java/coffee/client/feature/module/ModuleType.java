@@ -8,11 +8,11 @@ import coffee.client.helper.GameTexture;
 import coffee.client.helper.Texture;
 
 public enum ModuleType {
-    RENDER("Render", GameTexture.ICONS_RENDER.getWhere()), MOVEMENT("Movement", GameTexture.ICONS_MOVE.getWhere()),
-    MISC("Miscellaneous", GameTexture.ICONS_MISC.getWhere()), WORLD("World", GameTexture.ICONS_WORLD.getWhere()),
-    EXPLOIT("Exploit", GameTexture.ICONS_EXPLOIT.getWhere()),
-    ADDON_PROVIDED("Addons", GameTexture.ICONS_ADDON_PROVIDED.getWhere()),
-    COMBAT("Combat", GameTexture.ICONS_COMBAT.getWhere());
+    RENDER("Render", GameTexture.ICONS_RENDER.getWhere()), MOVEMENT("Movement",
+            GameTexture.ICONS_MOVE.getWhere()), MISC("Miscellaneous", GameTexture.ICONS_MISC.getWhere()), WORLD("World",
+            GameTexture.ICONS_WORLD.getWhere()), EXPLOIT("Exploit",
+            GameTexture.ICONS_EXPLOIT.getWhere()), ADDON_PROVIDED("Addons",
+            GameTexture.ICONS_ADDON_PROVIDED.getWhere()), COMBAT("Combat", GameTexture.ICONS_COMBAT.getWhere());
 
 
     final String name;

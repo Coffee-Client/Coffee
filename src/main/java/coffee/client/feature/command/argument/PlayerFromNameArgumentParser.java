@@ -19,15 +19,21 @@ public class PlayerFromNameArgumentParser implements ArgumentParser<PlayerEntity
 
     @Override
     public PlayerEntity parse(String argument) throws CommandException {
-        if (CoffeeMain.client.world == null)
+        if (CoffeeMain.client.world == null) {
             throw new CommandException("World is not loaded", "Join a world or server");
+        }
         for (AbstractClientPlayerEntity player : CoffeeMain.client.world.getPlayers()) {
             if (ignoreCase) {
-                if (player.getGameProfile().getName().equalsIgnoreCase(argument)) return player;
+                if (player.getGameProfile().getName().equalsIgnoreCase(argument)) {
+                    return player;
+                }
             } else {
-                if (player.getGameProfile().getName().equals(argument)) return player;
+                if (player.getGameProfile().getName().equals(argument)) {
+                    return player;
+                }
             }
         }
-        throw new CommandException("Invalid argument \"" + argument + "\": Player not found", "Provide the name of an existing player");
+        throw new CommandException("Invalid argument \"" + argument + "\": Player not found",
+                "Provide the name of an existing player");
     }
 }

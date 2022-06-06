@@ -42,7 +42,8 @@ public class ClickGUI extends Screen implements FastTickable {
     //    public static final Theme theme = new SipoverV1();
 
     static final Color tooltipColor = new Color(20, 20, 30, 255);
-    static final ConfigContainer configContainer = new ConfigContainer(new File(CoffeeMain.BASE, "clickGui.sip"), "amongUs");
+    static final ConfigContainer configContainer = new ConfigContainer(new File(CoffeeMain.BASE, "clickGui.sip"),
+            "amongUs");
     private static ClickGUI instance;
     final List<Element> elements = new ArrayList<>();
     final ParticleRenderer real = new ParticleRenderer(100);
@@ -75,13 +76,17 @@ public class ClickGUI extends Screen implements FastTickable {
     }
 
     public static void reInit() {
-        if (instance != null) instance.initElements();
+        if (instance != null) {
+            instance.initElements();
+        }
     }
 
     void loadConfig() {
         configContainer.reload();
         ClickguiConfigContainer cc = configContainer.get(ClickguiConfigContainer.class);
-        if (cc == null || cc.entries == null) return;
+        if (cc == null || cc.entries == null) {
+            return;
+        }
         Map<String, CategoryDisplay> displays = new HashMap<>();
         for (Element element : elements) {
             if (element instanceof CategoryDisplay dd) {
@@ -101,7 +106,9 @@ public class ClickGUI extends Screen implements FastTickable {
                             .filter(moduleDisplay -> moduleDisplay.getModule().getName().equals(moduleEntry.name))
                             .findFirst()
                             .orElse(null);
-                    if (mde == null) continue;
+                    if (mde == null) {
+                        continue;
+                    }
                     mde.setExtended(moduleEntry.expanded);
                 }
             }
@@ -154,7 +161,9 @@ public class ClickGUI extends Screen implements FastTickable {
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
         for (Element element : elements) {
-            if (element.scroll(mouseX, mouseY, amount)) break;
+            if (element.scroll(mouseX, mouseY, amount)) {
+                break;
+            }
         }
         return super.mouseScrolled(mouseX, mouseY, amount);
     }
@@ -241,8 +250,12 @@ public class ClickGUI extends Screen implements FastTickable {
             for (String s : text) {
                 width = Math.max(width, FontRenderers.getRenderer().getStringWidth(s));
             }
-            Vec2f root = Renderer.R2D.renderTooltip(matrices, descX, descY, width + 4, FontRenderers.getRenderer()
-                    .getMarginHeight() + 4, tooltipColor);
+            Vec2f root = Renderer.R2D.renderTooltip(matrices,
+                    descX,
+                    descY,
+                    width + 4,
+                    FontRenderers.getRenderer().getMarginHeight() + 4,
+                    tooltipColor);
             float yOffset = 2;
             for (String s : text) {
                 FontRenderers.getRenderer().drawString(matrices, s, root.x + 1, root.y + yOffset, 0xFFFFFF, false);

@@ -22,7 +22,10 @@ public abstract class ChatHudMixin {
     @ModifyConstant(method = "addMessage(Lnet/minecraft/text/Text;IIZ)V", constant = @Constant(intValue = 100))
     int coffee_increaseHistorySize(int constant) {
         MoreChatHistory hist = ModuleRegistry.getByClass(MoreChatHistory.class);
-        if (hist.isEnabled()) return hist.getHistSize();
-        else return 100;
+        if (hist.isEnabled()) {
+            return hist.getHistSize();
+        } else {
+            return 100;
+        }
     }
 }

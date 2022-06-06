@@ -30,12 +30,17 @@ public class BlockHighlighting extends Module {
     public BlockHighlighting() {
         super("BlockHighlighting", "Renders better block breaking animations", ModuleType.RENDER);
         Events.registerEventHandler(EventType.PACKET_RECEIVE, p -> {
-            if (!this.isEnabled()) return;
+            if (!this.isEnabled()) {
+                return;
+            }
             PacketEvent event = (PacketEvent) p;
             if (event.getPacket() instanceof BlockUpdateS2CPacket packet) {
                 BlockPos real = packet.getPos();
-                Renderer.R3D.renderFadingBlock(Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 255), Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 100)
-                        .darker(), Vec3d.of(real), new Vec3d(1, 1, 1), 1000);
+                Renderer.R3D.renderFadingBlock(Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 255),
+                        Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 100).darker(),
+                        Vec3d.of(real),
+                        new Vec3d(1, 1, 1),
+                        1000);
             }
         });
     }
@@ -47,7 +52,9 @@ public class BlockHighlighting extends Module {
 
     public void renderEntry(MatrixStack stack, Long2ObjectMap.Entry<SortedSet<BlockBreakingInfo>> e) {
         SortedSet<BlockBreakingInfo> bbrs = e.getValue();
-        if (bbrs == null || bbrs.isEmpty()) return;
+        if (bbrs == null || bbrs.isEmpty()) {
+            return;
+        }
 
         long k = e.getLongKey();
         BlockPos kv = BlockPos.fromLong(k);
@@ -55,7 +62,9 @@ public class BlockHighlighting extends Module {
         double stageProg = stage / 10d;
         BlockState bs = CoffeeMain.client.world.getBlockState(kv);
         VoxelShape vs = bs.getOutlineShape(CoffeeMain.client.world, kv);
-        if (vs.isEmpty()) return;
+        if (vs.isEmpty()) {
+            return;
+        }
         Box bb = vs.getBoundingBox();
         double invProg = 1 - stageProg;
         double lenX = bb.getXLength();

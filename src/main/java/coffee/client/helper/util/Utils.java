@@ -49,7 +49,9 @@ public class Utils {
 
     public static void throwIfAnyEquals(String message, Object ifEquals, Object... toCheck) {
         for (Object o : toCheck) {
-            if (o == ifEquals) throw new IllegalArgumentException(message);
+            if (o == ifEquals) {
+                throw new IllegalArgumentException(message);
+            }
         }
     }
 
@@ -142,14 +144,30 @@ public class Utils {
         public static void drop(int index) {
             int translatedSlotId = slotIndexToId(index);
             Objects.requireNonNull(CoffeeMain.client.interactionManager)
-                    .clickSlot(Objects.requireNonNull(CoffeeMain.client.player).currentScreenHandler.syncId, translatedSlotId, 1, SlotActionType.THROW, CoffeeMain.client.player);
+                    .clickSlot(Objects.requireNonNull(CoffeeMain.client.player).currentScreenHandler.syncId,
+                            translatedSlotId,
+                            1,
+                            SlotActionType.THROW,
+                            CoffeeMain.client.player);
         }
 
         public static void moveStackToOther(int slotIdFrom, int slotIdTo) {
             Objects.requireNonNull(CoffeeMain.client.interactionManager)
-                    .clickSlot(0, slotIdFrom, 0, SlotActionType.PICKUP, CoffeeMain.client.player); // pick up item from stack
-            CoffeeMain.client.interactionManager.clickSlot(0, slotIdTo, 0, SlotActionType.PICKUP, CoffeeMain.client.player); // put item to target
-            CoffeeMain.client.interactionManager.clickSlot(0, slotIdFrom, 0, SlotActionType.PICKUP, CoffeeMain.client.player); // (in case target slot had item) put item from target back to from
+                    .clickSlot(0,
+                            slotIdFrom,
+                            0,
+                            SlotActionType.PICKUP,
+                            CoffeeMain.client.player); // pick up item from stack
+            CoffeeMain.client.interactionManager.clickSlot(0,
+                    slotIdTo,
+                    0,
+                    SlotActionType.PICKUP,
+                    CoffeeMain.client.player); // put item to target
+            CoffeeMain.client.interactionManager.clickSlot(0,
+                    slotIdFrom,
+                    0,
+                    SlotActionType.PICKUP,
+                    CoffeeMain.client.player); // (in case target slot had item) put item from target back to from
         }
     }
 
@@ -182,7 +200,11 @@ public class Utils {
         }
 
         public static boolean isABObstructed(Vec3d a, Vec3d b, World world, Entity requester) {
-            RaycastContext rcc = new RaycastContext(a, b, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, requester);
+            RaycastContext rcc = new RaycastContext(a,
+                    b,
+                    RaycastContext.ShapeType.COLLIDER,
+                    RaycastContext.FluidHandling.NONE,
+                    requester);
             BlockHitResult bhr = world.raycast(rcc);
             return !bhr.getPos().equals(b);
         }
@@ -203,7 +225,11 @@ public class Utils {
     public static class Packets {
 
         public static PlayerInteractBlockC2SPacket generatePlace(BlockPos pos) {
-            return new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, new BlockHitResult(new Vec3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5), Direction.UP, pos, false));
+            return new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND,
+                    new BlockHitResult(new Vec3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5),
+                            Direction.UP,
+                            pos,
+                            false));
         }
 
     }
@@ -293,7 +319,9 @@ public class Utils {
         }
 
         public static void runOnNextRender(Runnable r) {
-            if (CoffeeMain.client.options.hudHidden) return;
+            if (CoffeeMain.client.options.hudHidden) {
+                return;
+            }
             nextTickRunners.add(r);
         }
 

@@ -11,9 +11,14 @@ import net.minecraft.entity.player.PlayerEntity;
 import java.awt.Color;
 
 public enum ArgumentType {
-    STRING(new Color(0x55FF55), String.class),
-    NUMBER(new Color(0x009DFF), Integer.class, Double.class, Float.class, Long.class),
-    PLAYER(new Color(0xFF9900), PlayerEntity.class, AbstractClientPlayerEntity.class, LivingEntity.class);
+    STRING(new Color(0x55FF55), String.class), NUMBER(new Color(0x009DFF),
+            Integer.class,
+            Double.class,
+            Float.class,
+            Long.class), PLAYER(new Color(0xFF9900),
+            PlayerEntity.class,
+            AbstractClientPlayerEntity.class,
+            LivingEntity.class);
     final Color color;
     final Class<?>[] appliesTo;
 

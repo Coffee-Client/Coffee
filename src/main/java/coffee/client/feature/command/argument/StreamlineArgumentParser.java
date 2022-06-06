@@ -16,7 +16,9 @@ public class StreamlineArgumentParser {
     }
 
     public String consumeString() throws CommandException {
-        if (index >= args.length) throw new CommandException("Not enough arguments", null);
+        if (index >= args.length) {
+            throw new CommandException("Not enough arguments", null);
+        }
         String el = args[index];
         index++;
         return el;

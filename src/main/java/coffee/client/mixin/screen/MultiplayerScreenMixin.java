@@ -24,9 +24,17 @@ public class MultiplayerScreenMixin extends Screen {
 
     @Inject(method = "init", at = @At("RETURN"))
     void coffee_postInit(CallbackInfo ci) {
-        if (SelfDestruct.shouldSelfDestruct()) return;
+        if (SelfDestruct.shouldSelfDestruct()) {
+            return;
+        }
         double sourceY = 32 / 2d - 20 / 2d;
-        RoundButton proxies = new RoundButton(RoundButton.STANDARD, 5, sourceY, 60, 20, "Proxies", () -> CoffeeMain.client.setScreen(new ProxyManagerScreen(this)));
+        RoundButton proxies = new RoundButton(RoundButton.STANDARD,
+                5,
+                sourceY,
+                60,
+                20,
+                "Proxies",
+                () -> CoffeeMain.client.setScreen(new ProxyManagerScreen(this)));
         addDrawableChild(proxies);
     }
 }

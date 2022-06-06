@@ -61,7 +61,9 @@ public class InstantBreak extends Module {
                 }
             } else {
                 Objects.requireNonNull(client.getNetworkHandler())
-                        .sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.STOP_DESTROY_BLOCK, last, Direction.DOWN));
+                        .sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.STOP_DESTROY_BLOCK,
+                                last,
+                                Direction.DOWN));
                 positions.clear();
             }
         }
@@ -79,11 +81,15 @@ public class InstantBreak extends Module {
             positions.remove(0);
             return;
         }
-        PlayerActionC2SPacket pstart = new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.START_DESTROY_BLOCK, bp, Direction.DOWN);
+        PlayerActionC2SPacket pstart = new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.START_DESTROY_BLOCK,
+                bp,
+                Direction.DOWN);
         whitelist.add(pstart);
         Objects.requireNonNull(client.getNetworkHandler()).sendPacket(pstart);
         client.getNetworkHandler()
-                .sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.STOP_DESTROY_BLOCK, bp, Direction.DOWN));
+                .sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.STOP_DESTROY_BLOCK,
+                        bp,
+                        Direction.DOWN));
     }
 
     @Override

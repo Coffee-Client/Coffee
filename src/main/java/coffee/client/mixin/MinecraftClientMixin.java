@@ -59,12 +59,16 @@ public class MinecraftClientMixin {
 
     @Inject(method = "getGameVersion", at = @At("HEAD"), cancellable = true)
     void coffee_replaceGameVersion(CallbackInfoReturnable<String> cir) {
-        if (SelfDestruct.shouldSelfDestruct()) cir.setReturnValue(SharedConstants.getGameVersion().getName());
+        if (SelfDestruct.shouldSelfDestruct()) {
+            cir.setReturnValue(SharedConstants.getGameVersion().getName());
+        }
     }
 
     @Inject(method = "getVersionType", at = @At("HEAD"), cancellable = true)
     void coffee_replaceVersionType(CallbackInfoReturnable<String> cir) {
-        if (SelfDestruct.shouldSelfDestruct()) cir.setReturnValue("release");
+        if (SelfDestruct.shouldSelfDestruct()) {
+            cir.setReturnValue("release");
+        }
     }
 
 }

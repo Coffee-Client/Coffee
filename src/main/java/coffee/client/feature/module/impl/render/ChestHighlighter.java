@@ -29,7 +29,9 @@ public class ChestHighlighter extends Module {
     }
 
     void addIfNotExisting(BlockPos p) {
-        if (positions.stream().noneMatch(blockPos -> blockPos.equals(p))) positions.add(p);
+        if (positions.stream().noneMatch(blockPos -> blockPos.equals(p))) {
+            positions.add(p);
+        }
     }
 
     void remove(BlockPos p) {
@@ -38,7 +40,9 @@ public class ChestHighlighter extends Module {
 
     @EventListener(type = EventType.BLOCK_ENTITY_RENDER)
     void r(BlockEntityRenderEvent be) {
-        if (!this.isEnabled()) return;
+        if (!this.isEnabled()) {
+            return;
+        }
         if (be.getBlockEntity() instanceof ChestBlockEntity) {
             addIfNotExisting(be.getBlockEntity().getPos());
         }
@@ -67,8 +71,11 @@ public class ChestHighlighter extends Module {
     @Override
     public void onWorldRender(MatrixStack matrices) {
         for (BlockPos position : positions) {
-            Renderer.R3D.renderFadingBlock(Utils.getCurrentRGB(), Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 100)
-                    .darker(), Vec3d.of(position), new Vec3d(1, 1, 1), 500);
+            Renderer.R3D.renderFadingBlock(Utils.getCurrentRGB(),
+                    Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 100).darker(),
+                    Vec3d.of(position),
+                    new Vec3d(1, 1, 1),
+                    500);
         }
     }
 

@@ -43,7 +43,9 @@ public class ClickTP extends Module {
     }
 
     public static double roundToN(double x, int n) {
-        if (n == 0) return Math.floor(x);
+        if (n == 0) {
+            return Math.floor(x);
+        }
         double factor = Math.pow(10, n);
         return Math.round(x * factor) / factor;
     }
@@ -69,9 +71,13 @@ public class ClickTP extends Module {
 
     @EventListener(type = EventType.MOUSE_EVENT)
     void onMouseEvent(MouseEvent event) {
-        if (!this.isEnabled()) return;
+        if (!this.isEnabled()) {
+            return;
+        }
         if (event.getButton() == 1 && event.getAction() == 1) {
-            if (CoffeeMain.client.currentScreen != null) return;
+            if (CoffeeMain.client.currentScreen != null) {
+                return;
+            }
             BlockHitResult ray = (BlockHitResult) client.player.raycast(200, client.getTickDelta(), true);
             int rd = lengthTo(ray.getBlockPos());
             int raycastdistance = rd / 7;
@@ -80,7 +86,9 @@ public class ClickTP extends Module {
             BlockPos dest = new BlockPos(d.getX() + 0.5, d.getY(), d.getZ() + 0.5);
             dest = dest.offset(Direction.UP, 1);
 
-            if (onlyctrl.getValue() && !client.options.sprintKey.isPressed()) return;
+            if (onlyctrl.getValue() && !client.options.sprintKey.isPressed()) {
+                return;
+            }
 
             switch (mode.getValue()) {
                 case Normal -> client.player.updatePosition(dest.getX(), dest.getY(), dest.getZ());
@@ -96,7 +104,10 @@ public class ClickTP extends Module {
                     double y = yn / raycastdistance;
                     double z = zn / raycastdistance;
                     for (int i = 0; i < raycastdistance; i++) {
-                        client.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(player.getX() + x, player.getY() + y, player.getZ() + z, true));
+                        client.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(player.getX() + x,
+                                player.getY() + y,
+                                player.getZ() + z,
+                                true));
                     }
                     player.updatePosition(dest.getX(), dest.getY(), dest.getZ());
                 }
@@ -136,7 +147,10 @@ public class ClickTP extends Module {
                     double y = yn / rdd;
                     double z = zn / rdd;
                     for (int i = 0; i < rdd; i++) {
-                        client.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(player.getX() + x, player.getY() + y, player.getZ() + z, true));
+                        client.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(player.getX() + x,
+                                player.getY() + y,
+                                player.getZ() + z,
+                                true));
                         try {
                             Thread.sleep(10);
                         } catch (Exception ignored) {

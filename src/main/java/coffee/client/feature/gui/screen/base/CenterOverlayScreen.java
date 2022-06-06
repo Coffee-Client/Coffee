@@ -27,25 +27,33 @@ public class CenterOverlayScreen extends AAScreen {
 
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        if (parent != null) parent.render(matrices, mouseX, mouseY, delta);
+        if (parent != null) {
+            parent.render(matrices, mouseX, mouseY, delta);
+        }
         super.render(matrices, mouseX, mouseY, delta);
     }
 
     @Override
     protected void initInternal() {
-        if (parent != null) parent.init(client, width, height);
+        if (parent != null) {
+            parent.init(client, width, height);
+        }
         super.initInternal();
     }
 
     @Override
     public void resize(MinecraftClient client, int width, int height) {
-        if (parent != null) parent.resize(client, width, height);
+        if (parent != null) {
+            parent.resize(client, width, height);
+        }
         super.resize(client, width, height);
     }
 
     @Override
     public void onFastTick() {
-        if (parent instanceof FastTickable f) f.onFastTick();
+        if (parent instanceof FastTickable f) {
+            f.onFastTick();
+        }
         super.onFastTick();
     }
 
@@ -85,7 +93,14 @@ public class CenterOverlayScreen extends AAScreen {
         FontAdapter normal = FontRenderers.getRenderer();
         fa.drawString(stack, title, 5, 5, 0xFFFFFF);
         normal.drawString(stack, description, 5, 5 + fa.getFontHeight(), 0xBBBBBB);
-        Renderer.R2D.renderRoundedQuadWithShadow(stack, new Color(20, 20, 20), centerX - elementWidth / 2d - padding, centerY - elementHeight / 2d - padding, centerX + elementWidth / 2d + padding, centerY + elementHeight / 2d + padding, 5, 20);
+        Renderer.R2D.renderRoundedQuadWithShadow(stack,
+                new Color(20, 20, 20),
+                centerX - elementWidth / 2d - padding,
+                centerY - elementHeight / 2d - padding,
+                centerX + elementWidth / 2d + padding,
+                centerY + elementHeight / 2d + padding,
+                5,
+                20);
         super.renderInternal(stack, mouseX, mouseY, delta);
     }
 }

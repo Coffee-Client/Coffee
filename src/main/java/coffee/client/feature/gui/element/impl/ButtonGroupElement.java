@@ -44,7 +44,18 @@ public class ButtonGroupElement extends Element {
                 rad3 = 0;
                 rad4 = 0;
             }
-            SingleButton btn = new SingleButton(0, 0, dir == LayoutDirection.RIGHT ? widthForOneButton : width, dir == LayoutDirection.RIGHT ? height : heightForOneButton, be.content, be.onClicked, rad1 * 5, rad2 * 5, rad3 * 5, rad4 * 5, new Color(30, 30, 30), new Color(50, 50, 50));
+            SingleButton btn = new SingleButton(0,
+                    0,
+                    dir == LayoutDirection.RIGHT ? widthForOneButton : width,
+                    dir == LayoutDirection.RIGHT ? height : heightForOneButton,
+                    be.content,
+                    be.onClicked,
+                    rad1 * 5,
+                    rad2 * 5,
+                    rad3 * 5,
+                    rad4 * 5,
+                    new Color(30, 30, 30),
+                    new Color(50, 50, 50));
             els.add(btn);
         }
     }
@@ -70,7 +81,9 @@ public class ButtonGroupElement extends Element {
     @Override
     public boolean mouseClicked(double x, double y, int button) {
         for (Element el : els) {
-            if (el.mouseClicked(x, y, button)) return true;
+            if (el.mouseClicked(x, y, button)) {
+                return true;
+            }
         }
         return false;
     }
@@ -144,13 +157,34 @@ public class ButtonGroupElement extends Element {
             boolean mouseOver = inBounds(mouseX, mouseY);
             Color c = mouseOver ? this.sel : this.c;
             if (r1 != 0 || r2 != 0 || r3 != 0 || r4 != 0) {
-                Renderer.R2D.renderRoundedQuad(stack, c, getPositionX(), getPositionY(), getPositionX() + getWidth(), getPositionY() + getHeight(), r1, r2, r3, r4, 20);
+                Renderer.R2D.renderRoundedQuad(stack,
+                        c,
+                        getPositionX(),
+                        getPositionY(),
+                        getPositionX() + getWidth(),
+                        getPositionY() + getHeight(),
+                        r1,
+                        r2,
+                        r3,
+                        r4,
+                        20);
             } else {
-                Renderer.R2D.renderQuad(stack, c, getPositionX(), getPositionY(), getPositionX() + getWidth(), getPositionY() + getHeight());
+                Renderer.R2D.renderQuad(stack,
+                        c,
+                        getPositionX(),
+                        getPositionY(),
+                        getPositionX() + getWidth(),
+                        getPositionY() + getHeight());
             }
             FontRenderers.getRenderer()
-                    .drawCenteredString(stack, t, getPositionX() + getWidth() / 2d, getPositionY() + getHeight() / 2d - FontRenderers.getRenderer()
-                            .getFontHeight() / 2d, 1f, 1f, 1f, 1f);
+                    .drawCenteredString(stack,
+                            t,
+                            getPositionX() + getWidth() / 2d,
+                            getPositionY() + getHeight() / 2d - FontRenderers.getRenderer().getFontHeight() / 2d,
+                            1f,
+                            1f,
+                            1f,
+                            1f);
         }
 
         @Override

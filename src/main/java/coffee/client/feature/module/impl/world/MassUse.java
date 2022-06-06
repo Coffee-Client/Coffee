@@ -55,7 +55,8 @@ public class MassUse extends Module {
             switch (mode.getValue()) {
                 case Interact -> {
                     if (pe.getPacket() instanceof PlayerInteractBlockC2SPacket p1) {
-                        PlayerInteractBlockC2SPacket pp = new PlayerInteractBlockC2SPacket(p1.getHand(), p1.getBlockHitResult());
+                        PlayerInteractBlockC2SPacket pp = new PlayerInteractBlockC2SPacket(p1.getHand(),
+                                p1.getBlockHitResult());
                         for (int i = 0; i < uses.getValue(); i++) {
                             dontRepeat.add(pp);
                             Objects.requireNonNull(client.getNetworkHandler()).sendPacket(pp);
@@ -76,8 +77,12 @@ public class MassUse extends Module {
                         for (int i = 0; i < uses.getValue(); i++) {
                             PlayerInteractBlockC2SPacket pp = new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, r);
                             dontRepeat.add(pp);
-                            client.player.networkHandler.sendPacket(new PlayerActionC2SPacket(Action.START_DESTROY_BLOCK, p, Direction.UP));
-                            client.player.networkHandler.sendPacket(new PlayerActionC2SPacket(Action.STOP_DESTROY_BLOCK, p, Direction.UP));
+                            client.player.networkHandler.sendPacket(new PlayerActionC2SPacket(Action.START_DESTROY_BLOCK,
+                                    p,
+                                    Direction.UP));
+                            client.player.networkHandler.sendPacket(new PlayerActionC2SPacket(Action.STOP_DESTROY_BLOCK,
+                                    p,
+                                    Direction.UP));
                             client.player.networkHandler.sendPacket(pp);
                         }
                     }
@@ -88,7 +93,9 @@ public class MassUse extends Module {
                         Random random = new Random();
 
                         for (int i = 0; i < uses.getValue(); i++) {
-                            BlockPos pos = new BlockPos(client.player.getPos()).add(random.nextInt(13) - 6, random.nextInt(13) - 6, random.nextInt(13) - 6);
+                            BlockPos pos = new BlockPos(client.player.getPos()).add(random.nextInt(13) - 6,
+                                    random.nextInt(13) - 6,
+                                    random.nextInt(13) - 6);
                             PlayerInteractBlockC2SPacket pp = Utils.Packets.generatePlace(pos);
                             dontRepeat.add(pp);
                             client.player.networkHandler.sendPacket(pp);

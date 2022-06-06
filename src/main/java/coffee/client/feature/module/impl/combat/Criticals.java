@@ -36,18 +36,36 @@ public class Criticals extends Module {
                 ModuleRegistry.getByClass(NoFall.class).enabled = false; // disable nofall modifying packets when we send these
                 switch (mode.getValue()) {
                     case Packet -> {
-                        PlayerMoveC2SPacket.PositionAndOnGround p1 = new PlayerMoveC2SPacket.PositionAndOnGround(ppos.x, ppos.y + 0.2, ppos.z, true);
-                        PlayerMoveC2SPacket.PositionAndOnGround p2 = new PlayerMoveC2SPacket.PositionAndOnGround(ppos.x, ppos.y, ppos.z, false);
-                        PlayerMoveC2SPacket.PositionAndOnGround p3 = new PlayerMoveC2SPacket.PositionAndOnGround(ppos.x, ppos.y + 0.000011, ppos.z, false);
-                        PlayerMoveC2SPacket.PositionAndOnGround p4 = new PlayerMoveC2SPacket.PositionAndOnGround(ppos.x, ppos.y, ppos.z, false);
+                        PlayerMoveC2SPacket.PositionAndOnGround p1 = new PlayerMoveC2SPacket.PositionAndOnGround(ppos.x,
+                                ppos.y + 0.2,
+                                ppos.z,
+                                true);
+                        PlayerMoveC2SPacket.PositionAndOnGround p2 = new PlayerMoveC2SPacket.PositionAndOnGround(ppos.x,
+                                ppos.y,
+                                ppos.z,
+                                false);
+                        PlayerMoveC2SPacket.PositionAndOnGround p3 = new PlayerMoveC2SPacket.PositionAndOnGround(ppos.x,
+                                ppos.y + 0.000011,
+                                ppos.z,
+                                false);
+                        PlayerMoveC2SPacket.PositionAndOnGround p4 = new PlayerMoveC2SPacket.PositionAndOnGround(ppos.x,
+                                ppos.y,
+                                ppos.z,
+                                false);
                         CoffeeMain.client.getNetworkHandler().sendPacket(p1);
                         CoffeeMain.client.getNetworkHandler().sendPacket(p2);
                         CoffeeMain.client.getNetworkHandler().sendPacket(p3);
                         CoffeeMain.client.getNetworkHandler().sendPacket(p4);
                     }
                     case TpHop -> {
-                        PlayerMoveC2SPacket.PositionAndOnGround p5 = new PlayerMoveC2SPacket.PositionAndOnGround(ppos.x, ppos.y + 0.02, ppos.z, false);
-                        PlayerMoveC2SPacket.PositionAndOnGround p6 = new PlayerMoveC2SPacket.PositionAndOnGround(ppos.x, ppos.y + 0.01, ppos.z, false);
+                        PlayerMoveC2SPacket.PositionAndOnGround p5 = new PlayerMoveC2SPacket.PositionAndOnGround(ppos.x,
+                                ppos.y + 0.02,
+                                ppos.z,
+                                false);
+                        PlayerMoveC2SPacket.PositionAndOnGround p6 = new PlayerMoveC2SPacket.PositionAndOnGround(ppos.x,
+                                ppos.y + 0.01,
+                                ppos.z,
+                                false);
                         CoffeeMain.client.getNetworkHandler().sendPacket(p5);
                         CoffeeMain.client.getNetworkHandler().sendPacket(p6);
                     }

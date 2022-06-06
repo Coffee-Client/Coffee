@@ -81,8 +81,9 @@ public class SuperheroFX extends Module {
         if (renderer == null) {
             int fsize = 32 * 2;
             try {
-                renderer = new FontRenderer(Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(CoffeeMain.class.getClassLoader()
-                        .getResourceAsStream("Superherofx.ttf"))).deriveFont(Font.PLAIN, fsize), fsize);
+                renderer = new FontRenderer(Font.createFont(Font.TRUETYPE_FONT,
+                        Objects.requireNonNull(CoffeeMain.class.getClassLoader()
+                                .getResourceAsStream("Superherofx.ttf"))).deriveFont(Font.PLAIN, fsize), fsize);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -130,7 +131,9 @@ public class SuperheroFX extends Module {
             PlayerInteractEntityC2SPacketMixin mixin = (PlayerInteractEntityC2SPacketMixin) packet;
             int id = mixin.getEntityId();
             Entity e = client.world.getEntityById(id);
-            if (e == null) return;
+            if (e == null) {
+                return;
+            }
             final boolean[] isAttack = { false };
             packet.handle(new PlayerInteractEntityC2SPacket.Handler() {
                 @Override
@@ -148,7 +151,9 @@ public class SuperheroFX extends Module {
                     isAttack[0] = true;
                 }
             });
-            if (!isAttack[0]) return;
+            if (!isAttack[0]) {
+                return;
+            }
             Vec3d pos = e.getPos().add(0, e.getHeight() / 2d, 0);
             String[] words = getWords();
             for (int i = 0; i < amount; i++) {
@@ -161,7 +166,14 @@ public class SuperheroFX extends Module {
                 String w = words[r.nextInt(0, words.length)];
                 double randomN = r.nextDouble();
                 long lifetimeRnd = (long) (randomN * lifetimeRandom);
-                FxEntry fe = new FxEntry(w, pos.add(randomXOffset, randomYOffset, randomZOffset), velX, velY, velZ, System.currentTimeMillis(), (long) lifetime + lifetimeRnd, r.nextFloat());
+                FxEntry fe = new FxEntry(w,
+                        pos.add(randomXOffset, randomYOffset, randomZOffset),
+                        velX,
+                        velY,
+                        velZ,
+                        System.currentTimeMillis(),
+                        (long) lifetime + lifetimeRnd,
+                        r.nextFloat());
                 entries.add(fe);
             }
         }
@@ -171,31 +183,57 @@ public class SuperheroFX extends Module {
     public void onWorldRender(MatrixStack matrices) {
         for (FxEntry entry : entries) {
             Vec3d screenSpace = Renderer.R2D.getScreenSpaceCoordinate(entry.pos, matrices);
-            if (Renderer.R2D.isOnScreen(screenSpace)) Utils.TickManager.runOnNextRender(() -> {
-                Color a = c;
-                if (rgb) {
-                    if (syncRgb) a = Color.getHSBColor((System.currentTimeMillis() % 2000) / 2000f, 0.7f, 1);
-                    else
-                        a = Color.getHSBColor((System.currentTimeMillis() % 2000) / 2000f + (float) entry.randomSize, 0.7f, 1);
-                }
-                long fadeOut = 300;
-                long remainingTime = Math.max(0, entry.createdAt + entry.lifetime - System.currentTimeMillis());
-                double fadeProgOut = MathHelper.clamp(((double) fadeOut - (double) remainingTime) / (double) fadeOut, 0, 1);
-                double fadeProgIn = MathHelper.clamp(((double) fadeOut - (double) (entry.lifetime - remainingTime)) / (double) fadeOut, 0, 1);
-                double fadeProg = Transitions.easeOutExpo(Math.max(fadeProgOut, fadeProgIn));
-                double scaler = size / 32d;
-                MatrixStack st = Renderer.R3D.getEmptyMatrixStack();
-                st.translate(screenSpace.x, screenSpace.y, 0);
-                st.translate(0, getRenderer().getFontHeight() / 2d, 0);
-                st.scale((float) (1 - fadeProg), (float) (1 - fadeProg), 1);
+            if (Renderer.R2D.isOnScreen(screenSpace)) {
+                Utils.TickManager.runOnNextRender(() -> {
+                    Color a = c;
+                    if (rgb) {
+                        if (syncRgb) {
+                            a = Color.getHSBColor((System.currentTimeMillis() % 2000) / 2000f, 0.7f, 1);
+                        } else {
+                            a = Color.getHSBColor((System.currentTimeMillis() % 2000) / 2000f + (float) entry.randomSize,
+                                    0.7f,
+                                    1);
+                        }
+                    }
+                    long fadeOut = 300;
+                    long remainingTime = Math.max(0, entry.createdAt + entry.lifetime - System.currentTimeMillis());
+                    double fadeProgOut = MathHelper.clamp(((double) fadeOut - (double) remainingTime) / (double) fadeOut,
+                            0,
+                            1);
+                    double fadeProgIn = MathHelper.clamp(((double) fadeOut - (double) (entry.lifetime - remainingTime)) / (double) fadeOut,
+                            0,
+                            1);
+                    double fadeProg = Transitions.easeOutExpo(Math.max(fadeProgOut, fadeProgIn));
+                    double scaler = size / 32d;
+                    MatrixStack st = Renderer.R3D.getEmptyMatrixStack();
+                    st.translate(screenSpace.x, screenSpace.y, 0);
+                    st.translate(0, getRenderer().getFontHeight() / 2d, 0);
+                    st.scale((float) (1 - fadeProg), (float) (1 - fadeProg), 1);
 
-                st.scale((float) scaler, (float) scaler, 1);
-                st.scale(1 + (float) ((entry.randomSize - .5) * sizeRandom), 1 + (float) ((entry.randomSize - .5) * sizeRandom), 1);
-                if (shadows) {
-                    getRenderer().drawCenteredString(st, entry.text, 1f, 1f - getRenderer().getFontHeight() / 2f, .05f, .05f, .05f, 1f);
-                }
-                getRenderer().drawCenteredString(st, entry.text, 0f, -getRenderer().getFontHeight() / 2f, a.getRed() / 255f, a.getGreen() / 255f, a.getBlue() / 255f, 1f);
-            });
+                    st.scale((float) scaler, (float) scaler, 1);
+                    st.scale(1 + (float) ((entry.randomSize - .5) * sizeRandom),
+                            1 + (float) ((entry.randomSize - .5) * sizeRandom),
+                            1);
+                    if (shadows) {
+                        getRenderer().drawCenteredString(st,
+                                entry.text,
+                                1f,
+                                1f - getRenderer().getFontHeight() / 2f,
+                                .05f,
+                                .05f,
+                                .05f,
+                                1f);
+                    }
+                    getRenderer().drawCenteredString(st,
+                            entry.text,
+                            0f,
+                            -getRenderer().getFontHeight() / 2f,
+                            a.getRed() / 255f,
+                            a.getGreen() / 255f,
+                            a.getBlue() / 255f,
+                            1f);
+                });
+            }
         }
     }
 

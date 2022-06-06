@@ -26,9 +26,8 @@ public class FreeLook extends Module {
     final BooleanSetting enableAA = this.config.create(new BooleanSetting.Builder(false).name("Enable Anti-Aim")
             .description("Hvh toggle rage nn noob")
             .get());
-    final EnumSetting<AntiAimMode> aaMode = this.config.create(new EnumSetting.Builder<>(AntiAimMode.Spin).name("AA Mode")
-            .description("How to aim")
-            .get());
+    final EnumSetting<AntiAimMode> aaMode = this.config.create(new EnumSetting.Builder<>(AntiAimMode.Spin).name(
+            "AA Mode").description("How to aim").get());
     final DoubleSetting aaSpeed = this.config.create(new DoubleSetting.Builder(1).name("AA Speed")
             .description("How fast to aim")
             .min(0.1)
@@ -143,8 +142,9 @@ public class FreeLook extends Module {
             }
         }
         Objects.requireNonNull(client.getNetworkHandler())
-                .sendPacket(new PlayerMoveC2SPacket.LookAndOnGround(newyaw, newpitch, Objects.requireNonNull(client.player)
-                        .isOnGround()));
+                .sendPacket(new PlayerMoveC2SPacket.LookAndOnGround(newyaw,
+                        newpitch,
+                        Objects.requireNonNull(client.player).isOnGround()));
     }
 
     public enum AntiAimMode {

@@ -169,8 +169,17 @@ public class TargetHud extends Module {
             RenderSystem.clear(GL40C.GL_COLOR_BUFFER_BIT, false);
             RenderSystem.colorMask(true, true, true, true);
             RenderSystem.setShader(GameRenderer::getPositionColorShader);
-            Renderer.R2D.renderRoundedQuadInternal(stack.peek()
-                    .getPositionMatrix(), 0, 0, 0, 1, 5, 5, 5 + 32, 5 + 32, 5, 10);
+            Renderer.R2D.renderRoundedQuadInternal(stack.peek().getPositionMatrix(),
+                    0,
+                    0,
+                    0,
+                    1,
+                    5,
+                    5,
+                    5 + 32,
+                    5 + 32,
+                    5,
+                    10);
 
             RenderSystem.blendFunc(GL40C.GL_DST_ALPHA, GL40C.GL_ONE_MINUS_DST_ALPHA);
             Renderer.R2D.renderTexture(stack, 5, 5, 32, 32, 0, 0, 32, 32, 32, 32);
@@ -194,11 +203,29 @@ public class TargetHud extends Module {
 
             Color MID_END = Renderer.Util.lerp(GREEN, RED, hPer);
             double pillHeight = 2;
-            Renderer.R2D.renderRoundedQuad(stack, new Color(0, 0, 0, 200), textLeftAlign, modalHeight - 5 - pillHeight, modalWidth - 5, modalHeight - 5, pillHeight / 2d, 10);
-            Renderer.R2D.renderRoundedQuad(stack, MID_END, textLeftAlign, modalHeight - 5 - pillHeight, renderToX, modalHeight - 5, pillHeight / 2d, 10);
+            Renderer.R2D.renderRoundedQuad(stack,
+                    new Color(0, 0, 0, 200),
+                    textLeftAlign,
+                    modalHeight - 5 - pillHeight,
+                    modalWidth - 5,
+                    modalHeight - 5,
+                    pillHeight / 2d,
+                    10);
+            Renderer.R2D.renderRoundedQuad(stack,
+                    MID_END,
+                    textLeftAlign,
+                    modalHeight - 5 - pillHeight,
+                    renderToX,
+                    modalHeight - 5,
+                    pillHeight / 2d,
+                    10);
             if (renderHP.getValue()) {
                 FontRenderers.getRenderer()
-                        .drawString(stack, Utils.Math.roundToDecimal(trackedHp, 2) + " HP", textLeftAlign, yOffset, MID_END.getRGB());
+                        .drawString(stack,
+                                Utils.Math.roundToDecimal(trackedHp, 2) + " HP",
+                                textLeftAlign,
+                                yOffset,
+                                MID_END.getRGB());
             }
 
             stack.pop();

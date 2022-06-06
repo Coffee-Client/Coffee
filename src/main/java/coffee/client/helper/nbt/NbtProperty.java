@@ -39,7 +39,9 @@ public class NbtProperty extends NbtElement {
             compound.putUuid(name, nu);
         } else if (val instanceof Boolean b) {
             compound.putBoolean(name, b);
-        } else compound.put(name, get());
+        } else {
+            compound.put(name, get());
+        }
     }
 
     @Override
@@ -58,6 +60,8 @@ public class NbtProperty extends NbtElement {
             return NbtByte.of(b);
         } else if (val instanceof Short s) {
             return NbtShort.of(s);
-        } else return null; // no nbt representation of it
+        } else {
+            return null; // no nbt representation of it
+        }
     }
 }

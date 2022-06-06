@@ -49,14 +49,30 @@ public abstract class HudElement {
     }
 
     public void renderOutline() {
-        Renderer.R2D.renderLine(Renderer.R3D.getEmptyMatrixStack(), ThemeManager.getMainTheme()
-                .getAccent(), posX, posY, posX + width, posY);
-        Renderer.R2D.renderLine(Renderer.R3D.getEmptyMatrixStack(), ThemeManager.getMainTheme()
-                .getAccent(), posX + width, posY, posX + width, posY + height);
-        Renderer.R2D.renderLine(Renderer.R3D.getEmptyMatrixStack(), ThemeManager.getMainTheme()
-                .getAccent(), posX + width, posY + height, posX, posY + height);
-        Renderer.R2D.renderLine(Renderer.R3D.getEmptyMatrixStack(), ThemeManager.getMainTheme()
-                .getAccent(), posX, posY + height, posX, posY);
+        Renderer.R2D.renderLine(Renderer.R3D.getEmptyMatrixStack(),
+                ThemeManager.getMainTheme().getAccent(),
+                posX,
+                posY,
+                posX + width,
+                posY);
+        Renderer.R2D.renderLine(Renderer.R3D.getEmptyMatrixStack(),
+                ThemeManager.getMainTheme().getAccent(),
+                posX + width,
+                posY,
+                posX + width,
+                posY + height);
+        Renderer.R2D.renderLine(Renderer.R3D.getEmptyMatrixStack(),
+                ThemeManager.getMainTheme().getAccent(),
+                posX + width,
+                posY + height,
+                posX,
+                posY + height);
+        Renderer.R2D.renderLine(Renderer.R3D.getEmptyMatrixStack(),
+                ThemeManager.getMainTheme().getAccent(),
+                posX,
+                posY + height,
+                posX,
+                posY);
 
         double rpoY = posY - FontRenderers.getRenderer().getFontHeight();
         if (posY < FontRenderers.getRenderer().getFontHeight()) { // too small to render text properly

@@ -39,7 +39,9 @@ public abstract class ScreenMixin extends AbstractParentElement {
         if (!SelfDestruct.shouldSelfDestruct()) {
             for (Element child : this.children) {
                 if (child instanceof HasSpecialCursor specialCursor) {
-                    if (specialCursor.shouldApplyCustomCursor()) c = specialCursor.getCursor();
+                    if (specialCursor.shouldApplyCustomCursor()) {
+                        c = specialCursor.getCursor();
+                    }
                 }
             }
         }

@@ -132,7 +132,8 @@ public class LoadingScreen extends ClientScreen implements FastTickable {
                     Utils.registerBufferedImageTexture(resource.getWhere(), bi);
                     CoffeeMain.log(Level.INFO, "Downloaded " + resource.getDownloadUrl());
                 } catch (Exception e) {
-                    CoffeeMain.log(Level.ERROR, "Failed to download " + resource.getDownloadUrl() + ": " + e.getMessage());
+                    CoffeeMain.log(Level.ERROR,
+                            "Failed to download " + resource.getDownloadUrl() + ": " + e.getMessage());
                     BufferedImage empty = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
                     empty.setRGB(0, 0, 0xFF000000);
                     Utils.registerBufferedImageTexture(resource.getWhere(), empty);
@@ -180,7 +181,11 @@ public class LoadingScreen extends ClientScreen implements FastTickable {
         double textHeight = title.getMarginHeight();
         double centerY1 = height / 2d;
         double centerX = width / 2d;
-        title.drawString(stack, text, centerX - textWidth / 2f, centerY1 - textHeight / 2d, new Color(1f, 1f, 1f, (float) opacity).getRGB());
+        title.drawString(stack,
+                text,
+                centerX - textWidth / 2f,
+                centerY1 - textHeight / 2d,
+                new Color(1f, 1f, 1f, (float) opacity).getRGB());
         double maxWidth = 200;
         double rWidth = smoothProgress * maxWidth;
         double barHeight = 3;
@@ -188,15 +193,43 @@ public class LoadingScreen extends ClientScreen implements FastTickable {
 
         Color MID_END = Renderer.Util.lerp(GREEN, RED, smoothProgress);
         String perStr = Utils.Math.roundToDecimal(smoothProgress * 100, 1) + "%";
-        Renderer.R2D.renderRoundedQuad(stack, new Color(40, 40, 40, (int) (opacity * 255)), centerX - maxWidth / 2d, centerY1 + textHeight / 2d + pad, centerX + maxWidth / 2d, centerY1 + textHeight / 2d + pad + barHeight, barHeight / 2d, 10);
-        Renderer.R2D.renderRoundedQuad(stack, Renderer.Util.modify(MID_END, -1, -1, -1, (int) (opacity * 255)), centerX - maxWidth / 2d, centerY1 + textHeight / 2d + pad, centerX - maxWidth / 2d + rWidth, centerY1 + textHeight / 2d + pad + barHeight, barHeight / 2d, 10);
+        Renderer.R2D.renderRoundedQuad(stack,
+                new Color(40, 40, 40, (int) (opacity * 255)),
+                centerX - maxWidth / 2d,
+                centerY1 + textHeight / 2d + pad,
+                centerX + maxWidth / 2d,
+                centerY1 + textHeight / 2d + pad + barHeight,
+                barHeight / 2d,
+                10);
+        Renderer.R2D.renderRoundedQuad(stack,
+                Renderer.Util.modify(MID_END, -1, -1, -1, (int) (opacity * 255)),
+                centerX - maxWidth / 2d,
+                centerY1 + textHeight / 2d + pad,
+                centerX - maxWidth / 2d + rWidth,
+                centerY1 + textHeight / 2d + pad + barHeight,
+                barHeight / 2d,
+                10);
         double currentY = centerY1 + textHeight / 2d + pad + barHeight + 5;
         for (ProgressData value : progressMap.values()) {
             if (value.getWorkingOnIt().get()) {
                 double prg = value.getProgress().get() * maxWidth;
                 prg = Math.max(prg, barHeight);
-                Renderer.R2D.renderRoundedQuad(stack, new Color(40, 40, 40, (int) (opacity * 255)), centerX - maxWidth / 2d, currentY, centerX + maxWidth / 2d, currentY + barHeight, barHeight / 2d, 10);
-                Renderer.R2D.renderRoundedQuad(stack, Renderer.Util.modify(MID_END, -1, -1, -1, (int) (opacity * 255)), centerX - maxWidth / 2d, currentY, centerX - maxWidth / 2d + prg, currentY + barHeight, barHeight / 2d, 10);
+                Renderer.R2D.renderRoundedQuad(stack,
+                        new Color(40, 40, 40, (int) (opacity * 255)),
+                        centerX - maxWidth / 2d,
+                        currentY,
+                        centerX + maxWidth / 2d,
+                        currentY + barHeight,
+                        barHeight / 2d,
+                        10);
+                Renderer.R2D.renderRoundedQuad(stack,
+                        Renderer.Util.modify(MID_END, -1, -1, -1, (int) (opacity * 255)),
+                        centerX - maxWidth / 2d,
+                        currentY,
+                        centerX - maxWidth / 2d + prg,
+                        currentY + barHeight,
+                        barHeight / 2d,
+                        10);
                 currentY += barHeight + 2;
             }
         }
@@ -206,7 +239,14 @@ public class LoadingScreen extends ClientScreen implements FastTickable {
         double yOffset = FontRenderers.getRenderer().getFontHeight() * warningLines.length;
         for (String warningLine : warningLines) {
             FontRenderers.getRenderer()
-                    .drawCenteredString(stack, warningLine, width / 2d, height - 20 - yOffset, 1f, 1f, 1f, (float) opacity);
+                    .drawCenteredString(stack,
+                            warningLine,
+                            width / 2d,
+                            height - 20 - yOffset,
+                            1f,
+                            1f,
+                            1f,
+                            (float) opacity);
             yOffset += FontRenderers.getRenderer().getFontHeight();
         }
         super.renderInternal(stack, mouseX, mouseY, delta);

@@ -24,11 +24,14 @@ public class AnnotationParser {
                     break;
                 }
             }
-            if (annotation == null) continue;
+            if (annotation == null) {
+                continue;
+            }
             declaredField.setAccessible(true);
             Object defaultValue = declaredField.get(inst);
-            if (defaultValue == null)
+            if (defaultValue == null) {
                 throw new NullPointerException("Field annotated with @Setting needs a value as default");
+            }
             SettingType typeToParse = null;
             for (SettingType value : SettingType.values()) {
                 if (value.getAcceptedType() == declaredField.getType()) {
@@ -36,8 +39,10 @@ public class AnnotationParser {
                     break;
                 }
             }
-            if (typeToParse == null) throw new IllegalArgumentException("Type " + declaredField.getType()
-                    .getName() + " is not recognized as setting type");
+            if (typeToParse == null) {
+                throw new IllegalArgumentException("Type " + declaredField.getType()
+                        .getName() + " is not recognized as setting type");
+            }
             SettingBase.Builder<?, ?, ?> base = typeToParse.getProvider().getExtern(annotation, declaredField, inst);
             config.create(base.name(annotation.name()).description(annotation.description()).onChanged(o -> {
                 try {

@@ -19,7 +19,9 @@ public class Packets {
         double square = Math.sqrt(target.x * target.x + target.z * target.z);
         float pitch = MathHelper.wrapDegrees((float) (-(MathHelper.atan2(target.y, square) * vec)));
         float yaw = MathHelper.wrapDegrees((float) (MathHelper.atan2(target.z, target.x) * vec) - 90.0F);
-        PlayerMoveC2SPacket p = new PlayerMoveC2SPacket.LookAndOnGround(yaw, pitch, CoffeeMain.client.player.isOnGround());
+        PlayerMoveC2SPacket p = new PlayerMoveC2SPacket.LookAndOnGround(yaw,
+                pitch,
+                CoffeeMain.client.player.isOnGround());
         Objects.requireNonNull(CoffeeMain.client.getNetworkHandler()).sendPacket(p);
     }
 }

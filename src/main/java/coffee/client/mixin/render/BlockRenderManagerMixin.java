@@ -25,6 +25,8 @@ public class BlockRenderManagerMixin {
     @Inject(method = "renderBlock", at = @At("HEAD"), cancellable = true)
     void coffee_dispatchRenderEvent(BlockState state, BlockPos pos, BlockRenderView world, MatrixStack matrices, VertexConsumer vertexConsumer, boolean cull, Random random, CallbackInfoReturnable<Boolean> cir) {
         BlockRenderEvent be = new BlockRenderEvent(matrices, pos, state);
-        if (Events.fireEvent(EventType.BLOCK_RENDER, be)) cir.setReturnValue(false);
+        if (Events.fireEvent(EventType.BLOCK_RENDER, be)) {
+            cir.setReturnValue(false);
+        }
     }
 }

@@ -140,7 +140,13 @@ public class NbtEditorScreen extends ClientScreen implements FastTickable {
     protected void init() {
         RoundButton format = new RoundButton(RoundButton.STANDARD, 5, height - 30 + 5, 64, 20, "Format", this::format);
         addDrawableChild(format);
-        RoundButton save = new RoundButton(RoundButton.SUCCESS, 5 + format.getWidth() + 5, height - 30 + 5, 64, 20, "Save", this::save);
+        RoundButton save = new RoundButton(RoundButton.SUCCESS,
+                5 + format.getWidth() + 5,
+                height - 30 + 5,
+                64,
+                20,
+                "Save",
+                this::save);
         addDrawableChild(save);
         search = new RoundTextFieldWidget(width - 5 - 160, height - 30 + 5, 160, 20, "Search...");
         addDrawableChild(search);
@@ -178,7 +184,8 @@ public class NbtEditorScreen extends ClientScreen implements FastTickable {
         }
         // if the index of the next : from where we are right now is smaller than the index of the last , or the last , is beyond where we are now
         // and the next : from where we are right now is beyond where we are right now, mark it
-        if ((total.indexOf(':', index) < total.lastIndexOf(',') || total.lastIndexOf(',') < index) && total.indexOf(' ', index) > total.indexOf(':', index) && total.indexOf(':', index) > index) {
+        if ((total.indexOf(':', index) < total.lastIndexOf(',') || total.lastIndexOf(',') < index) && total.indexOf(' ',
+                index) > total.indexOf(':', index) && total.indexOf(':', index) > index) {
             return 0x55FFFF;
         }
         boolean isSuffix = false;
@@ -256,8 +263,11 @@ public class NbtEditorScreen extends ClientScreen implements FastTickable {
                     int whitespacesStart = 0;
                     String index = initial.get(editorY);
                     for (char c : Arrays.copyOfRange(index.toCharArray(), 0, editorX)) {
-                        if (c == ' ') whitespacesStart++;
-                        else break;
+                        if (c == ' ') {
+                            whitespacesStart++;
+                        } else {
+                            break;
+                        }
                     }
                     whitespacesStart %= 2;
                     int missing = 2 - whitespacesStart;
@@ -403,16 +413,26 @@ public class NbtEditorScreen extends ClientScreen implements FastTickable {
                 if (searchLen > 0) {
                     int currentResult = s.toLowerCase().indexOf(search.get().toLowerCase());
                     if (currentResult != -1) {
-                        Renderer.R2D.renderQuad(stack, new Color(0x50AB5909, true), 5, y, width - 5, y + FontRenderers.getMono()
-                                .getMarginHeight());
+                        Renderer.R2D.renderQuad(stack,
+                                new Color(0x50AB5909, true),
+                                5,
+                                y,
+                                width - 5,
+                                y + FontRenderers.getMono().getMarginHeight());
                     }
                     while (currentResult >= 0) {
                         double paddingX = FontRenderers.getMono()
                                 .getStringWidth(s.substring(0, currentResult)) + 7 - smoothScrollX;
                         double markedTextWidth = FontRenderers.getMono()
                                 .getStringWidth(s.substring(currentResult, currentResult + searchLen)) + 2;
-                        Renderer.R2D.renderRoundedQuad(stack, new Color(0xAB5907), paddingX, y, paddingX + markedTextWidth, y + FontRenderers.getMono()
-                                .getMarginHeight(), 2, 10);
+                        Renderer.R2D.renderRoundedQuad(stack,
+                                new Color(0xAB5907),
+                                paddingX,
+                                y,
+                                paddingX + markedTextWidth,
+                                y + FontRenderers.getMono().getMarginHeight(),
+                                2,
+                                10);
                         currentResult = s.toLowerCase().indexOf(search.get().toLowerCase(), currentResult + 1);
                     }
                 }

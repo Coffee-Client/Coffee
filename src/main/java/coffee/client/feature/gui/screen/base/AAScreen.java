@@ -107,7 +107,9 @@ public class AAScreen extends Screen implements FastTickable {
 
     private boolean iterateOverChildren(Function<Element, Boolean> supp) {
         for (Element element : getElements()) {
-            if (supp.apply(element)) return true;
+            if (supp.apply(element)) {
+                return true;
+            }
         }
         return false;
     }

@@ -33,7 +33,9 @@ public class ConfigContainer {
     }
 
     public <T> T get(Class<T> type) {
-        if (!loaded) return null;
+        if (!loaded) {
+            return null;
+        }
         return gson.fromJson(getValue(), type);
     }
 

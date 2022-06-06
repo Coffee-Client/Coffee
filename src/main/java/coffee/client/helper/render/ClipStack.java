@@ -65,8 +65,9 @@ public class ClipStack {
     public void popWindow() {
 
         TransformationEntry e = clipStack.pop();
-        if (ModuleRegistry.getByClass(ClickGUI.class).isDebuggerEnabled())
+        if (ModuleRegistry.getByClass(ClickGUI.class).isDebuggerEnabled()) {
             renderDebug(e.rect.getX(), e.rect.getY(), e.rect.getX1(), e.rect.getY1());
+        }
         if (clipStack.empty()) {
             Renderer.R2D.endScissor();
         } else {

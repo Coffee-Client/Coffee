@@ -28,19 +28,24 @@ public class Config extends Command {
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
         return switch (index) {
-            case 0 -> new PossibleArgument(ArgumentType.STRING, ModuleRegistry.getModules()
-                    .stream()
-                    .map(mod -> mod.getName().replaceAll(" ", "-"))
-                    .toList()
-                    .toArray(String[]::new));
-            case 1 -> {
-                if (ModuleRegistry.getByName(args[0]) != null) {
-                    yield new PossibleArgument(ArgumentType.STRING, Objects.requireNonNull(ModuleRegistry.getByName(args[0].replaceAll("-", " "))).config.getSettings()
+            case 0 -> new PossibleArgument(ArgumentType.STRING,
+                    ModuleRegistry.getModules()
                             .stream()
-                            .map(SettingBase::getName)
+                            .map(mod -> mod.getName().replaceAll(" ", "-"))
                             .toList()
                             .toArray(String[]::new));
-                } else yield super.getSuggestionsWithType(index, args);
+            case 1 -> {
+                if (ModuleRegistry.getByName(args[0]) != null) {
+                    yield new PossibleArgument(ArgumentType.STRING,
+                            Objects.requireNonNull(ModuleRegistry.getByName(args[0].replaceAll("-",
+                                            " "))).config.getSettings()
+                                    .stream()
+                                    .map(SettingBase::getName)
+                                    .toList()
+                                    .toArray(String[]::new));
+                } else {
+                    yield super.getSuggestionsWithType(index, args);
+                }
             }
             case 2 -> new PossibleArgument(ArgumentType.STRING, "(New value)");
             default -> super.getSuggestionsWithType(index, args);

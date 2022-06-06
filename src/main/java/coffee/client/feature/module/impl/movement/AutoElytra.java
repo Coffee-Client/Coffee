@@ -27,7 +27,9 @@ public class AutoElytra extends Module {
             .get());
 
     public AutoElytra() {
-        super("AutoElytra", "Automatically equips an elytra from your inventory if you fell long enough", ModuleType.MOVEMENT);
+        super("AutoElytra",
+                "Automatically equips an elytra from your inventory if you fell long enough",
+                ModuleType.MOVEMENT);
     }
 
     boolean equippedElytra() {

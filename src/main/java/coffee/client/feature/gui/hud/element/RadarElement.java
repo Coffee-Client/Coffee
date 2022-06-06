@@ -26,8 +26,11 @@ import java.awt.Color;
 
 public class RadarElement extends HudElement {
     public RadarElement() {
-        super("Radar", 5, 100 + ModuleType.values().length * FontRenderers.getRenderer()
-                .getMarginHeight() + 4 + 5, 100, 100);
+        super("Radar",
+                5,
+                100 + ModuleType.values().length * FontRenderers.getRenderer().getMarginHeight() + 4 + 5,
+                100,
+                100);
     }
 
 
@@ -55,8 +58,9 @@ public class RadarElement extends HudElement {
                 deltaX *= width;
                 deltaZ *= width;
                 Color c;
-                if (entity.equals(CoffeeMain.client.player)) c = Color.WHITE;
-                else if (entity instanceof PlayerEntity) {
+                if (entity.equals(CoffeeMain.client.player)) {
+                    c = Color.WHITE;
+                } else if (entity instanceof PlayerEntity) {
                     c = Color.RED;
                 } else if (entity instanceof ItemEntity) {
                     c = Color.CYAN;

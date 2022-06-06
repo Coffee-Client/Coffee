@@ -23,8 +23,11 @@ public class DumpVertexProvider implements VertexConsumerProvider {
     @Override
     public VertexConsumer getBuffer(RenderLayer layer) {
         return dumps.computeIfAbsent(layer, renderLayer -> {
-            if (((IRenderPhaseMixin) renderLayer).getName().startsWith("entity")) return new DumpVertexConsumer();
-            else return new DiscardingVertexConsumer();
+            if (((IRenderPhaseMixin) renderLayer).getName().startsWith("entity")) {
+                return new DumpVertexConsumer();
+            } else {
+                return new DiscardingVertexConsumer();
+            }
         });
     }
 }

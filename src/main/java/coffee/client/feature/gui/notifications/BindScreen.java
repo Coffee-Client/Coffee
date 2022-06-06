@@ -27,7 +27,8 @@ public class BindScreen extends ClientScreen {
     public void renderInternal(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         renderBackground(matrices);
         cfr.drawCenteredString(matrices, "Press any key", width / 2d, height / 2d - cfr.getMarginHeight(), 0xAAAAAA);
-        String kn = a.keybind.getValue() > 0 ? GLFW.glfwGetKeyName((int) (a.keybind.getValue() + 0), GLFW.glfwGetKeyScancode((int) (a.keybind.getValue() + 0))) : "None";
+        String kn = a.keybind.getValue() > 0 ? GLFW.glfwGetKeyName((int) (a.keybind.getValue() + 0),
+                GLFW.glfwGetKeyScancode((int) (a.keybind.getValue() + 0))) : "None";
         if (kn == null) {
             try {
                 for (Field declaredField : GLFW.class.getDeclaredFields()) {

@@ -26,7 +26,8 @@ public class Panic extends Command {
 
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
-        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.STRING, "hard", "restore"));
+        return StaticArgumentServer.serveFromStatic(index,
+                new PossibleArgument(ArgumentType.STRING, "hard", "restore"));
     }
 
     @Override

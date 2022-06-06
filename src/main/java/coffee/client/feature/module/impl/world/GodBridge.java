@@ -23,7 +23,8 @@ import java.util.Objects;
 public class GodBridge extends Module {
 
     final float mOffset = 0.20f;
-    final Direction[] allowedSides = new Direction[] { Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST };
+    final Direction[] allowedSides = new Direction[] { Direction.NORTH, Direction.EAST, Direction.SOUTH,
+            Direction.WEST };
     //    final BooleanValue courseCorrect = (BooleanValue) this.config.create("Course correct", true).description("Prevent you from falling off the track by accident");
     final BooleanSetting courseCorrect = this.config.create(new BooleanSetting.Builder(true).name("Course correct")
             .description("Prevents you from accidentally falling off a side of the bridge")
@@ -43,7 +44,11 @@ public class GodBridge extends Module {
         // Notification.create(5000, "GodBridge", "Look down, as you would normally while godbridging to start");
         if (!isReady()) {
             if (isReady == null) {
-                isReady = Notification.create(-1, "GodBridge", true, Notification.Type.INFO, "Look down, as you would normally while godbridging to start");
+                isReady = Notification.create(-1,
+                        "GodBridge",
+                        true,
+                        Notification.Type.INFO,
+                        "Look down, as you would normally while godbridging to start");
             }
         } else {
             if (isReady != null) {

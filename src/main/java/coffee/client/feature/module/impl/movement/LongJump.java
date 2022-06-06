@@ -24,9 +24,8 @@ public class LongJump extends Module {
             .max(20)
             .precision(2)
             .get());
-    final EnumSetting<FocusType> focus = this.config.create(new EnumSetting.Builder<>(FocusType.Direction).name("Focus on")
-            .description("What to focus on when throwing you forwards")
-            .get());
+    final EnumSetting<FocusType> focus = this.config.create(new EnumSetting.Builder<>(FocusType.Direction).name(
+            "Focus on").description("What to focus on when throwing you forwards").get());
     final BooleanSetting glide = this.config.create(new BooleanSetting.Builder(true).name("Glide")
             .description("Whether to glide after the initial jump")
             .get());
@@ -58,8 +57,9 @@ public class LongJump extends Module {
         double scaled = xz.getValue() / 5;
         return switch (focus.getValue()) {
             case Direction -> new Vec3d(-MathHelper.sin(f) * scaled, 0.0D, MathHelper.cos(f) * scaled);
-            case Velocity -> new Vec3d(CoffeeMain.client.player.getVelocity()
-                    .normalize().x * scaled, 0.0D, CoffeeMain.client.player.getVelocity().normalize().z * scaled);
+            case Velocity -> new Vec3d(CoffeeMain.client.player.getVelocity().normalize().x * scaled,
+                    0.0D,
+                    CoffeeMain.client.player.getVelocity().normalize().z * scaled);
         };
     }
 

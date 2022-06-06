@@ -66,8 +66,9 @@ public class SpinAutism extends Module {
         Rotations.setClientYaw((float) (Math.random() * 360));
         PlayerInteractItemC2SPacket p = new PlayerInteractItemC2SPacket(Hand.MAIN_HAND);
         Objects.requireNonNull(CoffeeMain.client.getNetworkHandler()).sendPacket(p);
-        PlayerMoveC2SPacket p1 = new PlayerMoveC2SPacket.LookAndOnGround((float) r, Rotations.getClientPitch(), Objects.requireNonNull(CoffeeMain.client.player)
-                .isOnGround());
+        PlayerMoveC2SPacket p1 = new PlayerMoveC2SPacket.LookAndOnGround((float) r,
+                Rotations.getClientPitch(),
+                Objects.requireNonNull(CoffeeMain.client.player).isOnGround());
         CoffeeMain.client.getNetworkHandler().sendPacket(p1);
     }
 

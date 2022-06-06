@@ -115,7 +115,9 @@ public class CategoryDisplay extends Element {
         return md.stream().filter(moduleDisplay -> {
             char[] charsToSearchFor = ClickGUI.instance().searchTerm.toLowerCase().toCharArray();
             for (char c : charsToSearchFor) {
-                if (!moduleDisplay.module.getName().toLowerCase().contains(String.valueOf(c))) return false;
+                if (!moduleDisplay.module.getName().toLowerCase().contains(String.valueOf(c))) {
+                    return false;
+                }
             }
             return true;
         }).collect(Collectors.toList());
@@ -147,7 +149,8 @@ public class CategoryDisplay extends Element {
         double mouseY1 = mouseY;
         scroll(mouseX1, mouseY1, 0);
         Theme theme = ThemeManager.getMainTheme();
-        double openAnim = this.openAnim < 0.5 ? (1 - sqrt(1 - pow(2 * this.openAnim, 2))) / 2 : (sqrt(1 - pow(-2 * this.openAnim + 2, 2)) + 1) / 2;
+        double openAnim = this.openAnim < 0.5 ? (1 - sqrt(1 - pow(2 * this.openAnim,
+                2))) / 2 : (sqrt(1 - pow(-2 * this.openAnim + 2, 2)) + 1) / 2;
         //        Renderer.R2D.fill(matrices, theme.getHeader(), x, y, x + width, y + headerHeight());
         double r = 5;
         double hheight = headerHeight();
@@ -167,9 +170,23 @@ public class CategoryDisplay extends Element {
 
 
         RenderSystem.setShaderTexture(0, mt.getTex());
-        Renderer.R2D.renderTexture(matrices, x + texPad, y + texPad, texDim, texDim, 0, 0, texDim, texDim, texDim, texDim);
+        Renderer.R2D.renderTexture(matrices,
+                x + texPad,
+                y + texPad,
+                texDim,
+                texDim,
+                0,
+                0,
+                texDim,
+                texDim,
+                texDim,
+                texDim);
         //        cfr.drawCenteredString(matrices,mt.getName(),x+texPad+texDim+texPad,y+headerHeight()/2d-cfr.getFontHeight()/2d,0xFFFFFF);
-        cfr.drawCenteredString(matrices, mt.getName(), x + width / 2d, y + headerHeight() / 2d - cfr.getFontHeight() / 2d, 0xFFFFFF);
+        cfr.drawCenteredString(matrices,
+                mt.getName(),
+                x + width / 2d,
+                y + headerHeight() / 2d - cfr.getFontHeight() / 2d,
+                0xFFFFFF);
         double ct = 1;
         double cw = 6;
         matrices.push();
@@ -183,7 +200,11 @@ public class CategoryDisplay extends Element {
         matrices.pop();
         if (openAnim != 0) {
             // rounding the height in the final param makes it more smooth, otherwise scissor will do something with the start y and it will rattle like shit
-            ClipStack.globalInstance.addWindow(matrices, new Rectangle(x, y + headerHeight(), x + width, y + Math.round(this.height) - (modHeight != 0 ? r : 0)));
+            ClipStack.globalInstance.addWindow(matrices,
+                    new Rectangle(x,
+                            y + headerHeight(),
+                            x + width,
+                            y + Math.round(this.height) - (modHeight != 0 ? r : 0)));
             double y = headerHeight();
             matrices.push();
             matrices.translate(0, scroller.getScroll(), 0);
@@ -194,7 +215,9 @@ public class CategoryDisplay extends Element {
             for (ModuleDisplay moduleDisplay : getModules()) {
                 moduleDisplay.setX(this.x);
                 moduleDisplay.setY(this.y + y);
-                if (moduleDisplay.getY() + scroller.getScroll() > this.y + height) continue;
+                if (moduleDisplay.getY() + scroller.getScroll() > this.y + height) {
+                    continue;
+                }
 
                 moduleDisplay.render(matrices, mouseX1, mouseY1 - scroller.getScroll(), scrollBeingUsed);
                 y += moduleDisplay.getHeight();
@@ -209,9 +232,25 @@ public class CategoryDisplay extends Element {
                 double scrollbarHeight = modHeight - 2;
                 double scrollerHeight = ratio * scrollbarHeight;
                 double sbW = 2;
-                Renderer.R2D.renderRoundedQuad(matrices, new Color(20, 20, 20, 150), x + width - 1 - sbW, this.y + headerHeight() + 1, x + width - 1, this.y + headerHeight() + 1 + scrollbarHeight, sbW / 2d, 20);
-                double scrollerStartY = MathHelper.lerp(scrollIndex, this.y + headerHeight() + 1, this.y + headerHeight() + 1 + scrollbarHeight - scrollerHeight);
-                Renderer.R2D.renderRoundedQuad(matrices, new Color(40, 40, 40, 200), x + width - 1 - sbW, scrollerStartY, x + width - 1, scrollerStartY + scrollerHeight, sbW / 2d, 20);
+                Renderer.R2D.renderRoundedQuad(matrices,
+                        new Color(20, 20, 20, 150),
+                        x + width - 1 - sbW,
+                        this.y + headerHeight() + 1,
+                        x + width - 1,
+                        this.y + headerHeight() + 1 + scrollbarHeight,
+                        sbW / 2d,
+                        20);
+                double scrollerStartY = MathHelper.lerp(scrollIndex,
+                        this.y + headerHeight() + 1,
+                        this.y + headerHeight() + 1 + scrollbarHeight - scrollerHeight);
+                Renderer.R2D.renderRoundedQuad(matrices,
+                        new Color(40, 40, 40, 200),
+                        x + width - 1 - sbW,
+                        scrollerStartY,
+                        x + width - 1,
+                        scrollerStartY + scrollerHeight,
+                        sbW / 2d,
+                        20);
             }
         }
         //        FontRenderers.getRenderer().drawCenteredString(matrices, getModules().size() + " modules", this.x + this.width / 2d, this.y + this.height - 1 - FontRenderers.getRenderer().getMarginHeight(), 0xFFFFFF);
@@ -221,7 +260,9 @@ public class CategoryDisplay extends Element {
     public void tickAnim() {
         scroller.tick();
         double oaDelta = 0.02;
-        if (!open) oaDelta *= -1;
+        if (!open) {
+            oaDelta *= -1;
+        }
         openAnim += oaDelta;
         openAnim = MathHelper.clamp(openAnim, 0, 1);
         for (ModuleDisplay moduleDisplay : getModules()) {

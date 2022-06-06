@@ -71,12 +71,16 @@ public class AntiCrash extends Module {
     }
 
     public static AntiCrash instance() {
-        if (instance == null) instance = ModuleRegistry.getByClass(AntiCrash.class);
+        if (instance == null) {
+            instance = ModuleRegistry.getByClass(AntiCrash.class);
+        }
         return instance;
     }
 
     void handlePacketEvent(Event e) {
-        if (!this.isEnabled()) return;
+        if (!this.isEnabled()) {
+            return;
+        }
         PacketEvent pe = (PacketEvent) e;
         if (pe.getPacket() instanceof OpenScreenS2CPacket && screenGui.getValue()) {
             long current = System.currentTimeMillis();
@@ -101,7 +105,8 @@ public class AntiCrash extends Module {
             if (newCount >= particleMax.getValue()) {
                 int space = (int) Math.floor(particleMax.getValue() - partTotal);
                 if (space > 0) {
-                    ((IParticleS2CPacketMixin) p).setCount(Math.min(space, p.getCount())); // decrease count to fit just below particle max
+                    ((IParticleS2CPacketMixin) p).setCount(Math.min(space,
+                            p.getCount())); // decrease count to fit just below particle max
                     //                    showCrashPreventionNotification("Decreased particle packet: " + oldCount + " -> " + p.getCount());
                 } else {
                     //                    showCrashPreventionNotification("Blocked particle packet: S=" + p.getCount() + " T=" + partTotal);
@@ -112,8 +117,9 @@ public class AntiCrash extends Module {
     }
 
     public void showCrashPreventionNotification(String msg) {
-        if (lastCrashNotif == null || lastCrashNotif.creationDate + lastCrashNotif.duration < System.currentTimeMillis())
+        if (lastCrashNotif == null || lastCrashNotif.creationDate + lastCrashNotif.duration < System.currentTimeMillis()) {
             lastCrashNotif = Notification.create(4000, "AntiCrash", Notification.Type.WARNING, msg);
+        }
     }
 
     @Override

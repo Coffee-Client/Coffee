@@ -15,7 +15,9 @@ public class Cursor {
     private static long currentCursor = -1;
 
     public static void setGlfwCursor(long cursor) {
-        if (currentCursor == cursor) return;
+        if (currentCursor == cursor) {
+            return;
+        }
         currentCursor = cursor;
         GLFW.glfwSetCursor(CoffeeMain.client.getWindow().getHandle(), cursor);
     }

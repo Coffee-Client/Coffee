@@ -145,7 +145,9 @@ public class ModuleRegistry {
 
     public static void clearCustomModules(Addon addon) {
         for (AddonModuleEntry customModule : customModules) {
-            if (customModule.addon == addon && customModule.module.isEnabled()) customModule.module.setEnabled(false);
+            if (customModule.addon == addon && customModule.module.isEnabled()) {
+                customModule.module.setEnabled(false);
+            }
         }
         customModules.removeIf(addonModuleEntry -> addonModuleEntry.addon == addon);
         rebuildSharedModuleList();
@@ -189,7 +191,9 @@ public class ModuleRegistry {
     }
 
     private static void initInner() {
-        if (initialized.get()) return;
+        if (initialized.get()) {
+            return;
+        }
         initialized.set(true);
         vanillaModules.clear();
 
@@ -307,7 +311,11 @@ public class ModuleRegistry {
         for (Module module : getModules()) {
             module.postModuleInit();
         }
-        CoffeeMain.log(Level.INFO, "Initialized modules. Vanilla modules:", vanillaModules.size(), "Addon modules:", customModules.size());
+        CoffeeMain.log(Level.INFO,
+                "Initialized modules. Vanilla modules:",
+                vanillaModules.size(),
+                "Addon modules:",
+                customModules.size());
     }
 
     public static List<Module> getModules() {
@@ -326,7 +334,8 @@ public class ModuleRegistry {
             while (reloadInProgress.get()) {
                 Thread.onSpinWait();
             }
-            CoffeeMain.log(Level.INFO, "Lock opened within " + (System.currentTimeMillis() - lockStart) + " ms (" + (System.nanoTime() - lockStartns) + " ns)");
+            CoffeeMain.log(Level.INFO,
+                    "Lock opened within " + (System.currentTimeMillis() - lockStart) + " ms (" + (System.nanoTime() - lockStartns) + " ns)");
         }
 
     }

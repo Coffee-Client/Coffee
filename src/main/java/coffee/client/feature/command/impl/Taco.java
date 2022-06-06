@@ -69,7 +69,9 @@ public class Taco extends Command {
 
         }
         if (!gifPath.exists()) //noinspection ResultOfMethodCallIgnored
+        {
             gifPath.mkdir();
+        }
         try {
             if (!storage.isFile()) {
                 //noinspection ResultOfMethodCallIgnored
@@ -108,7 +110,9 @@ public class Taco extends Command {
         File[] a = Objects.requireNonNull(gifPath.listFiles()).clone();
         List<String> framesSorted = Arrays.stream(a).map(File::getName).sorted().toList();
         for (String file : framesSorted) {
-            if (!file.endsWith(".gif")) continue;
+            if (!file.endsWith(".gif")) {
+                continue;
+            }
             File f = Arrays.stream(a).filter(file1 -> file1.getName().equals(file)).findFirst().orElseThrow();
             try {
                 ImageReader reader = ImageIO.getImageReadersByFormatName("gif").next();

@@ -22,7 +22,8 @@ public class EntityModelMixin {
         // shut up retard
         //noinspection ConstantConditions
         ModuleRegistry.getByClass(ESP.class).recording = ModuleRegistry.getByClass(ESP.class)
-                .isEnabled() && ModuleRegistry.getByClass(ESP.class).outlineMode.getValue() == ESP.Mode.Model && ((((Object) this) instanceof PlayerEntityModel && ModuleRegistry.getByClass(ESP.class).players.getValue()) || ModuleRegistry.getByClass(ESP.class).entities.getValue());
+                .isEnabled() && ModuleRegistry.getByClass(ESP.class).outlineMode.getValue() == ESP.Mode.Model && ((((Object) this) instanceof PlayerEntityModel && ModuleRegistry.getByClass(
+                ESP.class).players.getValue()) || ModuleRegistry.getByClass(ESP.class).entities.getValue());
     }
 
     @Inject(method = "render", at = @At("TAIL"))

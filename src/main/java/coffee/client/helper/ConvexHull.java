@@ -6,7 +6,9 @@ import java.util.List;
 public class ConvexHull {
     public static List<Point> convexHull(List<Point> p1) {
         List<Point> p = new ArrayList<>(p1);
-        if (p.isEmpty()) return p;
+        if (p.isEmpty()) {
+            return p;
+        }
         p.sort(Point::compareTo);
         List<Point> h = new ArrayList<>();
 

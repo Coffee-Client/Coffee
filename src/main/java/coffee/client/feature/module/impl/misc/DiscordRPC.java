@@ -27,10 +27,8 @@ public class DiscordRPC extends Module {
             .description("What to put as the title of the rpc")
             .onChanged(s -> update())
             .get());
-    final StringSetting state = this.config.create(new StringSetting.Builder("Obliterating minecraft").name("Description")
-            .description("What to put as the description of the rpc")
-            .onChanged(s -> update())
-            .get());
+    final StringSetting state = this.config.create(new StringSetting.Builder("Obliterating minecraft").name(
+            "Description").description("What to put as the description of the rpc").onChanged(s -> update()).get());
     long startTime;
 
     public DiscordRPC() {
@@ -86,7 +84,10 @@ public class DiscordRPC extends Module {
         offThreadExec.execute(() -> {
             boolean result = DiscordIPC.start(971849283911434271L, this::applyRpc);
             if (!result) {
-                Notification.create(5000, "Discord RPC", Notification.Type.ERROR, "Discord isn't open! Open discord and enable the module again.");
+                Notification.create(5000,
+                        "Discord RPC",
+                        Notification.Type.ERROR,
+                        "Discord isn't open! Open discord and enable the module again.");
                 setEnabled(false);
             }
         });

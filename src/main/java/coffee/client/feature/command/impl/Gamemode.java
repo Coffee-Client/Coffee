@@ -27,10 +27,9 @@ public class Gamemode extends Command {
 
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
-        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.STRING, Arrays.stream(GameMode.values())
-                .map(GameMode::getName)
-                .toList()
-                .toArray(String[]::new)));
+        return StaticArgumentServer.serveFromStatic(index,
+                new PossibleArgument(ArgumentType.STRING,
+                        Arrays.stream(GameMode.values()).map(GameMode::getName).toList().toArray(String[]::new)));
     }
 
     @Override
@@ -40,7 +39,9 @@ public class Gamemode extends Command {
         }
         validateArgumentsLength(args, 1, "Provide gamemode");
         GameMode gm = GameMode.byName(args[0], null);
-        if (gm == null) throw new CommandException("Invalid gamemode", "Specify a valid gamemode");
+        if (gm == null) {
+            throw new CommandException("Invalid gamemode", "Specify a valid gamemode");
+        }
         CoffeeMain.client.interactionManager.setGameMode(gm);
     }
 }

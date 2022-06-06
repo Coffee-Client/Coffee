@@ -38,9 +38,8 @@ import java.util.List;
 public class ESP extends Module {
     //static DumpVertexConsumer consumer = new DumpVertexConsumer();
     static DumpVertexProvider provider;
-    public final EnumSetting<Mode> outlineMode = this.config.create(new EnumSetting.Builder<>(Mode.Filled).name("Outline mode")
-            .description("How to render the outline")
-            .get());
+    public final EnumSetting<Mode> outlineMode = this.config.create(new EnumSetting.Builder<>(Mode.Filled).name(
+            "Outline mode").description("How to render the outline").get());
     public final BooleanSetting entities = this.config.create(new BooleanSetting.Builder(false).name("Show entities")
             .description("Render entities")
             .get());
@@ -144,11 +143,19 @@ public class ESP extends Module {
                 Color c = Utils.getCurrentRGB();
                 Vec3d eSource = Utils.getInterpolatedEntityPosition(entity);
                 switch (outlineMode.getValue()) {
-                    case Filled ->
-                            Renderer.R3D.renderFilled(eSource.subtract(new Vec3d(entity.getWidth(), 0, entity.getWidth()).multiply(0.5)), new Vec3d(entity.getWidth(), entity.getHeight(), entity.getWidth()), Renderer.Util.modify(c, -1, -1, -1, 130), matrices);
+                    case Filled -> Renderer.R3D.renderFilled(eSource.subtract(new Vec3d(entity.getWidth(),
+                                    0,
+                                    entity.getWidth()).multiply(0.5)),
+                            new Vec3d(entity.getWidth(), entity.getHeight(), entity.getWidth()),
+                            Renderer.Util.modify(c, -1, -1, -1, 130),
+                            matrices);
                     case Rect -> renderOutline(entity, c, matrices);
-                    case Outline ->
-                            Renderer.R3D.renderOutline(eSource.subtract(new Vec3d(entity.getWidth(), 0, entity.getWidth()).multiply(0.5)), new Vec3d(entity.getWidth(), entity.getHeight(), entity.getWidth()), Renderer.Util.modify(c, -1, -1, -1, 130), matrices);
+                    case Outline -> Renderer.R3D.renderOutline(eSource.subtract(new Vec3d(entity.getWidth(),
+                                    0,
+                                    entity.getWidth()).multiply(0.5)),
+                            new Vec3d(entity.getWidth(), entity.getHeight(), entity.getWidth()),
+                            Renderer.Util.modify(c, -1, -1, -1, 130),
+                            matrices);
                     case Shader -> renderShaderOutline(entity, matrices);
                 }
             }
@@ -168,7 +175,9 @@ public class ESP extends Module {
         List<Vec3d> boxPoints = new ArrayList<>();
         for (DumpVertexConsumer consumer : provider.getBuffers()) {
             for (DumpVertexConsumer.VertexData vertexData : consumer.getStack()) {
-                if (vertexData.getPosition() != null) boxPoints.add(vertexData.getPosition().add(origin));
+                if (vertexData.getPosition() != null) {
+                    boxPoints.add(vertexData.getPosition().add(origin));
+                }
             }
             consumer.clear();
         }
@@ -180,18 +189,30 @@ public class ESP extends Module {
                 .toList()
                 .toArray(Vec3d[]::new);
 
-        if (screenSpace.length == 0) return;
+        if (screenSpace.length == 0) {
+            return;
+        }
 
         Vec3d leastX = screenSpace[0];
         Vec3d mostX = screenSpace[0];
         Vec3d leastY = screenSpace[0];
         Vec3d mostY = screenSpace[0];
         for (Vec3d vec3d : screenSpace) {
-            if (!Renderer.R2D.isOnScreen(vec3d)) return;
-            if (vec3d.x < leastX.x) leastX = vec3d;
-            if (vec3d.x > mostX.x) mostX = vec3d;
-            if (vec3d.y < leastY.y) leastY = vec3d;
-            if (vec3d.y > mostY.y) mostY = vec3d;
+            if (!Renderer.R2D.isOnScreen(vec3d)) {
+                return;
+            }
+            if (vec3d.x < leastX.x) {
+                leastX = vec3d;
+            }
+            if (vec3d.x > mostX.x) {
+                mostX = vec3d;
+            }
+            if (vec3d.y < leastY.y) {
+                leastY = vec3d;
+            }
+            if (vec3d.y > mostY.y) {
+                mostY = vec3d;
+            }
         }
         Vec3d finalLeastX = leastX;
         Vec3d finalLeastY = leastY;
@@ -236,7 +257,9 @@ public class ESP extends Module {
         3----2
         */
         //matrix.multiply(new Quaternion(0,0,(float) rotation,true));
-        float[][] verts = new float[][] { new float[] { 0, 0 }, new float[] { 0, height }, new float[] { -width, height }, new float[] { -width, -width }, new float[] { topWidth, -width }, new float[] { topWidth, 0 }, new float[] { 0, 0 } };
+        float[][] verts = new float[][] { new float[] { 0, 0 }, new float[] { 0, height },
+                new float[] { -width, height }, new float[] { -width, -width }, new float[] { topWidth, -width },
+                new float[] { topWidth, 0 }, new float[] { 0, 0 } };
         for (float[] vert : verts) {
 
             bb.vertex(matrix, x + vert[0] * xMul, y + vert[1] * yMul, 0f).color(r, g, b, a).next();
@@ -251,7 +274,9 @@ public class ESP extends Module {
     }
 
     void renderOutline(Entity e, Color color, MatrixStack stack) {
-        Vec3d eSource = new Vec3d(MathHelper.lerp(CoffeeMain.client.getTickDelta(), e.prevX, e.getX()), MathHelper.lerp(CoffeeMain.client.getTickDelta(), e.prevY, e.getY()), MathHelper.lerp(CoffeeMain.client.getTickDelta(), e.prevZ, e.getZ()));
+        Vec3d eSource = new Vec3d(MathHelper.lerp(CoffeeMain.client.getTickDelta(), e.prevX, e.getX()),
+                MathHelper.lerp(CoffeeMain.client.getTickDelta(), e.prevY, e.getY()),
+                MathHelper.lerp(CoffeeMain.client.getTickDelta(), e.prevZ, e.getZ()));
         float red = color.getRed() / 255f;
         float green = color.getGreen() / 255f;
         float blue = color.getBlue() / 255f;

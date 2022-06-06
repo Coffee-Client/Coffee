@@ -150,9 +150,14 @@ public class Hud extends Module {
             }
         } else {
             if (serverNotResponding == null) {
-                serverNotResponding = Notification.create(-1, "", true, Notification.Type.INFO, "Server not responding! " + minSec.format(System.currentTimeMillis() - lastTimePacketReceived));
+                serverNotResponding = Notification.create(-1,
+                        "",
+                        true,
+                        Notification.Type.INFO,
+                        "Server not responding! " + minSec.format(System.currentTimeMillis() - lastTimePacketReceived));
             }
-            serverNotResponding.contents = new String[] { "Server not responding! " + minSec.format(System.currentTimeMillis() - lastTimePacketReceived) };
+            serverNotResponding.contents = new String[] {
+                    "Server not responding! " + minSec.format(System.currentTimeMillis() - lastTimePacketReceived) };
         }
         if (!NotificationRenderer.topBarNotifications.contains(serverNotResponding)) {
             serverNotResponding = null;
@@ -213,13 +218,32 @@ public class Hud extends Module {
 
         double width = pad + newWidth + 5 + FontRenderers.getRenderer().getStringWidth(desc) + pad;
         double height = pad * 2 + Math.max(newHeight, FontRenderers.getRenderer().getFontHeight());
-        Renderer.R2D.renderRoundedQuadWithShadow(ms, ThemeManager.getMainTheme()
-                .getConfig(), 0, 0, width, height, 5, 20);
+        Renderer.R2D.renderRoundedQuadWithShadow(ms,
+                ThemeManager.getMainTheme().getConfig(),
+                0,
+                0,
+                width,
+                height,
+                5,
+                20);
         RenderSystem.setShaderTexture(0, GameTexture.TEXTURE_ICON.getWhere());
-        Renderer.R2D.renderTexture(ms, pad, height / 2d - newHeight / 2d, newWidth, newHeight, 0, 0, newWidth, newHeight, newWidth, newHeight);
+        Renderer.R2D.renderTexture(ms,
+                pad,
+                height / 2d - newHeight / 2d,
+                newWidth,
+                newHeight,
+                0,
+                0,
+                newWidth,
+                newHeight,
+                newWidth,
+                newHeight);
         FontRenderers.getRenderer()
-                .drawString(ms, desc, pad + newWidth + 5, height / 2d - FontRenderers.getRenderer()
-                        .getMarginHeight() / 2d, 0xFFFFFF);
+                .drawString(ms,
+                        desc,
+                        pad + newWidth + 5,
+                        height / 2d - FontRenderers.getRenderer().getMarginHeight() / 2d,
+                        0xFFFFFF);
     }
 
     void drawModuleList(MatrixStack ms) {
@@ -237,19 +261,30 @@ public class Hud extends Module {
             double slideProg = MathHelper.clamp(prog - 1, 0, 1); // 1-2 as 0-1 from 0-2
             double hei = (FontRenderers.getRenderer().getMarginHeight() + 2);
             double wid = moduleEntry.getValue().getRenderWidth() + 2;
-            Renderer.R2D.renderQuad(ms, ThemeManager.getMainTheme()
-                    .getActive(), width - (wid + 1), y, width, y + hei * expandProg);
+            Renderer.R2D.renderQuad(ms,
+                    ThemeManager.getMainTheme().getActive(),
+                    width - (wid + 1),
+                    y,
+                    width,
+                    y + hei * expandProg);
             ms.push();
             ms.translate((1 - slideProg) * wid, 0, 0);
-            Renderer.R2D.renderQuad(ms, ThemeManager.getMainTheme()
-                    .getModule(), width - wid, y, width, y + hei * expandProg);
+            Renderer.R2D.renderQuad(ms,
+                    ThemeManager.getMainTheme().getModule(),
+                    width - wid,
+                    y,
+                    width,
+                    y + hei * expandProg);
             double nameW = FontRenderers.getRenderer().getStringWidth(moduleEntry.getKey().getName());
             FontRenderers.getRenderer()
                     .drawString(ms, moduleEntry.getKey().getName(), width - wid + 1, y + 1, 0xFFFFFF);
             if (moduleEntry.getKey().getContext() != null && !moduleEntry.getKey().getContext().isEmpty()) {
                 FontRenderers.getRenderer()
-                        .drawString(ms, " " + moduleEntry.getKey()
-                                .getContext(), width - wid + 1 + nameW, y + 1, 0xAAAAAA);
+                        .drawString(ms,
+                                " " + moduleEntry.getKey().getContext(),
+                                width - wid + 1 + nameW,
+                                y + 1,
+                                0xAAAAAA);
             }
             ms.pop();
             y += hei * expandProg;
@@ -326,7 +361,8 @@ public class Hud extends Module {
         }
 
         double easeInOutCirc(double x) {
-            return x == 0 ? 0 : x == 1 ? 1 : x < 0.5 ? Math.pow(2, 20 * x - 10) / 2 : (2 - Math.pow(2, -20 * x + 10)) / 2;
+            return x == 0 ? 0 : x == 1 ? 1 : x < 0.5 ? Math.pow(2, 20 * x - 10) / 2 : (2 - Math.pow(2,
+                    -20 * x + 10)) / 2;
 
         }
     }

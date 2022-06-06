@@ -21,14 +21,16 @@ import java.util.Objects;
 public class StatsScreen extends ClientScreen implements FastTickable {
     static final List<Float> packetIn = Util.make(() -> {
         List<Float> f = new ArrayList<>();
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < 100; i++) {
             f.add(0f);
+        }
         return f;
     });
     static final List<Float> packetOut = Util.make(() -> {
         List<Float> f = new ArrayList<>();
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < 100; i++) {
             f.add(0f);
+        }
         return f;
     });
     final Timer packetUpdater = new Timer();
@@ -44,7 +46,9 @@ public class StatsScreen extends ClientScreen implements FastTickable {
             while (packetIn.size() > 100) {
                 packetIn.remove(0);
             }
-            while (packetOut.size() > 100) packetOut.remove(0);
+            while (packetOut.size() > 100) {
+                packetOut.remove(0);
+            }
         }
     }
 
@@ -57,9 +61,8 @@ public class StatsScreen extends ClientScreen implements FastTickable {
         List<Float> pIn = new ArrayList<>(StatsScreen.packetIn);
         List<Float> pOut = new ArrayList<>(StatsScreen.packetOut);
         pIn.removeIf(Objects::isNull);
-        float highest = Math.max(pIn.stream()
-                .max(Comparator.comparingDouble(value -> (double) value))
-                .orElse(0f), pOut.stream().max(Comparator.comparingDouble(value -> (double) value)).orElse(0f));
+        float highest = Math.max(pIn.stream().max(Comparator.comparingDouble(value -> (double) value)).orElse(0f),
+                pOut.stream().max(Comparator.comparingDouble(value -> (double) value)).orElse(0f));
         double maxHeight = 300;
         float scaleFactor = (float) Math.min(1, maxHeight / highest);
         for (int i = 0; i < pIn.size(); i++) {

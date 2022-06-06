@@ -14,7 +14,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class ModStatusMixin {
     @Inject(method = "isModded", at = @At("HEAD"), cancellable = true)
     void coffee_replaceModdedStatus(CallbackInfoReturnable<Boolean> cir) {
-        if (SelfDestruct.shouldSelfDestruct()) cir.setReturnValue(false);
+        if (SelfDestruct.shouldSelfDestruct()) {
+            cir.setReturnValue(false);
+        }
     }
 
     @Redirect(method = "combine", at = @At(value = "FIELD", target = "Lnet/minecraft/util/ModStatus;confidence:Lnet/minecraft/util/ModStatus$Confidence;", ordinal = 0))
@@ -29,6 +31,8 @@ public class ModStatusMixin {
 
     @Inject(method = "confidence", at = @At("HEAD"), cancellable = true)
     void coffee_replaceConfidence(CallbackInfoReturnable<ModStatus.Confidence> cir) {
-        if (SelfDestruct.shouldSelfDestruct()) cir.setReturnValue(ModStatus.Confidence.PROBABLY_NOT);
+        if (SelfDestruct.shouldSelfDestruct()) {
+            cir.setReturnValue(ModStatus.Confidence.PROBABLY_NOT);
+        }
     }
 }

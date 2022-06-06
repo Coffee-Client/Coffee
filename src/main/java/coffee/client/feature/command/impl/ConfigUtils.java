@@ -49,10 +49,13 @@ public class ConfigUtils extends Command {
 
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
-        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.STRING, "load", "save"), new PossibleArgument(ArgumentType.STRING, Arrays.stream(Objects.requireNonNull(CONFIG_STORAGE.listFiles()))
-                .map(File::getName)
-                .toList()
-                .toArray(String[]::new)));
+        return StaticArgumentServer.serveFromStatic(index,
+                new PossibleArgument(ArgumentType.STRING, "load", "save"),
+                new PossibleArgument(ArgumentType.STRING,
+                        Arrays.stream(Objects.requireNonNull(CONFIG_STORAGE.listFiles()))
+                                .map(File::getName)
+                                .toList()
+                                .toArray(String[]::new)));
     }
 
     @Override
@@ -60,7 +63,8 @@ public class ConfigUtils extends Command {
         validateArgumentsLength(args, 2, "Provide action and file");
         switch (args[0].toLowerCase()) {
             case "load" -> {
-                File f = new File(CONFIG_STORAGE.getAbsolutePath() + "/" + String.join(" ", Arrays.copyOfRange(args, 1, args.length)));
+                File f = new File(CONFIG_STORAGE.getAbsolutePath() + "/" + String.join(" ",
+                        Arrays.copyOfRange(args, 1, args.length)));
                 if (!f.exists()) {
                     error("That file doesn't exist");
                     return;
@@ -119,7 +123,8 @@ public class ConfigUtils extends Command {
                 }
             }
             case "save" -> {
-                File out = new File(CONFIG_STORAGE.getAbsolutePath() + "/" + String.join(" ", Arrays.copyOfRange(args, 1, args.length)));
+                File out = new File(CONFIG_STORAGE.getAbsolutePath() + "/" + String.join(" ",
+                        Arrays.copyOfRange(args, 1, args.length)));
                 if (out.exists()) {
                     warn("Overwriting file because it already exists");
                     if (!out.delete()) {
@@ -160,7 +165,8 @@ public class ConfigUtils extends Command {
                     base.add("config", config);
                     FileUtils.writeStringToFile(out, base.toString(), Charsets.UTF_8, false);
                     LiteralText t = new LiteralText("[§9A§r] Saved config! Click to open");
-                    Style s = Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.of("Click to open")))
+                    Style s = Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                                    Text.of("Click to open")))
                             .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, out.getAbsolutePath()));
                     t.setStyle(s);
                     Objects.requireNonNull(CoffeeMain.client.player).sendMessage(t, false);

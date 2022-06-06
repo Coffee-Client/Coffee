@@ -28,12 +28,15 @@ public class Ban extends Command {
 
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
-        if (index == 0) return new PossibleArgument(ArgumentType.PLAYER, Objects.requireNonNull(CoffeeMain.client.world)
-                .getPlayers()
-                .stream()
-                .map(abstractClientPlayerEntity -> abstractClientPlayerEntity.getGameProfile().getName())
-                .toList()
-                .toArray(String[]::new));
+        if (index == 0) {
+            return new PossibleArgument(ArgumentType.PLAYER,
+                    Objects.requireNonNull(CoffeeMain.client.world)
+                            .getPlayers()
+                            .stream()
+                            .map(abstractClientPlayerEntity -> abstractClientPlayerEntity.getGameProfile().getName())
+                            .toList()
+                            .toArray(String[]::new));
+        }
         return super.getSuggestionsWithType(index, args);
     }
 
@@ -57,6 +60,7 @@ public class Ban extends Command {
         } catch (Exception ignored) {
         }
         ban.setCustomName(Text.of(playerN.getGameProfile().getName()));
-        CoffeeMain.client.player.networkHandler.sendPacket(new CreativeInventoryActionC2SPacket(36 + CoffeeMain.client.player.getInventory().selectedSlot, ban));
+        CoffeeMain.client.player.networkHandler.sendPacket(new CreativeInventoryActionC2SPacket(36 + CoffeeMain.client.player.getInventory().selectedSlot,
+                ban));
     }
 }

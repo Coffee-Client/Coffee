@@ -77,13 +77,18 @@ public class ConfigDisplay extends Element {
         boolean returnTrue = false;
         for (ConfigBase<?> basis : getBases()) { // notify every string setting to optionally deselect the thing
             if (basis instanceof StringSettingEditor && basis.getConfigValue().shouldShow()) {
-                if (basis.clicked(x, y, button)) returnTrue = true;
+                if (basis.clicked(x, y, button)) {
+                    returnTrue = true;
+                }
             }
         }
-        if (returnTrue) return true;
+        if (returnTrue) {
+            return true;
+        }
         for (ConfigBase<?> basis : getBases()) {
-            if (!(basis instanceof StringSettingEditor) && basis.getConfigValue()
-                    .shouldShow() && basis.clicked(x, y, button)) {
+            if (!(basis instanceof StringSettingEditor) && basis.getConfigValue().shouldShow() && basis.clicked(x,
+                    y,
+                    button)) {
                 return true;
             }
         }
@@ -169,7 +174,9 @@ public class ConfigDisplay extends Element {
     @Override
     public boolean scroll(double mouseX, double mouseY, double amount) {
         for (ConfigBase<?> basis : bases) {
-            if (basis.scroll(mouseX, mouseY, amount)) return true;
+            if (basis.scroll(mouseX, mouseY, amount)) {
+                return true;
+            }
         }
         return super.scroll(mouseX, mouseY, amount);
     }

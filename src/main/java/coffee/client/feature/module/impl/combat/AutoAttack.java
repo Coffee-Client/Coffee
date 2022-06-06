@@ -27,7 +27,8 @@ public class AutoAttack extends Module {
             return;
         }
         Objects.requireNonNull(CoffeeMain.client.interactionManager)
-                .attackEntity(CoffeeMain.client.player, ((EntityHitResult) CoffeeMain.client.crosshairTarget).getEntity());
+                .attackEntity(CoffeeMain.client.player,
+                        ((EntityHitResult) CoffeeMain.client.crosshairTarget).getEntity());
         CoffeeMain.client.player.swingHand(Hand.MAIN_HAND);
     }
 

@@ -88,14 +88,15 @@ public class CaveMapper extends Module {
             .min(5000)
             .max(30000)
             .get());
-    final BooleanSetting includeTranslucent = this.config.create(new BooleanSetting.Builder(true).name("Scan transparent")
-            .description("Scan through transparent blocks as well")
-            .get());
+    final BooleanSetting includeTranslucent = this.config.create(new BooleanSetting.Builder(true).name(
+            "Scan transparent").description("Scan through transparent blocks as well").get());
     BlockPos start = null;
     boolean scanned = false;
 
     public CaveMapper() {
-        super("CaveMapper", "Maps a cave for ores, scanning for exposed ones, to bypass antixray plugins", ModuleType.RENDER);
+        super("CaveMapper",
+                "Maps a cave for ores, scanning for exposed ones, to bypass antixray plugins",
+                ModuleType.RENDER);
         oreColors.put(Blocks.COAL_ORE, new Color(47, 44, 54));
         oreColors.put(Blocks.IRON_ORE, new Color(236, 173, 119));
         oreColors.put(Blocks.GOLD_ORE, new Color(247, 229, 30));
@@ -313,7 +314,10 @@ public class CaveMapper extends Module {
             if (hit == null) {
                 continue;
             }
-            Renderer.R3D.renderOutline(new Vec3d(hit.getX(), hit.getY(), hit.getZ()), new Vec3d(1, 1, 1), Color.WHITE, matrices);
+            Renderer.R3D.renderOutline(new Vec3d(hit.getX(), hit.getY(), hit.getZ()),
+                    new Vec3d(1, 1, 1),
+                    Color.WHITE,
+                    matrices);
         }
         List<Map.Entry<BlockPos, List<Vec3d>>> real = new ArrayList<>(circ);
 
@@ -337,8 +341,8 @@ public class CaveMapper extends Module {
                 if (ores.contains(entry.getKey())) {
                     continue;
                 }
-                double dist = new Vec3d(entry.getKey().getX(), entry.getKey().getY(), entry.getKey()
-                        .getZ()).distanceTo(Objects.requireNonNull(CoffeeMain.client.player).getPos());
+                double dist = new Vec3d(entry.getKey().getX(), entry.getKey().getY(), entry.getKey().getZ()).distanceTo(
+                        Objects.requireNonNull(CoffeeMain.client.player).getPos());
                 dist = (1 - MathHelper.clamp(dist, 0, 15) / 15d) * 3d;
                 dist = Math.round(dist);
                 dist /= 3;
@@ -383,8 +387,15 @@ public class CaveMapper extends Module {
             Vec3d p = new Vec3d(ore.getX(), ore.getY(), ore.getZ());
             double dist = p.distanceTo(Objects.requireNonNull(CoffeeMain.client.player).getPos());
             dist = MathHelper.clamp(dist, 0, 30);
-            Renderer.R3D.renderFilled(p, new Vec3d(1, 1, 1), Renderer.Util.modify(oreColors.containsKey(t) ? oreColors.get(t) : new Color(CoffeeMain.client.world.getBlockState(ore)
-                    .getMapColor(CoffeeMain.client.world, ore).color), -1, -1, -1, (int) ((dist / 30d) * 200)), matrices);
+            Renderer.R3D.renderFilled(p,
+                    new Vec3d(1, 1, 1),
+                    Renderer.Util.modify(oreColors.containsKey(t) ? oreColors.get(t) : new Color(CoffeeMain.client.world.getBlockState(
+                                    ore).getMapColor(CoffeeMain.client.world, ore).color),
+                            -1,
+                            -1,
+                            -1,
+                            (int) ((dist / 30d) * 200)),
+                    matrices);
         }
     }
 

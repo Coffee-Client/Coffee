@@ -148,7 +148,8 @@ public class TextFieldElement extends Element implements HasSpecialCursor {
             if (cursor > 0 && cursor == selectionStart && cursor == selectionEnd) {
                 String preText = text;
 
-                int count = (mods == isCtrlPressed) ? cursor : (mods == (SystemUtils.IS_OS_WINDOWS ? GLFW.GLFW_MOD_CONTROL : GLFW.GLFW_MOD_ALT)) ? countToNextSpace(true) : 1;
+                int count = (mods == isCtrlPressed) ? cursor : (mods == (SystemUtils.IS_OS_WINDOWS ? GLFW.GLFW_MOD_CONTROL : GLFW.GLFW_MOD_ALT)) ? countToNextSpace(
+                        true) : 1;
 
                 text = text.substring(0, cursor - count) + text.substring(cursor);
                 cursor -= count;
@@ -169,7 +170,8 @@ public class TextFieldElement extends Element implements HasSpecialCursor {
                     if (cursor == selectionStart && cursor == selectionEnd) {
                         String preText = text;
 
-                        int count = ctrl ? text.length() - cursor : (mods == (SystemUtils.IS_OS_WINDOWS ? GLFW.GLFW_MOD_CONTROL : GLFW.GLFW_MOD_ALT)) ? countToNextSpace(false) : 1;
+                        int count = ctrl ? text.length() - cursor : (mods == (SystemUtils.IS_OS_WINDOWS ? GLFW.GLFW_MOD_CONTROL : GLFW.GLFW_MOD_ALT)) ? countToNextSpace(
+                                false) : 1;
 
                         text = text.substring(0, cursor) + text.substring(cursor + count);
 
@@ -322,29 +324,58 @@ public class TextFieldElement extends Element implements HasSpecialCursor {
         double innerHeight = FontRenderers.getRenderer().getFontHeight();
         double centerY = getPositionY() + height / 2d - innerHeight / 2d;
 
-        Renderer.R2D.renderRoundedQuad(stack, new Color(40, 40, 40), getPositionX(), getPositionY(), getPositionX() + width, getPositionY() + height, 5, 20);
-        ClipStack.globalInstance.addWindow(stack, new Rectangle(getPositionX() + pad, getPositionY(), getPositionX() + width - pad, getPositionY() + height));
+        Renderer.R2D.renderRoundedQuad(stack,
+                new Color(40, 40, 40),
+                getPositionX(),
+                getPositionY(),
+                getPositionX() + width,
+                getPositionY() + height,
+                5,
+                20);
+        ClipStack.globalInstance.addWindow(stack,
+                new Rectangle(getPositionX() + pad,
+                        getPositionY(),
+                        getPositionX() + width - pad,
+                        getPositionY() + height));
         // Text content
         if (!text.isEmpty()) {
             FontRenderers.getRenderer()
-                    .drawString(stack, text, (float) (getPositionX() + pad - overflowWidth), (float) (centerY), 0xFFFFFF, false);
+                    .drawString(stack,
+                            text,
+                            (float) (getPositionX() + pad - overflowWidth),
+                            (float) (centerY),
+                            0xFFFFFF,
+                            false);
         } else {
             FontRenderers.getRenderer()
-                    .drawString(stack, suggestion, (float) (getPositionX() + pad - overflowWidth), (float) (centerY), 0xAAAAAA, false);
+                    .drawString(stack,
+                            suggestion,
+                            (float) (getPositionX() + pad - overflowWidth),
+                            (float) (centerY),
+                            0xAAAAAA,
+                            false);
         }
 
         // Text highlighting
         if (focused && (cursor != selectionStart || cursor != selectionEnd)) {
             double selStart = getPositionX() + pad + getTextWidth(selectionStart) - overflowWidth;
             double selEnd = getPositionX() + pad + getTextWidth(selectionEnd) - overflowWidth;
-            Renderer.R2D.renderQuad(stack, new Color(50, 50, 255, 100), selStart, centerY, selEnd, centerY + FontRenderers.getRenderer()
-                    .getMarginHeight());
+            Renderer.R2D.renderQuad(stack,
+                    new Color(50, 50, 255, 100),
+                    selStart,
+                    centerY,
+                    selEnd,
+                    centerY + FontRenderers.getRenderer().getMarginHeight());
         }
         ClipStack.globalInstance.popWindow();
         boolean renderCursor = (System.currentTimeMillis() % 1000) / 500d > 1;
         if (focused && renderCursor) {
-            Renderer.R2D.renderQuad(stack, Color.WHITE, getPositionX() + pad + getTextWidth(cursor) - overflowWidth, centerY, getPositionX() + pad + getTextWidth(cursor) - overflowWidth + 1, centerY + FontRenderers.getRenderer()
-                    .getMarginHeight());
+            Renderer.R2D.renderQuad(stack,
+                    Color.WHITE,
+                    getPositionX() + pad + getTextWidth(cursor) - overflowWidth,
+                    centerY,
+                    getPositionX() + pad + getTextWidth(cursor) - overflowWidth + 1,
+                    centerY + FontRenderers.getRenderer().getMarginHeight());
         }
 
     }

@@ -52,26 +52,49 @@ public class ButtonElement extends Element {
     public void render(MatrixStack matrices, double mouseX, double mouseY) {
         isHovered = inBounds(mouseX, mouseY) && isEnabled();
         double width = getWidth();
-        if (!isVisible()) return;
+        if (!isVisible()) {
+            return;
+        }
         matrices.push();
         matrices.translate(getPositionX() + width / 2d, getPositionY() + height / 2d, 0);
         float animProgress = (float) Transitions.easeOutExpo(this.animProgress);
         matrices.scale(MathHelper.lerp(animProgress, 1f, 1.01f), MathHelper.lerp(animProgress, 1f, 1.01f), 1f);
         double originX = -width / 2d;
         double originY = -height / 2d;
-        Renderer.R2D.renderRoundedQuad(matrices, new Color(30, 30, 30), originX, originY, width / 2d, height / 2d, Math.min(height / 2d, 5), 20);
-        if (animProgress != 0)
-            Renderer.R2D.renderRoundedShadow(matrices, new Color(10, 10, 10, 100), originX, originY, width / 2d, height / 2d, Math.min(height / 2d, 5), 20, animProgress * 3);
+        Renderer.R2D.renderRoundedQuad(matrices,
+                new Color(30, 30, 30),
+                originX,
+                originY,
+                width / 2d,
+                height / 2d,
+                Math.min(height / 2d, 5),
+                20);
+        if (animProgress != 0) {
+            Renderer.R2D.renderRoundedShadow(matrices,
+                    new Color(10, 10, 10, 100),
+                    originX,
+                    originY,
+                    width / 2d,
+                    height / 2d,
+                    Math.min(height / 2d, 5),
+                    20,
+                    animProgress * 3);
+        }
         FontRenderers.getRenderer()
-                .drawString(matrices, text, -(FontRenderers.getRenderer()
-                        .getStringWidth(text)) / 2f, -FontRenderers.getRenderer()
-                        .getMarginHeight() / 2f, isEnabled() ? textColor.getRGB() : 0xAAAAAA, false);
+                .drawString(matrices,
+                        text,
+                        -(FontRenderers.getRenderer().getStringWidth(text)) / 2f,
+                        -FontRenderers.getRenderer().getMarginHeight() / 2f,
+                        isEnabled() ? textColor.getRGB() : 0xAAAAAA,
+                        false);
         matrices.pop();
     }
 
     @Override
     public boolean mouseClicked(double x, double y, int button) {
-        if (!isVisible()) return false;
+        if (!isVisible()) {
+            return false;
+        }
         if (inBounds(x, y) && isEnabled() && button == 0) {
             onPress.run();
         }

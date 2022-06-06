@@ -89,8 +89,10 @@ public abstract class SettingBase<V> {
      */
     public void setValue(V value) {
         this.value = value;
-        if (this.onChanged != null) for (Consumer<V> vConsumer : this.onChanged) {
-            vConsumer.accept(value);
+        if (this.onChanged != null) {
+            for (Consumer<V> vConsumer : this.onChanged) {
+                vConsumer.accept(value);
+            }
         }
     }
 

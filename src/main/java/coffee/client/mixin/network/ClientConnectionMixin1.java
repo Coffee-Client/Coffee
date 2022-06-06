@@ -24,10 +24,12 @@ public class ClientConnectionMixin1 {
         if (currentProxy != null) {
             if (currentProxy.socks4()) {
                 channel.pipeline()
-                        .addFirst(new Socks4ProxyHandler(new InetSocketAddress(currentProxy.address(), currentProxy.port()), currentProxy.user()));
+                        .addFirst(new Socks4ProxyHandler(new InetSocketAddress(currentProxy.address(),
+                                currentProxy.port()), currentProxy.user()));
             } else {
                 channel.pipeline()
-                        .addFirst(new Socks5ProxyHandler(new InetSocketAddress(currentProxy.address(), currentProxy.port()), currentProxy.user(), currentProxy.pass()));
+                        .addFirst(new Socks5ProxyHandler(new InetSocketAddress(currentProxy.address(),
+                                currentProxy.port()), currentProxy.user(), currentProxy.pass()));
             }
         }
     }

@@ -23,10 +23,13 @@ public class ItemSpoof extends Command {
 
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
-        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.STRING, Registry.ITEM.stream()
-                .map(p -> Registry.ITEM.getId(p).toString())
-                .toList()
-                .toArray(String[]::new)), new PossibleArgument(ArgumentType.NUMBER, "(amount)"));
+        return StaticArgumentServer.serveFromStatic(index,
+                new PossibleArgument(ArgumentType.STRING,
+                        Registry.ITEM.stream()
+                                .map(p -> Registry.ITEM.getId(p).toString())
+                                .toList()
+                                .toArray(String[]::new)),
+                new PossibleArgument(ArgumentType.NUMBER, "(amount)"));
     }
 
     @Override
@@ -36,7 +39,9 @@ public class ItemSpoof extends Command {
         IntegerArgumentParser integerArgumentParser = new IntegerArgumentParser();
         int amount = integerArgumentParser.parse(args[1]);
         Identifier i = Identifier.tryParse(args[0]);
-        if (i == null) throw new CommandException("Invalid name \"" + args[0] + "\"", "Provide valid item identifier");
+        if (i == null) {
+            throw new CommandException("Invalid name \"" + args[0] + "\"", "Provide valid item identifier");
+        }
         Item item = Registry.ITEM.get(i);
         ItemStack stack = new ItemStack(item, amount);
         CoffeeMain.client.player.getInventory().armor.set(3, stack);

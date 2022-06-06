@@ -31,7 +31,9 @@ public class AutoIgnite extends Module {
     int getLighterSlot() {
         for (int i = 0; i < 9; i++) {
             ItemStack is = CoffeeMain.client.player.getInventory().getStack(i);
-            if (is.getItem() == Items.FLINT_AND_STEEL) return i;
+            if (is.getItem() == Items.FLINT_AND_STEEL) {
+                return i;
+            }
         }
         return -1;
     }
@@ -39,15 +41,18 @@ public class AutoIgnite extends Module {
     @Override
     public void tick() {
         int lighterSlot = getLighterSlot();
-        if (lighterSlot == -1) return;
+        if (lighterSlot == -1) {
+            return;
+        }
         double searchRad = Math.ceil(CoffeeMain.client.interactionManager.getReachDistance());
         List<BlockPos> blocksToIgnite = new ArrayList<>();
         for (double x = -searchRad; x < searchRad; x++) {
             for (double y = -searchRad; y < searchRad; y++) {
                 for (double z = -searchRad; z < searchRad; z++) {
                     Vec3d vPos = CoffeeMain.client.player.getEyePos().add(x, y, z);
-                    if (vPos.distanceTo(CoffeeMain.client.player.getEyePos()) > CoffeeMain.client.interactionManager.getReachDistance())
+                    if (vPos.distanceTo(CoffeeMain.client.player.getEyePos()) > CoffeeMain.client.interactionManager.getReachDistance()) {
                         continue;
+                    }
                     BlockPos bp = new BlockPos(vPos);
                     BlockState bs = CoffeeMain.client.world.getBlockState(bp);
                     if (bs.getBlock() == Blocks.TNT) {
@@ -56,13 +61,17 @@ public class AutoIgnite extends Module {
                 }
             }
         }
-        if (blocksToIgnite.isEmpty()) return;
+        if (blocksToIgnite.isEmpty()) {
+            return;
+        }
         int prevSlot = CoffeeMain.client.player.getInventory().selectedSlot;
         CoffeeMain.client.getNetworkHandler().sendPacket(new UpdateSelectedSlotC2SPacket(lighterSlot));
 
         for (BlockPos blockPos : blocksToIgnite) {
-            BlockHitResult bhr = new BlockHitResult(Vec3d.of(blockPos)
-                    .add(0.5, 0.5, 0.5), Direction.DOWN, blockPos, false);
+            BlockHitResult bhr = new BlockHitResult(Vec3d.of(blockPos).add(0.5, 0.5, 0.5),
+                    Direction.DOWN,
+                    blockPos,
+                    false);
             PlayerInteractBlockC2SPacket interact = new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, bhr);
             CoffeeMain.client.getNetworkHandler().sendPacket(interact);
         }

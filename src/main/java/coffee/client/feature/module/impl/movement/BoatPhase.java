@@ -15,7 +15,9 @@ import net.minecraft.entity.vehicle.BoatEntity;
 public class BoatPhase extends Module {
 
     public BoatPhase() {
-        super("BoatPhase", "Allows you to go through blocks, when in a boat which sand is falling on", ModuleType.MOVEMENT);
+        super("BoatPhase",
+                "Allows you to go through blocks, when in a boat which sand is falling on",
+                ModuleType.MOVEMENT);
     }
 
     @Override
@@ -25,7 +27,8 @@ public class BoatPhase extends Module {
 
     @Override
     public void enable() {
-        Utils.Logging.message("To use BoatPhase, go into a boat, move it all the way towards a wall and drop sand on the boat with you in it");
+        Utils.Logging.message(
+                "To use BoatPhase, go into a boat, move it all the way towards a wall and drop sand on the boat with you in it");
     }
 
     @Override

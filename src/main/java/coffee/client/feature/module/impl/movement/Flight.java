@@ -128,7 +128,14 @@ public class Flight extends Module {
                     Vec3d vp = CoffeeMain.client.player.getPos();
                     Random r = new Random();
                     for (int i = 0; i < 10; i++) {
-                        CoffeeMain.client.world.addImportantParticle(ParticleTypes.SOUL_FIRE_FLAME, true, vp.x, vp.y, vp.z, (r.nextDouble() * 0.25) - .125, (r.nextDouble() * 0.25) - .125, (r.nextDouble() * 0.25) - .125);
+                        CoffeeMain.client.world.addImportantParticle(ParticleTypes.SOUL_FIRE_FLAME,
+                                true,
+                                vp.x,
+                                vp.y,
+                                vp.z,
+                                (r.nextDouble() * 0.25) - .125,
+                                (r.nextDouble() * 0.25) - .125,
+                                (r.nextDouble() * 0.25) - .125);
                     }
                 }
             }
@@ -192,7 +199,10 @@ public class Flight extends Module {
     }
 
     private void sendPosition(double x, double y, double z, boolean onGround) {
-        CoffeeMain.client.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(x, y, z, onGround));
+        CoffeeMain.client.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(x,
+                y,
+                z,
+                onGround));
     }
 
     @Override
@@ -205,7 +215,8 @@ public class Flight extends Module {
         flewBefore = Objects.requireNonNull(CoffeeMain.client.player).getAbilities().flying;
         CoffeeMain.client.player.setOnGround(false);
         Objects.requireNonNull(CoffeeMain.client.getNetworkHandler())
-                .sendPacket(new ClientCommandC2SPacket(CoffeeMain.client.player, ClientCommandC2SPacket.Mode.RELEASE_SHIFT_KEY));
+                .sendPacket(new ClientCommandC2SPacket(CoffeeMain.client.player,
+                        ClientCommandC2SPacket.Mode.RELEASE_SHIFT_KEY));
     }
 
     @EventListener(type = EventType.PACKET_SEND)

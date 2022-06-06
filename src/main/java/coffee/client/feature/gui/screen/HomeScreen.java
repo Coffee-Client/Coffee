@@ -6,6 +6,7 @@ package coffee.client.feature.gui.screen;
 
 import coffee.client.CoffeeMain;
 import coffee.client.feature.gui.clickgui.ParticleRenderer;
+import coffee.client.feature.gui.screen.base.ClientScreen;
 import coffee.client.feature.gui.widget.RoundButton;
 import coffee.client.helper.GameTexture;
 import coffee.client.helper.Texture;
@@ -97,7 +98,7 @@ public class HomeScreen extends ClientScreen {
         buttonsMap.add(new AbstractMap.SimpleEntry<>("Realms", () -> CoffeeMain.client.setScreen(new RealmsMainScreen(this))));
         buttonsMap.add(new AbstractMap.SimpleEntry<>("Alts", () -> {
             CoffeeMain.client.setScreen(AltManagerScreen.instance());
-            //CoffeeMain.client.setScreen(new TestScreen());
+            //CoffeeMain.client.setScreen(new ProxyManagerScreen(this));
         }));
         buttonsMap.add(new AbstractMap.SimpleEntry<>("Settings", () -> CoffeeMain.client.setScreen(new OptionsScreen(this, CoffeeMain.client.options))));
         buttonsMap.add(new AbstractMap.SimpleEntry<>("Quit", CoffeeMain.client::scheduleStop));

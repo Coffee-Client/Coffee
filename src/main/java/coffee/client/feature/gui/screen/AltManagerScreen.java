@@ -7,6 +7,7 @@ package coffee.client.feature.gui.screen;
 import coffee.client.CoffeeMain;
 import coffee.client.feature.gui.FastTickable;
 import coffee.client.feature.gui.notifications.hudNotif.HudNotification;
+import coffee.client.feature.gui.screen.base.ClientScreen;
 import coffee.client.feature.gui.widget.RoundButton;
 import coffee.client.feature.gui.widget.RoundTextFieldWidget;
 import coffee.client.helper.Texture;
@@ -42,6 +43,8 @@ import org.lwjgl.opengl.GL40C;
 import java.awt.Color;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -102,6 +105,39 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
                         .filter(s -> !s.isEmpty())
                         .anyMatch(s -> s.toLowerCase().startsWith(search.get().toLowerCase())))
                 .collect(Collectors.toList());
+    }
+
+    void tryParseAltsFile(String txt) {
+        for (String s : txt.split("\n")) {
+            String trm = s.trim();
+            String[] spl = trm.split(":");
+            String mail = spl[0];
+            String pass = spl[1];
+            AddScreenOverlay.AccountType acType = AddScreenOverlay.AccountType.MOJANG;
+            if (spl.length > 2) {
+                acType = AddScreenOverlay.AccountType.valueOf(spl[2].toUpperCase());
+            }
+            AltStorage as = new AltStorage("Unknown", mail, pass, UUID.randomUUID(), acType, "");
+            AltContainer ac = new AltContainer(-1, -1, 0, as);
+            ac.renderX = -1;
+            ac.renderY = -1;
+            alts.add(ac);
+        }
+    }
+
+    @Override
+    public void filesDragged(List<Path> paths) {
+        for (Path path : paths) {
+            File f = path.toFile();
+            if (!f.exists() || !f.canRead() || !f.isFile()) continue;
+            try {
+                String content = Files.readString(path);
+                tryParseAltsFile(content);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        super.filesDragged(paths);
     }
 
     void saveAlts() {

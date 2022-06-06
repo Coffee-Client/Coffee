@@ -16,8 +16,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.awt.Color;
-
 @Mixin(MultiplayerScreen.class)
 public class MultiplayerScreenMixin extends Screen {
     public MultiplayerScreenMixin() {
@@ -28,7 +26,7 @@ public class MultiplayerScreenMixin extends Screen {
     void coffee_postInit(CallbackInfo ci) {
         if (SelfDestruct.shouldSelfDestruct()) return;
         double sourceY = 32 / 2d - 20 / 2d;
-        RoundButton proxies = new RoundButton(new Color(40, 40, 40), 5, sourceY, 60, 20, "Proxies", () -> CoffeeMain.client.setScreen(new ProxyManagerScreen(this)));
+        RoundButton proxies = new RoundButton(RoundButton.STANDARD, 5, sourceY, 60, 20, "Proxies", () -> CoffeeMain.client.setScreen(new ProxyManagerScreen(this)));
         addDrawableChild(proxies);
     }
 }

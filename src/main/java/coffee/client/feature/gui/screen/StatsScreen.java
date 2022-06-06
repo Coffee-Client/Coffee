@@ -6,6 +6,7 @@ package coffee.client.feature.gui.screen;
 
 import coffee.client.CoffeeMain;
 import coffee.client.feature.gui.FastTickable;
+import coffee.client.feature.gui.screen.base.ClientScreen;
 import coffee.client.helper.Timer;
 import coffee.client.helper.render.Renderer;
 import net.minecraft.client.util.math.MatrixStack;

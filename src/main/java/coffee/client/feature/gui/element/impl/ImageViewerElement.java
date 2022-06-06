@@ -8,15 +8,15 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
-public class ImageViewerWidget extends Element {
+public class ImageViewerElement extends Element {
     Identifier tex;
 
-    public ImageViewerWidget(double x, double y, GameTexture texture) {
+    public ImageViewerElement(double x, double y, GameTexture texture) {
         super(x, y, texture.getDimensions().getWidth(), texture.getDimensions().getHeight());
         this.tex = texture.getWhere();
     }
 
-    public ImageViewerWidget(double x, double y, GameTexture texture, double width) {
+    public ImageViewerElement(double x, double y, GameTexture texture, double width) {
         super(x, y, texture.getDimensions().getWidth(), texture.getDimensions().getHeight());
         Rectangle scaled = getScaledDimensions(texture.getDimensions(), width);
         setWidth(scaled.getWidth());
@@ -24,7 +24,7 @@ public class ImageViewerWidget extends Element {
         this.tex = texture.getWhere();
     }
 
-    public ImageViewerWidget(double x, double y, double height, GameTexture texture) {
+    public ImageViewerElement(double x, double y, double height, GameTexture texture) {
         super(x, y, texture.getDimensions().getWidth(), texture.getDimensions().getHeight());
         Rectangle scaled = getScaledDimensionsWithHeight(texture.getDimensions(), height);
         setWidth(scaled.getWidth());
@@ -32,7 +32,7 @@ public class ImageViewerWidget extends Element {
         this.tex = texture.getWhere();
     }
 
-    public ImageViewerWidget(double x, double y, Identifier texture, double width, double height) {
+    public ImageViewerElement(double x, double y, Identifier texture, double width, double height) {
         super(x, y, width, height);
         this.tex = texture;
     }

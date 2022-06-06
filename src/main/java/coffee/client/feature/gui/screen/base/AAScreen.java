@@ -1,4 +1,4 @@
-package coffee.client.feature.gui.screen;
+package coffee.client.feature.gui.screen.base;
 
 import coffee.client.CoffeeMain;
 import coffee.client.feature.gui.FastTickable;
@@ -61,7 +61,6 @@ public class AAScreen extends Screen implements FastTickable {
     }
 
     public void renderInternal(MatrixStack stack, int mouseX, int mouseY, float delta) {
-
         for (Element element : getElements()) {
             element.render(stack, mouseX, mouseY);
         }

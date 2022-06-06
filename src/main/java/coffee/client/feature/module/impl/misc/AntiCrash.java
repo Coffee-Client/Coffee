@@ -54,6 +54,12 @@ public class AntiCrash extends Module {
             .max(100)
             .precision(0)
             .get());
+
+    @Getter
+    BooleanSetting disableBossbars = this.config.create(new BooleanSetting.Builder(true).name("Disable bossbars")
+            .description("Does not render bossbars")
+            .get());
+
     long lastScreen = System.currentTimeMillis();
     Notification lastCrashNotif = null;
 

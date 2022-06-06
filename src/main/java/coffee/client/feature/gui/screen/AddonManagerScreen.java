@@ -8,6 +8,7 @@ import coffee.client.feature.addon.Addon;
 import coffee.client.feature.addon.AddonManager;
 import coffee.client.feature.gui.FastTickable;
 import coffee.client.feature.gui.clickgui.ClickGUI;
+import coffee.client.feature.gui.screen.base.ClientScreen;
 import coffee.client.feature.gui.widget.RoundButton;
 import coffee.client.helper.GameTexture;
 import coffee.client.helper.Timer;

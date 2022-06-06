@@ -10,11 +10,11 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ButtonGroup extends Element {
+public class ButtonGroupElement extends Element {
     List<Element> els = new ArrayList<>();
     LayoutDirection dir;
 
-    public ButtonGroup(double x, double y, double width, double height, LayoutDirection direction, ButtonEntry... btns) {
+    public ButtonGroupElement(double x, double y, double width, double height, LayoutDirection direction, ButtonEntry... btns) {
         super(x, y, width, height);
         this.dir = direction;
         createButtons(btns);
@@ -44,7 +44,7 @@ public class ButtonGroup extends Element {
                 rad3 = 0;
                 rad4 = 0;
             }
-            SingleButton btn = new SingleButton(0, 0, dir== LayoutDirection.RIGHT?widthForOneButton:width, dir==LayoutDirection.RIGHT?height:heightForOneButton, be.content, be.onClicked, rad1 * 5, rad2 * 5, rad3 * 5, rad4 * 5, new Color(30, 30, 30), new Color(50, 50, 50));
+            SingleButton btn = new SingleButton(0, 0, dir == LayoutDirection.RIGHT ? widthForOneButton : width, dir == LayoutDirection.RIGHT ? height : heightForOneButton, be.content, be.onClicked, rad1 * 5, rad2 * 5, rad3 * 5, rad4 * 5, new Color(30, 30, 30), new Color(50, 50, 50));
             els.add(btn);
         }
     }

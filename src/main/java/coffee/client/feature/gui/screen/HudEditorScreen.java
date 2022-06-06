@@ -5,6 +5,7 @@
 package coffee.client.feature.gui.screen;
 
 import coffee.client.feature.gui.hud.HudRenderer;
+import coffee.client.feature.gui.screen.base.ClientScreen;
 
 /**
  * Placeholder class with no elements, used for instanceof in {@link HudRenderer#render()}

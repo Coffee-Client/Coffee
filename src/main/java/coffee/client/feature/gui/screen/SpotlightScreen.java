@@ -9,6 +9,7 @@ import coffee.client.feature.command.Command;
 import coffee.client.feature.command.CommandRegistry;
 import coffee.client.feature.gui.DoesMSAA;
 import coffee.client.feature.gui.FastTickable;
+import coffee.client.feature.gui.screen.base.ClientScreen;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleRegistry;
 import coffee.client.helper.GameTexture;

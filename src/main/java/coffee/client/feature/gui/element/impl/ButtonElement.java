@@ -51,6 +51,7 @@ public class ButtonElement extends Element {
     @Override
     public void render(MatrixStack matrices, double mouseX, double mouseY) {
         isHovered = inBounds(mouseX, mouseY) && isEnabled();
+        double width = getWidth();
         if (!isVisible()) return;
         matrices.push();
         matrices.translate(getPositionX() + width / 2d, getPositionY() + height / 2d, 0);
@@ -73,7 +74,6 @@ public class ButtonElement extends Element {
         if (!isVisible()) return false;
         if (inBounds(x, y) && isEnabled() && button == 0) {
             onPress.run();
-            return true;
         }
         return false;
     }

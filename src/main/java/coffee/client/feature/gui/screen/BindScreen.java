@@ -4,6 +4,7 @@
 
 package coffee.client.feature.gui.screen;
 
+import coffee.client.feature.gui.screen.base.ClientScreen;
 import coffee.client.feature.module.Module;
 import coffee.client.helper.font.FontRenderers;
 import coffee.client.helper.font.adapter.FontAdapter;

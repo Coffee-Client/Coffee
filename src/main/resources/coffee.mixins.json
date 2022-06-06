@@ -35,6 +35,7 @@
     "render.BlockEntityRenderDispatcherMixin",
     "render.BlockMixin",
     "render.BlockRenderManagerMixin",
+    "render.BossBarHudMixin",
     "render.CameraMixin",
     "render.Deadmau5FeatureRendererMixin",
     "render.EntityModelMixin",

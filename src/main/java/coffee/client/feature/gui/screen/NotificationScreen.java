@@ -6,6 +6,7 @@ package coffee.client.feature.gui.screen;
 
 import coffee.client.feature.gui.FastTickable;
 import coffee.client.feature.gui.notifications.Notification;
+import coffee.client.feature.gui.screen.base.ClientScreen;
 import coffee.client.feature.gui.widget.RoundButton;
 import coffee.client.helper.font.FontRenderers;
 import coffee.client.helper.render.Renderer;

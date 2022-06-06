@@ -16,7 +16,7 @@ import org.lwjgl.glfw.GLFW;
 
 import java.awt.Color;
 
-public class RoundTextFieldWidget extends Element implements HasSpecialCursor {
+public class TextFieldElement extends Element implements HasSpecialCursor {
     protected final String suggestion;
     public Runnable changeListener = () -> {
     };
@@ -27,7 +27,7 @@ public class RoundTextFieldWidget extends Element implements HasSpecialCursor {
     protected int selectionStart, selectionEnd;
     boolean mouseOver = false;
 
-    public RoundTextFieldWidget(double x, double y, double width, double height, String text) {
+    public TextFieldElement(double x, double y, double width, double height, String text) {
         super(x, y, width, height);
         this.suggestion = text;
     }
@@ -491,7 +491,7 @@ public class RoundTextFieldWidget extends Element implements HasSpecialCursor {
             }
 
             setFocused(true);
-            return true;
+            return false;
         }
 
         if (focused) {

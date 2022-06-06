@@ -11,7 +11,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
 
-public class FlexLayout extends Element {
+public class FlexLayoutElement extends Element {
     @Getter
     List<Element> elements;
     LayoutDirection direction;
@@ -19,7 +19,7 @@ public class FlexLayout extends Element {
     double viewportHeight, viewportWidth;
     Scroller scroller = new Scroller(0);
 
-    public FlexLayout(FlexLayout.LayoutDirection direction, double x, double y, double width, double height, double padding, Element... elements) {
+    public FlexLayoutElement(FlexLayoutElement.LayoutDirection direction, double x, double y, double width, double height, double padding, Element... elements) {
         super(x, y, width, height);
         this.elements = List.of(elements);
         this.direction = direction;
@@ -28,6 +28,17 @@ public class FlexLayout extends Element {
         this.viewportWidth = getActualWidth();
         if (width < 0) setWidth(viewportWidth);
         if (height < 0) setHeight(viewportHeight);
+    }
+
+    public FlexLayoutElement(LayoutDirection direction, double x, double y, double padding, Element... elements) {
+        super(x, y, 0, 0);
+        this.elements = List.of(elements);
+        this.direction = direction;
+        this.padding = padding;
+        this.viewportHeight = getActualHeight();
+        this.viewportWidth = getActualWidth();
+        setWidth(getActualWidth());
+        setHeight(getActualHeight());
     }
 
     double getActualHeight() {

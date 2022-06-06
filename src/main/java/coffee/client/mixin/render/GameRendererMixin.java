@@ -7,7 +7,7 @@ package coffee.client.mixin.render;
 import coffee.client.CoffeeMain;
 import coffee.client.feature.gui.DoesMSAA;
 import coffee.client.feature.gui.notifications.hudNotif.HudNotificationRenderer;
-import coffee.client.feature.gui.screen.ClientScreen;
+import coffee.client.feature.gui.screen.base.ClientScreen;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleRegistry;
 import coffee.client.feature.module.impl.render.FreeLook;

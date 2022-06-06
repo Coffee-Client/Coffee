@@ -4,141 +4,30 @@
 
 package coffee.client.feature.gui.screen;
 
-import coffee.client.feature.gui.widget.RoundButton;
-import coffee.client.feature.gui.widget.RoundTextFieldWidget;
+import coffee.client.feature.gui.element.impl.ButtonGroupElement;
+import coffee.client.feature.gui.element.impl.FlexLayoutElement;
+import coffee.client.feature.gui.element.impl.TextElement;
+import coffee.client.feature.gui.element.impl.TextFieldElement;
+import coffee.client.feature.gui.screen.base.CenterOverlayScreen;
 import coffee.client.helper.font.FontRenderers;
-import coffee.client.helper.font.adapter.FontAdapter;
-import coffee.client.helper.render.MSAAFramebuffer;
-import coffee.client.helper.render.Renderer;
-import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 
 import java.awt.Color;
 
-public class ProxyManagerScreen extends ClientScreen {
-    static final double widgetWidth = 300;
-    static final FontAdapter title = FontRenderers.getCustomSize(40);
+public class ProxyManagerScreen extends CenterOverlayScreen {
     public static Proxy currentProxy = null;
-    static double widgetHeight = 400;
-    static boolean isSocks4 = false;
-    final Screen parent;
-    RoundTextFieldWidget ip, port, user, pass;
-    RoundButton reset, apply, type;
+    TextFieldElement ip;
+    TextFieldElement port;
+    boolean isSocks4 = true;
 
-    public ProxyManagerScreen(Screen parent) {
-        super(MSAAFramebuffer.MAX_SAMPLES);
-        this.parent = parent;
-    }
-
-    double padding() {
-        return 5;
+    public ProxyManagerScreen(Screen p) {
+        super(p, "Proxy manager", "Manage your proxy connection");
     }
 
     @Override
-    protected void init() {
-
-        RoundButton exit = new RoundButton(new Color(40, 40, 40), width - 20 - 5, 5, 20, 20, "X", this::close);
-        addDrawableChild(exit);
-
-        double wWidth = widgetWidth - padding() * 2d;
-        double sourceX = width / 2d - widgetWidth / 2d + wWidth / 2d;
-        double sourceY = height / 2d - widgetHeight / 2d;
-        double yOffset = padding() + title.getMarginHeight() + FontRenderers.getRenderer()
-                .getMarginHeight() + padding();
-        ip = new RoundTextFieldWidget(sourceX, sourceY + yOffset, wWidth, 20, "IP");
-        yOffset += ip.getHeight() + padding();
-        port = new RoundTextFieldWidget(sourceX, sourceY + yOffset, wWidth, 20, "Port");
-
-        yOffset += port.getHeight() + padding();
-        user = new RoundTextFieldWidget(sourceX, sourceY + yOffset, wWidth, 20, "Username (opt.)");
-        yOffset += user.getHeight() + padding();
-        pass = new RoundTextFieldWidget(sourceX, sourceY + yOffset, wWidth, 20, "Password (opt.)");
-        yOffset += pass.getHeight() + padding();
-        if (currentProxy != null) {
-            ip.setText(currentProxy.address);
-            port.setText(currentProxy.port + "");
-            user.setText(currentProxy.user);
-            pass.setText(currentProxy.pass);
-        }
-        type = new RoundButton(new Color(40, 40, 40), sourceX, sourceY + yOffset, wWidth, 20, "Type: " + (isSocks4 ? "Socks4" : "Socks5"), () -> {
-            isSocks4 = !isSocks4;
-            type.setText("Type: " + (isSocks4 ? "Socks4" : "Socks5"));
-        });
-
-        yOffset += 20 + padding();
-        double doubleWidth = wWidth / 2d - padding() / 2d;
-        reset = new RoundButton(new Color(40, 40, 40), sourceX, yOffset, doubleWidth, 20, "Reset", () -> {
-            currentProxy = null;
-            ip.set("");
-            port.set("");
-            user.set("");
-            pass.set("");
-        });
-        apply = new RoundButton(new Color(40, 40, 40), sourceX + doubleWidth + padding(), yOffset, doubleWidth, 20, "Apply", () -> currentProxy = new Proxy(ip.get(), Integer.parseInt(port.get()), isSocks4, user.get(), pass.get()));
-
-        addDrawableChild(ip);
-        addDrawableChild(port);
-        addDrawableChild(user);
-        addDrawableChild(pass);
-        addDrawableChild(type);
-        addDrawableChild(reset);
-        addDrawableChild(apply);
-
-
-        super.init();
-    }
-
-    @Override
-    public void renderInternal(MatrixStack stack, int mouseX, int mouseY, float delta) {
-        if (parent != null) {
-            parent.render(stack, mouseX, mouseY, delta);
-        }
-        Renderer.R2D.renderQuad(stack, new Color(0, 0, 0, 130), 0, 0, width, height);
-        double wWidth = widgetWidth - padding() * 2d;
-        double sourceX = width / 2d - widgetWidth / 2d + padding();
-        double sourceY = height / 2d - widgetHeight / 2d;
-        double actualSourceX = width / 2d - widgetWidth / 2d;
-        double yOffset = 1;
-        Renderer.R2D.renderRoundedQuad(stack, new Color(20, 20, 20), width / 2d - widgetWidth / 2d, height / 2d - widgetHeight / 2d, width / 2d + widgetWidth / 2d, height / 2d + widgetHeight / 2d, 5, 20);
-        title.drawString(stack, "Proxies", (float) (actualSourceX + padding()), (float) (sourceY + yOffset), 0xFFFFFF, false);
-        yOffset += title.getMarginHeight();
-        String t = "Manage your proxy connection";
-        FontRenderers.getRenderer()
-                .drawString(stack, t, (float) (actualSourceX + padding()), (float) (sourceY + yOffset), 0xFFFFFF, false);
-        if (currentProxy != null) {
-            String text = "Connected: " + currentProxy.address + ":" + currentProxy.port;
-            double textWidth = FontRenderers.getRenderer().getStringWidth(text);
-            FontRenderers.getRenderer()
-                    .drawString(stack, text, (float) (actualSourceX + widgetWidth - padding() - textWidth), (float) (sourceY + yOffset), 0xFFFFFF, false);
-        }
-        yOffset += FontRenderers.getRenderer().getMarginHeight() + padding();
-
-        ip.setX(sourceX);
-        ip.setY(sourceY + yOffset);
-        yOffset += ip.getHeight() + padding();
-        port.setX(sourceX);
-        port.setY(sourceY + yOffset);
-        yOffset += port.getHeight() + padding();
-        user.setX(sourceX);
-        user.setY(sourceY + yOffset);
-        yOffset += user.getHeight() + padding();
-        pass.setX(sourceX);
-        pass.setY(sourceY + yOffset);
-        yOffset += pass.getHeight() + padding();
-        type.setX(sourceX);
-        type.setY(sourceY + yOffset);
-        yOffset += 20 + padding();
-        double doubleWidth = wWidth / 2d - padding() / 2d;
-        reset.setX(sourceX);
-        reset.setY(sourceY + yOffset);
-        apply.setX(sourceX + doubleWidth + padding());
-        apply.setY(sourceY + yOffset);
-        apply.setEnabled(canApply());
-        yOffset += 20 + padding();
-        widgetHeight = yOffset;
-
-        super.renderInternal(stack, mouseX, mouseY, delta);
+    public void onFastTick() {
+        super.onFastTick();
     }
 
     boolean canApply() {
@@ -158,21 +47,43 @@ public class ProxyManagerScreen extends ClientScreen {
         return true;
     }
 
-
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        for (Element child : children()) {
-            child.mouseClicked(0, 0, button);
-        }
-        return super.mouseClicked(mouseX, mouseY, button);
+    protected void initInternal() {
+        double oneWidth = 150;
+        double padding = 5;
+        double entireWidth = oneWidth * 2 + padding;
+        TextElement mode = new TextElement(FontRenderers.getRenderer(), "Type: " + (isSocks4 ? "SOCKS4" : "SOCKS5"), Color.WHITE, false, 0, 0);
+        TextElement conn = new TextElement(FontRenderers.getRenderer(), currentProxy == null ? "Not connected" : String.format("Connected to %s:%s", currentProxy.address, currentProxy.port), Color.WHITE, false, 0, 0);
+        ip = new TextFieldElement(0, 0, oneWidth, 20, "IP");
+        port = new TextFieldElement(0, 0, oneWidth, 20, "Port");
+        TextFieldElement username = new TextFieldElement(0, 0, oneWidth, 20, "Username (opt.)");
+        TextFieldElement password = new TextFieldElement(0, 0, oneWidth, 20, "Password (opt.)");
+        ButtonGroupElement bg = new ButtonGroupElement(0, 0, entireWidth, 20, ButtonGroupElement.LayoutDirection.RIGHT, new ButtonGroupElement.ButtonEntry("Apply", () -> {
+            if (!canApply()) return;
+            Proxy p = new Proxy(ip.get(), Integer.parseInt(port.get()), isSocks4, username.get(), password.get());
+            currentProxy = p;
+            conn.setText(String.format("Connected to %s:%s", p.address, p.port));
+        }), new ButtonGroupElement.ButtonEntry("Change type", () -> {
+            isSocks4 = !isSocks4;
+            mode.setText("Type: " + (isSocks4 ? "SOCKS4" : "SOCKS5"));
+        }), new ButtonGroupElement.ButtonEntry("Reset", () -> {
+            currentProxy = null;
+            conn.setText("Not connected");
+        }), new ButtonGroupElement.ButtonEntry("Close", this::close));
+        FlexLayoutElement top = new FlexLayoutElement(FlexLayoutElement.LayoutDirection.RIGHT, 0, 0, padding, ip, port);
+        FlexLayoutElement middle = new FlexLayoutElement(FlexLayoutElement.LayoutDirection.RIGHT, 0, 0, padding, username, password);
+        FlexLayoutElement entire = new FlexLayoutElement(FlexLayoutElement.LayoutDirection.DOWN, 0, 0, padding, mode, conn, top, middle, bg);
+        addChild(entire);
     }
 
     @Override
-    public void close() {
-        client.setScreen(parent);
+    public void renderInternal(MatrixStack stack, int mouseX, int mouseY, float delta) {
+        //Renderer.R2D.renderQuad(stack, Color.WHITE, 0, 0, width, height);
+        super.renderInternal(stack, mouseX, mouseY, delta);
     }
 
     public record Proxy(String address, int port, boolean socks4, String user, String pass) {
 
     }
+
 }

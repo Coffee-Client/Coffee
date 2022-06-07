@@ -179,8 +179,7 @@ public class FontRenderer {
         bufferBuilder.vertex(matrix, width, 0, 0).color(r, g, b, a).next();
         bufferBuilder.vertex(matrix, 0, 0, 0).color(r, g, b, a).next();
         bufferBuilder.vertex(matrix, 0, height, 0).color(r, g, b, a).next();
-        bufferBuilder.end();
-        BufferRenderer.draw(bufferBuilder);
+        BufferRenderer.drawWithShader(bufferBuilder.end());
         RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
     }
 
@@ -201,8 +200,7 @@ public class FontRenderer {
         bufferBuilder.vertex(matrix, width, height, 0).texture(1, 1).color(r, g, b, a).next();
         bufferBuilder.vertex(matrix, width, 0, 0).texture(1, 0).color(r, g, b, a).next();
         bufferBuilder.vertex(matrix, 0, 0, 0).texture(0, 0).color(r, g, b, a).next();
-        bufferBuilder.end();
-        BufferRenderer.draw(bufferBuilder);
+        BufferRenderer.drawWithShader(bufferBuilder.end());
 
         return width;
     }

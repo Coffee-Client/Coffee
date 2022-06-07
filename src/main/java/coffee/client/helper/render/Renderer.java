@@ -113,8 +113,7 @@ public class Renderer {
                         .next();
 
             }
-            bufferBuilder.end();
-            BufferRenderer.draw(bufferBuilder);
+            BufferRenderer.drawWithShader(bufferBuilder.end());
             RenderSystem.enableTexture();
             RenderSystem.disableBlend();
             stack.pop();
@@ -176,8 +175,7 @@ public class Renderer {
             buffer.vertex(matrix, x1, y1, z2).color(red, green, blue, alpha).next();
             buffer.vertex(matrix, x1, y2, z2).color(red, green, blue, alpha).next();
 
-            buffer.end();
-            BufferRenderer.draw(buffer);
+            BufferRenderer.drawWithShader(buffer.end());
             GL11.glDepthFunc(GL11.GL_LEQUAL);
             endRender();
         }
@@ -249,8 +247,7 @@ public class Renderer {
             buffer.vertex(matrix, x2, y1, z2).color(red, green, blue, alpha).next();
             buffer.vertex(matrix, x1, y1, z2).color(red, green, blue, alpha).next();
 
-            buffer.end();
-            BufferRenderer.draw(buffer);
+            BufferRenderer.drawWithShader(buffer.end());
 
             RenderSystem.setShader(GameRenderer::getPositionColorShader);
             buffer.begin(VertexFormat.DrawMode.DEBUG_LINES, VertexFormats.POSITION_COLOR);
@@ -284,9 +281,7 @@ public class Renderer {
             buffer.vertex(matrix, x1, y1, z2).color(r1, g1, b1, a1).next();
             buffer.vertex(matrix, x1, y2, z2).color(r1, g1, b1, a1).next();
 
-            buffer.end();
-
-            BufferRenderer.draw(buffer);
+            BufferRenderer.drawWithShader(buffer.end());
             GL11.glDepthFunc(GL11.GL_LEQUAL);
             endRender();
         }
@@ -343,9 +338,7 @@ public class Renderer {
             buffer.vertex(matrix, x2, y1, z2).color(red, green, blue, alpha).next();
             buffer.vertex(matrix, x1, y1, z2).color(red, green, blue, alpha).next();
 
-            buffer.end();
-
-            BufferRenderer.draw(buffer);
+            BufferRenderer.drawWithShader(buffer.end());
             GL11.glDepthFunc(GL11.GL_LEQUAL);
             endRender();
         }
@@ -378,9 +371,7 @@ public class Renderer {
                         .next();
             });
 
-            buffer.end();
-
-            BufferRenderer.draw(buffer);
+            BufferRenderer.drawWithShader(buffer.end());
             GL11.glDepthFunc(GL11.GL_LEQUAL);
             endRender();
         }
@@ -411,9 +402,7 @@ public class Renderer {
             buffer.vertex(matrix, x1, y1, z1).color(red, green, blue, alpha).next();
             buffer.vertex(matrix, x2, y2, z2).color(red, green, blue, alpha).next();
 
-            buffer.end();
-
-            BufferRenderer.draw(buffer);
+            BufferRenderer.drawWithShader(buffer.end());
             GL11.glDepthFunc(GL11.GL_LEQUAL);
             endRender();
         }
@@ -651,8 +640,7 @@ public class Renderer {
                         .color(cr, cg, cb, 0f)
                         .next();
             }
-            bufferBuilder.end();
-            BufferRenderer.draw(bufferBuilder);
+            BufferRenderer.drawWithShader(bufferBuilder.end());
         }
 
         public static void renderRoundedShadow(MatrixStack matrices, Color innerColor, double fromX, double fromY, double toX, double toY, double rad, double samples, double shadowWidth) {
@@ -720,8 +708,7 @@ public class Renderer {
                         .next();
 
             }
-            bufferBuilder.end();
-            BufferRenderer.draw(bufferBuilder);
+            BufferRenderer.drawWithShader(bufferBuilder.end());
             stack.pop();
             endRender();
         }
@@ -734,8 +721,7 @@ public class Renderer {
             bufferBuilder.vertex(matrix, (float) x1, (float) y1, (float) z).texture(u1, v1).next();
             bufferBuilder.vertex(matrix, (float) x1, (float) y0, (float) z).texture(u1, v0).next();
             bufferBuilder.vertex(matrix, (float) x0, (float) y0, (float) z).texture(u0, v0).next();
-            bufferBuilder.end();
-            BufferRenderer.draw(bufferBuilder);
+            BufferRenderer.drawWithShader(bufferBuilder.end());
         }
 
         public static void renderCircle(MatrixStack matrices, Color c, double originX, double originY, double rad, int segments) {
@@ -759,8 +745,7 @@ public class Renderer {
                         .color(g, h, k, f)
                         .next();
             }
-            bufferBuilder.end();
-            BufferRenderer.draw(bufferBuilder);
+            BufferRenderer.drawWithShader(bufferBuilder.end());
         }
 
         public static boolean isOnScreen(Vec3d pos) {
@@ -819,8 +804,7 @@ public class Renderer {
             bufferBuilder.vertex(matrix, (float) x21, (float) y21, 0.0F).color(g, h, k, f).next();
             bufferBuilder.vertex(matrix, (float) x21, (float) y11, 0.0F).color(g, h, k, f).next();
             bufferBuilder.vertex(matrix, (float) x11, (float) y11, 0.0F).color(g, h, k, f).next();
-            bufferBuilder.end();
-            BufferRenderer.draw(bufferBuilder);
+            BufferRenderer.drawWithShader(bufferBuilder.end());
             endRender();
         }
 
@@ -861,8 +845,7 @@ public class Renderer {
             bufferBuilder.vertex(matrix, (float) x11, (float) y21, 0.0F).color(r1, g1, b1, a1).next();
             bufferBuilder.vertex(matrix, (float) x21, (float) y21, 0.0F).color(r2, g2, b2, a2).next();
             bufferBuilder.vertex(matrix, (float) x21, (float) y11, 0.0F).color(r2, g2, b2, a2).next();
-            bufferBuilder.end();
-            BufferRenderer.draw(bufferBuilder);
+            BufferRenderer.drawWithShader(bufferBuilder.end());
             endRender();
         }
 
@@ -890,8 +873,7 @@ public class Renderer {
                             .next();
                 }
             }
-            bufferBuilder.end();
-            BufferRenderer.draw(bufferBuilder);
+            BufferRenderer.drawWithShader(bufferBuilder.end());
         }
 
         public static void renderRoundedQuadWithShadow(MatrixStack matrices, Color c, double fromX, double fromY, double toX, double toY, double rad, double samples) {
@@ -940,8 +922,7 @@ public class Renderer {
             bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINES, VertexFormats.POSITION_COLOR);
             bufferBuilder.vertex(m, (float) x, (float) y, 0f).color(g, h, k, f).next();
             bufferBuilder.vertex(m, (float) x1, (float) y1, 0f).color(g, h, k, f).next();
-            bufferBuilder.end();
-            BufferRenderer.draw(bufferBuilder);
+            BufferRenderer.drawWithShader(bufferBuilder.end());
             endRender();
         }
 

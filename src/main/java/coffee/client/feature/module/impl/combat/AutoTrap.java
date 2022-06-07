@@ -141,8 +141,7 @@ public class AutoTrap extends Module {
                     }
                     BlockHitResult bhr = new BlockHitResult(Vec3d.of(current), Direction.DOWN, current, false);
 
-                    Objects.requireNonNull(CoffeeMain.client.interactionManager)
-                            .interactBlock(CoffeeMain.client.player, CoffeeMain.client.world, Hand.MAIN_HAND, bhr);
+                    CoffeeMain.client.interactionManager.interactBlock(CoffeeMain.client.player, Hand.MAIN_HAND, bhr);
                 }
                 CoffeeMain.client.player.getInventory().selectedSlot = selSlot;
             });

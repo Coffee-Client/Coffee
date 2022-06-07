@@ -7,6 +7,7 @@ package coffee.client.feature.module.impl.world;
 import coffee.client.CoffeeMain;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
+import coffee.client.helper.util.Utils;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.util.math.MatrixStack;
@@ -72,7 +73,7 @@ public class AutoIgnite extends Module {
                     Direction.DOWN,
                     blockPos,
                     false);
-            PlayerInteractBlockC2SPacket interact = new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, bhr);
+            PlayerInteractBlockC2SPacket interact = new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, bhr, Utils.increaseAndCloseUpdateManager(CoffeeMain.client.world));
             CoffeeMain.client.getNetworkHandler().sendPacket(interact);
         }
 

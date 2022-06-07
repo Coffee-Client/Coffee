@@ -23,7 +23,7 @@ public class AdBlock extends Module {
             }
             PacketEvent pe = (PacketEvent) event;
             if (pe.getPacket() instanceof GameMessageS2CPacket msg) {
-                if (msg.getMessage().getString().contains("[AD]")) {
+                if (msg.content().getString().contains("[AD]")) {
                     event.setCancelled(true);
                     blocked++;
                 }

@@ -7,10 +7,13 @@ package coffee.client.helper.util;
 import coffee.client.CoffeeMain;
 import coffee.client.helper.Texture;
 import coffee.client.helper.font.adapter.FontAdapter;
+import coffee.client.mixin.ClientWorldMixin;
 import coffee.client.mixin.IMinecraftClientMixin;
 import coffee.client.mixin.IRenderTickCounterMixin;
+import net.minecraft.client.network.PendingUpdateManager;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.texture.NativeImageBackedTexture;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -18,7 +21,7 @@ import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.network.Packet;
 import net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket;
 import net.minecraft.screen.slot.SlotActionType;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextColor;
 import net.minecraft.util.Hand;
@@ -129,6 +132,17 @@ public class Utils {
         }
     }
 
+    public static PendingUpdateManager getUpdateManager(ClientWorld world) {
+        return ((ClientWorldMixin) world).acquirePendingUpdateManager();
+    }
+
+    public static int increaseAndCloseUpdateManager(ClientWorld world) {
+        PendingUpdateManager pum = getUpdateManager(world);
+        int p = pum.getSequence();
+        pum.close();
+        return p;
+    }
+
     public static class Inventory {
 
         public static int slotIndexToId(int index) {
@@ -225,11 +239,17 @@ public class Utils {
     public static class Packets {
 
         public static PlayerInteractBlockC2SPacket generatePlace(BlockPos pos) {
-            return new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND,
+            PendingUpdateManager pendingUpdateManager = getUpdateManager(CoffeeMain.client.world).incrementSequence();
+
+            var packet = new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND,
                     new BlockHitResult(new Vec3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5),
                             Direction.UP,
                             pos,
-                            false));
+                            false), pendingUpdateManager.getSequence());
+
+            pendingUpdateManager.close();
+
+            return packet;
         }
 
     }
@@ -291,7 +311,7 @@ public class Utils {
         }
 
         public static void message(String n, Color c) {
-            LiteralText t = new LiteralText(n);
+            MutableText t = Text.literal(n);
             t.setStyle(t.getStyle().withColor(TextColor.fromRgb(c.getRGB())));
             message(t);
         }

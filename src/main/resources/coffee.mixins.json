@@ -5,6 +5,7 @@
   "mixins": [
     "ClientBrandRetrieverMixin",
     "ClientPlayerInteractionManagerMixin",
+    "ClientWorldMixin",
     "IClientPlayerInteractionManagerMixin",
     "IMinecraftClientMixin",
     "IRenderTickCounterMixin",

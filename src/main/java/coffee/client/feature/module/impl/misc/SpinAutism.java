@@ -9,6 +9,7 @@ import coffee.client.feature.config.DoubleSetting;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
 import coffee.client.helper.Rotations;
+import coffee.client.helper.util.Utils;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.packet.c2s.play.PlayerInteractItemC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
@@ -64,7 +65,7 @@ public class SpinAutism extends Module {
         timeout = (int) Math.floor(speed.getValue()); // timeout expired, set it back to full
         Rotations.setClientPitch((float) ((Math.random() * 60) - 30));
         Rotations.setClientYaw((float) (Math.random() * 360));
-        PlayerInteractItemC2SPacket p = new PlayerInteractItemC2SPacket(Hand.MAIN_HAND);
+        PlayerInteractItemC2SPacket p = new PlayerInteractItemC2SPacket(Hand.MAIN_HAND, Utils.increaseAndCloseUpdateManager(CoffeeMain.client.world));
         Objects.requireNonNull(CoffeeMain.client.getNetworkHandler()).sendPacket(p);
         PlayerMoveC2SPacket p1 = new PlayerMoveC2SPacket.LookAndOnGround((float) r,
                 Rotations.getClientPitch(),

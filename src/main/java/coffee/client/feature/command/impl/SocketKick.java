@@ -28,6 +28,7 @@ import net.minecraft.text.Text;
 
 import java.net.InetSocketAddress;
 import java.util.Objects;
+import java.util.Optional;
 
 public class SocketKick extends Command {
     public SocketKick() {
@@ -96,6 +97,6 @@ public class SocketKick extends Command {
         PlayerFromNameArgumentParser parser = new PlayerFromNameArgumentParser(true);
         PlayerEntity pe = parser.parse(args[0]);
         GameProfile fuck = pe.getGameProfile();
-        conn.send(new LoginHelloC2SPacket(fuck));
+        conn.send(new LoginHelloC2SPacket(fuck.getName(), Optional.empty()));
     }
 }

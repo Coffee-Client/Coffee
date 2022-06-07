@@ -57,8 +57,8 @@ public class AChatScreenMixin extends Screen {
         return ModuleRegistry.getByClass(ClientSettings.class).getPrefix().getValue();
     }
 
-    @Redirect(method = "keyPressed", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/ChatScreen;sendMessage(Ljava/lang/String;)V"))
-    void coffee_interceptChatMessage(ChatScreen instance, String s) {
+    @Redirect(method = "keyPressed", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/ChatScreen;sendMessage(Ljava/lang/String;Z)V"))
+    void coffee_interceptChatMessage(ChatScreen instance, String s, boolean t) {
         String p = getPrefix();
         if (SelfDestruct.shouldSelfDestruct()) {
             if (SelfDestruct.handleMessage(s)) {
@@ -69,7 +69,7 @@ public class AChatScreenMixin extends Screen {
             CommandRegistry.execute(s.substring(p.length())); // cut off prefix
             return;
         }
-        instance.sendMessage(s); // else, go
+        instance.sendMessage(s, true); // else, go
     }
 
     List<String> getSuggestions(String command) {

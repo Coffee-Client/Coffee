@@ -20,7 +20,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.HoverEvent;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import org.apache.commons.io.FileUtils;
@@ -164,7 +164,7 @@ public class ConfigUtils extends Command {
                     base.add("enabled", enabled);
                     base.add("config", config);
                     FileUtils.writeStringToFile(out, base.toString(), Charsets.UTF_8, false);
-                    LiteralText t = new LiteralText("[§9A§r] Saved config! Click to open");
+                    MutableText t = Text.literal("[§9A§r] Saved config! Click to open");
                     Style s = Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
                                     Text.of("Click to open")))
                             .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, out.getAbsolutePath()));

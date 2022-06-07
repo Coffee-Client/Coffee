@@ -45,7 +45,7 @@ public class GameRendererMixin {
     @Inject(at = @At(value = "FIELD", target = "Lnet/minecraft/client/render/GameRenderer;renderHand:Z", opcode = Opcodes.GETFIELD, ordinal = 0), method = "renderWorld")
     void coffee_dispatchWorldRender(float tickDelta, long limitTime, MatrixStack matrix, CallbackInfo ci) {
         if (vb) {
-            CoffeeMain.client.options.bobView = true;
+            CoffeeMain.client.options.getBobView().setValue(true);
             vb = false;
         }
         MSAAFramebuffer.use(MSAAFramebuffer.MAX_SAMPLES, () -> {
@@ -82,9 +82,9 @@ public class GameRendererMixin {
 
     @Inject(at = @At("HEAD"), method = "bobView", cancellable = true)
     private void coffee_stopCursorBob(MatrixStack matrices, float f, CallbackInfo ci) {
-        if (CoffeeMain.client.options.bobView && dis) {
+        if (CoffeeMain.client.options.getBobView().getValue() && dis) {
             vb = true;
-            CoffeeMain.client.options.bobView = false;
+            CoffeeMain.client.options.getBobView().setValue(false);
             dis = false;
             ci.cancel();
         }

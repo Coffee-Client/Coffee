@@ -47,7 +47,7 @@ public class EnumSetting<T extends Enum<?>> extends SettingBase<T> {
         super.setValue(value);
     }
 
-    public static class Builder<T extends Enum<?>> extends SettingBase.Builder<Builder<T>, T, EnumSetting<T>> {
+    public static class Builder<T extends Enum<?>> extends SettingBase.Builder<coffee.client.feature.config.EnumSetting.Builder<T>, T, EnumSetting<T>> {
         public Builder(T defaultValue) {
             super(defaultValue);
         }

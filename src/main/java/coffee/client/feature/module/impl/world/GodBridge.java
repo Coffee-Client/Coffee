@@ -101,7 +101,7 @@ public class GodBridge extends Module {
                 CoffeeMain.client.execute(() -> {
                     client.player.swingHand(Hand.MAIN_HAND);
                     Objects.requireNonNull(client.interactionManager)
-                            .interactBlock(client.player, client.world, Hand.MAIN_HAND, result);
+                            .interactBlock(client.player, Hand.MAIN_HAND, result);
                 });
             }
         }

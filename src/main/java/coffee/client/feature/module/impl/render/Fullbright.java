@@ -26,17 +26,17 @@ public class Fullbright extends Module {
 
     @Override
     public void enable() {
-        og = MathHelper.clamp(CoffeeMain.client.options.gamma, 0, 1);
+        og = MathHelper.clamp(CoffeeMain.client.options.getGamma().getValue(), 0, 1);
     }
 
     @Override
     public void disable() {
-        CoffeeMain.client.options.gamma = og;
+        CoffeeMain.client.options.getGamma().setValue(og);
     }
 
     @Override
     public void onFastTick() {
-        CoffeeMain.client.options.gamma = Transitions.transition(CoffeeMain.client.options.gamma, 10, 300);
+        CoffeeMain.client.options.getGamma().setValue(Transitions.transition(CoffeeMain.client.options.getGamma().getValue(), 10, 300));
     }
 
     @Override

@@ -15,7 +15,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.StringNbtReader;
-import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 import net.minecraft.network.packet.c2s.play.CreativeInventoryActionC2SPacket;
 
 import java.util.Objects;
@@ -43,12 +42,9 @@ public class TitleLag extends Command {
         validateArgumentsLength(args, 1, "Provide target player");
         PlayerEntity target = new PlayerFromNameArgumentParser(true).parse(args[0]);
         String targetName = target.getGameProfile().getName();
-        CoffeeMain.client.getNetworkHandler()
-                .sendPacket(new ChatMessageC2SPacket("/gamerule sendCommandFeedback false"));
-        CoffeeMain.client.getNetworkHandler()
-                .sendPacket(new ChatMessageC2SPacket("/title " + targetName + " times 0 999999999 0"));
-        CoffeeMain.client.getNetworkHandler()
-                .sendPacket(new ChatMessageC2SPacket("/gamerule sendCommandFeedback true"));
+        CoffeeMain.client.player.sendChatMessage("/gamerule sendCommandFeedback false");
+        CoffeeMain.client.player.sendChatMessage("/title " + targetName + " times 0 999999999 0");
+        CoffeeMain.client.player.sendChatMessage("/gamerule sendCommandFeedback true");
         ItemStack stack = new ItemStack(Items.COMMAND_BLOCK, 1);
         try {
             stack.setNbt(StringNbtReader.parse("{BlockEntityTag:{Command:\"/title " + targetName + " title {\\\"text\\\":\\\"" + "l".repeat(

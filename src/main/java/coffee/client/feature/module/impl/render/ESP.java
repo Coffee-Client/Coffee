@@ -121,8 +121,7 @@ public class ESP extends Module {
                 }
 
             }
-            buffer.end();
-            BufferRenderer.draw(buffer);
+            BufferRenderer.drawWithShader(buffer.end());
 
             GL11.glDepthFunc(GL11.GL_LEQUAL);
             RenderSystem.disableBlend();
@@ -264,8 +263,7 @@ public class ESP extends Module {
 
             bb.vertex(matrix, x + vert[0] * xMul, y + vert[1] * yMul, 0f).color(r, g, b, a).next();
         }
-        bb.end();
-        BufferRenderer.draw(bb);
+        BufferRenderer.drawWithShader(bb.end());
     }
 
     @Override
@@ -311,9 +309,7 @@ public class ESP extends Module {
         buffer.vertex(matrix, x + sin, y + e.getHeight(), z + cos).color(red, green, blue, alpha).next();
         buffer.vertex(matrix, x + sin, y, z + cos).color(red, green, blue, alpha).next();
 
-        buffer.end();
-
-        BufferRenderer.draw(buffer);
+        BufferRenderer.drawWithShader(buffer.end());
         GL11.glDepthFunc(GL11.GL_LEQUAL);
         RenderSystem.disableBlend();
         stack.pop();

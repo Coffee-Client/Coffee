@@ -92,7 +92,7 @@ public class AutoFish extends Module {
     }
 
     private void click() {
-        CoffeeMain.client.player.networkHandler.sendPacket(new PlayerInteractItemC2SPacket(Hand.MAIN_HAND));
+        CoffeeMain.client.player.networkHandler.sendPacket(new PlayerInteractItemC2SPacket(Hand.MAIN_HAND, Utils.increaseAndCloseUpdateManager(CoffeeMain.client.world)));
     }
 
     public int getFishingRod() {

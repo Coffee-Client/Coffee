@@ -108,7 +108,7 @@ public class Boom extends Module {
                 CoffeeMain.client.player.getInventory().selectedSlot), stack);
         CreativeInventoryActionC2SPacket u2 = new CreativeInventoryActionC2SPacket(Utils.Inventory.slotIndexToId(
                 CoffeeMain.client.player.getInventory().selectedSlot), air);
-        PlayerInteractBlockC2SPacket p1 = new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, bhr);
+        PlayerInteractBlockC2SPacket p1 = new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, bhr, Utils.increaseAndCloseUpdateManager(CoffeeMain.client.world));
         Objects.requireNonNull(CoffeeMain.client.getNetworkHandler()).sendPacket(u1);
         CoffeeMain.client.getNetworkHandler().sendPacket(p1);
         CoffeeMain.client.getNetworkHandler().sendPacket(u2);
@@ -136,7 +136,7 @@ public class Boom extends Module {
                 CoffeeMain.client.player.getInventory().selectedSlot), stack);
         CreativeInventoryActionC2SPacket u2 = new CreativeInventoryActionC2SPacket(Utils.Inventory.slotIndexToId(
                 CoffeeMain.client.player.getInventory().selectedSlot), air);
-        PlayerInteractBlockC2SPacket p1 = new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, bhr);
+        PlayerInteractBlockC2SPacket p1 = new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, bhr, Utils.increaseAndCloseUpdateManager(CoffeeMain.client.world));
         Objects.requireNonNull(CoffeeMain.client.getNetworkHandler()).sendPacket(u1);
         CoffeeMain.client.getNetworkHandler().sendPacket(p1);
         CoffeeMain.client.getNetworkHandler().sendPacket(u2);

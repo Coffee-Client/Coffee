@@ -35,7 +35,7 @@ public class ColorSetting extends SettingBase<Color> {
         return getDefaultValue();
     }
 
-    public static class Builder extends SettingBase.Builder<Builder, Color, ColorSetting> {
+    public static class Builder extends SettingBase.Builder<coffee.client.feature.config.ColorSetting.Builder, Color, ColorSetting> {
 
         public Builder(Color defaultValue) {
             super(defaultValue);

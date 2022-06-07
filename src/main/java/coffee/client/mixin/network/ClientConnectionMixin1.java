@@ -5,9 +5,9 @@
 package coffee.client.mixin.network;
 
 import coffee.client.feature.gui.screen.ProxyManagerScreen;
+import coffee.client.helper.network.proxy.Socks4ProxyHandler;
+import coffee.client.helper.network.proxy.Socks5ProxyHandler;
 import io.netty.channel.Channel;
-import io.netty.handler.proxy.Socks4ProxyHandler;
-import io.netty.handler.proxy.Socks5ProxyHandler;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

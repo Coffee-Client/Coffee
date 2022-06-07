@@ -95,8 +95,7 @@ public class ShowTntPrime extends Module {
                     .next();
 
         }
-        bufferBuilder.end();
-        BufferRenderer.draw(bufferBuilder);
+        BufferRenderer.drawWithShader(bufferBuilder.end());
         RenderSystem.enableTexture();
         RenderSystem.disableBlend();
         stack.pop();

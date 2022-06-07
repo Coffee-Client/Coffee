@@ -126,8 +126,7 @@ public class BooleanSettingEditor extends ConfigBase<BooleanSetting> {
                     .next();
         }
 
-        bufferBuilder.end();
-        BufferRenderer.draw(bufferBuilder);
+        BufferRenderer.drawWithShader(bufferBuilder.end());
         Renderer.endRender();
     }
 

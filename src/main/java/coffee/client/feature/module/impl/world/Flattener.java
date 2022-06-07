@@ -131,7 +131,6 @@ public class Flattener extends Module {
                 Rotations.lookAtV3(actual);
                 Objects.requireNonNull(client.interactionManager)
                         .interactBlock(client.player,
-                                client.world,
                                 Hand.MAIN_HAND,
                                 new BlockHitResult(actual, Direction.DOWN, blockPos, false));
             }

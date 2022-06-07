@@ -89,7 +89,6 @@ public class AutoLavacast extends Module {
                     CoffeeMain.client.execute(() -> {
                         BlockHitResult bhr = new BlockHitResult(placeCenter, Direction.DOWN, next, false);
                         CoffeeMain.client.interactionManager.interactBlock(CoffeeMain.client.player,
-                                CoffeeMain.client.world,
                                 Hand.MAIN_HAND,
                                 bhr);
                         if (mode.getValue() == Mode.Fast) {
@@ -152,7 +151,7 @@ public class AutoLavacast extends Module {
 
     static class ListenInput extends Input {
         @Override
-        public void tick(boolean slowDown) {
+        public void tick(boolean slowDown, float f) {
             this.movementForward = moveForwards ? 1 : 0;
         }
     }

@@ -370,8 +370,7 @@ public class CaveMapper extends Module {
                 }
             }
         }
-        buffer.end();
-        BufferRenderer.draw(buffer);
+        BufferRenderer.drawWithShader(buffer.end());
         GL11.glDepthFunc(GL11.GL_LEQUAL);
         RenderSystem.disableBlend();
         RenderSystem.enableCull();

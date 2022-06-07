@@ -21,7 +21,7 @@ public class BooleanSetting extends SettingBase<Boolean> {
         return (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("1"));
     }
 
-    public static class Builder extends SettingBase.Builder<Builder, Boolean, BooleanSetting> {
+    public static class Builder extends SettingBase.Builder<coffee.client.feature.config.BooleanSetting.Builder, Boolean, BooleanSetting> {
 
         public Builder(Boolean defaultValue) {
             super(defaultValue);

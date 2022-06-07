@@ -20,6 +20,7 @@ import net.minecraft.network.packet.s2c.login.LoginSuccessS2CPacket;
 import net.minecraft.text.Text;
 
 import java.net.InetSocketAddress;
+import java.util.Optional;
 
 public class Kickall extends Command {
     public Kickall() {
@@ -71,7 +72,7 @@ public class Kickall extends Command {
                 }
             });
             conn.send(new HandshakeC2SPacket(sa.getHostName(), sa.getPort(), NetworkState.LOGIN));
-            conn.send(new LoginHelloC2SPacket(playerListEntry.getProfile()));
+            conn.send(new LoginHelloC2SPacket(playerListEntry.getProfile().getName(), Optional.empty()));
         }
     }
 }

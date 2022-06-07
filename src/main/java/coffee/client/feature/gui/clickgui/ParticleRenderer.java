@@ -108,8 +108,7 @@ public class ParticleRenderer {
 
             renderOutlineIntern(start, dimensions, stack, buffer);
 
-            buffer.end();
-            BufferRenderer.draw(buffer);
+            BufferRenderer.drawWithShader(buffer.end());
             GL11.glDepthFunc(GL11.GL_LEQUAL);
             RenderSystem.disableBlend();
         }

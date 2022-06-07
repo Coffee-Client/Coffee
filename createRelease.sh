@@ -20,6 +20,6 @@ if [[ ! -d bin ]]; then
   mkdir bin
   fi
 mv ./build/libs/coffee-1.0.0.jar bin/latest.jar
-mv ./build/libs/coffee-1.0.0-dev.jar bin/latest-sdk.jar
-mv ./build/libs/coffee-1.0.0-sources-dev.jar bin/latest-sdk-sources.jar
+mv ./build/devlibs/coffee-1.0.0-dev.jar bin/latest-sdk.jar
+mv ./build/devlibs/coffee-1.0.0-sources.jar bin/latest-sdk-sources.jar
 echo "Made release"

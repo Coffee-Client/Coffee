@@ -25,10 +25,6 @@ configurations {
 	impl
 }
 
-loom {
-//	accessWidenerPath = file("src/main/resources/shadow.accessWidener")
-}
-
 dependencies {
 
     //to change the versions see the gradle.properties file

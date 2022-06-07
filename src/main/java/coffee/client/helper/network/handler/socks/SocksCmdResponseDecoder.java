@@ -94,8 +94,6 @@ public class SocksCmdResponseDecoder extends ReplayingDecoder<SocksCmdResponseDe
 
     @UnstableApi
     public enum State {
-        CHECK_PROTOCOL_VERSION,
-        READ_CMD_HEADER,
-        READ_CMD_ADDRESS
+        CHECK_PROTOCOL_VERSION, READ_CMD_HEADER, READ_CMD_ADDRESS
     }
 }

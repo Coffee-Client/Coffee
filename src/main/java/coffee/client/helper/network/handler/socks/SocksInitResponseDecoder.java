@@ -56,7 +56,6 @@ public class SocksInitResponseDecoder extends ReplayingDecoder<SocksInitResponse
 
     @UnstableApi
     public enum State {
-        CHECK_PROTOCOL_VERSION,
-        READ_PREFERRED_AUTH_TYPE
+        CHECK_PROTOCOL_VERSION, READ_PREFERRED_AUTH_TYPE
     }
 }

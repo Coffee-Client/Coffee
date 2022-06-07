@@ -26,6 +26,17 @@ public class Socks4CommandStatus implements Comparable<Socks4CommandStatus> {
     public static final Socks4CommandStatus REJECTED_OR_FAILED = new Socks4CommandStatus(0x5b, "REJECTED_OR_FAILED");
     public static final Socks4CommandStatus IDENTD_UNREACHABLE = new Socks4CommandStatus(0x5c, "IDENTD_UNREACHABLE");
     public static final Socks4CommandStatus IDENTD_AUTH_FAILURE = new Socks4CommandStatus(0x5d, "IDENTD_AUTH_FAILURE");
+    private final byte byteValue;
+    private final String name;
+    private String text;
+    public Socks4CommandStatus(int byteValue) {
+        this(byteValue, "UNKNOWN");
+    }
+
+    public Socks4CommandStatus(int byteValue, String name) {
+        this.name = ObjectUtil.checkNotNull(name, "name");
+        this.byteValue = (byte) byteValue;
+    }
 
     public static Socks4CommandStatus valueOf(byte b) {
         return switch (b) {
@@ -36,19 +47,6 @@ public class Socks4CommandStatus implements Comparable<Socks4CommandStatus> {
             default -> new Socks4CommandStatus(b);
         };
 
-    }
-
-    private final byte byteValue;
-    private final String name;
-    private String text;
-
-    public Socks4CommandStatus(int byteValue) {
-        this(byteValue, "UNKNOWN");
-    }
-
-    public Socks4CommandStatus(int byteValue, String name) {
-        this.name = ObjectUtil.checkNotNull(name, "name");
-        this.byteValue = (byte) byteValue;
     }
 
     public byte byteValue() {

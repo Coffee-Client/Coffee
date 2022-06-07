@@ -245,7 +245,8 @@ public class Utils {
                     new BlockHitResult(new Vec3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5),
                             Direction.UP,
                             pos,
-                            false), pendingUpdateManager.getSequence());
+                            false),
+                    pendingUpdateManager.getSequence());
 
             pendingUpdateManager.close();
 

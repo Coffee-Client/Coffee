@@ -73,7 +73,9 @@ public class AutoIgnite extends Module {
                     Direction.DOWN,
                     blockPos,
                     false);
-            PlayerInteractBlockC2SPacket interact = new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, bhr, Utils.increaseAndCloseUpdateManager(CoffeeMain.client.world));
+            PlayerInteractBlockC2SPacket interact = new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND,
+                    bhr,
+                    Utils.increaseAndCloseUpdateManager(CoffeeMain.client.world));
             CoffeeMain.client.getNetworkHandler().sendPacket(interact);
         }
 

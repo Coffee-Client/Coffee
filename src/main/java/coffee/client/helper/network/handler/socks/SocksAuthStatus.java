@@ -17,8 +17,7 @@
 package coffee.client.helper.network.handler.socks;
 
 public enum SocksAuthStatus {
-    SUCCESS((byte) 0x00),
-    FAILURE((byte) 0xff);
+    SUCCESS((byte) 0x00), FAILURE((byte) 0xff);
 
     private final byte b;
 

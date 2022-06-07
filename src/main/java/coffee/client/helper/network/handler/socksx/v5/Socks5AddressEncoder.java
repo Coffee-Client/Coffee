@@ -62,9 +62,9 @@ public interface Socks5AddressEncoder {
     /**
      * Encodes a SOCKS5 address.
      *
-     * @param addrType the type of the address
+     * @param addrType  the type of the address
      * @param addrValue the string representation of the address
-     * @param out the output buffer where the encoded SOCKS5 address field will be written to
+     * @param out       the output buffer where the encoded SOCKS5 address field will be written to
      */
     void encodeAddress(Socks5AddressType addrType, String addrValue, ByteBuf out) throws Exception;
 }

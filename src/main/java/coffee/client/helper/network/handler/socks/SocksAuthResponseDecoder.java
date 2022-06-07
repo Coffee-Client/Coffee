@@ -33,8 +33,7 @@ public class SocksAuthResponseDecoder extends ReplayingDecoder<SocksAuthResponse
     }
 
     @Override
-    protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> out)
-            throws Exception {
+    protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> out) throws Exception {
         switch (state()) {
             case CHECK_PROTOCOL_VERSION: {
                 if (byteBuf.readByte() != SocksSubnegotiationVersion.AUTH_PASSWORD.byteValue()) {
@@ -57,7 +56,6 @@ public class SocksAuthResponseDecoder extends ReplayingDecoder<SocksAuthResponse
 
     @UnstableApi
     public enum State {
-        CHECK_PROTOCOL_VERSION,
-        READ_AUTH_RESPONSE
+        CHECK_PROTOCOL_VERSION, READ_AUTH_RESPONSE
     }
 }

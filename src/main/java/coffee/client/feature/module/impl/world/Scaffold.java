@@ -133,8 +133,7 @@ public class Scaffold extends Module {
                 Vec3d.of(bp),
                 new Vec3d(1, 1, 1),
                 1000);
-        Objects.requireNonNull(client.interactionManager)
-                .interactBlock(client.player, Hand.MAIN_HAND, bhr);
+        Objects.requireNonNull(client.interactionManager).interactBlock(client.player, Hand.MAIN_HAND, bhr);
         client.player.getInventory().selectedSlot = c;
     }
 }

@@ -33,13 +33,6 @@ import java.util.List;
  */
 public class Socks4ClientDecoder extends ReplayingDecoder<Socks4ClientDecoder.State> {
 
-    @UnstableApi
-    public enum State {
-        START,
-        SUCCESS,
-        FAILURE
-    }
-
     public Socks4ClientDecoder() {
         super(State.START);
         setSingleDecode(true);
@@ -49,30 +42,30 @@ public class Socks4ClientDecoder extends ReplayingDecoder<Socks4ClientDecoder.St
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
         try {
             switch (state()) {
-            case START: {
-                final int version = in.readUnsignedByte();
-                if (version != 0) {
-                    throw new DecoderException("unsupported reply version: " + version + " (expected: 0)");
-                }
+                case START: {
+                    final int version = in.readUnsignedByte();
+                    if (version != 0) {
+                        throw new DecoderException("unsupported reply version: " + version + " (expected: 0)");
+                    }
 
-                final Socks4CommandStatus status = Socks4CommandStatus.valueOf(in.readByte());
-                final int dstPort = in.readUnsignedShort();
-                final String dstAddr = NetUtil.intToIpAddress(in.readInt());
+                    final Socks4CommandStatus status = Socks4CommandStatus.valueOf(in.readByte());
+                    final int dstPort = in.readUnsignedShort();
+                    final String dstAddr = NetUtil.intToIpAddress(in.readInt());
 
-                out.add(new DefaultSocks4CommandResponse(status, dstAddr, dstPort));
-                checkpoint(State.SUCCESS);
-            }
-            case SUCCESS: {
-                int readableBytes = actualReadableBytes();
-                if (readableBytes > 0) {
-                    out.add(in.readRetainedSlice(readableBytes));
+                    out.add(new DefaultSocks4CommandResponse(status, dstAddr, dstPort));
+                    checkpoint(State.SUCCESS);
                 }
-                break;
-            }
-            case FAILURE: {
-                in.skipBytes(actualReadableBytes());
-                break;
-            }
+                case SUCCESS: {
+                    int readableBytes = actualReadableBytes();
+                    if (readableBytes > 0) {
+                        out.add(in.readRetainedSlice(readableBytes));
+                    }
+                    break;
+                }
+                case FAILURE: {
+                    in.skipBytes(actualReadableBytes());
+                    break;
+                }
             }
         } catch (Exception e) {
             fail(out, e);
@@ -89,5 +82,10 @@ public class Socks4ClientDecoder extends ReplayingDecoder<Socks4ClientDecoder.St
         out.add(m);
 
         checkpoint(State.FAILURE);
+    }
+
+    @UnstableApi
+    public enum State {
+        START, SUCCESS, FAILURE
     }
 }

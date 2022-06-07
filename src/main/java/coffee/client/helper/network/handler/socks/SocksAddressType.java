@@ -17,10 +17,7 @@
 package coffee.client.helper.network.handler.socks;
 
 public enum SocksAddressType {
-    IPv4((byte) 0x01),
-    DOMAIN((byte) 0x03),
-    IPv6((byte) 0x04),
-    UNKNOWN((byte) 0xff);
+    IPv4((byte) 0x01), DOMAIN((byte) 0x03), IPv6((byte) 0x04), UNKNOWN((byte) 0xff);
 
     private final byte b;
 

@@ -32,8 +32,7 @@ public final class DefaultSocks5CommandRequest extends AbstractSocks5Message imp
     private final String dstAddr;
     private final int dstPort;
 
-    public DefaultSocks5CommandRequest(
-            Socks5CommandType type, Socks5AddressType dstAddrType, String dstAddr, int dstPort) {
+    public DefaultSocks5CommandRequest(Socks5CommandType type, Socks5AddressType dstAddrType, String dstAddr, int dstPort) {
 
         this.type = ObjectUtil.checkNotNull(type, "type");
         ObjectUtil.checkNotNull(dstAddrType, "dstAddrType");

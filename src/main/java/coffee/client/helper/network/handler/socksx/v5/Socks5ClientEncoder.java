@@ -52,6 +52,36 @@ public class Socks5ClientEncoder extends MessageToByteEncoder<Socks5Message> {
         this.addressEncoder = ObjectUtil.checkNotNull(addressEncoder, "addressEncoder");
     }
 
+    private static void encodeAuthMethodRequest(Socks5InitialRequest msg, ByteBuf out) {
+        out.writeByte(msg.version().byteValue());
+
+        final List<Socks5AuthMethod> authMethods = msg.authMethods();
+        final int numAuthMethods = authMethods.size();
+        out.writeByte(numAuthMethods);
+
+        if (authMethods instanceof RandomAccess) {
+            for (Socks5AuthMethod authMethod : authMethods) {
+                out.writeByte(authMethod.byteValue());
+            }
+        } else {
+            for (Socks5AuthMethod a : authMethods) {
+                out.writeByte(a.byteValue());
+            }
+        }
+    }
+
+    private static void encodePasswordAuthRequest(Socks5PasswordAuthRequest msg, ByteBuf out) {
+        out.writeByte(0x01);
+
+        final String username = msg.username();
+        out.writeByte(username.length());
+        ByteBufUtil.writeAscii(out, username);
+
+        final String password = msg.password();
+        out.writeByte(password.length());
+        ByteBufUtil.writeAscii(out, password);
+    }
+
     /**
      * Returns the {@link Socks5AddressEncoder} of this encoder.
      */
@@ -70,36 +100,6 @@ public class Socks5ClientEncoder extends MessageToByteEncoder<Socks5Message> {
         } else {
             throw new EncoderException("unsupported message type: " + StringUtil.simpleClassName(msg));
         }
-    }
-
-    private static void encodeAuthMethodRequest(Socks5InitialRequest msg, ByteBuf out) {
-        out.writeByte(msg.version().byteValue());
-
-        final List<Socks5AuthMethod> authMethods = msg.authMethods();
-        final int numAuthMethods = authMethods.size();
-        out.writeByte(numAuthMethods);
-
-        if (authMethods instanceof RandomAccess) {
-            for (Socks5AuthMethod authMethod : authMethods) {
-                out.writeByte(authMethod.byteValue());
-            }
-        } else {
-            for (Socks5AuthMethod a: authMethods) {
-                out.writeByte(a.byteValue());
-            }
-        }
-    }
-
-    private static void encodePasswordAuthRequest(Socks5PasswordAuthRequest msg, ByteBuf out) {
-        out.writeByte(0x01);
-
-        final String username = msg.username();
-        out.writeByte(username.length());
-        ByteBufUtil.writeAscii(out, username);
-
-        final String password = msg.password();
-        out.writeByte(password.length());
-        ByteBufUtil.writeAscii(out, password);
     }
 
     private void encodeCommandRequest(Socks5CommandRequest msg, ByteBuf out) throws Exception {

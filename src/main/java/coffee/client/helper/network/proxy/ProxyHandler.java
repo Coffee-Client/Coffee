@@ -20,28 +20,24 @@ import java.nio.channels.ConnectionPendingException;
 import java.util.concurrent.TimeUnit;
 
 public abstract class ProxyHandler extends ChannelDuplexHandler {
-    private static final InternalLogger logger = InternalLoggerFactory.getInstance(ProxyHandler.class);
-
-    /**
-     * The default connect timeout: 10 seconds.
-     */
-    private static final long DEFAULT_CONNECT_TIMEOUT_MILLIS = 10000;
-
     /**
      * A string that signifies 'no authentication' or 'anonymous'.
      */
     static final String AUTH_NONE = "none";
-
+    private static final InternalLogger logger = InternalLoggerFactory.getInstance(ProxyHandler.class);
+    /**
+     * The default connect timeout: 10 seconds.
+     */
+    private static final long DEFAULT_CONNECT_TIMEOUT_MILLIS = 10000;
     private final SocketAddress proxyAddress;
+    private final LazyChannelPromise connectPromise = new LazyChannelPromise();
     private volatile SocketAddress destinationAddress;
     private volatile long connectTimeoutMillis = DEFAULT_CONNECT_TIMEOUT_MILLIS;
-
     private volatile ChannelHandlerContext ctx;
     private PendingWriteQueue pendingWrites;
     private boolean finished;
     private boolean suppressChannelReadComplete;
     private boolean flushedPrematurely;
-    private final LazyChannelPromise connectPromise = new LazyChannelPromise();
     private Future<?> connectTimeoutFuture;
     private final ChannelFutureListener writeListener = new ChannelFutureListener() {
         @Override
@@ -54,6 +50,12 @@ public abstract class ProxyHandler extends ChannelDuplexHandler {
 
     protected ProxyHandler(SocketAddress proxyAddress) {
         this.proxyAddress = ObjectUtil.checkNotNull(proxyAddress, "proxyAddress");
+    }
+
+    private static void readIfNeeded(ChannelHandlerContext ctx) {
+        if (!ctx.channel().config().isAutoRead()) {
+            ctx.read();
+        }
     }
 
     /**
@@ -148,9 +150,7 @@ public abstract class ProxyHandler extends ChannelDuplexHandler {
     protected abstract void removeDecoder(ChannelHandlerContext ctx) throws Exception;
 
     @Override
-    public final void connect(
-            ChannelHandlerContext ctx, SocketAddress remoteAddress, SocketAddress localAddress,
-            ChannelPromise promise) throws Exception {
+    public final void connect(ChannelHandlerContext ctx, SocketAddress remoteAddress, SocketAddress localAddress, ChannelPromise promise) throws Exception {
 
         if (destinationAddress != null) {
             promise.setFailure(new ConnectionPendingException());
@@ -256,8 +256,8 @@ public abstract class ProxyHandler extends ChannelDuplexHandler {
      * Handles the message received from the proxy server.
      *
      * @return {@code true} if the connection to the destination has been established,
-     *         {@code false} if the connection to the destination has not been established and more messages are
-     *         expected from the proxy server
+     * {@code false} if the connection to the destination has not been established and more messages are
+     * expected from the proxy server
      */
     protected abstract boolean handleResponse(ChannelHandlerContext ctx, Object response) throws Exception;
 
@@ -270,8 +270,10 @@ public abstract class ProxyHandler extends ChannelDuplexHandler {
 
             removedCodec &= safeRemoveEncoder();
 
-            ctx.fireUserEventTriggered(
-                    new ProxyConnectionEvent(protocol(), authScheme(), proxyAddress, destinationAddress));
+            ctx.fireUserEventTriggered(new ProxyConnectionEvent(protocol(),
+                    authScheme(),
+                    proxyAddress,
+                    destinationAddress));
 
             removedCodec &= safeRemoveDecoder();
 
@@ -320,8 +322,7 @@ public abstract class ProxyHandler extends ChannelDuplexHandler {
         if (!connectPromise.isDone()) {
 
             if (!(cause instanceof ProxyConnectException)) {
-                cause = new ProxyConnectException(
-                        exceptionMessage(cause.toString()), cause);
+                cause = new ProxyConnectException(exceptionMessage(cause.toString()), cause);
             }
 
             safeRemoveDecoder();
@@ -354,8 +355,7 @@ public abstract class ProxyHandler extends ChannelDuplexHandler {
             s = "";
         }
 
-        StringBuilder buf = new StringBuilder(128 + s.length())
-                .append(protocol())
+        StringBuilder buf = new StringBuilder(128 + s.length()).append(protocol())
                 .append(", ")
                 .append(authScheme())
                 .append(", ")
@@ -397,12 +397,6 @@ public abstract class ProxyHandler extends ChannelDuplexHandler {
             ctx.flush();
         } else {
             flushedPrematurely = true;
-        }
-    }
-
-    private static void readIfNeeded(ChannelHandlerContext ctx) {
-        if (!ctx.channel().config().isAutoRead()) {
-            ctx.read();
         }
     }
 

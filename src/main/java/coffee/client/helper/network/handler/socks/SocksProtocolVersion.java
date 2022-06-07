@@ -17,9 +17,7 @@
 package coffee.client.helper.network.handler.socks;
 
 public enum SocksProtocolVersion {
-    SOCKS4a((byte) 0x04),
-    SOCKS5((byte) 0x05),
-    UNKNOWN((byte) 0xff);
+    SOCKS4a((byte) 0x04), SOCKS5((byte) 0x05), UNKNOWN((byte) 0xff);
 
     private final byte b;
 

@@ -32,36 +32,9 @@ public class Socks5CommandStatus implements Comparable<Socks5CommandStatus> {
     public static final Socks5CommandStatus TTL_EXPIRED = new Socks5CommandStatus(0x06, "TTL_EXPIRED");
     public static final Socks5CommandStatus COMMAND_UNSUPPORTED = new Socks5CommandStatus(0x07, "COMMAND_UNSUPPORTED");
     public static final Socks5CommandStatus ADDRESS_UNSUPPORTED = new Socks5CommandStatus(0x08, "ADDRESS_UNSUPPORTED");
-
-    public static Socks5CommandStatus valueOf(byte b) {
-        switch (b) {
-        case 0x00:
-            return SUCCESS;
-        case 0x01:
-            return FAILURE;
-        case 0x02:
-            return FORBIDDEN;
-        case 0x03:
-            return NETWORK_UNREACHABLE;
-        case 0x04:
-            return HOST_UNREACHABLE;
-        case 0x05:
-            return CONNECTION_REFUSED;
-        case 0x06:
-            return TTL_EXPIRED;
-        case 0x07:
-            return COMMAND_UNSUPPORTED;
-        case 0x08:
-            return ADDRESS_UNSUPPORTED;
-        }
-
-        return new Socks5CommandStatus(b);
-    }
-
     private final byte byteValue;
     private final String name;
     private String text;
-
     public Socks5CommandStatus(int byteValue) {
         this(byteValue, "UNKNOWN");
     }
@@ -69,6 +42,31 @@ public class Socks5CommandStatus implements Comparable<Socks5CommandStatus> {
     public Socks5CommandStatus(int byteValue, String name) {
         this.name = ObjectUtil.checkNotNull(name, "name");
         this.byteValue = (byte) byteValue;
+    }
+
+    public static Socks5CommandStatus valueOf(byte b) {
+        switch (b) {
+            case 0x00:
+                return SUCCESS;
+            case 0x01:
+                return FAILURE;
+            case 0x02:
+                return FORBIDDEN;
+            case 0x03:
+                return NETWORK_UNREACHABLE;
+            case 0x04:
+                return HOST_UNREACHABLE;
+            case 0x05:
+                return CONNECTION_REFUSED;
+            case 0x06:
+                return TTL_EXPIRED;
+            case 0x07:
+                return COMMAND_UNSUPPORTED;
+            case 0x08:
+                return ADDRESS_UNSUPPORTED;
+        }
+
+        return new Socks5CommandStatus(b);
     }
 
     public byte byteValue() {

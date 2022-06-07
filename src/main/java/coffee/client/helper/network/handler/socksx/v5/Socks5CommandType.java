@@ -26,6 +26,17 @@ public class Socks5CommandType implements Comparable<Socks5CommandType> {
     public static final Socks5CommandType CONNECT = new Socks5CommandType(0x01, "CONNECT");
     public static final Socks5CommandType BIND = new Socks5CommandType(0x02, "BIND");
     public static final Socks5CommandType UDP_ASSOCIATE = new Socks5CommandType(0x03, "UDP_ASSOCIATE");
+    private final byte byteValue;
+    private final String name;
+    private String text;
+    public Socks5CommandType(int byteValue) {
+        this(byteValue, "UNKNOWN");
+    }
+
+    public Socks5CommandType(int byteValue, String name) {
+        this.name = ObjectUtil.checkNotNull(name, "name");
+        this.byteValue = (byte) byteValue;
+    }
 
     public static Socks5CommandType valueOf(byte b) {
         return switch (b) {
@@ -35,19 +46,6 @@ public class Socks5CommandType implements Comparable<Socks5CommandType> {
             default -> new Socks5CommandType(b);
         };
 
-    }
-
-    private final byte byteValue;
-    private final String name;
-    private String text;
-
-    public Socks5CommandType(int byteValue) {
-        this(byteValue, "UNKNOWN");
-    }
-
-    public Socks5CommandType(int byteValue, String name) {
-        this.name = ObjectUtil.checkNotNull(name, "name");
-        this.byteValue = (byte) byteValue;
     }
 
     public byte byteValue() {

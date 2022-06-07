@@ -57,13 +57,15 @@ public class MassUse extends Module {
                 case Interact -> {
                     if (pe.getPacket() instanceof PlayerInteractBlockC2SPacket p1) {
                         PlayerInteractBlockC2SPacket pp = new PlayerInteractBlockC2SPacket(p1.getHand(),
-                                p1.getBlockHitResult(), Utils.increaseAndCloseUpdateManager(CoffeeMain.client.world));
+                                p1.getBlockHitResult(),
+                                Utils.increaseAndCloseUpdateManager(CoffeeMain.client.world));
                         for (int i = 0; i < uses.getValue(); i++) {
                             dontRepeat.add(pp);
                             Objects.requireNonNull(client.getNetworkHandler()).sendPacket(pp);
                         }
                     } else if (pe.getPacket() instanceof PlayerInteractItemC2SPacket p1) {
-                        PlayerInteractItemC2SPacket pp = new PlayerInteractItemC2SPacket(p1.getHand(), Utils.increaseAndCloseUpdateManager(CoffeeMain.client.world));
+                        PlayerInteractItemC2SPacket pp = new PlayerInteractItemC2SPacket(p1.getHand(),
+                                Utils.increaseAndCloseUpdateManager(CoffeeMain.client.world));
                         for (int i = 0; i < uses.getValue(); i++) {
                             dontRepeat.add(pp);
                             Objects.requireNonNull(client.getNetworkHandler()).sendPacket(pp);
@@ -76,7 +78,9 @@ public class MassUse extends Module {
                     BlockPos p = r.getBlockPos();
                     if (pe.getPacket() instanceof PlayerInteractBlockC2SPacket) {
                         for (int i = 0; i < uses.getValue(); i++) {
-                            PlayerInteractBlockC2SPacket pp = new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, r, Utils.increaseAndCloseUpdateManager(CoffeeMain.client.world));
+                            PlayerInteractBlockC2SPacket pp = new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND,
+                                    r,
+                                    Utils.increaseAndCloseUpdateManager(CoffeeMain.client.world));
                             dontRepeat.add(pp);
                             client.player.networkHandler.sendPacket(new PlayerActionC2SPacket(Action.START_DESTROY_BLOCK,
                                     p,

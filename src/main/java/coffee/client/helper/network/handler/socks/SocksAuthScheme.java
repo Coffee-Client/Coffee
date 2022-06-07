@@ -17,10 +17,7 @@
 package coffee.client.helper.network.handler.socks;
 
 public enum SocksAuthScheme {
-    NO_AUTH((byte) 0x00),
-    AUTH_GSSAPI((byte) 0x01),
-    AUTH_PASSWORD((byte) 0x02),
-    UNKNOWN((byte) 0xff);
+    NO_AUTH((byte) 0x00), AUTH_GSSAPI((byte) 0x01), AUTH_PASSWORD((byte) 0x02), UNKNOWN((byte) 0xff);
 
     private final byte b;
 

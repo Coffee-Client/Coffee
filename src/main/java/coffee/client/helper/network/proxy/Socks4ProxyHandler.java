@@ -41,7 +41,7 @@ public final class Socks4ProxyHandler extends ProxyHandler {
 
     @Override
     public String authScheme() {
-        return username != null? AUTH_USERNAME : AUTH_NONE;
+        return username != null ? AUTH_USERNAME : AUTH_NONE;
     }
 
     public String username() {
@@ -83,8 +83,10 @@ public final class Socks4ProxyHandler extends ProxyHandler {
         } else {
             rhost = raddr.getAddress().getHostAddress();
         }
-        return new DefaultSocks4CommandRequest(
-                Socks4CommandType.CONNECT, rhost, raddr.getPort(), username != null? username : "");
+        return new DefaultSocks4CommandRequest(Socks4CommandType.CONNECT,
+                rhost,
+                raddr.getPort(),
+                username != null ? username : "");
     }
 
     @Override

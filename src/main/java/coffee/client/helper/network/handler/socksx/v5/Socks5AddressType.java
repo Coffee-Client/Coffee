@@ -26,6 +26,17 @@ public class Socks5AddressType implements Comparable<Socks5AddressType> {
     public static final Socks5AddressType IPv4 = new Socks5AddressType(0x01, "IPv4");
     public static final Socks5AddressType DOMAIN = new Socks5AddressType(0x03, "DOMAIN");
     public static final Socks5AddressType IPv6 = new Socks5AddressType(0x04, "IPv6");
+    private final byte byteValue;
+    private final String name;
+    private String text;
+    public Socks5AddressType(int byteValue) {
+        this(byteValue, "UNKNOWN");
+    }
+
+    public Socks5AddressType(int byteValue, String name) {
+        this.name = ObjectUtil.checkNotNull(name, "name");
+        this.byteValue = (byte) byteValue;
+    }
 
     public static Socks5AddressType valueOf(byte b) {
         return switch (b) {
@@ -35,19 +46,6 @@ public class Socks5AddressType implements Comparable<Socks5AddressType> {
             default -> new Socks5AddressType(b);
         };
 
-    }
-
-    private final byte byteValue;
-    private final String name;
-    private String text;
-
-    public Socks5AddressType(int byteValue) {
-        this(byteValue, "UNKNOWN");
-    }
-
-    public Socks5AddressType(int byteValue, String name) {
-        this.name = ObjectUtil.checkNotNull(name, "name");
-        this.byteValue = (byte) byteValue;
     }
 
     public byte byteValue() {

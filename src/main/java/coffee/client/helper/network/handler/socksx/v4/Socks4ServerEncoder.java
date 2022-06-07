@@ -32,14 +32,14 @@ public final class Socks4ServerEncoder extends MessageToByteEncoder<Socks4Comman
 
     private static final byte[] IPv4_HOSTNAME_ZEROED = { 0x00, 0x00, 0x00, 0x00 };
 
-    private Socks4ServerEncoder() { }
+    private Socks4ServerEncoder() {
+    }
 
     @Override
     protected void encode(ChannelHandlerContext ctx, Socks4CommandResponse msg, ByteBuf out) throws Exception {
         out.writeByte(0);
         out.writeByte(msg.status().byteValue());
         out.writeShort(msg.dstPort());
-        out.writeBytes(msg.dstAddr() == null? IPv4_HOSTNAME_ZEROED
-                                            : NetUtil.createByteArrayFromIpAddressString(msg.dstAddr()));
+        out.writeBytes(msg.dstAddr() == null ? IPv4_HOSTNAME_ZEROED : NetUtil.createByteArrayFromIpAddressString(msg.dstAddr()));
     }
 }

@@ -35,13 +35,6 @@ import java.util.List;
  */
 public class Socks5CommandRequestDecoder extends ReplayingDecoder<Socks5CommandRequestDecoder.State> {
 
-    @UnstableApi
-    public enum State {
-        INIT,
-        SUCCESS,
-        FAILURE
-    }
-
     private final Socks5AddressDecoder addressDecoder;
 
     public Socks5CommandRequestDecoder() {
@@ -57,33 +50,32 @@ public class Socks5CommandRequestDecoder extends ReplayingDecoder<Socks5CommandR
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
         try {
             switch (state()) {
-            case INIT: {
-                final byte version = in.readByte();
-                if (version != SocksVersion.SOCKS5.byteValue()) {
-                    throw new DecoderException(
-                            "unsupported version: " + version + " (expected: " + SocksVersion.SOCKS5.byteValue() + ')');
-                }
+                case INIT: {
+                    final byte version = in.readByte();
+                    if (version != SocksVersion.SOCKS5.byteValue()) {
+                        throw new DecoderException("unsupported version: " + version + " (expected: " + SocksVersion.SOCKS5.byteValue() + ')');
+                    }
 
-                final Socks5CommandType type = Socks5CommandType.valueOf(in.readByte());
-                in.skipBytes(1); // RSV
-                final Socks5AddressType dstAddrType = Socks5AddressType.valueOf(in.readByte());
-                final String dstAddr = addressDecoder.decodeAddress(dstAddrType, in);
-                final int dstPort = in.readUnsignedShort();
+                    final Socks5CommandType type = Socks5CommandType.valueOf(in.readByte());
+                    in.skipBytes(1); // RSV
+                    final Socks5AddressType dstAddrType = Socks5AddressType.valueOf(in.readByte());
+                    final String dstAddr = addressDecoder.decodeAddress(dstAddrType, in);
+                    final int dstPort = in.readUnsignedShort();
 
-                out.add(new DefaultSocks5CommandRequest(type, dstAddrType, dstAddr, dstPort));
-                checkpoint(State.SUCCESS);
-            }
-            case SUCCESS: {
-                int readableBytes = actualReadableBytes();
-                if (readableBytes > 0) {
-                    out.add(in.readRetainedSlice(readableBytes));
+                    out.add(new DefaultSocks5CommandRequest(type, dstAddrType, dstAddr, dstPort));
+                    checkpoint(State.SUCCESS);
                 }
-                break;
-            }
-            case FAILURE: {
-                in.skipBytes(actualReadableBytes());
-                break;
-            }
+                case SUCCESS: {
+                    int readableBytes = actualReadableBytes();
+                    if (readableBytes > 0) {
+                        out.add(in.readRetainedSlice(readableBytes));
+                    }
+                    break;
+                }
+                case FAILURE: {
+                    in.skipBytes(actualReadableBytes());
+                    break;
+                }
             }
         } catch (Exception e) {
             fail(out, e);
@@ -97,9 +89,16 @@ public class Socks5CommandRequestDecoder extends ReplayingDecoder<Socks5CommandR
 
         checkpoint(State.FAILURE);
 
-        Socks5Message m = new DefaultSocks5CommandRequest(
-                Socks5CommandType.CONNECT, Socks5AddressType.IPv4, "0.0.0.0", 1);
+        Socks5Message m = new DefaultSocks5CommandRequest(Socks5CommandType.CONNECT,
+                Socks5AddressType.IPv4,
+                "0.0.0.0",
+                1);
         m.setDecoderResult(DecoderResult.failure(cause));
         out.add(m);
+    }
+
+    @UnstableApi
+    public enum State {
+        INIT, SUCCESS, FAILURE
     }
 }

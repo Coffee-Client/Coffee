@@ -33,6 +33,12 @@ public enum SocksVersion {
      */
     UNKNOWN((byte) 0xff);
 
+    private final byte b;
+
+    SocksVersion(byte b) {
+        this.b = b;
+    }
+
     /**
      * Returns the {@link SocksVersion} that corresponds to the specified version field value,
      * as defined in the protocol specification.
@@ -47,12 +53,6 @@ public enum SocksVersion {
             return SOCKS5;
         }
         return UNKNOWN;
-    }
-
-    private final byte b;
-
-    SocksVersion(byte b) {
-        this.b = b;
     }
 
     /**

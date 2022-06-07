@@ -17,7 +17,5 @@
 package coffee.client.helper.network.handler.socks;
 
 public enum SocksMessageType {
-    REQUEST,
-    RESPONSE,
-    UNKNOWN
+    REQUEST, RESPONSE, UNKNOWN
 }

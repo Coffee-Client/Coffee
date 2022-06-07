@@ -39,7 +39,8 @@ public class AirPlace extends Module {
                         return;
                     }
                     CoffeeMain.client.player.networkHandler.sendPacket(new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND,
-                            (BlockHitResult) CoffeeMain.client.crosshairTarget, Utils.increaseAndCloseUpdateManager(CoffeeMain.client.world)));
+                            (BlockHitResult) CoffeeMain.client.crosshairTarget,
+                            Utils.increaseAndCloseUpdateManager(CoffeeMain.client.world)));
                     if ((client.player.getMainHandStack().getItem() instanceof BlockItem)) {
                         Renderer.R3D.renderFadingBlock(Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 255),
                                 Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 100).darker(),

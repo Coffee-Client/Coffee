@@ -36,7 +36,7 @@ public class DefaultSocks5InitialRequest extends AbstractSocks5Message implement
         ObjectUtil.checkNotNull(authMethods, "authMethods");
 
         List<Socks5AuthMethod> list = new ArrayList<Socks5AuthMethod>(authMethods.length);
-        for (Socks5AuthMethod m: authMethods) {
+        for (Socks5AuthMethod m : authMethods) {
             if (m == null) {
                 break;
             }
@@ -50,7 +50,7 @@ public class DefaultSocks5InitialRequest extends AbstractSocks5Message implement
         ObjectUtil.checkNotNull(authMethods, "authSchemes");
 
         List<Socks5AuthMethod> list = new ArrayList<Socks5AuthMethod>();
-        for (Socks5AuthMethod m: authMethods) {
+        for (Socks5AuthMethod m : authMethods) {
             if (m == null) {
                 break;
             }

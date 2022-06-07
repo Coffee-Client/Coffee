@@ -31,6 +31,17 @@ public class Socks5AuthMethod implements Comparable<Socks5AuthMethod> {
      * Indicates that the server does not accept any authentication methods the client proposed.
      */
     public static final Socks5AuthMethod UNACCEPTED = new Socks5AuthMethod(0xff, "UNACCEPTED");
+    private final byte byteValue;
+    private final String name;
+    private String text;
+    public Socks5AuthMethod(int byteValue) {
+        this(byteValue, "UNKNOWN");
+    }
+
+    public Socks5AuthMethod(int byteValue, String name) {
+        this.name = ObjectUtil.checkNotNull(name, "name");
+        this.byteValue = (byte) byteValue;
+    }
 
     public static Socks5AuthMethod valueOf(byte b) {
         return switch (b) {
@@ -41,19 +52,6 @@ public class Socks5AuthMethod implements Comparable<Socks5AuthMethod> {
             default -> new Socks5AuthMethod(b);
         };
 
-    }
-
-    private final byte byteValue;
-    private final String name;
-    private String text;
-
-    public Socks5AuthMethod(int byteValue) {
-        this(byteValue, "UNKNOWN");
-    }
-
-    public Socks5AuthMethod(int byteValue, String name) {
-        this.name = ObjectUtil.checkNotNull(name, "name");
-        this.byteValue = (byte) byteValue;
     }
 
     public byte byteValue() {

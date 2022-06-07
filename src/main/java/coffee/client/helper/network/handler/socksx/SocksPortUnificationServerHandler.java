@@ -18,6 +18,7 @@ package coffee.client.helper.network.handler.socksx;
 
 import coffee.client.helper.network.handler.socksx.v4.Socks4ServerDecoder;
 import coffee.client.helper.network.handler.socksx.v4.Socks4ServerEncoder;
+import coffee.client.helper.network.handler.socksx.v5.Socks5AddressEncoder;
 import coffee.client.helper.network.handler.socksx.v5.Socks5InitialRequestDecoder;
 import coffee.client.helper.network.handler.socksx.v5.Socks5ServerEncoder;
 import io.netty.buffer.ByteBuf;
@@ -36,8 +37,7 @@ import java.util.List;
  */
 public class SocksPortUnificationServerHandler extends ByteToMessageDecoder {
 
-    private static final InternalLogger logger =
-            InternalLoggerFactory.getInstance(SocksPortUnificationServerHandler.class);
+    private static final InternalLogger logger = InternalLoggerFactory.getInstance(SocksPortUnificationServerHandler.class);
 
     private final Socks5ServerEncoder socks5encoder;
 
@@ -56,6 +56,16 @@ public class SocksPortUnificationServerHandler extends ByteToMessageDecoder {
         this.socks5encoder = ObjectUtil.checkNotNull(socks5encoder, "socks5encoder");
     }
 
+    private static void logKnownVersion(ChannelHandlerContext ctx, SocksVersion version) {
+        logger.debug("{} Protocol version: {}({})", ctx.channel(), version);
+    }
+
+    private static void logUnknownVersion(ChannelHandlerContext ctx, byte versionVal) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("{} Unknown protocol version: {}", ctx.channel(), versionVal & 0xFF);
+        }
+    }
+
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
         final int readerIndex = in.readerIndex();
@@ -68,33 +78,23 @@ public class SocksPortUnificationServerHandler extends ByteToMessageDecoder {
         SocksVersion version = SocksVersion.valueOf(versionVal);
 
         switch (version) {
-        case SOCKS4a:
-            logKnownVersion(ctx, version);
-            p.addAfter(ctx.name(), null, Socks4ServerEncoder.INSTANCE);
-            p.addAfter(ctx.name(), null, new Socks4ServerDecoder());
-            break;
-        case SOCKS5:
-            logKnownVersion(ctx, version);
-            p.addAfter(ctx.name(), null, socks5encoder);
-            p.addAfter(ctx.name(), null, new Socks5InitialRequestDecoder());
-            break;
-        default:
-            logUnknownVersion(ctx, versionVal);
-            in.skipBytes(in.readableBytes());
-            ctx.close();
-            return;
+            case SOCKS4a:
+                logKnownVersion(ctx, version);
+                p.addAfter(ctx.name(), null, Socks4ServerEncoder.INSTANCE);
+                p.addAfter(ctx.name(), null, new Socks4ServerDecoder());
+                break;
+            case SOCKS5:
+                logKnownVersion(ctx, version);
+                p.addAfter(ctx.name(), null, socks5encoder);
+                p.addAfter(ctx.name(), null, new Socks5InitialRequestDecoder());
+                break;
+            default:
+                logUnknownVersion(ctx, versionVal);
+                in.skipBytes(in.readableBytes());
+                ctx.close();
+                return;
         }
 
         p.remove(this);
-    }
-
-    private static void logKnownVersion(ChannelHandlerContext ctx, SocksVersion version) {
-        logger.debug("{} Protocol version: {}({})", ctx.channel(), version);
-    }
-
-    private static void logUnknownVersion(ChannelHandlerContext ctx, byte versionVal) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("{} Unknown protocol version: {}", ctx.channel(), versionVal & 0xFF);
-        }
     }
 }

@@ -24,6 +24,17 @@ public class Socks4CommandType implements Comparable<Socks4CommandType> {
 
     public static final Socks4CommandType CONNECT = new Socks4CommandType(0x01, "CONNECT");
     public static final Socks4CommandType BIND = new Socks4CommandType(0x02, "BIND");
+    private final byte byteValue;
+    private final String name;
+    private String text;
+    public Socks4CommandType(int byteValue) {
+        this(byteValue, "UNKNOWN");
+    }
+
+    public Socks4CommandType(int byteValue, String name) {
+        this.name = ObjectUtil.checkNotNull(name, "name");
+        this.byteValue = (byte) byteValue;
+    }
 
     public static Socks4CommandType valueOf(byte b) {
         return switch (b) {
@@ -32,19 +43,6 @@ public class Socks4CommandType implements Comparable<Socks4CommandType> {
             default -> new Socks4CommandType(b);
         };
 
-    }
-
-    private final byte byteValue;
-    private final String name;
-    private String text;
-
-    public Socks4CommandType(int byteValue) {
-        this(byteValue, "UNKNOWN");
-    }
-
-    public Socks4CommandType(int byteValue, String name) {
-        this.name = ObjectUtil.checkNotNull(name, "name");
-        this.byteValue = (byte) byteValue;
     }
 
     public byte byteValue() {

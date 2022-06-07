@@ -34,13 +34,6 @@ import java.util.List;
  */
 public class Socks5InitialRequestDecoder extends ReplayingDecoder<Socks5InitialRequestDecoder.State> {
 
-    @UnstableApi
-    public enum State {
-        INIT,
-        SUCCESS,
-        FAILURE
-    }
-
     public Socks5InitialRequestDecoder() {
         super(State.INIT);
     }
@@ -49,34 +42,33 @@ public class Socks5InitialRequestDecoder extends ReplayingDecoder<Socks5InitialR
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
         try {
             switch (state()) {
-            case INIT: {
-                final byte version = in.readByte();
-                if (version != SocksVersion.SOCKS5.byteValue()) {
-                    throw new DecoderException(
-                            "unsupported version: " + version + " (expected: " + SocksVersion.SOCKS5.byteValue() + ')');
-                }
+                case INIT: {
+                    final byte version = in.readByte();
+                    if (version != SocksVersion.SOCKS5.byteValue()) {
+                        throw new DecoderException("unsupported version: " + version + " (expected: " + SocksVersion.SOCKS5.byteValue() + ')');
+                    }
 
-                final int authMethodCnt = in.readUnsignedByte();
+                    final int authMethodCnt = in.readUnsignedByte();
 
-                final Socks5AuthMethod[] authMethods = new Socks5AuthMethod[authMethodCnt];
-                for (int i = 0; i < authMethodCnt; i++) {
-                    authMethods[i] = Socks5AuthMethod.valueOf(in.readByte());
-                }
+                    final Socks5AuthMethod[] authMethods = new Socks5AuthMethod[authMethodCnt];
+                    for (int i = 0; i < authMethodCnt; i++) {
+                        authMethods[i] = Socks5AuthMethod.valueOf(in.readByte());
+                    }
 
-                out.add(new DefaultSocks5InitialRequest(authMethods));
-                checkpoint(State.SUCCESS);
-            }
-            case SUCCESS: {
-                int readableBytes = actualReadableBytes();
-                if (readableBytes > 0) {
-                    out.add(in.readRetainedSlice(readableBytes));
+                    out.add(new DefaultSocks5InitialRequest(authMethods));
+                    checkpoint(State.SUCCESS);
                 }
-                break;
-            }
-            case FAILURE: {
-                in.skipBytes(actualReadableBytes());
-                break;
-            }
+                case SUCCESS: {
+                    int readableBytes = actualReadableBytes();
+                    if (readableBytes > 0) {
+                        out.add(in.readRetainedSlice(readableBytes));
+                    }
+                    break;
+                }
+                case FAILURE: {
+                    in.skipBytes(actualReadableBytes());
+                    break;
+                }
             }
         } catch (Exception e) {
             fail(out, e);
@@ -93,5 +85,10 @@ public class Socks5InitialRequestDecoder extends ReplayingDecoder<Socks5InitialR
         Socks5Message m = new DefaultSocks5InitialRequest(Socks5AuthMethod.NO_AUTH);
         m.setDecoderResult(DecoderResult.failure(cause));
         out.add(m);
+    }
+
+    @UnstableApi
+    public enum State {
+        INIT, SUCCESS, FAILURE
     }
 }

@@ -25,6 +25,17 @@ public class Socks5PasswordAuthStatus implements Comparable<Socks5PasswordAuthSt
 
     public static final Socks5PasswordAuthStatus SUCCESS = new Socks5PasswordAuthStatus(0x00, "SUCCESS");
     public static final Socks5PasswordAuthStatus FAILURE = new Socks5PasswordAuthStatus(0xFF, "FAILURE");
+    private final byte byteValue;
+    private final String name;
+    private String text;
+    public Socks5PasswordAuthStatus(int byteValue) {
+        this(byteValue, "UNKNOWN");
+    }
+
+    public Socks5PasswordAuthStatus(int byteValue, String name) {
+        this.name = ObjectUtil.checkNotNull(name, "name");
+        this.byteValue = (byte) byteValue;
+    }
 
     public static Socks5PasswordAuthStatus valueOf(byte b) {
         return switch (b) {
@@ -33,19 +44,6 @@ public class Socks5PasswordAuthStatus implements Comparable<Socks5PasswordAuthSt
             default -> new Socks5PasswordAuthStatus(b);
         };
 
-    }
-
-    private final byte byteValue;
-    private final String name;
-    private String text;
-
-    public Socks5PasswordAuthStatus(int byteValue) {
-        this(byteValue, "UNKNOWN");
-    }
-
-    public Socks5PasswordAuthStatus(int byteValue, String name) {
-        this.name = ObjectUtil.checkNotNull(name, "name");
-        this.byteValue = (byte) byteValue;
     }
 
     public byte byteValue() {

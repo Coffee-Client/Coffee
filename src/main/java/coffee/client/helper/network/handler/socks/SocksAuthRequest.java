@@ -38,8 +38,7 @@ public final class SocksAuthRequest extends SocksRequest {
         ObjectUtil.checkNotNull(password, "password");
         final CharsetEncoder asciiEncoder = CharsetUtil.encoder(CharsetUtil.US_ASCII);
         if (!asciiEncoder.canEncode(username) || !asciiEncoder.canEncode(password)) {
-            throw new IllegalArgumentException(
-                    "username: " + username + " or password: **** values should be in pure ascii");
+            throw new IllegalArgumentException("username: " + username + " or password: **** values should be in pure ascii");
         }
         if (username.length() > 255) {
             throw new IllegalArgumentException("username: " + username + " exceeds 255 char limit");

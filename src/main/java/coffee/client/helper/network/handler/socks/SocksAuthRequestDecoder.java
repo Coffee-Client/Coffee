@@ -64,8 +64,6 @@ public class SocksAuthRequestDecoder extends ReplayingDecoder<SocksAuthRequestDe
 
     @UnstableApi
     public enum State {
-        CHECK_PROTOCOL_VERSION,
-        READ_USERNAME,
-        READ_PASSWORD
+        CHECK_PROTOCOL_VERSION, READ_USERNAME, READ_PASSWORD
     }
 }

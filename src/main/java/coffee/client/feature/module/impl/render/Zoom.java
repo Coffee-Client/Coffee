@@ -64,7 +64,8 @@ public class Zoom extends Module {
     @Override
     public void enable() {
         msens = client.options.getMouseSensitivity().getValue();
-        client.options.getMouseSensitivity().setValue(msens * (finalFov.getValue() / client.options.getFov().getValue()));
+        client.options.getMouseSensitivity()
+                .setValue(msens * (finalFov.getValue() / client.options.getFov().getValue()));
         // retard the keybind thing is always an int shut the fuck up
         kb = new Keybind((int) (keybind.getValue() + 0));
         enabledTime = System.currentTimeMillis();

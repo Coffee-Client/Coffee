@@ -17,10 +17,7 @@
 package coffee.client.helper.network.handler.socks;
 
 public enum SocksCmdType {
-    CONNECT((byte) 0x01),
-    BIND((byte) 0x02),
-    UDP((byte) 0x03),
-    UNKNOWN((byte) 0xff);
+    CONNECT((byte) 0x01), BIND((byte) 0x02), UDP((byte) 0x03), UNKNOWN((byte) 0xff);
 
     private final byte b;
 

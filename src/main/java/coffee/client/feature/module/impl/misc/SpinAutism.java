@@ -65,7 +65,8 @@ public class SpinAutism extends Module {
         timeout = (int) Math.floor(speed.getValue()); // timeout expired, set it back to full
         Rotations.setClientPitch((float) ((Math.random() * 60) - 30));
         Rotations.setClientYaw((float) (Math.random() * 360));
-        PlayerInteractItemC2SPacket p = new PlayerInteractItemC2SPacket(Hand.MAIN_HAND, Utils.increaseAndCloseUpdateManager(CoffeeMain.client.world));
+        PlayerInteractItemC2SPacket p = new PlayerInteractItemC2SPacket(Hand.MAIN_HAND,
+                Utils.increaseAndCloseUpdateManager(CoffeeMain.client.world));
         Objects.requireNonNull(CoffeeMain.client.getNetworkHandler()).sendPacket(p);
         PlayerMoveC2SPacket p1 = new PlayerMoveC2SPacket.LookAndOnGround((float) r,
                 Rotations.getClientPitch(),

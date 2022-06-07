@@ -6,7 +6,8 @@ import java.net.ConnectException;
 public class ProxyConnectException extends ConnectException {
     private static final long serialVersionUID = 5211364632246265538L;
 
-    public ProxyConnectException() { }
+    public ProxyConnectException() {
+    }
 
     public ProxyConnectException(String msg) {
         super(msg);

@@ -20,8 +20,5 @@ package coffee.client.helper.network.handler.socks;
  * Type of socks response
  */
 public enum SocksResponseType {
-    INIT,
-    AUTH,
-    CMD,
-    UNKNOWN
+    INIT, AUTH, CMD, UNKNOWN
 }

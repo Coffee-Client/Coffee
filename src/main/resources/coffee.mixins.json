@@ -17,6 +17,7 @@
     "MouseMixin",
     "ParticleManagerMixin",
     "SharedConstantsMixin",
+    "SimpleOptionMixin",
     "entity.AreaEffectCloudEntityMixin",
     "entity.ClientPlayerEntityMixin",
     "entity.EntityMixin",

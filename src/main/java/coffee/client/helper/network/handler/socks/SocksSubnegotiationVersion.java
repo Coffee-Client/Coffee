@@ -17,8 +17,7 @@
 package coffee.client.helper.network.handler.socks;
 
 public enum SocksSubnegotiationVersion {
-    AUTH_PASSWORD((byte) 0x01),
-    UNKNOWN((byte) 0xff);
+    AUTH_PASSWORD((byte) 0x01), UNKNOWN((byte) 0xff);
 
     private final byte b;
 

@@ -64,7 +64,7 @@ public interface Socks5AddressDecoder {
      * Decodes a SOCKS5 address field into its string representation.
      *
      * @param addrType the type of the address
-     * @param in the input buffer which contains the SOCKS5 address field at its reader index
+     * @param in       the input buffer which contains the SOCKS5 address field at its reader index
      */
     String decodeAddress(Socks5AddressType addrType, ByteBuf in) throws Exception;
 }

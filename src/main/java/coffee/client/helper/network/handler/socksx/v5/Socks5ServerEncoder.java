@@ -48,6 +48,16 @@ public class Socks5ServerEncoder extends MessageToByteEncoder<Socks5Message> {
         this.addressEncoder = ObjectUtil.checkNotNull(addressEncoder, "addressEncoder");
     }
 
+    private static void encodeAuthMethodResponse(Socks5InitialResponse msg, ByteBuf out) {
+        out.writeByte(msg.version().byteValue());
+        out.writeByte(msg.authMethod().byteValue());
+    }
+
+    private static void encodePasswordAuthResponse(Socks5PasswordAuthResponse msg, ByteBuf out) {
+        out.writeByte(0x01);
+        out.writeByte(msg.status().byteValue());
+    }
+
     /**
      * Returns the {@link Socks5AddressEncoder} of this encoder.
      */
@@ -66,16 +76,6 @@ public class Socks5ServerEncoder extends MessageToByteEncoder<Socks5Message> {
         } else {
             throw new EncoderException("unsupported message type: " + StringUtil.simpleClassName(msg));
         }
-    }
-
-    private static void encodeAuthMethodResponse(Socks5InitialResponse msg, ByteBuf out) {
-        out.writeByte(msg.version().byteValue());
-        out.writeByte(msg.authMethod().byteValue());
-    }
-
-    private static void encodePasswordAuthResponse(Socks5PasswordAuthResponse msg, ByteBuf out) {
-        out.writeByte(0x01);
-        out.writeByte(msg.status().byteValue());
     }
 
     private void encodeCommandResponse(Socks5CommandResponse msg, ByteBuf out) throws Exception {

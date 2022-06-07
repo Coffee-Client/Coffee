@@ -22,6 +22,7 @@ import io.netty.util.internal.StringUtil;
 final class SocksCommonUtils {
     public static final SocksRequest UNKNOWN_SOCKS_REQUEST = new UnknownSocksRequest();
     public static final SocksResponse UNKNOWN_SOCKS_RESPONSE = new UnknownSocksResponse();
+    private static final char ipv6hextetSeparator = ':';
 
     /**
      * A constructor to stop this class being constructed.
@@ -29,8 +30,6 @@ final class SocksCommonUtils {
     private SocksCommonUtils() {
         // NOOP
     }
-
-    private static final char ipv6hextetSeparator = ':';
 
     /**
      * Converts numeric IPv6 to standard (non-compressed) format.
@@ -44,7 +43,7 @@ final class SocksCommonUtils {
 
     private static void ipv6toStr(StringBuilder sb, byte[] src, int fromHextet, int toHextet) {
         int i;
-        toHextet --;
+        toHextet--;
         for (i = fromHextet; i < toHextet; i++) {
             appendHextet(sb, src, i);
             sb.append(ipv6hextetSeparator);

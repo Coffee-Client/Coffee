@@ -36,8 +36,7 @@ public final class DefaultSocks5CommandResponse extends AbstractSocks5Message im
         this(status, bndAddrType, null, 0);
     }
 
-    public DefaultSocks5CommandResponse(
-            Socks5CommandStatus status, Socks5AddressType bndAddrType, String bndAddr, int bndPort) {
+    public DefaultSocks5CommandResponse(Socks5CommandStatus status, Socks5AddressType bndAddrType, String bndAddr, int bndPort) {
 
         ObjectUtil.checkNotNull(status, "status");
         ObjectUtil.checkNotNull(bndAddrType, "bndAddrType");

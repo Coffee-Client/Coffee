@@ -64,7 +64,9 @@ public class AnyPlacer extends Module {
                             Direction.DOWN,
                             new BlockPos(CoffeeMain.client.player.getPos()),
                             false);
-                    PlayerInteractBlockC2SPacket ib = new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, bhr, Utils.increaseAndCloseUpdateManager(CoffeeMain.client.world));
+                    PlayerInteractBlockC2SPacket ib = new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND,
+                            bhr,
+                            Utils.increaseAndCloseUpdateManager(CoffeeMain.client.world));
                     CoffeeMain.client.getNetworkHandler().sendPacket(ib);
                 }
             }

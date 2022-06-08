@@ -18,7 +18,7 @@ echo Running build
 ./gradlew build
 if not exist "./bin" mkdir bin
 
-ren ./build/libs/coffee-1.0.0.jar ./bin/latest.jar
-ren ./build/devlibs/coffee-1.0.0-dev.jar ./bin/latest-sdk.jar
-ren ./build/devlibs/coffee-1.0.0-sources.jar ./bin/latest-sdk-sources.jar
+cp ./build/libs/coffee-1.0.0.jar ./bin/latest.jar
+cp ./build/devlibs/coffee-1.0.0-dev.jar ./bin/latest-sdk.jar
+cp ./build/devlibs/coffee-1.0.0-sources.jar ./bin/latest-sdk-sources.jar
 echo Made release

@@ -92,7 +92,7 @@ public class GameRendererMixin {
 
     @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;raycast(DFZ)Lnet/minecraft/util/hit/HitResult;"), method = "updateTargetedEntity", require = 0)
     HitResult coffee_replaceHitResult(Entity instance, double maxDistance, float tickDelta, boolean includeFluids) {
-        if (ModuleRegistry.getByClass(FreeLook.class).isEnabled() && !((boolean) ModuleRegistry.getByClass(FreeLook.class).config.get("Enable Anti-Aim").getValue())) {
+        if (ModuleRegistry.getByClass(FreeLook.class).isEnabled() && !((boolean) FreeLook.instance().getEnableAA().getValue())) {
             Vec3d vec3d = instance.getCameraPosVec(tickDelta);
             Vec3d vec3d2 = Utils.Math.getRotationVector(Rotations.getClientPitch(), Rotations.getClientYaw());
             Vec3d vec3d3 = vec3d.add(vec3d2.x * maxDistance, vec3d2.y * maxDistance, vec3d2.z * maxDistance);

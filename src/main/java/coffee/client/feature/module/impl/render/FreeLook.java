@@ -8,9 +8,12 @@ import coffee.client.feature.config.BooleanSetting;
 import coffee.client.feature.config.DoubleSetting;
 import coffee.client.feature.config.EnumSetting;
 import coffee.client.feature.module.Module;
+import coffee.client.feature.module.ModuleRegistry;
 import coffee.client.feature.module.ModuleType;
+import coffee.client.feature.module.impl.misc.AntiCrash;
 import coffee.client.helper.Keybind;
 import coffee.client.helper.Rotations;
+import lombok.Getter;
 import net.minecraft.client.option.Perspective;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
@@ -19,10 +22,11 @@ import net.minecraft.util.math.MathHelper;
 import java.util.Objects;
 
 public class FreeLook extends Module {
-
+    private static FreeLook instance = null;
     final BooleanSetting hold = this.config.create(new BooleanSetting.Builder(true).name("Hold")
             .description("Disables the module after you unpress the keybind")
             .get());
+    @Getter
     final BooleanSetting enableAA = this.config.create(new BooleanSetting.Builder(false).name("Enable Anti-Aim")
             .description("Hvh toggle rage nn noob")
             .get());
@@ -58,6 +62,13 @@ public class FreeLook extends Module {
         aaSpeed.showIf(() -> aaMode.getValue() != AntiAimMode.Jitter && enableAA.getValue());
         jitterRange.showIf(() -> aaMode.getValue() == AntiAimMode.Jitter && enableAA.getValue());
         swayRange.showIf(() -> aaMode.getValue() == AntiAimMode.Sway && enableAA.getValue());
+    }
+
+    public static FreeLook instance() {
+        if (instance == null) {
+            instance = ModuleRegistry.getByClass(FreeLook.class);
+        }
+        return instance;
     }
 
     @Override

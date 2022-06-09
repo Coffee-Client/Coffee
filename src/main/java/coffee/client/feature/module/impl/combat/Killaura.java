@@ -354,7 +354,7 @@ public class Killaura extends Module {
         List<String> t = new ArrayList<>();
         t.add("T" + attacks.size());
         t.add("D" + getDelay());
-        t.add("R" + getRange());
+        t.add("R" + Utils.Math.roundToDecimal(getRange(), 1));
         t.add(mode.getValue().name());
         return "[" + String.join(";", t) + "]";
     }

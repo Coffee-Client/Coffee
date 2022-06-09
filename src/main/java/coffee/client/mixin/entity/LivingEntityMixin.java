@@ -69,7 +69,7 @@ public class LivingEntityMixin {
 
     @Redirect(method = "jump", at = @At(value = "INVOKE", target = "net/minecraft/entity/LivingEntity.getYaw()F"), require = 0)
     private float coffee_overwriteJumpDirection(LivingEntity instance) {
-        if (instance.equals(CoffeeMain.client.player) && ModuleRegistry.getByClass(FreeLook.class).isEnabled()) {
+        if (instance.equals(CoffeeMain.client.player) && ModuleRegistry.getByClass(FreeLook.class).isEnabled() && !((boolean) FreeLook.instance().getEnableAA().getValue())) {
             return ModuleRegistry.getByClass(FreeLook.class).newyaw;
         }
         return instance.getYaw();

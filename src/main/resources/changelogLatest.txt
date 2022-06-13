@@ -1,1 +1,2 @@
-Fixed antiaim 
+Visual updates
+Bug fixes regarding 1.19

@@ -12,8 +12,7 @@ public class DoubleArgumentParser implements ArgumentParser<Double> {
         try {
             return Double.parseDouble(argument);
         } catch (Exception e) {
-            throw new CommandException("Invalid argument \"" + argument + "\": Expected a double",
-                    "Provide a valid number");
+            throw new CommandException("Invalid argument \"" + argument + "\": Expected a double", "Provide a valid number");
         }
     }
 }

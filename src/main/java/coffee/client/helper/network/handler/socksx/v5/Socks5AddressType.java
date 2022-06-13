@@ -29,6 +29,7 @@ public class Socks5AddressType implements Comparable<Socks5AddressType> {
     private final byte byteValue;
     private final String name;
     private String text;
+
     public Socks5AddressType(int byteValue) {
         this(byteValue, "UNKNOWN");
     }

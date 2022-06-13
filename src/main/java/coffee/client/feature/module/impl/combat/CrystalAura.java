@@ -80,15 +80,12 @@ public class CrystalAura extends Module {
                 List<Vec3d> potentialTargets = new ArrayList<>();
                 for (BlockPos obsidianPosition : obsidianPositions) {
                     Vec3d center = Vec3d.of(obsidianPosition);
-                    if (!isABObstructed(center.add(.5, 1, .5), entity.getPos()) || !isABObstructed(center.add(.5,
-                            1,
-                            .5), entity.getPos().add(0, entity.getHeight(), 0))) {
+                    if (!isABObstructed(center.add(.5, 1, .5), entity.getPos()) || !isABObstructed(center.add(.5, 1, .5),
+                            entity.getPos().add(0, entity.getHeight(), 0))) {
                         potentialTargets.add(center);
                     }
                 }
-                Vec3d t = potentialTargets.stream()
-                        .min(Comparator.comparingDouble(value -> value.distanceTo(entity.getPos())))
-                        .orElse(null);
+                Vec3d t = potentialTargets.stream().min(Comparator.comparingDouble(value -> value.distanceTo(entity.getPos()))).orElse(null);
                 if (t == null) {
                     continue;
                 }
@@ -117,15 +114,8 @@ public class CrystalAura extends Module {
         for (EntityEntry target : targets) {
             Renderer.R3D.renderLine(target.target().getPos(), target.target().getEyePos(), Color.WHITE, matrices);
             if (target.freeAB() != null) {
-                Renderer.R3D.renderLine(Vec3d.of(target.freeAB()).add(.5, 1, .5),
-                        target.target().getPos(),
-                        Color.RED,
-                        matrices);
-                Renderer.R3D.renderFadingBlock(Color.WHITE,
-                        new Color(255, 50, 50, 100),
-                        Vec3d.of(target.freeAB()),
-                        new Vec3d(1, 1, 1),
-                        1000);
+                Renderer.R3D.renderLine(Vec3d.of(target.freeAB()).add(.5, 1, .5), target.target().getPos(), Color.RED, matrices);
+                Renderer.R3D.renderFadingBlock(Color.WHITE, new Color(255, 50, 50, 100), Vec3d.of(target.freeAB()), new Vec3d(1, 1, 1), 1000);
             }
         }
     }

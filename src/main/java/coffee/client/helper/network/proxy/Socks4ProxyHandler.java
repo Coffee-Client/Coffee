@@ -83,10 +83,7 @@ public final class Socks4ProxyHandler extends ProxyHandler {
         } else {
             rhost = raddr.getAddress().getHostAddress();
         }
-        return new DefaultSocks4CommandRequest(Socks4CommandType.CONNECT,
-                rhost,
-                raddr.getPort(),
-                username != null ? username : "");
+        return new DefaultSocks4CommandRequest(Socks4CommandType.CONNECT, rhost, raddr.getPort(), username != null ? username : "");
     }
 
     @Override

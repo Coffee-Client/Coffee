@@ -19,15 +19,10 @@ import java.util.Objects;
 public class Zoom extends Module {
 
     static long enabledTime = 0;
-    final DoubleSetting finalFov = this.config.create(new DoubleSetting.Builder(30).name("FOV")
-            .description("How far to zoom in")
-            .min(1)
-            .max(180)
-            .precision(0)
-            .get());
-    final BooleanSetting hold = this.config.create(new BooleanSetting.Builder(true).name("Hold")
-            .description("Disables the module when you unpress the keybind")
-            .get());
+    final DoubleSetting finalFov = this.config.create(
+            new DoubleSetting.Builder(30).name("FOV").description("How far to zoom in").min(1).max(180).precision(0).get());
+    final BooleanSetting hold = this.config.create(
+            new BooleanSetting.Builder(true).name("Hold").description("Disables the module when you unpress the keybind").get());
 
     Keybind kb;
     double msens = 0.5d;
@@ -64,8 +59,7 @@ public class Zoom extends Module {
     @Override
     public void enable() {
         msens = client.options.getMouseSensitivity().getValue();
-        client.options.getMouseSensitivity()
-                .setValue(msens * (finalFov.getValue() / client.options.getFov().getValue()));
+        client.options.getMouseSensitivity().setValue(msens * (finalFov.getValue() / client.options.getFov().getValue()));
         // retard the keybind thing is always an int shut the fuck up
         kb = new Keybind((int) (keybind.getValue() + 0));
         enabledTime = System.currentTimeMillis();

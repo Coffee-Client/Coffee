@@ -64,14 +64,8 @@ public class BooleanSettingEditor extends ConfigBase<BooleanSetting> {
         double smoothAnimProgress = Transitions.easeOutExpo(animProgress);
 
         double dimensionsWeCanUse = 8;
-        Renderer.R2D.renderRoundedQuad(matrices,
-                Renderer.Util.lerp(theme.getInactive(), theme.getActive(), 1 - smoothAnimProgress),
-                x,
-                y + height / 2d - dimensionsWeCanUse / 2d,
-                x + dimensionsWeCanUse,
-                y + height / 2d + dimensionsWeCanUse / 2d,
-                2,
-                20);
+        Renderer.R2D.renderRoundedQuad(matrices, Renderer.Util.lerp(theme.getInactive(), theme.getActive(), 1 - smoothAnimProgress), x,
+                y + height / 2d - dimensionsWeCanUse / 2d, x + dimensionsWeCanUse, y + height / 2d + dimensionsWeCanUse / 2d, 2, 20);
         matrices.push();
 
         float rotateDeg = 45;
@@ -89,10 +83,7 @@ public class BooleanSettingEditor extends ConfigBase<BooleanSetting> {
         renderHook(matrices, Color.WHITE, 0, 0, 3 * smoothAnimProgress, 5 * smoothAnimProgress, 0.75);
         matrices.pop();
         FontRenderers.getRenderer()
-                .drawString(matrices,
-                        configValue.getName(),
-                        x + dimensionsWeCanUse + 2,
-                        y + height / 2d - FontRenderers.getRenderer().getMarginHeight() / 2d,
+                .drawString(matrices, configValue.getName(), x + dimensionsWeCanUse + 2, y + height / 2d - FontRenderers.getRenderer().getMarginHeight() / 2d,
                         0xFFFFFF);
     }
 
@@ -113,11 +104,10 @@ public class BooleanSettingEditor extends ConfigBase<BooleanSetting> {
          * 1 ------- 2 - origin
          * */
 
-        double[][] verts = new double[][] { new double[] { 0, 0 }, new double[] { 0, -extendHeight },
-                new double[] { -thickness, -extendHeight }, new double[] { -thickness, 0 },
+        double[][] verts = new double[][] { new double[] { 0, 0 }, new double[] { 0, -extendHeight }, new double[] { -thickness, -extendHeight },
+                new double[] { -thickness, 0 },
 
-                new double[] { 0, 0 }, new double[] { 0, -thickness }, new double[] { -hookWidth, -thickness },
-                new double[] { -hookWidth, 0 } };
+                new double[] { 0, 0 }, new double[] { 0, -thickness }, new double[] { -hookWidth, -thickness }, new double[] { -hookWidth, 0 } };
         for (double[] vert : verts) {
             double xOffset = vert[0];
             double yOffset = vert[1];

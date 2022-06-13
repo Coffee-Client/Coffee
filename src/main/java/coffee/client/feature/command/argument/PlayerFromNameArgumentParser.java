@@ -33,7 +33,6 @@ public class PlayerFromNameArgumentParser implements ArgumentParser<PlayerEntity
                 }
             }
         }
-        throw new CommandException("Invalid argument \"" + argument + "\": Player not found",
-                "Provide the name of an existing player");
+        throw new CommandException("Invalid argument \"" + argument + "\": Player not found", "Provide the name of an existing player");
     }
 }

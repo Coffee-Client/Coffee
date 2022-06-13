@@ -175,7 +175,8 @@ public class ModuleRegistry {
         Module instance = null;
         for (Constructor<?> declaredConstructor : moduleClass.getDeclaredConstructors()) {
             if (declaredConstructor.getParameterCount() != 0) {
-                throw new IllegalArgumentException(moduleClass.getName() + " has invalid constructor: expected " + moduleClass.getName() + "(), got " + declaredConstructor);
+                throw new IllegalArgumentException(
+                        moduleClass.getName() + " has invalid constructor: expected " + moduleClass.getName() + "(), got " + declaredConstructor);
             }
             try {
                 instance = (Module) declaredConstructor.newInstance();
@@ -311,11 +312,7 @@ public class ModuleRegistry {
         for (Module module : getModules()) {
             module.postModuleInit();
         }
-        CoffeeMain.log(Level.INFO,
-                "Initialized modules. Vanilla modules:",
-                vanillaModules.size(),
-                "Addon modules:",
-                customModules.size());
+        CoffeeMain.log(Level.INFO, "Initialized modules. Vanilla modules:", vanillaModules.size(), "Addon modules:", customModules.size());
     }
 
     public static List<Module> getModules() {
@@ -334,8 +331,7 @@ public class ModuleRegistry {
             while (reloadInProgress.get()) {
                 Thread.onSpinWait();
             }
-            CoffeeMain.log(Level.INFO,
-                    "Lock opened within " + (System.currentTimeMillis() - lockStart) + " ms (" + (System.nanoTime() - lockStartns) + " ns)");
+            CoffeeMain.log(Level.INFO, "Lock opened within " + (System.currentTimeMillis() - lockStart) + " ms (" + (System.nanoTime() - lockStartns) + " ns)");
         }
 
     }

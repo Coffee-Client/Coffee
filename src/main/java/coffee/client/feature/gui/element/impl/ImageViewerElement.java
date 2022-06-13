@@ -57,17 +57,7 @@ public class ImageViewerElement extends Element {
     @Override
     public void render(MatrixStack stack, double mouseX, double mouseY) {
         RenderSystem.setShaderTexture(0, tex);
-        Renderer.R2D.renderTexture(stack,
-                getPositionX(),
-                getPositionY(),
-                getWidth(),
-                getHeight(),
-                0,
-                0,
-                getWidth(),
-                getHeight(),
-                getWidth(),
-                getHeight());
+        Renderer.R2D.renderTexture(stack, getPositionX(), getPositionY(), getWidth(), getHeight(), 0, 0, getWidth(), getHeight(), getWidth(), getHeight());
     }
 
     @Override

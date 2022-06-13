@@ -24,9 +24,7 @@ public class Glyph {
     Rectangle2D dimensions;
 
     public Glyph(char c, Font f) {
-        this.imageTex = new Texture("font/glyphs/" + ((int) c) + "-" + f.getName()
-                .toLowerCase()
-                .hashCode() + (int) Math.floor(Math.random() * 0xFFFF));
+        this.imageTex = new Texture("font/glyphs/" + ((int) c) + "-" + f.getName().toLowerCase().hashCode() + (int) Math.floor(Math.random() * 0xFFFF));
         this.f = f;
         this.c = c;
         generateTexture();
@@ -37,9 +35,7 @@ public class Glyph {
         FontRenderContext fontRenderContext = new FontRenderContext(affineTransform, true, true);
         Rectangle2D dim = f.getStringBounds(String.valueOf(c), fontRenderContext);
         this.dimensions = dim;
-        BufferedImage bufferedImage = new BufferedImage((int) Math.ceil(dim.getWidth()),
-                (int) Math.ceil(dim.getHeight()),
-                BufferedImage.TYPE_INT_ARGB);
+        BufferedImage bufferedImage = new BufferedImage((int) Math.ceil(dim.getWidth()), (int) Math.ceil(dim.getHeight()), BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = bufferedImage.createGraphics();
 
         g.setFont(f);

@@ -36,10 +36,7 @@ public class ParticleManagerMixin implements ParticleManagerDuck {
         if (ac.isEnabled()) {
             if (ac.getCapParticles().getValue()) {
                 int max = (int) Math.floor(ac.getParticleMax().getValue());
-                int totalParticles = this.particles.values()
-                        .stream()
-                        .mapToInt(Collection::size)
-                        .sum() + this.newParticles.size();
+                int totalParticles = this.particles.values().stream().mapToInt(Collection::size).sum() + this.newParticles.size();
                 if (totalParticles >= max) {
                     ci.cancel();
                 }

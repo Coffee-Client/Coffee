@@ -29,6 +29,7 @@ public class Socks4CommandStatus implements Comparable<Socks4CommandStatus> {
     private final byte byteValue;
     private final String name;
     private String text;
+
     public Socks4CommandStatus(int byteValue) {
         this(byteValue, "UNKNOWN");
     }

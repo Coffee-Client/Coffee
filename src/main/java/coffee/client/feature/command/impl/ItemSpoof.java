@@ -24,11 +24,7 @@ public class ItemSpoof extends Command {
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
         return StaticArgumentServer.serveFromStatic(index,
-                new PossibleArgument(ArgumentType.STRING,
-                        Registry.ITEM.stream()
-                                .map(p -> Registry.ITEM.getId(p).toString())
-                                .toList()
-                                .toArray(String[]::new)),
+                new PossibleArgument(ArgumentType.STRING, Registry.ITEM.stream().map(p -> Registry.ITEM.getId(p).toString()).toList().toArray(String[]::new)),
                 new PossibleArgument(ArgumentType.NUMBER, "(amount)"));
     }
 

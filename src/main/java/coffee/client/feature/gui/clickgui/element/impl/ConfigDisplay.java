@@ -26,6 +26,7 @@ import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.Utils;
 import net.minecraft.client.util.math.MatrixStack;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,7 +34,7 @@ import java.util.stream.Collectors;
 public class ConfigDisplay extends Element {
     final List<ConfigBase<?>> bases = new ArrayList<>();
     final double padding = 4;
-    final double paddingLeft = 2;
+    final double paddingRight = 0;
     long hoverStart = System.currentTimeMillis();
     boolean hoveredBefore = false;
 
@@ -42,24 +43,24 @@ public class ConfigDisplay extends Element {
         for (SettingBase<?> setting : mc.getSettings()) {
 
             if (setting instanceof BooleanSetting set) {
-                BooleanSettingEditor bse = new BooleanSettingEditor(0, 0, width - padding * 2 - paddingLeft, set);
+                BooleanSettingEditor bse = new BooleanSettingEditor(0, 0, width - padding * 2 - paddingRight, set);
                 bases.add(bse);
             } else if (setting instanceof DoubleSetting set) {
                 if (set.getName().equalsIgnoreCase("keybind")) {
-                    KeybindEditor ke = new KeybindEditor(0, 0, width - padding * 2 - paddingLeft, set);
+                    KeybindEditor ke = new KeybindEditor(0, 0, width - padding * 2 - paddingRight, set);
                     bases.add(ke);
                 } else {
-                    DoubleSettingEditor dse = new DoubleSettingEditor(0, 0, width - padding * 2 - paddingLeft, set);
+                    DoubleSettingEditor dse = new DoubleSettingEditor(0, 0, width - padding * 2 - paddingRight, set);
                     bases.add(dse);
                 }
             } else if (setting instanceof EnumSetting<?> set) {
-                EnumSettingEditor ese = new EnumSettingEditor(0, 0, width - padding * 2 - paddingLeft, set);
+                EnumSettingEditor ese = new EnumSettingEditor(0, 0, width - padding * 2 - paddingRight, set);
                 bases.add(ese);
             } else if (setting instanceof StringSetting set) {
-                StringSettingEditor sse = new StringSettingEditor(0, 0, width - padding * 2 - paddingLeft, set);
+                StringSettingEditor sse = new StringSettingEditor(0, 0, width - padding * 2 - paddingRight, set);
                 bases.add(sse);
             } else if (setting instanceof ColorSetting set) {
-                ColorSettingEditor cse = new ColorSettingEditor(0, 0, width - padding * 2 - paddingLeft, set);
+                ColorSettingEditor cse = new ColorSettingEditor(0, 0, width - padding * 2 - paddingRight, set);
                 bases.add(cse);
             }
         }
@@ -67,9 +68,7 @@ public class ConfigDisplay extends Element {
     }
 
     public List<ConfigBase<?>> getBases() {
-        return bases.stream()
-                .filter(configBase -> configBase.getConfigValue().shouldShow())
-                .collect(Collectors.toList());
+        return bases.stream().filter(configBase -> configBase.getConfigValue().shouldShow()).collect(Collectors.toList());
     }
 
     @Override
@@ -86,9 +85,7 @@ public class ConfigDisplay extends Element {
             return true;
         }
         for (ConfigBase<?> basis : getBases()) {
-            if (!(basis instanceof StringSettingEditor) && basis.getConfigValue().shouldShow() && basis.clicked(x,
-                    y,
-                    button)) {
+            if (!(basis instanceof StringSettingEditor) && basis.getConfigValue().shouldShow() && basis.clicked(x, y, button)) {
                 return true;
             }
         }
@@ -137,7 +134,8 @@ public class ConfigDisplay extends Element {
         Theme theme = ThemeManager.getMainTheme();
         double height = getHeight();
         Renderer.R2D.renderQuad(matrices, theme.getConfig(), x, this.y, x + width, this.y + height);
-        Renderer.R2D.renderQuad(matrices, theme.getAccent(), x, this.y, x + 1, this.y + height);
+//        Renderer.R2D.renderQuad(matrices, theme.getAccent(), x, this.y, x + 1, this.y + height);
+        Renderer.R2D.renderQuadGradient(matrices,new Color(0,0,0,0),new Color(0,0,0,100),this.x,this.y+this.getHeight()-10,this.x+this.getWidth(),this.y+this.getHeight(), true);
         boolean hovered = inBounds(mouseX, mouseY);
         if (!hoveredBefore && hovered) {
             hoverStart = System.currentTimeMillis();

@@ -29,8 +29,7 @@ public class CreativeInventoryScreenMixin extends Screen {
             if (CoffeeMain.client.player.getInventory().getMainHandStack().isEmpty()) {
                 Utils.Logging.error("You need to hold an item!");
             } else {
-                CoffeeMain.client.setScreen(new NbtEditorScreen(CoffeeMain.client.player.getInventory()
-                        .getMainHandStack()));
+                CoffeeMain.client.setScreen(new NbtEditorScreen(CoffeeMain.client.player.getInventory().getMainHandStack()));
             }
         });
         addDrawableChild(nbtEdit);

@@ -57,15 +57,12 @@ public class AnyPlacer extends Module {
                     nl.add(NbtDouble.of(spawnPos.y));
                     nl.add(NbtDouble.of(spawnPos.z));
                     entityTag.put("Pos", nl);
-                    CreativeInventoryActionC2SPacket a = new CreativeInventoryActionC2SPacket(Utils.Inventory.slotIndexToId(
-                            CoffeeMain.client.player.getInventory().selectedSlot), sex);
+                    CreativeInventoryActionC2SPacket a = new CreativeInventoryActionC2SPacket(
+                            Utils.Inventory.slotIndexToId(CoffeeMain.client.player.getInventory().selectedSlot), sex);
                     Objects.requireNonNull(CoffeeMain.client.getNetworkHandler()).sendPacket(a);
-                    BlockHitResult bhr = new BlockHitResult(CoffeeMain.client.player.getPos(),
-                            Direction.DOWN,
-                            new BlockPos(CoffeeMain.client.player.getPos()),
+                    BlockHitResult bhr = new BlockHitResult(CoffeeMain.client.player.getPos(), Direction.DOWN, new BlockPos(CoffeeMain.client.player.getPos()),
                             false);
-                    PlayerInteractBlockC2SPacket ib = new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND,
-                            bhr,
+                    PlayerInteractBlockC2SPacket ib = new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, bhr,
                             Utils.increaseAndCloseUpdateManager(CoffeeMain.client.world));
                     CoffeeMain.client.getNetworkHandler().sendPacket(ib);
                 }

@@ -362,38 +362,22 @@ public class RoundTextFieldWidget implements Element, Drawable, Selectable, Does
         ClipStack.globalInstance.addWindow(stack, new Rectangle(x + pad, y, x + width - pad, y + height));
         // Text content
         if (!text.isEmpty()) {
-            FontRenderers.getRenderer()
-                    .drawString(stack, text, (float) (x + pad - overflowWidth), (float) (centerY), 0xFFFFFF, false);
+            FontRenderers.getRenderer().drawString(stack, text, (float) (x + pad - overflowWidth), (float) (centerY), 0xFFFFFF, false);
         } else {
-            FontRenderers.getRenderer()
-                    .drawString(stack,
-                            suggestion,
-                            (float) (x + pad - overflowWidth),
-                            (float) (centerY),
-                            0xAAAAAA,
-                            false);
+            FontRenderers.getRenderer().drawString(stack, suggestion, (float) (x + pad - overflowWidth), (float) (centerY), 0xAAAAAA, false);
         }
 
         // Text highlighting
         if (focused && (cursor != selectionStart || cursor != selectionEnd)) {
             double selStart = x + pad + getTextWidth(selectionStart) - overflowWidth;
             double selEnd = x + pad + getTextWidth(selectionEnd) - overflowWidth;
-            Renderer.R2D.renderQuad(stack,
-                    new Color(50, 50, 255, 100),
-                    selStart,
-                    centerY,
-                    selEnd,
-                    centerY + FontRenderers.getRenderer().getMarginHeight());
+            Renderer.R2D.renderQuad(stack, new Color(50, 50, 255, 100), selStart, centerY, selEnd, centerY + FontRenderers.getRenderer().getMarginHeight());
         }
         ClipStack.globalInstance.popWindow();
         boolean renderCursor = (System.currentTimeMillis() % 1000) / 500d > 1;
         if (focused && renderCursor) {
-            Renderer.R2D.renderQuad(stack,
-                    Color.WHITE,
-                    x + pad + getTextWidth(cursor) - overflowWidth,
-                    centerY,
-                    x + pad + getTextWidth(cursor) - overflowWidth + 1,
-                    centerY + FontRenderers.getRenderer().getMarginHeight());
+            Renderer.R2D.renderQuad(stack, Color.WHITE, x + pad + getTextWidth(cursor) - overflowWidth, centerY,
+                    x + pad + getTextWidth(cursor) - overflowWidth + 1, centerY + FontRenderers.getRenderer().getMarginHeight());
         }
 
     }

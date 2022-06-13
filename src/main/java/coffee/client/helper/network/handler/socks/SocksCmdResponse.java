@@ -32,8 +32,7 @@ public final class SocksCmdResponse extends SocksResponse {
     // All arrays are initialized on construction time to 0/false/null remove array Initialization
     private static final byte[] DOMAIN_ZEROED = { 0x00 };
     private static final byte[] IPv4_HOSTNAME_ZEROED = { 0x00, 0x00, 0x00, 0x00 };
-    private static final byte[] IPv6_HOSTNAME_ZEROED = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    private static final byte[] IPv6_HOSTNAME_ZEROED = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
     private final SocksCmdStatus cmdStatus;
     private final SocksAddressType addressType;
     private final String host;
@@ -140,8 +139,7 @@ public final class SocksCmdResponse extends SocksResponse {
         byteBuf.writeByte(addressType.byteValue());
         switch (addressType) {
             case IPv4: {
-                byte[] hostContent = host == null ? IPv4_HOSTNAME_ZEROED : NetUtil.createByteArrayFromIpAddressString(
-                        host);
+                byte[] hostContent = host == null ? IPv4_HOSTNAME_ZEROED : NetUtil.createByteArrayFromIpAddressString(host);
                 byteBuf.writeBytes(hostContent);
                 byteBuf.writeShort(port);
                 break;
@@ -158,8 +156,7 @@ public final class SocksCmdResponse extends SocksResponse {
                 break;
             }
             case IPv6: {
-                byte[] hostContent = host == null ? IPv6_HOSTNAME_ZEROED : NetUtil.createByteArrayFromIpAddressString(
-                        host);
+                byte[] hostContent = host == null ? IPv6_HOSTNAME_ZEROED : NetUtil.createByteArrayFromIpAddressString(host);
                 byteBuf.writeBytes(hostContent);
                 byteBuf.writeShort(port);
                 break;

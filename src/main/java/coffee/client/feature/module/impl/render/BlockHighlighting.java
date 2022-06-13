@@ -37,10 +37,7 @@ public class BlockHighlighting extends Module {
             if (event.getPacket() instanceof BlockUpdateS2CPacket packet) {
                 BlockPos real = packet.getPos();
                 Renderer.R3D.renderFadingBlock(Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 255),
-                        Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 100).darker(),
-                        Vec3d.of(real),
-                        new Vec3d(1, 1, 1),
-                        1000);
+                        Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 100).darker(), Vec3d.of(real), new Vec3d(1, 1, 1), 1000);
             }
         });
     }
@@ -71,8 +68,7 @@ public class BlockHighlighting extends Module {
         double lenY = bb.getYLength();
         double lenZ = bb.getZLength();
         bb = bb.shrink(bb.getXLength() * invProg, bb.getYLength() * invProg, bb.getZLength() * invProg);
-        Vec3d start = new Vec3d(bb.minX, bb.minY, bb.minZ).add(Vec3d.of(kv))
-                .add(lenX * invProg / 2d, lenY * invProg / 2d, lenZ * invProg / 2d);
+        Vec3d start = new Vec3d(bb.minX, bb.minY, bb.minZ).add(Vec3d.of(kv)).add(lenX * invProg / 2d, lenY * invProg / 2d, lenZ * invProg / 2d);
         Vec3d len = new Vec3d(bb.getXLength(), bb.getYLength(), bb.getZLength());
         Color outline = new Color(50, 50, 50, 255);
         Color fill = new Color(20, 20, 20, 100);

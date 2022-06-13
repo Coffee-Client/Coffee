@@ -26,8 +26,9 @@ public abstract class EntityMixin {
     @Redirect(method = "updateVelocity", at = @At(value = "INVOKE", target = "net/minecraft/entity/Entity.getYaw()F"))
     float coffee_updateFreelook(Entity instance) {
         FreeLook fl = FreeLook.instance();
-        if (instance.equals(CoffeeMain.client.player) && fl.isEnabled() && !((boolean) fl.getEnableAA().getValue()))
+        if (instance.equals(CoffeeMain.client.player) && fl.isEnabled() && !((boolean) fl.getEnableAA().getValue())) {
             return fl.newyaw;
+        }
         return instance.getYaw();
     }
 }

@@ -32,15 +32,9 @@ import java.util.Random;
 
 public class MassUse extends Module {
     final List<Packet<?>> dontRepeat = new ArrayList<>();
-    final EnumSetting<Mode> mode = this.config.create(new EnumSetting.Builder<>(Mode.Interact).name("Mode")
-            .description("How to use the item")
-            .get());
-    final DoubleSetting uses = this.config.create(new DoubleSetting.Builder(3).name("Uses")
-            .description("How many times to use the item")
-            .min(1)
-            .max(100)
-            .precision(0)
-            .get());
+    final EnumSetting<Mode> mode = this.config.create(new EnumSetting.Builder<>(Mode.Interact).name("Mode").description("How to use the item").get());
+    final DoubleSetting uses = this.config.create(
+            new DoubleSetting.Builder(3).name("Uses").description("How many times to use the item").min(1).max(100).precision(0).get());
 
     public MassUse() {
         super("MassUse", "Uses an item or block several times", ModuleType.WORLD);
@@ -56,8 +50,7 @@ public class MassUse extends Module {
             switch (mode.getValue()) {
                 case Interact -> {
                     if (pe.getPacket() instanceof PlayerInteractBlockC2SPacket p1) {
-                        PlayerInteractBlockC2SPacket pp = new PlayerInteractBlockC2SPacket(p1.getHand(),
-                                p1.getBlockHitResult(),
+                        PlayerInteractBlockC2SPacket pp = new PlayerInteractBlockC2SPacket(p1.getHand(), p1.getBlockHitResult(),
                                 Utils.increaseAndCloseUpdateManager(CoffeeMain.client.world));
                         for (int i = 0; i < uses.getValue(); i++) {
                             dontRepeat.add(pp);
@@ -78,16 +71,11 @@ public class MassUse extends Module {
                     BlockPos p = r.getBlockPos();
                     if (pe.getPacket() instanceof PlayerInteractBlockC2SPacket) {
                         for (int i = 0; i < uses.getValue(); i++) {
-                            PlayerInteractBlockC2SPacket pp = new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND,
-                                    r,
+                            PlayerInteractBlockC2SPacket pp = new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, r,
                                     Utils.increaseAndCloseUpdateManager(CoffeeMain.client.world));
                             dontRepeat.add(pp);
-                            client.player.networkHandler.sendPacket(new PlayerActionC2SPacket(Action.START_DESTROY_BLOCK,
-                                    p,
-                                    Direction.UP));
-                            client.player.networkHandler.sendPacket(new PlayerActionC2SPacket(Action.STOP_DESTROY_BLOCK,
-                                    p,
-                                    Direction.UP));
+                            client.player.networkHandler.sendPacket(new PlayerActionC2SPacket(Action.START_DESTROY_BLOCK, p, Direction.UP));
+                            client.player.networkHandler.sendPacket(new PlayerActionC2SPacket(Action.STOP_DESTROY_BLOCK, p, Direction.UP));
                             client.player.networkHandler.sendPacket(pp);
                         }
                     }
@@ -98,9 +86,7 @@ public class MassUse extends Module {
                         Random random = new Random();
 
                         for (int i = 0; i < uses.getValue(); i++) {
-                            BlockPos pos = new BlockPos(client.player.getPos()).add(random.nextInt(13) - 6,
-                                    random.nextInt(13) - 6,
-                                    random.nextInt(13) - 6);
+                            BlockPos pos = new BlockPos(client.player.getPos()).add(random.nextInt(13) - 6, random.nextInt(13) - 6, random.nextInt(13) - 6);
                             PlayerInteractBlockC2SPacket pp = Utils.Packets.generatePlace(pos);
                             dontRepeat.add(pp);
                             client.player.networkHandler.sendPacket(pp);

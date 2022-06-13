@@ -31,12 +31,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class AutoTNT extends Module {
-    final DoubleSetting placeDistance = this.config.create(new DoubleSetting.Builder(4).name("Place distance")
-            .description("How far to place the blocks apart")
-            .min(1)
-            .max(4)
-            .precision(0)
-            .get());
+    final DoubleSetting placeDistance = this.config.create(
+            new DoubleSetting.Builder(4).name("Place distance").description("How far to place the blocks apart").min(1).max(4).precision(0).get());
     boolean missingTntAck = false;
 
     public AutoTNT() {
@@ -55,11 +51,7 @@ public class AutoTNT extends Module {
         }
         if (tntSlot == -1) {
             if (!missingTntAck) {
-                Notification.create(6000,
-                        "AutoTNT",
-                        false,
-                        Notification.Type.WARNING,
-                        "Ran out of tnt! Get more in your hotbar");
+                Notification.create(6000, "AutoTNT", false, Notification.Type.WARNING, "Ran out of tnt! Get more in your hotbar");
             }
             missingTntAck = true;
             return;
@@ -72,8 +64,7 @@ public class AutoTNT extends Module {
             for (double z = -10; z < 11; z++) {
                 List<Map.Entry<BlockPos, Double>> airs = new ArrayList<>();
 
-                for (int y = Objects.requireNonNull(CoffeeMain.client.world)
-                        .getTopY(); y > CoffeeMain.client.world.getBottomY(); y--) {
+                for (int y = Objects.requireNonNull(CoffeeMain.client.world).getTopY(); y > CoffeeMain.client.world.getBottomY(); y--) {
                     Vec3d currentOffset = new Vec3d(x, y, z);
                     BlockPos bp = new BlockPos(new Vec3d(ppos.x + currentOffset.x, y, ppos.z + currentOffset.z));
                     BlockState bs = CoffeeMain.client.world.getBlockState(bp);
@@ -83,12 +74,11 @@ public class AutoTNT extends Module {
                     }
                 }
                 airs = airs.stream()
-                        .filter(blockPosDoubleEntry -> CoffeeMain.client.world.getBlockState(blockPosDoubleEntry.getKey()
-                                .down()).getMaterial().blocksMovement())
+                        .filter(blockPosDoubleEntry -> CoffeeMain.client.world.getBlockState(blockPosDoubleEntry.getKey().down())
+                                .getMaterial()
+                                .blocksMovement())
                         .collect(Collectors.toList());
-                Map.Entry<BlockPos, Double> best1 = airs.stream()
-                        .min(Comparator.comparingDouble(Map.Entry::getValue))
-                        .orElse(null);
+                Map.Entry<BlockPos, Double> best1 = airs.stream().min(Comparator.comparingDouble(Map.Entry::getValue)).orElse(null);
                 if (best1 == null) {
                     continue; // just void here, cancel
                 }
@@ -106,8 +96,7 @@ public class AutoTNT extends Module {
                         int sel = CoffeeMain.client.player.getInventory().selectedSlot;
                         CoffeeMain.client.player.getInventory().selectedSlot = finalTntSlot;
                         BlockHitResult bhr = new BlockHitResult(lmao, Direction.DOWN, best, false);
-                        Objects.requireNonNull(CoffeeMain.client.interactionManager)
-                                .interactBlock(CoffeeMain.client.player, Hand.MAIN_HAND, bhr);
+                        Objects.requireNonNull(CoffeeMain.client.interactionManager).interactBlock(CoffeeMain.client.player, Hand.MAIN_HAND, bhr);
                         CoffeeMain.client.player.getInventory().selectedSlot = sel;
                     });
                 }
@@ -130,8 +119,7 @@ public class AutoTNT extends Module {
     }
 
     boolean shouldPlace(BlockPos b) {
-        return b.getX() % ((int) Math.floor(placeDistance.getValue())) == 0 && b.getZ() % ((int) Math.floor(
-                placeDistance.getValue())) == 0;
+        return b.getX() % ((int) Math.floor(placeDistance.getValue())) == 0 && b.getZ() % ((int) Math.floor(placeDistance.getValue())) == 0;
     }
 
     @Override
@@ -142,8 +130,7 @@ public class AutoTNT extends Module {
             for (double z = -10; z < 11; z++) {
                 List<Map.Entry<BlockPos, Double>> airs = new ArrayList<>();
 
-                for (int y = Objects.requireNonNull(CoffeeMain.client.world)
-                        .getTopY(); y > CoffeeMain.client.world.getBottomY(); y--) {
+                for (int y = Objects.requireNonNull(CoffeeMain.client.world).getTopY(); y > CoffeeMain.client.world.getBottomY(); y--) {
                     Vec3d currentOffset = new Vec3d(x, y, z);
                     BlockPos bp = new BlockPos(new Vec3d(ppos.x + currentOffset.x, y, ppos.z + currentOffset.z));
                     BlockState bs = CoffeeMain.client.world.getBlockState(bp);
@@ -153,12 +140,11 @@ public class AutoTNT extends Module {
                     }
                 }
                 airs = airs.stream()
-                        .filter(blockPosDoubleEntry -> CoffeeMain.client.world.getBlockState(blockPosDoubleEntry.getKey()
-                                .down()).getMaterial().blocksMovement())
+                        .filter(blockPosDoubleEntry -> CoffeeMain.client.world.getBlockState(blockPosDoubleEntry.getKey().down())
+                                .getMaterial()
+                                .blocksMovement())
                         .collect(Collectors.toList());
-                Map.Entry<BlockPos, Double> best1 = airs.stream()
-                        .min(Comparator.comparingDouble(Map.Entry::getValue))
-                        .orElse(null);
+                Map.Entry<BlockPos, Double> best1 = airs.stream().min(Comparator.comparingDouble(Map.Entry::getValue)).orElse(null);
                 if (best1 == null) {
                     continue; // just void here, cancel
                 }

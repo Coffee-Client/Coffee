@@ -59,18 +59,12 @@ public class CenterOverlayScreen extends AAScreen {
 
     @Override
     public void renderInternal(MatrixStack stack, int mouseX, int mouseY, float delta) {
-        double minX = getElements().stream()
-                .map(Element::getPositionX)
-                .min(Comparator.comparingDouble(value -> value))
-                .orElse(0d);
+        double minX = getElements().stream().map(Element::getPositionX).min(Comparator.comparingDouble(value -> value)).orElse(0d);
         double maxX = getElements().stream()
                 .map(element -> element.getPositionX() + element.getWidth())
                 .max(Comparator.comparingDouble(value -> value))
                 .orElse(0d);
-        double minY = getElements().stream()
-                .map(Element::getPositionY)
-                .min(Comparator.comparingDouble(value -> value))
-                .orElse(0d);
+        double minY = getElements().stream().map(Element::getPositionY).min(Comparator.comparingDouble(value -> value)).orElse(0d);
         double maxY = getElements().stream()
                 .map(element -> element.getPositionY() + element.getHeight())
                 .max(Comparator.comparingDouble(value -> value))
@@ -93,14 +87,8 @@ public class CenterOverlayScreen extends AAScreen {
         FontAdapter normal = FontRenderers.getRenderer();
         fa.drawString(stack, title, 5, 5, 0xFFFFFF);
         normal.drawString(stack, description, 5, 5 + fa.getFontHeight(), 0xBBBBBB);
-        Renderer.R2D.renderRoundedQuadWithShadow(stack,
-                new Color(20, 20, 20),
-                centerX - elementWidth / 2d - padding,
-                centerY - elementHeight / 2d - padding,
-                centerX + elementWidth / 2d + padding,
-                centerY + elementHeight / 2d + padding,
-                5,
-                20);
+        Renderer.R2D.renderRoundedQuadWithShadow(stack, new Color(20, 20, 20), centerX - elementWidth / 2d - padding, centerY - elementHeight / 2d - padding,
+                centerX + elementWidth / 2d + padding, centerY + elementHeight / 2d + padding, 5, 20);
         super.renderInternal(stack, mouseX, mouseY, delta);
     }
 }

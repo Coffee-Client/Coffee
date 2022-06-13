@@ -24,12 +24,8 @@ import java.util.stream.StreamSupport;
 
 public class Tracers extends Module {
 
-    final BooleanSetting entities = this.config.create(new BooleanSetting.Builder(false).name("Show entities")
-            .description("Render entities")
-            .get());
-    final BooleanSetting players = this.config.create(new BooleanSetting.Builder(true).name("Show players")
-            .description("Render players")
-            .get());
+    final BooleanSetting entities = this.config.create(new BooleanSetting.Builder(false).name("Show entities").description("Render entities").get());
+    final BooleanSetting players = this.config.create(new BooleanSetting.Builder(true).name("Show players").description("Render players").get());
 
     public Tracers() {
         super("Tracers", "Shows where entities are in relation to you", ModuleType.RENDER);
@@ -56,8 +52,8 @@ public class Tracers extends Module {
             return null;
         }
         return StreamSupport.stream(CoffeeMain.client.world.getEntities().spliterator(), false)
-                .filter(entity -> entity.squaredDistanceTo(CoffeeMain.client.player) < 4096 && entity.getUuid() != CoffeeMain.client.player.getUuid() && isEntityApplicable(
-                        entity))
+                .filter(entity -> entity.squaredDistanceTo(
+                        CoffeeMain.client.player) < 4096 && entity.getUuid() != CoffeeMain.client.player.getUuid() && isEntityApplicable(entity))
                 .count() + "";
     }
 
@@ -96,10 +92,7 @@ public class Tracers extends Module {
             c = Renderer.Util.modify(c, -1, -1, -1, (int) Math.floor(dc * 255));
             if (isEntityApplicable(entity)) {
                 Vec3d pos = Utils.getInterpolatedEntityPosition(entity);
-                Renderer.R3D.renderLine(Renderer.R3D.getCrosshairVector(),
-                        pos.add(0, entity.getHeight() / 2, 0),
-                        c,
-                        matrices);
+                Renderer.R3D.renderLine(Renderer.R3D.getCrosshairVector(), pos.add(0, entity.getHeight() / 2, 0), c, matrices);
             }
         }
     }

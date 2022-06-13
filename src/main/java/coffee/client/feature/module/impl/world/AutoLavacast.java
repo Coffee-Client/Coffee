@@ -69,8 +69,7 @@ public class AutoLavacast extends Module {
         if (mode.getValue() == Mode.Bypass) {
             Rotations.lookAtPositionSmooth(placeCenter, 6);
             if (((CoffeeMain.client.player.horizontalCollision && moveForwards) || CoffeeMain.client.player.getBoundingBox()
-                    .intersects(Vec3d.of(next),
-                            Vec3d.of(next).add(1, 1, 1))) && CoffeeMain.client.player.isOnGround()) {
+                    .intersects(Vec3d.of(next), Vec3d.of(next).add(1, 1, 1))) && CoffeeMain.client.player.isOnGround()) {
                 CoffeeMain.client.player.jump();
                 CoffeeMain.client.player.setOnGround(false);
             }
@@ -88,9 +87,7 @@ public class AutoLavacast extends Module {
                 if (p.getDefaultState().canPlaceAt(CoffeeMain.client.world, next)) {
                     CoffeeMain.client.execute(() -> {
                         BlockHitResult bhr = new BlockHitResult(placeCenter, Direction.DOWN, next, false);
-                        CoffeeMain.client.interactionManager.interactBlock(CoffeeMain.client.player,
-                                Hand.MAIN_HAND,
-                                bhr);
+                        CoffeeMain.client.interactionManager.interactBlock(CoffeeMain.client.player, Hand.MAIN_HAND, bhr);
                         if (mode.getValue() == Mode.Fast) {
                             Vec3d goP = Vec3d.of(next).add(0.5, 1.05, 0.5);
                             CoffeeMain.client.player.updatePosition(goP.x, goP.y, goP.z);

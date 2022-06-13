@@ -37,16 +37,13 @@ public class EdgeSneak extends Module {
                 double zScale = z / 3d + .5;
                 BlockPos current = CoffeeMain.client.player.getBlockPos().add(x, -1, z);
                 BlockState bs = CoffeeMain.client.world.getBlockState(current);
-                if (bs.isAir() && bounding.contains(new Vec3d(current.getX() + xScale,
-                        current.getY() + 1,
-                        current.getZ() + zScale))) {
+                if (bs.isAir() && bounding.contains(new Vec3d(current.getX() + xScale, current.getY() + 1, current.getZ() + zScale))) {
                     sneak = true;
                     break;
                 }
             }
         }
-        boolean previousState = InputUtil.isKeyPressed(CoffeeMain.client.getWindow().getHandle(),
-                client.options.sneakKey.getDefaultKey().getCode());
+        boolean previousState = InputUtil.isKeyPressed(CoffeeMain.client.getWindow().getHandle(), client.options.sneakKey.getDefaultKey().getCode());
         if (Objects.requireNonNull(client.player).isOnGround()) {
             client.options.sneakKey.setPressed(sneak || previousState);
         }

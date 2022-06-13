@@ -89,10 +89,7 @@ public class Socks5CommandRequestDecoder extends ReplayingDecoder<Socks5CommandR
 
         checkpoint(State.FAILURE);
 
-        Socks5Message m = new DefaultSocks5CommandRequest(Socks5CommandType.CONNECT,
-                Socks5AddressType.IPv4,
-                "0.0.0.0",
-                1);
+        Socks5Message m = new DefaultSocks5CommandRequest(Socks5CommandType.CONNECT, Socks5AddressType.IPv4, "0.0.0.0", 1);
         m.setDecoderResult(DecoderResult.failure(cause));
         out.add(m);
     }

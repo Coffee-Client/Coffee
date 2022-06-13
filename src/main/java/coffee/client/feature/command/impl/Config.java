@@ -29,16 +29,11 @@ public class Config extends Command {
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
         return switch (index) {
             case 0 -> new PossibleArgument(ArgumentType.STRING,
-                    ModuleRegistry.getModules()
-                            .stream()
-                            .map(mod -> mod.getName().replaceAll(" ", "-"))
-                            .toList()
-                            .toArray(String[]::new));
+                    ModuleRegistry.getModules().stream().map(mod -> mod.getName().replaceAll(" ", "-")).toList().toArray(String[]::new));
             case 1 -> {
                 if (ModuleRegistry.getByName(args[0]) != null) {
                     yield new PossibleArgument(ArgumentType.STRING,
-                            Objects.requireNonNull(ModuleRegistry.getByName(args[0].replaceAll("-",
-                                            " "))).config.getSettings()
+                            Objects.requireNonNull(ModuleRegistry.getByName(args[0].replaceAll("-", " "))).config.getSettings()
                                     .stream()
                                     .map(SettingBase::getName)
                                     .toList()

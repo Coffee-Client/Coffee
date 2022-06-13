@@ -1,19 +1,20 @@
 #!/usr/bin/env bash
-echo "Input changelog, enter \"end\" when done"
-echo -n "" > ./src/main/resources/changelogLatest.txt
-while [[ true ]]; do
-  read -p "> " line
-  if [ "$line" == "end" ]; then
-    break
-    fi
-  echo $line >> ./src/main/resources/changelogLatest.txt
-done
+if [[ $1 != "--rebuild" ]]; then
+  echo "Input changelog, enter \"end\" when done"
+  echo -n "" > ./src/main/resources/changelogLatest.txt
+  while true; do
+    read -r -p "> " line
+    if [ "$line" == "end" ]; then
+      break
+      fi
+    echo "$line" >> ./src/main/resources/changelogLatest.txt
+  done
 
-ver=`cat ./src/main/resources/version.txt`
-verNew=$((ver+1))
-echo "Version: $ver -> $verNew"
-echo -n "$verNew" > ./src/main/resources/version.txt
-
+  ver=$(cat ./src/main/resources/version.txt)
+  verNew=$((ver+1))
+  echo "Version: $ver -> $verNew"
+  echo -n "$verNew" > ./src/main/resources/version.txt
+fi
 echo "Running build"
 ./gradlew build
 if [[ ! -d bin ]]; then

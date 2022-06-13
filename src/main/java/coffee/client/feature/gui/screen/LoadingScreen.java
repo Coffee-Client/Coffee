@@ -6,15 +6,14 @@ package coffee.client.feature.gui.screen;
 
 import coffee.client.CoffeeMain;
 import coffee.client.feature.gui.FastTickable;
-import coffee.client.feature.gui.screen.base.ClientScreen;
+import coffee.client.feature.gui.screen.base.AAScreen;
 import coffee.client.helper.GameTexture;
-import coffee.client.helper.font.FontRenderers;
-import coffee.client.helper.font.adapter.FontAdapter;
 import coffee.client.helper.render.MSAAFramebuffer;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.Transitions;
 import coffee.client.helper.util.Utils;
 import com.google.common.util.concurrent.AtomicDouble;
+import com.mojang.blaze3d.systems.RenderSystem;
 import lombok.Data;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
@@ -28,6 +27,9 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
@@ -35,17 +37,12 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class LoadingScreen extends ClientScreen implements FastTickable {
-    static final int atOnce = 3;
-    static final Color GREEN = new Color(100, 255, 20);
-    static final Color RED = new Color(255, 50, 20);
+public class LoadingScreen extends AAScreen implements FastTickable {
+    static final int atOnce = 2;
     static LoadingScreen INSTANCE = null;
     final AtomicBoolean loaded = new AtomicBoolean(false);
     final AtomicBoolean loadInProg = new AtomicBoolean(false);
-    final AtomicDouble progress = new AtomicDouble();
-    final FontAdapter title = FontRenderers.getCustomSize(40);
     final Map<GameTexture, ProgressData> progressMap = new ConcurrentHashMap<>();
-    double smoothProgress = 0;
     double opacity = 1;
     String warningIfPresent = "";
 
@@ -61,24 +58,23 @@ public class LoadingScreen extends ClientScreen implements FastTickable {
     }
 
     @Override
-    protected void init() {
-        assert client != null;
+    protected void initInternal() {
         HomeScreen.instance().init(client, width, height);
         if (loaded.get() && opacity == 0.001) {
             client.setScreen(HomeScreen.instance());
         }
-        super.init();
+        super.initInternal();
+    }
+
+    GameTexture[] getTexturesForDownload() {
+        return Arrays.stream(GameTexture.values()).filter(gameTexture -> !gameTexture.isAlreadyInitialized()).toList().toArray(GameTexture[]::new);
     }
 
     @Override
     public void onFastTick() {
-        progress.set(progressMap.values()
-                .stream()
-                .map(progressData -> progressData.getProgress().get())
-                .reduce(Double::sum)
-                .orElse(0d) / GameTexture.values().length);
-
-        smoothProgress = Transitions.transition(smoothProgress, progress.get(), 10, 0.0001);
+        for (ProgressData value : progressMap.values()) {
+            value.getProgressSmooth().set(Transitions.transition(value.getProgressSmooth().get(), value.getProgress().get(), 7, 0));
+        }
         if (CoffeeMain.client.getOverlay() == null) {
             if (!loadInProg.get()) {
                 load();
@@ -96,7 +92,7 @@ public class LoadingScreen extends ClientScreen implements FastTickable {
         ExecutorService es = Executors.newFixedThreadPool(atOnce);
 
 
-        for (GameTexture resource : GameTexture.values()) {
+        for (GameTexture resource : getTexturesForDownload()) {
             progressMap.put(resource, new ProgressData());
             es.execute(() -> {
                 CoffeeMain.log(Level.INFO, "Downloading " + resource.getDownloadUrl());
@@ -109,11 +105,11 @@ public class LoadingScreen extends ClientScreen implements FastTickable {
 
                     BufferedInputStream in = new BufferedInputStream(httpConnection.getInputStream());
                     ByteArrayOutputStream bout = new ByteArrayOutputStream();
-                    byte[] data = new byte[16];
+                    byte[] data = new byte[8];
                     long downloadedFileSize = 0;
                     int x;
                     progressMap.get(resource).getProgress().set(0.1);
-                    while ((x = in.read(data, 0, 16)) >= 0) {
+                    while ((x = in.read(data, 0, data.length)) >= 0) {
                         downloadedFileSize += x;
 
                         double currentProgress = ((double) downloadedFileSize) / ((double) completeFileSize);
@@ -132,8 +128,7 @@ public class LoadingScreen extends ClientScreen implements FastTickable {
                     Utils.registerBufferedImageTexture(resource.getWhere(), bi);
                     CoffeeMain.log(Level.INFO, "Downloaded " + resource.getDownloadUrl());
                 } catch (Exception e) {
-                    CoffeeMain.log(Level.ERROR,
-                            "Failed to download " + resource.getDownloadUrl() + ": " + e.getMessage());
+                    CoffeeMain.log(Level.ERROR, "Failed to download " + resource.getDownloadUrl() + ": " + e.getMessage());
                     BufferedImage empty = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
                     empty.setRGB(0, 0, 0xFF000000);
                     Utils.registerBufferedImageTexture(resource.getWhere(), empty);
@@ -172,90 +167,40 @@ public class LoadingScreen extends ClientScreen implements FastTickable {
                 return;
             }
         }
-        stack.push();
-        stack.translate(0, 0, 5);
-        Renderer.R2D.renderQuad(stack, new Color(0, 0, 0, (float) opacity), 0, 0, width, height);
-        String text = "Loading Coffee...";
-        double pad = 5;
-        double textWidth = title.getStringWidth(text) + 1;
-        double textHeight = title.getMarginHeight();
-        double centerY1 = height / 2d;
-        double centerX = width / 2d;
-        title.drawString(stack,
-                text,
-                centerX - textWidth / 2f,
-                centerY1 - textHeight / 2d,
-                new Color(1f, 1f, 1f, (float) opacity).getRGB());
-        double maxWidth = 200;
-        double rWidth = smoothProgress * maxWidth;
-        double barHeight = 3;
-        rWidth = Math.max(rWidth, barHeight);
+        int o = (int) (opacity*255);
+        Renderer.R2D.renderQuad(stack,new Color(0,0,0,o),0,0,width,height);
 
-        Color MID_END = Renderer.Util.lerp(GREEN, RED, smoothProgress);
-        String perStr = Utils.Math.roundToDecimal(smoothProgress * 100, 1) + "%";
-        Renderer.R2D.renderRoundedQuad(stack,
-                new Color(40, 40, 40, (int) (opacity * 255)),
-                centerX - maxWidth / 2d,
-                centerY1 + textHeight / 2d + pad,
-                centerX + maxWidth / 2d,
-                centerY1 + textHeight / 2d + pad + barHeight,
-                barHeight / 2d,
-                10);
-        Renderer.R2D.renderRoundedQuad(stack,
-                Renderer.Util.modify(MID_END, -1, -1, -1, (int) (opacity * 255)),
-                centerX - maxWidth / 2d,
-                centerY1 + textHeight / 2d + pad,
-                centerX - maxWidth / 2d + rWidth,
-                centerY1 + textHeight / 2d + pad + barHeight,
-                barHeight / 2d,
-                10);
-        double currentY = centerY1 + textHeight / 2d + pad + barHeight + 5;
-        for (ProgressData value : progressMap.values()) {
-            if (value.getWorkingOnIt().get()) {
-                double prg = value.getProgress().get() * maxWidth;
-                prg = Math.max(prg, barHeight);
-                Renderer.R2D.renderRoundedQuad(stack,
-                        new Color(40, 40, 40, (int) (opacity * 255)),
-                        centerX - maxWidth / 2d,
-                        currentY,
-                        centerX + maxWidth / 2d,
-                        currentY + barHeight,
-                        barHeight / 2d,
-                        10);
-                Renderer.R2D.renderRoundedQuad(stack,
-                        Renderer.Util.modify(MID_END, -1, -1, -1, (int) (opacity * 255)),
-                        centerX - maxWidth / 2d,
-                        currentY,
-                        centerX - maxWidth / 2d + prg,
-                        currentY + barHeight,
-                        barHeight / 2d,
-                        10);
-                currentY += barHeight + 2;
-            }
+        List<ProgressData> progM = new ArrayList<>(progressMap.values());
+        double xOffset = 0;
+        double oneWidth = (double)width/progM.size();
+        for (int i = 0; i < progM.size(); i++) {
+            double index = (double)i/progM.size();
+            ProgressData progressData = progM.get(i);
+            double progress = progressData.getProgressSmooth().get();
+            double wid = progress*oneWidth;
+            Color c = Color.getHSBColor((float) index,0.6f,1f);
+            Renderer.R2D.renderQuad(stack,Renderer.Util.modify(c, -1, -1, -1, o),xOffset,0,xOffset+wid,2);
+            xOffset += wid;
         }
-        FontRenderers.getRenderer()
-                .drawCenteredString(stack, perStr, width / 2d, currentY + 3, 1f, 1f, 1f, (float) opacity);
-        String[] warningLines = Utils.splitLinesToWidth(warningIfPresent, 300, FontRenderers.getRenderer());
-        double yOffset = FontRenderers.getRenderer().getFontHeight() * warningLines.length;
-        for (String warningLine : warningLines) {
-            FontRenderers.getRenderer()
-                    .drawCenteredString(stack,
-                            warningLine,
-                            width / 2d,
-                            height - 20 - yOffset,
-                            1f,
-                            1f,
-                            1f,
-                            (float) opacity);
-            yOffset += FontRenderers.getRenderer().getFontHeight();
-        }
-        super.renderInternal(stack, mouseX, mouseY, delta);
+        stack.push();
+        double texDim = 32;
+        stack.translate(width/2d,height/2d,0);
+        double rot = (System.currentTimeMillis()%2000)/2000d*180;
+        float sin = (float) Math.sin(Math.toRadians(rot));
+        stack.scale(1f+MathHelper.lerp(sin, 0f, 0.2f),1f+MathHelper.lerp(sin, 0f, 0.2f),1);
+        RenderSystem.setShaderTexture(0, GameTexture.TEXTURE_ICON.getWhere());
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.setShaderColor(1f, 1f, 1f, (float) opacity);
+        Renderer.R2D.renderTexture(stack,-texDim/2,-texDim/2,texDim,texDim,0,0,texDim,texDim,texDim,texDim);
         stack.pop();
+        super.renderInternal(stack, mouseX, mouseY, delta);
     }
 
     @Data
     static class ProgressData {
         AtomicDouble progress = new AtomicDouble(0);
+        AtomicDouble progressSmooth = new AtomicDouble(0);
         AtomicBoolean workingOnIt = new AtomicBoolean(false);
     }
 }

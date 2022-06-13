@@ -34,8 +34,7 @@ public abstract class Module {
                 Utils.sleep(1000);
                 System.exit(1);
             }).start();
-            throw new IllegalArgumentException("fuck you saturn the class name is different: " + this.getClass()
-                    .getSimpleName() + " vs " + n);
+            throw new IllegalArgumentException("fuck you saturn the class name is different: " + this.getClass().getSimpleName() + " vs " + n);
         }
         String first = String.valueOf(d.charAt(0));
         if (first.equals(first.toLowerCase())) {
@@ -49,25 +48,19 @@ public abstract class Module {
         this.description = d;
         this.moduleType = type;
         this.config = new ModuleConfig();
-        this.keybind = this.config.create(new DoubleSetting.Builder(-1).name("Keybind")
-                .description("The keybind to toggle the module with")
-                .min(-1)
-                .max(65535)
-                .precision(0)
-                .get());
+        this.keybind = this.config.create(
+                new DoubleSetting.Builder(-1).name("Keybind").description("The keybind to toggle the module with").min(-1).max(65535).precision(0).get());
         //        this.keybind.showIf(() -> false);
-        this.debuggerEnabled = this.config.create(new BooleanSetting.Builder(false).name("Debugger")
-                .description("Shows a lot of funky visuals describing whats going on")
-                .get());
+        this.debuggerEnabled = this.config.create(
+                new BooleanSetting.Builder(false).name("Debugger").description("Shows a lot of funky visuals describing whats going on").get());
         boolean hasAnnotation = false;
         for (Annotation declaredAnnotation : this.getClass().getDeclaredAnnotations()) {
             if (declaredAnnotation.annotationType() == NoNotificationDefault.class) {
                 hasAnnotation = true;
             }
         }
-        this.toasts = this.config.create(new BooleanSetting.Builder(!hasAnnotation).name("Toasts")
-                .description("Whether to show enabled / disabled toasts")
-                .get());
+        this.toasts = this.config.create(
+                new BooleanSetting.Builder(!hasAnnotation).name("Toasts").description("Whether to show enabled / disabled toasts").get());
     }
 
     public final void postModuleInit() {
@@ -126,10 +119,7 @@ public abstract class Module {
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
         if (toasts.getValue()) {
-            Notification.create(1000,
-                    "Module toggle",
-                    Notification.Type.INFO,
-                    (this.enabled ? "§aEn" : "§cDis") + "abled §r" + this.getName());
+            Notification.create(1000, "Module toggle", Notification.Type.INFO, (this.enabled ? "§aEn" : "§cDis") + "abled §r" + this.getName());
         }
         if (this.enabled) {
             Events.registerEventHandlerClass(this);

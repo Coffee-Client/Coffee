@@ -55,10 +55,7 @@ public class TpRange extends Module {
             MouseEvent me = (MouseEvent) event;
             if (me.getAction() == 1 && me.getButton() == 0) {
                 if (running.get()) {
-                    Notification.create(5000,
-                            "TpRange",
-                            Notification.Type.WARNING,
-                            "Already exploiting, please wait a bit");
+                    Notification.create(5000, "TpRange", Notification.Type.WARNING, "Already exploiting, please wait a bit");
                 } else {
                     esv.execute(this::theFunny);
                 }
@@ -78,12 +75,8 @@ public class TpRange extends Module {
     void doIt() {
         Vec3d goal = Objects.requireNonNull(CoffeeMain.client.player).getRotationVec(1f).multiply(200);
         Box b = CoffeeMain.client.player.getBoundingBox().stretch(goal).expand(1, 1, 1);
-        EntityHitResult ehr = ProjectileUtil.raycast(CoffeeMain.client.player,
-                CoffeeMain.client.player.getCameraPosVec(0),
-                CoffeeMain.client.player.getCameraPosVec(0).add(goal),
-                b,
-                Entity::isAttackable,
-                200 * 200);
+        EntityHitResult ehr = ProjectileUtil.raycast(CoffeeMain.client.player, CoffeeMain.client.player.getCameraPosVec(0),
+                CoffeeMain.client.player.getCameraPosVec(0).add(goal), b, Entity::isAttackable, 200 * 200);
         if (ehr == null) {
             return;
         }
@@ -92,8 +85,7 @@ public class TpRange extends Module {
 
         if (mode.getValue() == Mode.PaperBypass) {
             teleportTo(orig, pos);
-            Objects.requireNonNull(CoffeeMain.client.interactionManager)
-                    .attackEntity(CoffeeMain.client.player, ehr.getEntity());
+            Objects.requireNonNull(CoffeeMain.client.interactionManager).attackEntity(CoffeeMain.client.player, ehr.getEntity());
             Utils.sleep(100);
             teleportTo(pos, orig);
             CoffeeMain.client.player.updatePosition(orig.x, orig.y, orig.z);
@@ -101,8 +93,7 @@ public class TpRange extends Module {
             PlayerMoveC2SPacket tpToEntity = new PlayerMoveC2SPacket.PositionAndOnGround(pos.x, pos.y, pos.z, false);
             PlayerMoveC2SPacket tpBack = new PlayerMoveC2SPacket.PositionAndOnGround(orig.x, orig.y, orig.z, true);
             Objects.requireNonNull(CoffeeMain.client.getNetworkHandler()).sendPacket(tpToEntity);
-            Objects.requireNonNull(CoffeeMain.client.interactionManager)
-                    .attackEntity(CoffeeMain.client.player, ehr.getEntity());
+            Objects.requireNonNull(CoffeeMain.client.interactionManager).attackEntity(CoffeeMain.client.player, ehr.getEntity());
             CoffeeMain.client.getNetworkHandler().sendPacket(tpBack);
         }
     }

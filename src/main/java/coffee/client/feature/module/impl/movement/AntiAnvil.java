@@ -29,9 +29,7 @@ public class AntiAnvil extends Module {
     public void tick() {
         BlockPos currentPos = Objects.requireNonNull(CoffeeMain.client.player).getBlockPos();
         Vec3d ppos = CoffeeMain.client.player.getPos();
-        List<Entity> anvils = StreamSupport.stream(Objects.requireNonNull(CoffeeMain.client.world)
-                .getEntities()
-                .spliterator(), false).filter(entity -> {
+        List<Entity> anvils = StreamSupport.stream(Objects.requireNonNull(CoffeeMain.client.world).getEntities().spliterator(), false).filter(entity -> {
             if (entity instanceof FallingBlockEntity e) {
                 Block bs = e.getBlockState().getBlock();
                 return bs == Blocks.ANVIL || bs == Blocks.CHIPPED_ANVIL || bs == Blocks.DAMAGED_ANVIL;
@@ -44,10 +42,7 @@ public class AntiAnvil extends Module {
             if (anvilBp.getX() == currentPos.getX() && anvilBp.getZ() == currentPos.getZ()) {
                 double yDist = anvilPos.y - ppos.y;
                 if (yDist > 0 && yDist < -anvil.getVelocity().y * 2) { // anvil is 0-1 blocks above our feet
-                    PlayerMoveC2SPacket p = new PlayerMoveC2SPacket.PositionAndOnGround(ppos.x,
-                            ppos.y + 1,
-                            ppos.z,
-                            false);
+                    PlayerMoveC2SPacket p = new PlayerMoveC2SPacket.PositionAndOnGround(ppos.x, ppos.y + 1, ppos.z, false);
                     Objects.requireNonNull(CoffeeMain.client.getNetworkHandler()).sendPacket(p);
                 }
             }

@@ -28,6 +28,7 @@ public class Socks5PasswordAuthStatus implements Comparable<Socks5PasswordAuthSt
     private final byte byteValue;
     private final String name;
     private String text;
+
     public Socks5PasswordAuthStatus(int byteValue) {
         this(byteValue, "UNKNOWN");
     }

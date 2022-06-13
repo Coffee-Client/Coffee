@@ -29,6 +29,7 @@ public class Socks5CommandType implements Comparable<Socks5CommandType> {
     private final byte byteValue;
     private final String name;
     private String text;
+
     public Socks5CommandType(int byteValue) {
         this(byteValue, "UNKNOWN");
     }

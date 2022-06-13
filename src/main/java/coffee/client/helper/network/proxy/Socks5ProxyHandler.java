@@ -31,12 +31,10 @@ public final class Socks5ProxyHandler extends ProxyHandler {
     private static final String PROTOCOL = "socks5";
     private static final String AUTH_PASSWORD = "password";
 
-    private static final Socks5InitialRequest INIT_REQUEST_NO_AUTH = new DefaultSocks5InitialRequest(Collections.singletonList(
-            Socks5AuthMethod.NO_AUTH));
+    private static final Socks5InitialRequest INIT_REQUEST_NO_AUTH = new DefaultSocks5InitialRequest(Collections.singletonList(Socks5AuthMethod.NO_AUTH));
 
-    private static final Socks5InitialRequest INIT_REQUEST_PASSWORD = new DefaultSocks5InitialRequest(Arrays.asList(
-            Socks5AuthMethod.NO_AUTH,
-            Socks5AuthMethod.PASSWORD));
+    private static final Socks5InitialRequest INIT_REQUEST_PASSWORD = new DefaultSocks5InitialRequest(
+            Arrays.asList(Socks5AuthMethod.NO_AUTH, Socks5AuthMethod.PASSWORD));
 
     private final String username;
     private final String password;
@@ -126,8 +124,7 @@ public final class Socks5ProxyHandler extends ProxyHandler {
             } else if (authMethod == Socks5AuthMethod.PASSWORD) {
                 // In case of password authentication, send an authentication request.
                 ctx.pipeline().replace(decoderName, decoderName, new Socks5PasswordAuthResponseDecoder());
-                sendToProxyServer(new DefaultSocks5PasswordAuthRequest(username != null ? username : "",
-                        password != null ? password : ""));
+                sendToProxyServer(new DefaultSocks5PasswordAuthRequest(username != null ? username : "", password != null ? password : ""));
             } else {
                 // Should never reach here.
                 throw new Error();
@@ -180,8 +177,7 @@ public final class Socks5ProxyHandler extends ProxyHandler {
             } else if (NetUtil.isValidIpV6Address(rhost)) {
                 addrType = Socks5AddressType.IPv6;
             } else {
-                throw new ProxyConnectException(exceptionMessage("unknown address type: " + StringUtil.simpleClassName(
-                        rhost)));
+                throw new ProxyConnectException(exceptionMessage("unknown address type: " + StringUtil.simpleClassName(rhost)));
             }
         }
 

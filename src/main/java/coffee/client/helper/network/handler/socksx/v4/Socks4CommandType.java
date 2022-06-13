@@ -27,6 +27,7 @@ public class Socks4CommandType implements Comparable<Socks4CommandType> {
     private final byte byteValue;
     private final String name;
     private String text;
+
     public Socks4CommandType(int byteValue) {
         this(byteValue, "UNKNOWN");
     }

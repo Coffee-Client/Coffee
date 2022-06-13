@@ -4,11 +4,24 @@
 
 package coffee.client.feature.module.impl.misc;
 
+import coffee.client.CoffeeMain;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
+import coffee.client.helper.render.Renderer;
+import net.minecraft.client.gl.VertexBuffer;
+import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.Camera;
+import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.VertexFormat;
+import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.math.Vec3d;
+
+import java.util.Random;
 
 public class Test extends Module {
+    static VertexBuffer vbo;
 
     public Test() {
         super("Test", "Testing stuff with the client, can be ignored", ModuleType.MISC);
@@ -21,7 +34,8 @@ public class Test extends Module {
 
     @Override
     public void disable() {
-
+        vbo.close();
+        vbo = null;
     }
 
     @Override
@@ -31,68 +45,35 @@ public class Test extends Module {
 
     @Override
     public void onWorldRender(MatrixStack matrices) {
-        //Entity target = null;
-        //Vec3d t = client.player.getPos();
-        //Optional<Entity> e = StreamSupport.stream(client.world.getEntities().spliterator(), false).filter(entity -> !entity.equals(client.player)).min(Comparator.comparingDouble(value -> value.distanceTo(client.player)));
-        //if (e.isEmpty()) return;
-        //Entity target = e.get();
-        //EntityRenderer<? super Entity> renderer = client.getEntityRenderDispatcher().getRenderer(target);
-        //DumpVertexConsumer consumer = new DumpVertexConsumer();
-        //DumpVertexProvider provider = new DumpVertexProvider(consumer, client.getBufferBuilders()
-        //        .getEntityVertexConsumers());
-        //renderer.render(target, (float) (Math.random()*360f),client.getTickDelta(),Renderer.R3D.getEmptyMatrixStack(),provider,0);
-        //Vec3d entitySrc = target.getPos();
+        if (vbo == null) {
+            BufferBuilder buffer = Tessellator.getInstance().getBuffer();
+            buffer.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR);
 
-        //float red = color.getRed() / 255f;
-        //float green = color.getGreen() / 255f;
-        //float blue = color.getBlue() / 255f;
-        //float alpha = color.getAlpha() / 255f;
-        //Camera c = CoffeeMain.client.gameRenderer.getCamera();
-        //Vec3d camPos = c.getPos();
-        //Vec3d start1 = start.subtract(camPos);
-        //Vec3d end1 = end.subtract(camPos);
-        //Matrix4f matrix = matrices.peek().getPositionMatrix();
-        //float x1 = (float) start1.x;
-        //float y1 = (float) start1.y;
-        //float z1 = (float) start1.z;
-        //float x2 = (float) end1.x;
-        //float y2 = (float) end1.y;
-        //float z2 = (float) end1.z;
-        //BufferBuilder buffer = Tessellator.getInstance().getBuffer();
+            Random r = new Random();
+            for (int i = 0; i < 65535; i++) {
+                double x = r.nextDouble(-20, 21);
+                double y = r.nextDouble(-20, 21);
+                double z = r.nextDouble(-20, 21);
+                buffer.vertex(x, y, z).color(1f, 1f, 1f, .3f).next();
+            }
 
+            vbo = new VertexBuffer();
+            vbo.bind();
+            vbo.upload(buffer.end());
+            VertexBuffer.unbind();
+        }
 
-        //Renderer.setupRender();
-        //RenderSystem.enableDepthTest();
-        //GL11.glDepthFunc(GL11.GL_ALWAYS);
-        //RenderSystem.setShader(GameRenderer::getPositionColorShader);
-        //buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
-
-        //buffer.vertex(matrix, x1, y1, z1).color(red, green, blue, alpha).next();
-        //buffer.vertex(matrix, x2, y2, z2).color(red, green, blue, alpha).next();
-        //for (DumpVertexConsumer.VertexData vertexData : consumer.getStack()) {
-        //    Vec3d pos = vertexData.getPosition();
-        //    if (pos == null) continue;
-        //    //Vec3d translated = entitySrc.add(pos).subtract(camPos);
-        //    //float[] color = vertexData.getColor();
-        //    //buffer.vertex(matrix, (float) translated.x, (float) translated.y, (float) translated.z).color(color[0], color[1], color[2], color[3]).next();
-        //    Vec3d translated = entitySrc.add(pos);
-        //    Vec3d screenSpace = Renderer.R2D.getScreenSpaceCoordinate(translated, matrices);
-        //    if (Renderer.R2D.isOnScreen(screenSpace)) {
-        //        Utils.TickManager.runOnNextRender(() -> {
-        //            MatrixStack stack = Renderer.R3D.getEmptyMatrixStack();
-        //            stack.translate(screenSpace.x,screenSpace.y,0);
-        //            stack.scale(0.4f,0.4f,1);
-        //            FontRenderers.getMono().drawString(stack,pos.toString(),0,0,0xFFFFFF);
-        //        });
-        //    }
-        //}
-
-        //buffer.end();
-
-        //BufferRenderer.draw(buffer);
-        //GL11.glDepthFunc(GL11.GL_LEQUAL);
-        //Renderer.endRender();
-
+        Renderer.setupRender();
+        matrices.push();
+        Camera c = CoffeeMain.client.gameRenderer.getCamera();
+        Vec3d camPos = c.getPos();
+        matrices.translate(-camPos.x, -camPos.y, -camPos.z);
+        vbo.bind();
+        vbo.draw(matrices.peek().getPositionMatrix(), CoffeeMain.client.gameRenderer.getBasicProjectionMatrix(CoffeeMain.client.options.getFov().getValue()),
+                GameRenderer.getPositionColorShader());
+        VertexBuffer.unbind();
+        matrices.pop();
+        Renderer.endRender();
 
     }
 

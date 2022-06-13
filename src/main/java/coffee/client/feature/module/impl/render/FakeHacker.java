@@ -61,8 +61,7 @@ public class FakeHacker extends Module {
                     continue;
                 }
                 if (entity.isAttackable() && entity.distanceTo(target) < 4) {
-                    target.lookAt(EntityAnchorArgumentType.EntityAnchor.EYES,
-                            entity.getPos().add(0, entity.getHeight() / 2, 0));
+                    target.lookAt(EntityAnchorArgumentType.EntityAnchor.EYES, entity.getPos().add(0, entity.getHeight() / 2, 0));
                     target.swingHand(Hand.MAIN_HAND);
                 }
             }

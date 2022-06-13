@@ -10,6 +10,7 @@ import coffee.client.feature.gui.FastTickable;
 import coffee.client.feature.gui.notifications.NotificationRenderer;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleRegistry;
+import coffee.client.helper.GameTexture;
 import coffee.client.helper.Rotations;
 import coffee.client.helper.event.EventType;
 import coffee.client.helper.event.Events;
@@ -76,9 +77,9 @@ public class CoffeeMain implements ModInitializer {
     void initFonts() {
         try {
             int fsize = 18 * 2;
-            FontRenderers.setRenderer(new QuickFontAdapter(new FontRenderer(Font.createFont(Font.TRUETYPE_FONT,
-                            Objects.requireNonNull(CoffeeMain.class.getClassLoader().getResourceAsStream("Font.ttf")))
-                    .deriveFont(Font.PLAIN, fsize), fsize)));
+            FontRenderers.setRenderer(new QuickFontAdapter(new FontRenderer(
+                    Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(CoffeeMain.class.getClassLoader().getResourceAsStream("Font.ttf")))
+                            .deriveFont(Font.PLAIN, fsize), fsize)));
         } catch (FontFormatException | IOException e) {
             e.printStackTrace();
         }
@@ -154,6 +155,7 @@ public class CoffeeMain implements ModInitializer {
         for (Module module : new ArrayList<>(ModuleRegistry.getModules())) {
             module.postInit();
         }
+        GameTexture.postInit();
     }
 
 }

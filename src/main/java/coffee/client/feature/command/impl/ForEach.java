@@ -56,17 +56,13 @@ public class ForEach extends Command {
 
     @Override
     public ExamplesEntry getExampleArguments() {
-        return new ExamplesEntry("player 1000 /msg %s you stink",
-                "tab 10 /kick %s Server wipe",
-                "tab 0 /ban %s MOLED LLLLL");
+        return new ExamplesEntry("player 1000 /msg %s you stink", "tab 10 /kick %s Server wipe", "tab 0 /ban %s MOLED LLLLL");
     }
 
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
-        return StaticArgumentServer.serveFromStatic(index,
-                new PossibleArgument(ArgumentType.STRING, "player", "tab"),
-                new PossibleArgument(ArgumentType.NUMBER, "(delay)"),
-                new PossibleArgument(ArgumentType.NUMBER, "(message)"));
+        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.STRING, "player", "tab"),
+                new PossibleArgument(ArgumentType.NUMBER, "(delay)"), new PossibleArgument(ArgumentType.NUMBER, "(message)"));
     }
 
     @Override
@@ -75,17 +71,14 @@ public class ForEach extends Command {
         int delay = new IntegerArgumentParser().parse(args[1]);
         switch (args[0]) {
             case "player" -> {
-                for (PlayerListEntry playerListEntry : Objects.requireNonNull(CoffeeMain.client.getNetworkHandler())
-                        .getPlayerList()) {
-                    if (Utils.Players.isPlayerNameValid(playerListEntry.getProfile()
-                            .getName()) && !playerListEntry.getProfile()
+                for (PlayerListEntry playerListEntry : Objects.requireNonNull(CoffeeMain.client.getNetworkHandler()).getPlayerList()) {
+                    if (Utils.Players.isPlayerNameValid(playerListEntry.getProfile().getName()) && !playerListEntry.getProfile()
                             .getId()
                             .equals(Objects.requireNonNull(CoffeeMain.client.player).getUuid())) {
                         runner.execute(() -> {
                             try {
-                                CoffeeMain.client.player.sendChatMessage(String.join(" ",
-                                                Arrays.copyOfRange(args, 2, args.length))
-                                        .replaceAll("%s", playerListEntry.getProfile().getName()));
+                                CoffeeMain.client.player.sendChatMessage(
+                                        String.join(" ", Arrays.copyOfRange(args, 2, args.length)).replaceAll("%s", playerListEntry.getProfile().getName()));
                                 Thread.sleep(delay);
                             } catch (Exception ignored) {
                             }
@@ -95,8 +88,7 @@ public class ForEach extends Command {
             }
             case "tab" -> {
                 partial = String.join(" ", Arrays.copyOfRange(args, 2, args.length));
-                CoffeeMain.client.player.networkHandler.sendPacket(new RequestCommandCompletionsC2SPacket(0,
-                        partial + " "));
+                CoffeeMain.client.player.networkHandler.sendPacket(new RequestCommandCompletionsC2SPacket(0, partial + " "));
                 recieving = true;
             }
             default -> error("Argument 1 has to be either player or tab");

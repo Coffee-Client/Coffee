@@ -147,10 +147,9 @@ public class CategoryDisplay extends Element {
     public void render(MatrixStack matrices, double mouseX, double mouseY, double scrollBeingUsed) {
         double mouseX1 = mouseX;
         double mouseY1 = mouseY;
-        scroll(mouseX1, mouseY1, 0);
+
         Theme theme = ThemeManager.getMainTheme();
-        double openAnim = this.openAnim < 0.5 ? (1 - sqrt(1 - pow(2 * this.openAnim,
-                2))) / 2 : (sqrt(1 - pow(-2 * this.openAnim + 2, 2)) + 1) / 2;
+        double openAnim = this.openAnim < 0.5 ? (1 - sqrt(1 - pow(2 * this.openAnim, 2))) / 2 : (sqrt(1 - pow(-2 * this.openAnim + 2, 2)) + 1) / 2;
         //        Renderer.R2D.fill(matrices, theme.getHeader(), x, y, x + width, y + headerHeight());
         double r = 5;
         double hheight = headerHeight();
@@ -163,30 +162,18 @@ public class CategoryDisplay extends Element {
         modHeight = Math.min(modHeight, modHeight * openAnim); // looks weird but works
 
         this.height = headerHeight() + modHeight; // pre calc height
+
         if (modHeight != 0) {
             height += r * openAnim;
         }
+        scroll(mouseX1, mouseY1, 0);
         Renderer.R2D.renderRoundedQuad(matrices, theme.getHeader(), x, y, x + width, y + this.height, r, 20);
 
 
         RenderSystem.setShaderTexture(0, mt.getTex());
-        Renderer.R2D.renderTexture(matrices,
-                x + texPad,
-                y + texPad,
-                texDim,
-                texDim,
-                0,
-                0,
-                texDim,
-                texDim,
-                texDim,
-                texDim);
+        Renderer.R2D.renderTexture(matrices, x + texPad, y + texPad, texDim, texDim, 0, 0, texDim, texDim, texDim, texDim);
         //        cfr.drawCenteredString(matrices,mt.getName(),x+texPad+texDim+texPad,y+headerHeight()/2d-cfr.getFontHeight()/2d,0xFFFFFF);
-        cfr.drawCenteredString(matrices,
-                mt.getName(),
-                x + width / 2d,
-                y + headerHeight() / 2d - cfr.getFontHeight() / 2d,
-                0xFFFFFF);
+        cfr.drawCenteredString(matrices, mt.getName(), x + width / 2d, y + headerHeight() / 2d - cfr.getFontHeight() / 2d, 0xFFFFFF);
         double ct = 1;
         double cw = 6;
         matrices.push();
@@ -201,10 +188,7 @@ public class CategoryDisplay extends Element {
         if (openAnim != 0) {
             // rounding the height in the final param makes it more smooth, otherwise scissor will do something with the start y and it will rattle like shit
             ClipStack.globalInstance.addWindow(matrices,
-                    new Rectangle(x,
-                            y + headerHeight(),
-                            x + width,
-                            y + Math.round(this.height) - (modHeight != 0 ? r : 0)));
+                    new Rectangle(x, y + headerHeight(), x + width, y + Math.round(this.height) - (modHeight != 0 ? r : 0)));
             double y = headerHeight();
             matrices.push();
             matrices.translate(0, scroller.getScroll(), 0);
@@ -223,35 +207,22 @@ public class CategoryDisplay extends Element {
                 y += moduleDisplay.getHeight();
             }
             matrices.pop();
-            ClipStack.globalInstance.popWindow();
+
             if (modHeightUnclamped > 350) {
                 double elScroll = modHeightUnclamped - modHeight;
                 double scrollIndex = (scroller.getScroll() * -1) / elScroll;
 
                 double ratio = modHeight / modHeightUnclamped;
-                double scrollbarHeight = modHeight - 2;
-                double scrollerHeight = ratio * scrollbarHeight;
+                double scrollerHeight = ratio * modHeight;
                 double sbW = 2;
-                Renderer.R2D.renderRoundedQuad(matrices,
-                        new Color(20, 20, 20, 150),
-                        x + width - 1 - sbW,
-                        this.y + headerHeight() + 1,
-                        x + width - 1,
-                        this.y + headerHeight() + 1 + scrollbarHeight,
-                        sbW / 2d,
-                        20);
-                double scrollerStartY = MathHelper.lerp(scrollIndex,
-                        this.y + headerHeight() + 1,
-                        this.y + headerHeight() + 1 + scrollbarHeight - scrollerHeight);
-                Renderer.R2D.renderRoundedQuad(matrices,
-                        new Color(40, 40, 40, 200),
-                        x + width - 1 - sbW,
-                        scrollerStartY,
-                        x + width - 1,
-                        scrollerStartY + scrollerHeight,
-                        sbW / 2d,
-                        20);
+                Renderer.R2D.renderQuad(matrices, new Color(20, 20, 20, 150), x + width - sbW, this.y + headerHeight(), x + width,
+                        this.y + headerHeight() + modHeight);
+                double scrollerStartY = MathHelper.lerp(scrollIndex, this.y + headerHeight(),
+                        this.y + headerHeight() + modHeight - scrollerHeight);
+                Renderer.R2D.renderRoundedQuad(matrices, new Color(40, 40, 40, 200), x + width - sbW, scrollerStartY, x + width,
+                        scrollerStartY + scrollerHeight, sbW / 2d, 20);
             }
+            ClipStack.globalInstance.popWindow();
         }
         //        FontRenderers.getRenderer().drawCenteredString(matrices, getModules().size() + " modules", this.x + this.width / 2d, this.y + this.height - 1 - FontRenderers.getRenderer().getMarginHeight(), 0xFFFFFF);
     }

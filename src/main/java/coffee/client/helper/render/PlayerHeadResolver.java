@@ -30,8 +30,7 @@ public class PlayerHeadResolver {
 
     public static void resolve(UUID uuid, Texture texture) {
         if (imageCache.containsKey(uuid)) {
-            CoffeeMain.client.execute(() -> CoffeeMain.client.getTextureManager()
-                    .registerTexture(texture, imageCache.get(uuid)));
+            CoffeeMain.client.execute(() -> CoffeeMain.client.getTextureManager().registerTexture(texture, imageCache.get(uuid)));
             return;
         }
         imageCache.put(uuid, EMPTY);

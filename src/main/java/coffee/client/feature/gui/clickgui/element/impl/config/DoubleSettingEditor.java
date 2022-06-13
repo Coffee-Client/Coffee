@@ -24,8 +24,8 @@ public class DoubleSettingEditor extends ConfigBase<DoubleSetting> {
     void handleClick(double x) {
         double translated = x - this.x;
         double perIn = MathHelper.clamp(translated / width, 0, 1);
-        configValue.setValue(Utils.Math.roundToDecimal(perIn * (configValue.getMax() - configValue.getMin()) + configValue.getMin(),
-                configValue.getPrecision()));
+        configValue.setValue(
+                Utils.Math.roundToDecimal(perIn * (configValue.getMax() - configValue.getMin()) + configValue.getMin(), configValue.getPrecision()));
     }
 
     @Override
@@ -60,9 +60,7 @@ public class DoubleSettingEditor extends ConfigBase<DoubleSetting> {
     }
 
     double getPer() {
-        return MathHelper.clamp((configValue.getValue() - configValue.getMin()) / (configValue.getMax() - configValue.getMin()),
-                0,
-                1);
+        return MathHelper.clamp((configValue.getValue() - configValue.getMin()) / (configValue.getMax() - configValue.getMin()), 0, 1);
     }
 
     @Override
@@ -70,8 +68,7 @@ public class DoubleSettingEditor extends ConfigBase<DoubleSetting> {
         Theme theme = ThemeManager.getMainTheme();
         FontRenderers.getRenderer().drawString(matrices, configValue.name, x, y, 0xFFFFFF);
         String t = configValue.getValue().toString();
-        FontRenderers.getRenderer()
-                .drawString(matrices, t, x + width - FontRenderers.getRenderer().getStringWidth(t) - 1, y, 0xFFFFFF);
+        FontRenderers.getRenderer().drawString(matrices, t, x + width - FontRenderers.getRenderer().getStringWidth(t), y, 0xFFFFFF);
         double h = y + FontRenderers.getRenderer().getMarginHeight() + .5; // 9 px left
         Renderer.R2D.renderQuad(matrices, theme.getInactive(), x, h + 9 / 2d - .5, x + width, h + 9 / 2d);
         Renderer.R2D.renderQuad(matrices, theme.getActive(), x, h + 9 / 2d - .5, x + width * getPer(), h + 9 / 2d);
@@ -89,8 +86,8 @@ public class DoubleSettingEditor extends ConfigBase<DoubleSetting> {
         if (inBounds(mouseX, mouseY)) {
             double delta = 1 / (double) (configValue.getPrecision() + 1);
             delta *= amount;
-            configValue.setValue(MathHelper.clamp(Utils.Math.roundToDecimal(configValue.getValue() + delta,
-                    configValue.getPrecision()), configValue.getMin(), configValue.getMax()));
+            configValue.setValue(MathHelper.clamp(Utils.Math.roundToDecimal(configValue.getValue() + delta, configValue.getPrecision()), configValue.getMin(),
+                    configValue.getMax()));
             return true;
         }
         return super.scroll(mouseX, mouseY, amount);

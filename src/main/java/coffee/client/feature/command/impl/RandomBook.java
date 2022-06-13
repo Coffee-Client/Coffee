@@ -27,8 +27,7 @@ public class RandomBook extends Command {
 
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
-        return StaticArgumentServer.serveFromStatic(index,
-                new PossibleArgument(ArgumentType.STRING, "ascii", "raw", "unicode"),
+        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.STRING, "ascii", "raw", "unicode"),
                 new PossibleArgument(ArgumentType.NUMBER, "(pages)"));
     }
 
@@ -44,9 +43,7 @@ public class RandomBook extends Command {
                 }
 
                 Optional<String> pages = Optional.of("Raw");
-                client.player.networkHandler.sendPacket(new BookUpdateC2SPacket(client.player.getInventory().selectedSlot,
-                        title,
-                        pages));
+                client.player.networkHandler.sendPacket(new BookUpdateC2SPacket(client.player.getInventory().selectedSlot, title, pages));
             }
 
             case "ascii" -> {
@@ -62,16 +59,12 @@ public class RandomBook extends Command {
 
 
                 Optional<String> pages3 = Optional.of("Ascii");
-                client.player.networkHandler.sendPacket(new BookUpdateC2SPacket(client.player.getInventory().selectedSlot,
-                        title3,
-                        pages3));
+                client.player.networkHandler.sendPacket(new BookUpdateC2SPacket(client.player.getInventory().selectedSlot, title3, pages3));
             }
 
             case "unicode" -> {
                 IntStream chars = new Random().ints(0, 0x10FFFF + 1);
-                String text = chars.limit(210L * Math.round(size))
-                        .mapToObj(i -> String.valueOf((char) i))
-                        .collect(Collectors.joining());
+                String text = chars.limit(210L * Math.round(size)).mapToObj(i -> String.valueOf((char) i)).collect(Collectors.joining());
                 List<String> title2 = new ArrayList<>();
                 Optional<String> pages2 = Optional.of("Unicode");
 
@@ -79,9 +72,7 @@ public class RandomBook extends Command {
                     title2.add(text.substring(t * 210, (t + 1) * 210));
                 }
 
-                client.player.networkHandler.sendPacket(new BookUpdateC2SPacket(client.player.getInventory().selectedSlot,
-                        title2,
-                        pages2));
+                client.player.networkHandler.sendPacket(new BookUpdateC2SPacket(client.player.getInventory().selectedSlot, title2, pages2));
             }
         }
     }

@@ -32,8 +32,7 @@ public class HClip extends Command {
         Vec3d forward = Vec3d.fromPolar(0, CoffeeMain.client.player.getYaw()).normalize();
 
         if (CoffeeMain.client.player.getAbilities().creativeMode) {
-            CoffeeMain.client.player.updatePosition(CoffeeMain.client.player.getX() + forward.x * brik,
-                    CoffeeMain.client.player.getY(),
+            CoffeeMain.client.player.updatePosition(CoffeeMain.client.player.getX() + forward.x * brik, CoffeeMain.client.player.getY(),
                     CoffeeMain.client.player.getZ() + forward.z * brik);
         } else {
             clip(brik);
@@ -53,27 +52,13 @@ public class HClip extends Command {
         sendPosition(pos.x, pos.y + 54, pos.z);
         sendPosition(pos.x, pos.y + 63, pos.z);
         sendPosition(pos.x + forward.x * blocks, CoffeeMain.client.player.getY(), pos.z + forward.z * blocks);
-        sendPosition(CoffeeMain.client.player.getX(),
-                CoffeeMain.client.player.getY() - 9,
-                CoffeeMain.client.player.getZ());
-        sendPosition(CoffeeMain.client.player.getX(),
-                CoffeeMain.client.player.getY() - 9,
-                CoffeeMain.client.player.getZ());
-        sendPosition(CoffeeMain.client.player.getX(),
-                CoffeeMain.client.player.getY() - 9,
-                CoffeeMain.client.player.getZ());
-        sendPosition(CoffeeMain.client.player.getX(),
-                CoffeeMain.client.player.getY() - 9,
-                CoffeeMain.client.player.getZ());
-        sendPosition(CoffeeMain.client.player.getX(),
-                CoffeeMain.client.player.getY() - 9,
-                CoffeeMain.client.player.getZ());
-        sendPosition(CoffeeMain.client.player.getX(),
-                CoffeeMain.client.player.getY() - 9,
-                CoffeeMain.client.player.getZ());
-        sendPosition(CoffeeMain.client.player.getX(),
-                CoffeeMain.client.player.getY() - 8.9,
-                CoffeeMain.client.player.getZ());
+        sendPosition(CoffeeMain.client.player.getX(), CoffeeMain.client.player.getY() - 9, CoffeeMain.client.player.getZ());
+        sendPosition(CoffeeMain.client.player.getX(), CoffeeMain.client.player.getY() - 9, CoffeeMain.client.player.getZ());
+        sendPosition(CoffeeMain.client.player.getX(), CoffeeMain.client.player.getY() - 9, CoffeeMain.client.player.getZ());
+        sendPosition(CoffeeMain.client.player.getX(), CoffeeMain.client.player.getY() - 9, CoffeeMain.client.player.getZ());
+        sendPosition(CoffeeMain.client.player.getX(), CoffeeMain.client.player.getY() - 9, CoffeeMain.client.player.getZ());
+        sendPosition(CoffeeMain.client.player.getX(), CoffeeMain.client.player.getY() - 9, CoffeeMain.client.player.getZ());
+        sendPosition(CoffeeMain.client.player.getX(), CoffeeMain.client.player.getY() - 8.9, CoffeeMain.client.player.getZ());
         sendPosition(CoffeeMain.client.player.getX(), CoffeeMain.client.player.getY(), CoffeeMain.client.player.getZ());
         CoffeeMain.client.player.setYaw(oldy);
         CoffeeMain.client.player.setPitch(oldp);

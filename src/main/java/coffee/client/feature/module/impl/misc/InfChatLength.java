@@ -11,9 +11,7 @@ import net.minecraft.client.util.math.MatrixStack;
 public class InfChatLength extends Module {
 
     public InfChatLength() {
-        super("InfChatLength",
-                "Completely removes the length limit for the chat (Server side too, be careful!)",
-                ModuleType.MISC);
+        super("InfChatLength", "Completely removes the length limit for the chat (Server side too, be careful!)", ModuleType.MISC);
     }
 
     @Override

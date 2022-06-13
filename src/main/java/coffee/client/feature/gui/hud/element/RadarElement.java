@@ -26,11 +26,7 @@ import java.awt.Color;
 
 public class RadarElement extends HudElement {
     public RadarElement() {
-        super("Radar",
-                5,
-                100 + ModuleType.values().length * FontRenderers.getRenderer().getMarginHeight() + 4 + 5,
-                100,
-                100);
+        super("Radar", 5, 100 + ModuleType.values().length * FontRenderers.getRenderer().getMarginHeight() + 4 + 5, 100, 100);
     }
 
 

@@ -123,8 +123,7 @@ public class ViewNbt extends Command {
             }
             i -= 2;
         } else {
-            message(" ".repeat(i) + (componentName == null ? "-" : componentName + ":") + " " + ne.toString()
-                    .replaceAll("§", "&"));
+            message(" ".repeat(i) + (componentName == null ? "-" : componentName + ":") + " " + ne.toString().replaceAll("§", "&"));
         }
     }
 }

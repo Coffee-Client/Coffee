@@ -158,29 +158,15 @@ public class Utils {
         public static void drop(int index) {
             int translatedSlotId = slotIndexToId(index);
             Objects.requireNonNull(CoffeeMain.client.interactionManager)
-                    .clickSlot(Objects.requireNonNull(CoffeeMain.client.player).currentScreenHandler.syncId,
-                            translatedSlotId,
-                            1,
-                            SlotActionType.THROW,
+                    .clickSlot(Objects.requireNonNull(CoffeeMain.client.player).currentScreenHandler.syncId, translatedSlotId, 1, SlotActionType.THROW,
                             CoffeeMain.client.player);
         }
 
         public static void moveStackToOther(int slotIdFrom, int slotIdTo) {
             Objects.requireNonNull(CoffeeMain.client.interactionManager)
-                    .clickSlot(0,
-                            slotIdFrom,
-                            0,
-                            SlotActionType.PICKUP,
-                            CoffeeMain.client.player); // pick up item from stack
-            CoffeeMain.client.interactionManager.clickSlot(0,
-                    slotIdTo,
-                    0,
-                    SlotActionType.PICKUP,
-                    CoffeeMain.client.player); // put item to target
-            CoffeeMain.client.interactionManager.clickSlot(0,
-                    slotIdFrom,
-                    0,
-                    SlotActionType.PICKUP,
+                    .clickSlot(0, slotIdFrom, 0, SlotActionType.PICKUP, CoffeeMain.client.player); // pick up item from stack
+            CoffeeMain.client.interactionManager.clickSlot(0, slotIdTo, 0, SlotActionType.PICKUP, CoffeeMain.client.player); // put item to target
+            CoffeeMain.client.interactionManager.clickSlot(0, slotIdFrom, 0, SlotActionType.PICKUP,
                     CoffeeMain.client.player); // (in case target slot had item) put item from target back to from
         }
     }
@@ -214,11 +200,7 @@ public class Utils {
         }
 
         public static boolean isABObstructed(Vec3d a, Vec3d b, World world, Entity requester) {
-            RaycastContext rcc = new RaycastContext(a,
-                    b,
-                    RaycastContext.ShapeType.COLLIDER,
-                    RaycastContext.FluidHandling.NONE,
-                    requester);
+            RaycastContext rcc = new RaycastContext(a, b, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, requester);
             BlockHitResult bhr = world.raycast(rcc);
             return !bhr.getPos().equals(b);
         }
@@ -242,10 +224,7 @@ public class Utils {
             PendingUpdateManager pendingUpdateManager = getUpdateManager(CoffeeMain.client.world).incrementSequence();
 
             var packet = new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND,
-                    new BlockHitResult(new Vec3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5),
-                            Direction.UP,
-                            pos,
-                            false),
+                    new BlockHitResult(new Vec3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5), Direction.UP, pos, false),
                     pendingUpdateManager.getSequence());
 
             pendingUpdateManager.close();

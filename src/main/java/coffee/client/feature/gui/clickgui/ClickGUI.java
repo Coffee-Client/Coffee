@@ -42,8 +42,7 @@ public class ClickGUI extends Screen implements FastTickable {
     //    public static final Theme theme = new SipoverV1();
 
     static final Color tooltipColor = new Color(20, 20, 30, 255);
-    static final ConfigContainer configContainer = new ConfigContainer(new File(CoffeeMain.BASE, "clickGui.sip"),
-            "amongUs");
+    static final ConfigContainer configContainer = new ConfigContainer(new File(CoffeeMain.BASE, "clickGui.sip"), "amongUs");
     private static ClickGUI instance;
     final List<Element> elements = new ArrayList<>();
     final ParticleRenderer real = new ParticleRenderer(100);
@@ -181,10 +180,7 @@ public class ClickGUI extends Screen implements FastTickable {
         double y = 5;
         double tallestInTheRoom = 0;
         for (ModuleType value : Arrays.stream(ModuleType.values())
-                .sorted(Comparator.comparingLong(value -> -ModuleRegistry.getModules()
-                        .stream()
-                        .filter(module -> module.getModuleType() == value)
-                        .count()))
+                .sorted(Comparator.comparingLong(value -> -ModuleRegistry.getModules().stream().filter(module -> module.getModuleType() == value).count()))
                 .toList()) {
             CategoryDisplay cd = new CategoryDisplay(x, y, value);
             tallestInTheRoom = Math.max(tallestInTheRoom, cd.getHeight());
@@ -250,12 +246,7 @@ public class ClickGUI extends Screen implements FastTickable {
             for (String s : text) {
                 width = Math.max(width, FontRenderers.getRenderer().getStringWidth(s));
             }
-            Vec2f root = Renderer.R2D.renderTooltip(matrices,
-                    descX,
-                    descY,
-                    width + 4,
-                    FontRenderers.getRenderer().getMarginHeight() + 4,
-                    tooltipColor);
+            Vec2f root = Renderer.R2D.renderTooltip(matrices, descX, descY, width + 4, FontRenderers.getRenderer().getMarginHeight() + 4, tooltipColor);
             float yOffset = 2;
             for (String s : text) {
                 FontRenderers.getRenderer().drawString(matrices, s, root.x + 1, root.y + yOffset, 0xFFFFFF, false);

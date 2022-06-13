@@ -270,10 +270,7 @@ public abstract class ProxyHandler extends ChannelDuplexHandler {
 
             removedCodec &= safeRemoveEncoder();
 
-            ctx.fireUserEventTriggered(new ProxyConnectionEvent(protocol(),
-                    authScheme(),
-                    proxyAddress,
-                    destinationAddress));
+            ctx.fireUserEventTriggered(new ProxyConnectionEvent(protocol(), authScheme(), proxyAddress, destinationAddress));
 
             removedCodec &= safeRemoveDecoder();
 
@@ -286,8 +283,7 @@ public abstract class ProxyHandler extends ChannelDuplexHandler {
                 connectPromise.trySuccess(ctx.channel());
             } else {
                 // We are at inconsistent state because we failed to remove all codec handlers.
-                Exception cause = new ProxyConnectException(
-                        "failed to remove all codec handlers added by the proxy handler; bug?");
+                Exception cause = new ProxyConnectException("failed to remove all codec handlers added by the proxy handler; bug?");
                 failPendingWritesAndClose(cause);
             }
         }

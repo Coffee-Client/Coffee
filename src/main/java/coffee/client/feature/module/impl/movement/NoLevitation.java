@@ -24,9 +24,7 @@ public class NoLevitation extends Module {
     @Override
     public void enable() {
         if (FabricLoader.getInstance().isModLoaded("meteor-client")) {
-            Notification.create(4000,
-                    "NoLevitation",
-                    Notification.Type.ERROR,
+            Notification.create(4000, "NoLevitation", Notification.Type.ERROR,
                     "Meteor is currently loaded and prevents this from working. Use meteor's NoLevitation");
             setEnabled(false);
         }

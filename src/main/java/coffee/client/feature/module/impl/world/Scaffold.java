@@ -29,12 +29,8 @@ import java.util.Objects;
 public class Scaffold extends Module {
 
     //    final SliderValue extend = this.config.create("Extend", 3, 0, 5, 1);
-    final DoubleSetting extend = this.config.create(new DoubleSetting.Builder(3).name("Extend")
-            .description("How many blocks to extend outwards")
-            .min(0)
-            .max(5)
-            .precision(1)
-            .get());
+    final DoubleSetting extend = this.config.create(
+            new DoubleSetting.Builder(3).name("Extend").description("How many blocks to extend outwards").min(0).max(5).precision(1).get());
 
     public Scaffold() {
         super("Scaffold", "Places blocks below you as you walk", ModuleType.WORLD);
@@ -102,8 +98,7 @@ public class Scaffold extends Module {
                 Vec3d v = ppos;
                 for (double i = 0; i < extend.getValue(); i += 0.5) {
                     v = v.add(dir);
-                    if (v.distanceTo(client.player.getPos()) >= Objects.requireNonNull(client.interactionManager)
-                            .getReachDistance()) {
+                    if (v.distanceTo(client.player.getPos()) >= Objects.requireNonNull(client.interactionManager).getReachDistance()) {
                         break;
                     }
                     if (sneaking) {
@@ -129,10 +124,7 @@ public class Scaffold extends Module {
         client.player.getInventory().selectedSlot = s;
         BlockHitResult bhr = new BlockHitResult(new Vec3d(bp.getX(), bp.getY(), bp.getZ()), Direction.DOWN, bp, false);
         Renderer.R3D.renderFadingBlock(Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 255),
-                Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 100).darker(),
-                Vec3d.of(bp),
-                new Vec3d(1, 1, 1),
-                1000);
+                Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 100).darker(), Vec3d.of(bp), new Vec3d(1, 1, 1), 1000);
         Objects.requireNonNull(client.interactionManager).interactBlock(client.player, Hand.MAIN_HAND, bhr);
         client.player.getInventory().selectedSlot = c;
     }

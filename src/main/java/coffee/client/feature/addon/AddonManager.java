@@ -134,8 +134,7 @@ public class AddonManager {
                         "This error either occurs because the addon is heavily obfuscated and the obfuscator is bad, or because the addon is built on an outdated coffee SDK. Please report this error to the addon developer(s).");
             }
             if (e instanceof ClassCastException) {
-                CoffeeMain.log(Level.INFO,
-                        "This error probably occurs because of an outdated coffee SDK. Please report this error to the addon developer(s).");
+                CoffeeMain.log(Level.INFO, "This error probably occurs because of an outdated coffee SDK. Please report this error to the addon developer(s).");
             }
         }
         return null;
@@ -144,8 +143,7 @@ public class AddonManager {
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public void discoverNewAddons() {
         for (File file : Objects.requireNonNull(ADDON_DIRECTORY.listFiles())) {
-            if (loadedAddons.stream()
-                    .anyMatch(addonEntry -> addonEntry.sourceFile.getAbsoluteFile().equals(file.getAbsoluteFile()))) {
+            if (loadedAddons.stream().anyMatch(addonEntry -> addonEntry.sourceFile.getAbsoluteFile().equals(file.getAbsoluteFile()))) {
                 continue;
             }
             if (file.getName().endsWith(".jar")) {
@@ -184,8 +182,7 @@ public class AddonManager {
                         Module additionalModule = customModule.module();
                         if (storedConfig.containsKey(additionalModule.getName())) {
                             List<SettingBase<?>> amog = additionalModule.config.getSettings(); // new config
-                            for (SettingBase<?> setting : storedConfig.get(additionalModule.getName())
-                                    .getSettings()) { // old saved config
+                            for (SettingBase<?> setting : storedConfig.get(additionalModule.getName()).getSettings()) { // old saved config
                                 for (SettingBase<?> settingBase : amog) { // merge
                                     if (settingBase.name.equals(setting.name)) { // if new name equals old name of setting
                                         settingBase.accept(setting.getConfigSave()); // set val
@@ -218,8 +215,7 @@ public class AddonManager {
         List<Command> customCommands = addon.getAdditionalCommands();
         if (customModules != null) {
             for (AddonModule additionalModule : customModules) {
-                CoffeeMain.log(Level.INFO,
-                        "Loading module " + additionalModule.getName() + " from addon " + addon.name);
+                CoffeeMain.log(Level.INFO, "Loading module " + additionalModule.getName() + " from addon " + addon.name);
                 ModuleRegistry.registerAddonModule(addon, additionalModule);
             }
         }
@@ -262,12 +258,12 @@ public class AddonManager {
                     cSigP[i] = Byte.toUnsignedInt(cSig[i]);
                 }
                 if (!Arrays.equals(cSigP, EXPECTED_CLASS_SIGNATURE)) {
-                    throw new IllegalStateException("Invalid class file signature for " + jarEntry.getName() + ": expected 0x" + Arrays.stream(
-                                    EXPECTED_CLASS_SIGNATURE)
-                            .mapToObj(value -> Integer.toHexString(value).toUpperCase())
-                            .collect(Collectors.joining()) + ", got 0x" + Arrays.stream(cSigP)
-                            .mapToObj(value -> Integer.toHexString(value).toUpperCase())
-                            .collect(Collectors.joining()));
+                    throw new IllegalStateException(
+                            "Invalid class file signature for " + jarEntry.getName() + ": expected 0x" + Arrays.stream(EXPECTED_CLASS_SIGNATURE)
+                                    .mapToObj(value -> Integer.toHexString(value).toUpperCase())
+                                    .collect(Collectors.joining()) + ", got 0x" + Arrays.stream(cSigP)
+                                    .mapToObj(value -> Integer.toHexString(value).toUpperCase())
+                                    .collect(Collectors.joining()));
                 }
                 Class<?> loadedClass = classLoader.defineAndGetClass(classBytes);
                 if (Addon.class.isAssignableFrom(loadedClass)) {
@@ -281,8 +277,7 @@ public class AddonManager {
                 }
             } else {
                 File cacheFile = new File(ADDON_RESOURCE_CACHE,
-                        Math.abs(location.getName()
-                                .hashCode()) + "-" + Integer.toHexString((int) Math.floor(Math.random() * 0xFFFFFF)));
+                        Math.abs(location.getName().hashCode()) + "-" + Integer.toHexString((int) Math.floor(Math.random() * 0xFFFFFF)));
                 FileUtils.writeByteArrayToFile(cacheFile, stream.readAllBytes());
                 classLoader.defineResource(jarEntry.getName(), cacheFile.toURI().toURL());
             }
@@ -297,13 +292,8 @@ public class AddonManager {
         } catch (NoSuchMethodException e) {
             throw new IllegalStateException("Jarfile " + location.getName() + " has invalid main class: No constructor without arguments");
         }
-        CoffeeMain.log(Level.INFO,
-                "Discovered addon " + mainClassA.name + " by " + String.join(", ", mainClassA.developers));
-        loadedAddons.add(new AddonEntry(location,
-                mainClassA.name,
-                mainClassA.description,
-                mainClassA.developers,
-                mainClassA));
+        CoffeeMain.log(Level.INFO, "Discovered addon " + mainClassA.name + " by " + String.join(", ", mainClassA.developers));
+        loadedAddons.add(new AddonEntry(location, mainClassA.name, mainClassA.description, mainClassA.developers, mainClassA));
         return mainClassA;
     }
 

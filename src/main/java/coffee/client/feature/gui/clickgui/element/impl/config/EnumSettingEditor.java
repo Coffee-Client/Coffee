@@ -16,19 +16,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EnumSettingEditor extends ConfigBase<EnumSetting<?>> {
-    static final Color idk2 = new Color(0, 0, 20, 60);
+    static final Color idk2 = new Color(0x5F0E1515, true);
     final List<EnumSelectorClickable<?>> values = new ArrayList<>();
 
     public EnumSettingEditor(double x, double y, double width, EnumSetting<?> configValue) {
         super(x, y, width, 0, configValue);
         double h = FontRenderers.getRenderer().getFontHeight() + 3;
         for (Enum<?> value : configValue.getValues()) {
-            EnumSelectorClickable<?> a = new EnumSelectorClickable<>(this,
-                    0,
-                    0,
-                    width - 2,
-                    FontRenderers.getRenderer().getMarginHeight() + 2,
-                    value);
+            EnumSelectorClickable<?> a = new EnumSelectorClickable<>(this, 0, 0, width - 2, FontRenderers.getRenderer().getMarginHeight() + 2, value);
             values.add(a);
             h += a.height;
         }
@@ -115,10 +110,7 @@ public class EnumSettingEditor extends ConfigBase<EnumSetting<?>> {
 
         void render(MatrixStack stack) {
             FontRenderers.getRenderer()
-                    .drawCenteredString(stack,
-                            value.name(),
-                            x + width / 2d,
-                            y + height / 2d - FontRenderers.getRenderer().getMarginHeight() / 2d,
+                    .drawCenteredString(stack, value.name(), x + width / 2d, y + height / 2d - FontRenderers.getRenderer().getMarginHeight() / 2d,
                             instance.getColor(value));
         }
 

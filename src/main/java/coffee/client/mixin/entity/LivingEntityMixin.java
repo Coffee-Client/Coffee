@@ -50,8 +50,7 @@ public class LivingEntityMixin {
 
     @Redirect(method = "travel", at = @At(value = "INVOKE", target = "net/minecraft/entity/LivingEntity.hasStatusEffect(Lnet/minecraft/entity/effect/StatusEffect;)Z"), require = 0)
     boolean coffee_stopLevitationEffect(LivingEntity instance, StatusEffect effect) {
-        if (instance.equals(CoffeeMain.client.player) && ModuleRegistry.getByClass(NoLevitation.class)
-                .isEnabled() && effect == StatusEffects.LEVITATION) {
+        if (instance.equals(CoffeeMain.client.player) && ModuleRegistry.getByClass(NoLevitation.class).isEnabled() && effect == StatusEffects.LEVITATION) {
             return false;
         } else {
             return instance.hasStatusEffect(effect);
@@ -69,7 +68,9 @@ public class LivingEntityMixin {
 
     @Redirect(method = "jump", at = @At(value = "INVOKE", target = "net/minecraft/entity/LivingEntity.getYaw()F"), require = 0)
     private float coffee_overwriteJumpDirection(LivingEntity instance) {
-        if (instance.equals(CoffeeMain.client.player) && ModuleRegistry.getByClass(FreeLook.class).isEnabled() && !((boolean) FreeLook.instance().getEnableAA().getValue())) {
+        if (instance.equals(CoffeeMain.client.player) && ModuleRegistry.getByClass(FreeLook.class).isEnabled() && !((boolean) FreeLook.instance()
+                .getEnableAA()
+                .getValue())) {
             return ModuleRegistry.getByClass(FreeLook.class).newyaw;
         }
         return instance.getYaw();

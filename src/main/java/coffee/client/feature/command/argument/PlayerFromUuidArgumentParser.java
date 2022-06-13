@@ -24,11 +24,9 @@ public class PlayerFromUuidArgumentParser implements ArgumentParser<PlayerEntity
                     return player;
                 }
             }
-            throw new CommandException("Invalid argument \"" + argument + "\": Player not found",
-                    "Provide the uuid of an existing player");
+            throw new CommandException("Invalid argument \"" + argument + "\": Player not found", "Provide the uuid of an existing player");
         } catch (Exception e) {
-            throw new CommandException("Invalid argument \"" + argument + "\": Expected an UUID",
-                    "Provide a valid UUID");
+            throw new CommandException("Invalid argument \"" + argument + "\": Expected an UUID", "Provide a valid UUID");
         }
     }
 }

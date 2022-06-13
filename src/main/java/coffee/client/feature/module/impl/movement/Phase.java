@@ -28,15 +28,12 @@ public class Phase extends Module {
                 return;
             }
             PacketEvent pe = (PacketEvent) event;
-            Box p = CoffeeMain.client.player.getBoundingBox(CoffeeMain.client.player.getPose())
-                    .offset(0, 0.27, 0)
-                    .expand(0.25);
+            Box p = CoffeeMain.client.player.getBoundingBox(CoffeeMain.client.player.getPose()).offset(0, 0.27, 0).expand(0.25);
             if (p.getYLength() < 2) {
                 p = p.expand(0, 1, 0);
             }
             p = p.offset(CoffeeMain.client.player.getPos());
-            if (pe.getPacket() instanceof PlayerMoveC2SPacket && !Objects.requireNonNull(CoffeeMain.client.world)
-                    .isSpaceEmpty(CoffeeMain.client.player, p)) {
+            if (pe.getPacket() instanceof PlayerMoveC2SPacket && !Objects.requireNonNull(CoffeeMain.client.world).isSpaceEmpty(CoffeeMain.client.player, p)) {
                 event.setCancelled(true);
             }
         });

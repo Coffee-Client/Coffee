@@ -47,8 +47,8 @@ public class AutoTool extends Module {
 
     @Override
     public void tick() {
-        if (Objects.requireNonNull(client.interactionManager).isBreakingBlock() && !Objects.requireNonNull(
-                ModuleRegistry.getByClass(SurvivalNuker.class)).isEnabled()) {
+        if (Objects.requireNonNull(client.interactionManager).isBreakingBlock() && !Objects.requireNonNull(ModuleRegistry.getByClass(SurvivalNuker.class))
+                .isEnabled()) {
             BlockPos breaking = ((IClientPlayerInteractionManagerMixin) client.interactionManager).getCurrentBreakingPos();
             BlockState bs = Objects.requireNonNull(client.world).getBlockState(breaking);
             pick(bs);

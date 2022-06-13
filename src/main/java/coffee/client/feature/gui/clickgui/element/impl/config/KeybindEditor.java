@@ -97,14 +97,7 @@ public class KeybindEditor extends ConfigBase<DoubleSetting> {
         }
         Renderer.R2D.renderRoundedQuad(matrices, new Color(40, 40, 40), x, y, x + width, y + h, 5, 20);
         FontRenderers.getRenderer()
-                .drawCenteredString(matrices,
-                        keyName,
-                        x + width / 2d,
-                        y + h / 2d - FontRenderers.getRenderer().getMarginHeight() / 2d,
-                        1f,
-                        1f,
-                        1f,
-                        1f);
+                .drawCenteredString(matrices, keyName, x + width / 2d, y + h / 2d - FontRenderers.getRenderer().getMarginHeight() / 2d, 1f, 1f, 1f, 1f);
     }
 
     int getKeybind() {

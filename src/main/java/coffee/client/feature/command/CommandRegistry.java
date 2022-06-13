@@ -63,8 +63,7 @@ public class CommandRegistry {
     public static void registerCustomCommand(Addon addon, Command command) {
         for (CustomCommandEntry e : customCommands) {
             if (e.command.getClass() == command.getClass()) {
-                throw new IllegalStateException("Command " + command.getClass()
-                        .getSimpleName() + " already registered");
+                throw new IllegalStateException("Command " + command.getClass().getSimpleName() + " already registered");
             }
         }
         customCommands.add(new CustomCommandEntry(addon, command));

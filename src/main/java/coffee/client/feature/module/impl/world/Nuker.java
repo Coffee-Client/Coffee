@@ -34,9 +34,7 @@ public class Nuker extends Module {
         }
         return piss;
     });
-    final EnumSetting<Mode> modeSetting = this.config.create(new EnumSetting.Builder<>(Mode.Interaction).name("Mode")
-            .description("How to break block")
-            .get());
+    final EnumSetting<Mode> modeSetting = this.config.create(new EnumSetting.Builder<>(Mode.Interaction).name("Mode").description("How to break block").get());
 
     public Nuker() {
         super("Nuker", "The nuke", ModuleType.WORLD);
@@ -72,19 +70,10 @@ public class Nuker extends Module {
                     return;
                 }
                 //                    BlockHitResult bhr = new BlockHitResult(vec3d, Direction.DOWN,bp,false);
-                client.getNetworkHandler()
-                        .sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.START_DESTROY_BLOCK,
-                                bp,
-                                Direction.DOWN));
-                client.getNetworkHandler()
-                        .sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.STOP_DESTROY_BLOCK,
-                                bp,
-                                Direction.DOWN));
+                client.getNetworkHandler().sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.START_DESTROY_BLOCK, bp, Direction.DOWN));
+                client.getNetworkHandler().sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.STOP_DESTROY_BLOCK, bp, Direction.DOWN));
                 Renderer.R3D.renderFadingBlock(Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 255),
-                        Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 100).darker(),
-                        Vec3d.of(bp),
-                        new Vec3d(1, 1, 1),
-                        1000);
+                        Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 100).darker(), Vec3d.of(bp), new Vec3d(1, 1, 1), 1000);
                 //                    client.getNetworkHandler().sendPacket(new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND,bhr));
             });
             case Griefing -> iterateOverRange(client.interactionManager.getReachDistance(), vec3d -> {
@@ -94,19 +83,10 @@ public class Nuker extends Module {
                     return;
                 }
                 if (instantBreaks.contains(bs.getBlock())) {
-                    client.getNetworkHandler()
-                            .sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.START_DESTROY_BLOCK,
-                                    bp,
-                                    Direction.DOWN));
-                    client.getNetworkHandler()
-                            .sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.STOP_DESTROY_BLOCK,
-                                    bp,
-                                    Direction.DOWN));
+                    client.getNetworkHandler().sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.START_DESTROY_BLOCK, bp, Direction.DOWN));
+                    client.getNetworkHandler().sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.STOP_DESTROY_BLOCK, bp, Direction.DOWN));
                     Renderer.R3D.renderFadingBlock(Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 255),
-                            Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 100).darker(),
-                            Vec3d.of(bp),
-                            new Vec3d(1, 1, 1),
-                            1000);
+                            Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 100).darker(), Vec3d.of(bp), new Vec3d(1, 1, 1), 1000);
                 }
             });
             case Interaction -> iterateOverRange(client.interactionManager.getReachDistance(), vec3d -> {
@@ -121,10 +101,7 @@ public class Nuker extends Module {
                 }
                 client.interactionManager.attackBlock(bp, Direction.DOWN);
                 Renderer.R3D.renderFadingBlock(Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 255),
-                        Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 100).darker(),
-                        Vec3d.of(bp),
-                        new Vec3d(1, 1, 1),
-                        1000);
+                        Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 100).darker(), Vec3d.of(bp), new Vec3d(1, 1, 1), 1000);
             });
         }
     }

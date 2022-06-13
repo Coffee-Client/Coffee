@@ -49,12 +49,7 @@ public class Renderer {
         static List<FadingBlock> fades = new CopyOnWriteArrayList<>();
 
         public static void renderFadingBlock(Color outlineColor, Color fillColor, Vec3d start, Vec3d dimensions, long lifeTimeMs) {
-            FadingBlock fb = new FadingBlock(outlineColor,
-                    fillColor,
-                    start,
-                    dimensions,
-                    System.currentTimeMillis(),
-                    lifeTimeMs);
+            FadingBlock fb = new FadingBlock(outlineColor, fillColor, start, dimensions, System.currentTimeMillis(), lifeTimeMs);
 
             fades.removeIf(fadingBlock -> fadingBlock.start.equals(start) && fadingBlock.dimensions.equals(dimensions));
             fades.add(fb);
@@ -73,11 +68,8 @@ public class Renderer {
                 stack.push();
                 Color out = Util.modify(fade.outline, -1, -1, -1, (int) (fade.outline.getAlpha() * progress));
                 Color fill = Util.modify(fade.fill, -1, -1, -1, (int) (fade.fill.getAlpha() * progress));
-                Renderer.R3D.renderEdged(stack,
-                        fade.start.add(new Vec3d(0.2, 0.2, 0.2).multiply(ip)),
-                        fade.dimensions.subtract(new Vec3d(.4, .4, .4).multiply(ip)),
-                        fill,
-                        out);
+                Renderer.R3D.renderEdged(stack, fade.start.add(new Vec3d(0.2, 0.2, 0.2).multiply(ip)),
+                        fade.dimensions.subtract(new Vec3d(.4, .4, .4).multiply(ip)), fill, out);
                 stack.pop();
             }
         }
@@ -108,9 +100,7 @@ public class Renderer {
                 double offX = sin * rad;
                 double offY = cos * rad;
                 bufferBuilder.vertex(matrix, (float) offX, 0, (float) offY).color(g, h, k, f).next();
-                bufferBuilder.vertex(matrix, (float) (offX + sin * width), 0, (float) (offY + cos * width))
-                        .color(g, h, k, f)
-                        .next();
+                bufferBuilder.vertex(matrix, (float) (offX + sin * width), 0, (float) (offY + cos * width)).color(g, h, k, f).next();
 
             }
             BufferRenderer.drawWithShader(bufferBuilder.end());
@@ -127,7 +117,7 @@ public class Renderer {
             float blue = color.getBlue() / 255f;
             float alpha = color.getAlpha() / 255f;
 
-            GL11.glDepthFunc(GL11.GL_ALWAYS);
+            GL11.glDepthFunc(GL11.GL_LEQUAL);
             BufferBuilder buffer = Tessellator.getInstance().getBuffer();
 
             Camera c = CoffeeMain.client.gameRenderer.getCamera();
@@ -181,7 +171,7 @@ public class Renderer {
         }
 
         public static void renderFilled(Vec3d start, Vec3d dimensions, Color color, MatrixStack stack) {
-            renderFilled(start, dimensions, color, stack, GL11.GL_ALWAYS);
+            renderFilled(start, dimensions, color, stack, GL11.GL_LEQUAL);
         }
 
         public static MatrixStack getEmptyMatrixStack() {
@@ -213,7 +203,7 @@ public class Renderer {
             float z2 = (float) end.z;
             BufferBuilder buffer = Tessellator.getInstance().getBuffer();
 
-            GL11.glDepthFunc(GL11.GL_ALWAYS);
+            GL11.glDepthFunc(GL11.GL_LEQUAL);
             setupRender();
             RenderSystem.setShader(GameRenderer::getPositionColorShader);
             buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
@@ -357,18 +347,14 @@ public class Renderer {
             float z1 = (float) start1.z;
             BufferBuilder buffer = Tessellator.getInstance().getBuffer();
 
-            GL11.glDepthFunc(GL11.GL_ALWAYS);
+            GL11.glDepthFunc(GL11.GL_LEQUAL);
             setupRender();
             RenderSystem.setShader(GameRenderer::getPositionColorShader);
             buffer.begin(VertexFormat.DrawMode.DEBUG_LINES, VertexFormats.POSITION_COLOR);
 
             shape.forEachEdge((minX, minY, minZ, maxX, maxY, maxZ) -> {
-                buffer.vertex(matrix, (float) (x1 + minX), (float) (y1 + minY), (float) (z1 + minZ))
-                        .color(red, green, blue, alpha)
-                        .next();
-                buffer.vertex(matrix, (float) (x1 + maxX), (float) (y1 + maxY), (float) (z1 + maxZ))
-                        .color(red, green, blue, alpha)
-                        .next();
+                buffer.vertex(matrix, (float) (x1 + minX), (float) (y1 + minY), (float) (z1 + minZ)).color(red, green, blue, alpha).next();
+                buffer.vertex(matrix, (float) (x1 + maxX), (float) (y1 + maxY), (float) (z1 + maxZ)).color(red, green, blue, alpha).next();
             });
 
             BufferRenderer.drawWithShader(buffer.end());
@@ -394,7 +380,7 @@ public class Renderer {
             float z2 = (float) end1.z;
             BufferBuilder buffer = Tessellator.getInstance().getBuffer();
 
-            GL11.glDepthFunc(GL11.GL_ALWAYS);
+            GL11.glDepthFunc(GL11.GL_LEQUAL);
             setupRender();
             RenderSystem.setShader(GameRenderer::getPositionColorShader);
             buffer.begin(VertexFormat.DrawMode.DEBUG_LINES, VertexFormats.POSITION_COLOR);
@@ -490,60 +476,30 @@ public class Renderer {
 
             setupRender();
             RenderSystem.setShader(GameRenderer::getPositionColorShader);
-            renderRoundedQuadInternal(mat,
-                    color.getRed() / 255f,
-                    color.getGreen() / 255f,
-                    color.getBlue() / 255f,
-                    color.getAlpha() / 255f,
-                    roundStartX,
-                    roundStartY,
-                    roundStartX + width,
-                    roundStartY + height,
-                    5,
-                    5,
-                    5,
-                    5,
-                    20);
+            renderRoundedQuadInternal(mat, color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f, roundStartX,
+                    roundStartY, roundStartX + width, roundStartY + height, 5, 5, 5, 5, 20);
             Tessellator t = Tessellator.getInstance();
             BufferBuilder bb = t.getBuffer();
             bb.begin(VertexFormat.DrawMode.TRIANGLES, VertexFormats.POSITION_COLOR);
             if (renderUpsideDown) {
                 bb.vertex(mat, (float) arrowX, (float) arrowY - .5f, 0)
-                        .color(color.getRed() / 255f,
-                                color.getGreen() / 255f,
-                                color.getBlue() / 255f,
-                                color.getAlpha() / 255f)
+                        .color(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f)
                         .next();
                 bb.vertex(mat, (float) (arrowX - arrowDimX / 2f), (float) (arrowY - arrowDimY - .5), 0)
-                        .color(color.getRed() / 255f,
-                                color.getGreen() / 255f,
-                                color.getBlue() / 255f,
-                                color.getAlpha() / 255f)
+                        .color(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f)
                         .next();
                 bb.vertex(mat, (float) (arrowX + arrowDimX / 2f), (float) (arrowY - arrowDimY - .5), 0)
-                        .color(color.getRed() / 255f,
-                                color.getGreen() / 255f,
-                                color.getBlue() / 255f,
-                                color.getAlpha() / 255f)
+                        .color(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f)
                         .next();
             } else {
                 bb.vertex(mat, (float) arrowX, (float) arrowY + .5f, 0)
-                        .color(color.getRed() / 255f,
-                                color.getGreen() / 255f,
-                                color.getBlue() / 255f,
-                                color.getAlpha() / 255f)
+                        .color(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f)
                         .next();
                 bb.vertex(mat, (float) (arrowX - arrowDimX / 2f), (float) (arrowY + arrowDimY + .5), 0)
-                        .color(color.getRed() / 255f,
-                                color.getGreen() / 255f,
-                                color.getBlue() / 255f,
-                                color.getAlpha() / 255f)
+                        .color(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f)
                         .next();
                 bb.vertex(mat, (float) (arrowX + arrowDimX / 2f), (float) (arrowY + arrowDimY + .5), 0)
-                        .color(color.getRed() / 255f,
-                                color.getGreen() / 255f,
-                                color.getBlue() / 255f,
-                                color.getAlpha() / 255f)
+                        .color(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f)
                         .next();
             }
             t.draw();
@@ -556,9 +512,9 @@ public class Renderer {
             double height = endY - y;
             width = Math.max(0, width);
             height = Math.max(0, height);
-            float d = (float) CoffeeMain.client.getWindow().getScaleFactor();
-            int ay = (int) ((CoffeeMain.client.getWindow().getScaledHeight() - (y + height)) * d);
-            RenderSystem.enableScissor((int) (x * d), ay, (int) (width * d), (int) (height * d));
+            float mulScale = (float) CoffeeMain.client.getWindow().getScaleFactor();
+            int invertedY = (int) ((CoffeeMain.client.getWindow().getScaledHeight() - (y + height)) * mulScale);
+            RenderSystem.enableScissor((int) (x * mulScale), invertedY, (int) (width * mulScale), (int) (height * mulScale));
         }
 
         public static void endScissor() {
@@ -569,16 +525,8 @@ public class Renderer {
             double x1 = x0 + width;
             double y1 = y0 + height;
             double z = 0;
-            renderTexturedQuad(matrices.peek().getPositionMatrix(),
-                    x0,
-                    x1,
-                    y0,
-                    y1,
-                    z,
-                    (u + 0.0F) / (float) textureWidth,
-                    (u + (float) regionWidth) / (float) textureWidth,
-                    (v + 0.0F) / (float) textureHeight,
-                    (v + (float) regionHeight) / (float) textureHeight);
+            renderTexturedQuad(matrices.peek().getPositionMatrix(), x0, x1, y0, y1, z, (u + 0.0F) / (float) textureWidth,
+                    (u + (float) regionWidth) / (float) textureWidth, (v + 0.0F) / (float) textureHeight, (v + (float) regionHeight) / (float) textureHeight);
         }
 
         static Vec2f lerp(Vec2f p1, Vec2f p2, float delta) {
@@ -608,22 +556,18 @@ public class Renderer {
             double toY1 = toY - rad;
             double fromX1 = fromX + rad;
             double fromY1 = fromY + rad;
-            double[][] map = new double[][] { new double[] { toX1, toY1 }, new double[] { toX1, fromY1 },
-                    new double[] { fromX1, fromY1 }, new double[] { fromX1, toY1 } };
+            double[][] map = new double[][] { new double[] { toX1, toY1 }, new double[] { toX1, fromY1 }, new double[] { fromX1, fromY1 },
+                    new double[] { fromX1, toY1 } };
             for (int i = 0; i < map.length; i++) {
                 double[] current = map[i];
                 for (double r = i * 90d; r < (360 / 4d + i * 90d); r += (90 / samples)) {
                     float rad1 = (float) Math.toRadians(r);
                     float sin = (float) (Math.sin(rad1) * rad);
                     float cos = (float) (Math.cos(rad1) * rad);
-                    bufferBuilder.vertex(matrix, (float) current[0] + sin, (float) current[1] + cos, 0.0F)
-                            .color(cr, cg, cb, ca)
-                            .next();
+                    bufferBuilder.vertex(matrix, (float) current[0] + sin, (float) current[1] + cos, 0.0F).color(cr, cg, cb, ca).next();
                     float sin1 = (float) (sin + Math.sin(rad1) * wid);
                     float cos1 = (float) (cos + Math.cos(rad1) * wid);
-                    bufferBuilder.vertex(matrix, (float) current[0] + sin1, (float) current[1] + cos1, 0.0F)
-                            .color(cr, cg, cb, 0f)
-                            .next();
+                    bufferBuilder.vertex(matrix, (float) current[0] + sin1, (float) current[1] + cos1, 0.0F).color(cr, cg, cb, 0f).next();
                 }
             }
             {
@@ -631,14 +575,10 @@ public class Renderer {
                 float rad1 = (float) Math.toRadians(0);
                 float sin = (float) (Math.sin(rad1) * rad);
                 float cos = (float) (Math.cos(rad1) * rad);
-                bufferBuilder.vertex(matrix, (float) current[0] + sin, (float) current[1] + cos, 0.0F)
-                        .color(cr, cg, cb, ca)
-                        .next();
+                bufferBuilder.vertex(matrix, (float) current[0] + sin, (float) current[1] + cos, 0.0F).color(cr, cg, cb, ca).next();
                 float sin1 = (float) (sin + Math.sin(rad1) * wid);
                 float cos1 = (float) (cos + Math.cos(rad1) * wid);
-                bufferBuilder.vertex(matrix, (float) current[0] + sin1, (float) current[1] + cos1, 0.0F)
-                        .color(cr, cg, cb, 0f)
-                        .next();
+                bufferBuilder.vertex(matrix, (float) current[0] + sin1, (float) current[1] + cos1, 0.0F).color(cr, cg, cb, 0f).next();
             }
             BufferRenderer.drawWithShader(bufferBuilder.end());
         }
@@ -703,9 +643,7 @@ public class Renderer {
                 float h = hsb.getGreen() / 255f;
                 float k = hsb.getBlue() / 255f;
                 bufferBuilder.vertex(matrix, (float) offX, (float) offY, 0).color(g, h, k, alpha).next();
-                bufferBuilder.vertex(matrix, (float) (offX + sin * width), (float) (offY + cos * width), 0)
-                        .color(g, h, k, alpha)
-                        .next();
+                bufferBuilder.vertex(matrix, (float) (offX + sin * width), (float) (offY + cos * width), 0).color(g, h, k, alpha).next();
 
             }
             BufferRenderer.drawWithShader(bufferBuilder.end());
@@ -741,9 +679,7 @@ public class Renderer {
                 double radians = Math.toRadians(i);
                 double sin = Math.sin(radians) * rad;
                 double cos = Math.cos(radians) * rad;
-                bufferBuilder.vertex(matrix, (float) (originX + sin), (float) (originY + cos), 0)
-                        .color(g, h, k, f)
-                        .next();
+                bufferBuilder.vertex(matrix, (float) (originX + sin), (float) (originY + cos), 0).color(g, h, k, f).next();
             }
             BufferRenderer.drawWithShader(bufferBuilder.end());
         }
@@ -766,11 +702,9 @@ public class Renderer {
             GL11.glGetIntegerv(GL11.GL_VIEWPORT, viewport);
             Matrix4x4 matrix4x4Proj = Matrix4x4.copyFromColumnMajor(RenderSystem.getProjectionMatrix());//no more joml :)
             Matrix4x4 matrix4x4Model = Matrix4x4.copyFromColumnMajor(RenderSystem.getModelViewMatrix());//but I do the math myself now :( (heck math)
-            matrix4x4Proj.mul(matrix4x4Model)
-                    .project(vector4f.getX(), vector4f.getY(), vector4f.getZ(), viewport, screenCoords);
+            matrix4x4Proj.mul(matrix4x4Model).project(vector4f.getX(), vector4f.getY(), vector4f.getZ(), viewport, screenCoords);
             return new Vec3d(screenCoords.x / CoffeeMain.client.getWindow().getScaleFactor(),
-                    (displayHeight - screenCoords.y) / CoffeeMain.client.getWindow().getScaleFactor(),
-                    screenCoords.z);
+                    (displayHeight - screenCoords.y) / CoffeeMain.client.getWindow().getScaleFactor(), screenCoords.z);
         }
 
         public static void renderQuad(MatrixStack matrices, Color c, double x1, double y1, double x2, double y2) {
@@ -808,7 +742,7 @@ public class Renderer {
             endRender();
         }
 
-        public static void renderQuadGradient(MatrixStack matrices, Color c2, Color c1, double x1, double y1, double x2, double y2) {
+        public static void renderQuadGradient(MatrixStack matrices, Color c2, Color c1, double x1, double y1, double x2, double y2, boolean vertical) {
             double x11 = x1;
             double x21 = x2;
             double y11 = y1;
@@ -841,10 +775,18 @@ public class Renderer {
 
             RenderSystem.setShader(GameRenderer::getPositionColorShader);
             bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
-            bufferBuilder.vertex(matrix, (float) x11, (float) y11, 0.0F).color(r1, g1, b1, a1).next();
-            bufferBuilder.vertex(matrix, (float) x11, (float) y21, 0.0F).color(r1, g1, b1, a1).next();
-            bufferBuilder.vertex(matrix, (float) x21, (float) y21, 0.0F).color(r2, g2, b2, a2).next();
-            bufferBuilder.vertex(matrix, (float) x21, (float) y11, 0.0F).color(r2, g2, b2, a2).next();
+            if (vertical) {
+                bufferBuilder.vertex(matrix, (float) x11, (float) y11, 0.0F).color(r1, g1, b1, a1).next();
+                bufferBuilder.vertex(matrix, (float) x11, (float) y21, 0.0F).color(r2, g2, b2, a2).next();
+                bufferBuilder.vertex(matrix, (float) x21, (float) y21, 0.0F).color(r2, g2, b2, a2).next();
+                bufferBuilder.vertex(matrix, (float) x21, (float) y11, 0.0F).color(r1, g1, b1, a1).next();
+            } else {
+                bufferBuilder.vertex(matrix, (float) x11, (float) y11, 0.0F).color(r1, g1, b1, a1).next();
+                bufferBuilder.vertex(matrix, (float) x11, (float) y21, 0.0F).color(r1, g1, b1, a1).next();
+                bufferBuilder.vertex(matrix, (float) x21, (float) y21, 0.0F).color(r2, g2, b2, a2).next();
+                bufferBuilder.vertex(matrix, (float) x21, (float) y11, 0.0F).color(r2, g2, b2, a2).next();
+            }
+
             BufferRenderer.drawWithShader(bufferBuilder.end());
             endRender();
         }
@@ -857,10 +799,8 @@ public class Renderer {
             BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
             bufferBuilder.begin(VertexFormat.DrawMode.TRIANGLE_FAN, VertexFormats.POSITION_COLOR);
 
-            double[][] map = new double[][] { new double[] { toX - radC4, toY - radC4, radC4 },
-                    new double[] { toX - radC2, fromY + radC2, radC2 },
-                    new double[] { fromX + radC1, fromY + radC1, radC1 },
-                    new double[] { fromX + radC3, toY - radC3, radC3 } };
+            double[][] map = new double[][] { new double[] { toX - radC4, toY - radC4, radC4 }, new double[] { toX - radC2, fromY + radC2, radC2 },
+                    new double[] { fromX + radC1, fromY + radC1, radC1 }, new double[] { fromX + radC3, toY - radC3, radC3 } };
             for (int i = 0; i < 4; i++) {
                 double[] current = map[i];
                 for (double r = i * 90d; r < (360 / 4d + i * 90d); r += (90 / samples)) {
@@ -868,9 +808,7 @@ public class Renderer {
                     float rad1 = (float) Math.toRadians(r);
                     float sin = (float) (Math.sin(rad1) * rad);
                     float cos = (float) (Math.cos(rad1) * rad);
-                    bufferBuilder.vertex(matrix, (float) current[0] + sin, (float) current[1] + cos, 0.0F)
-                            .color(cr, cg, cb, ca)
-                            .next();
+                    bufferBuilder.vertex(matrix, (float) current[0] + sin, (float) current[1] + cos, 0.0F).color(cr, cg, cb, ca).next();
                 }
             }
             BufferRenderer.drawWithShader(bufferBuilder.end());
@@ -939,9 +877,7 @@ public class Renderer {
         }
 
         public static Color lerp(Color a, Color b, double c) {
-            return new Color(lerp(a.getRed(), b.getRed(), c),
-                    lerp(a.getGreen(), b.getGreen(), c),
-                    lerp(a.getBlue(), b.getBlue(), c),
+            return new Color(lerp(a.getRed(), b.getRed(), c), lerp(a.getGreen(), b.getGreen(), c), lerp(a.getBlue(), b.getBlue(), c),
                     lerp(a.getAlpha(), b.getAlpha(), c));
         }
 
@@ -954,10 +890,8 @@ public class Renderer {
          * @return the modified color
          */
         public static Color modify(Color original, int redOverwrite, int greenOverwrite, int blueOverwrite, int alphaOverwrite) {
-            return new Color(redOverwrite == -1 ? original.getRed() : redOverwrite,
-                    greenOverwrite == -1 ? original.getGreen() : greenOverwrite,
-                    blueOverwrite == -1 ? original.getBlue() : blueOverwrite,
-                    alphaOverwrite == -1 ? original.getAlpha() : alphaOverwrite);
+            return new Color(redOverwrite == -1 ? original.getRed() : redOverwrite, greenOverwrite == -1 ? original.getGreen() : greenOverwrite,
+                    blueOverwrite == -1 ? original.getBlue() : blueOverwrite, alphaOverwrite == -1 ? original.getAlpha() : alphaOverwrite);
         }
 
     }

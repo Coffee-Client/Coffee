@@ -24,8 +24,7 @@ public class Equip extends Command {
 
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
-        return StaticArgumentServer.serveFromStatic(index,
-                new PossibleArgument(ArgumentType.STRING, "head", "chest", "legs", "feet"));
+        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.STRING, "head", "chest", "legs", "feet"));
     }
 
     @Override
@@ -36,34 +35,22 @@ public class Equip extends Command {
             case "head" -> {
                 // 39 HEAD - 36 FEET
                 CoffeeMain.client.interactionManager.clickSlot(CoffeeMain.client.player.currentScreenHandler.syncId,
-                        36 + CoffeeMain.client.player.getInventory().selectedSlot,
-                        39,
-                        SlotActionType.SWAP,
-                        CoffeeMain.client.player);
+                        36 + CoffeeMain.client.player.getInventory().selectedSlot, 39, SlotActionType.SWAP, CoffeeMain.client.player);
                 message("Equipped item on head");
             }
             case "chest" -> {
                 CoffeeMain.client.interactionManager.clickSlot(CoffeeMain.client.player.currentScreenHandler.syncId,
-                        36 + CoffeeMain.client.player.getInventory().selectedSlot,
-                        39,
-                        SlotActionType.SWAP,
-                        CoffeeMain.client.player);
+                        36 + CoffeeMain.client.player.getInventory().selectedSlot, 39, SlotActionType.SWAP, CoffeeMain.client.player);
                 message("Equipped item on chest");
             }
             case "legs" -> {
                 CoffeeMain.client.interactionManager.clickSlot(CoffeeMain.client.player.currentScreenHandler.syncId,
-                        36 + CoffeeMain.client.player.getInventory().selectedSlot,
-                        39,
-                        SlotActionType.SWAP,
-                        CoffeeMain.client.player);
+                        36 + CoffeeMain.client.player.getInventory().selectedSlot, 39, SlotActionType.SWAP, CoffeeMain.client.player);
                 message("Equipped item on legs");
             }
             case "feet" -> {
                 CoffeeMain.client.interactionManager.clickSlot(CoffeeMain.client.player.currentScreenHandler.syncId,
-                        36 + CoffeeMain.client.player.getInventory().selectedSlot,
-                        39,
-                        SlotActionType.SWAP,
-                        CoffeeMain.client.player);
+                        36 + CoffeeMain.client.player.getInventory().selectedSlot, 39, SlotActionType.SWAP, CoffeeMain.client.player);
                 message("Equipped item on feet");
             }
             default -> error("Incorrect slot, slots are chest, legs, feet, and head");

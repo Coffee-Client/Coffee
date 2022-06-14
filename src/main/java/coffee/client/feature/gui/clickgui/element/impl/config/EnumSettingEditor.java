@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EnumSettingEditor extends ConfigBase<EnumSetting<?>> {
-    static final Color idk2 = new Color(0x5F0E1515, true);
+    static final Color idk2 = new Color(0x5F060909, true);
     final List<EnumSelectorClickable<?>> values = new ArrayList<>();
 
     public EnumSettingEditor(double x, double y, double width, EnumSetting<?> configValue) {

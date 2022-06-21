@@ -38,13 +38,10 @@ public enum GameTexture {
 
     @Getter
     final String downloadUrl;
-
-    @Getter
-    boolean alreadyInitialized = false;
-
     @Getter
     final Rectangle dimensions = new Rectangle(0, 0, 0, 0);
-
+    @Getter
+    boolean alreadyInitialized = false;
     BufferedImage registerLater = null;
 
     GameTexture(Texture where, String url) {
@@ -54,9 +51,13 @@ public enum GameTexture {
         if (c.getScheme().equals("res")) {
             this.alreadyInitialized = true;
             String p = c.getPath();
-            if (p.startsWith("/")) p = p.substring(1);
+            if (p.startsWith("/")) {
+                p = p.substring(1);
+            }
             try (InputStream is = GameTexture.class.getClassLoader().getResourceAsStream(p)) {
-                if (is == null) throw new IllegalArgumentException("Resource "+c.getPath()+" not found");
+                if (is == null) {
+                    throw new IllegalArgumentException("Resource " + c.getPath() + " not found");
+                }
                 BufferedImage bi = ImageIO.read(is);
                 getDimensions().setX(0);
                 getDimensions().setY(0);

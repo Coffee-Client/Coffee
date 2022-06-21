@@ -1,2 +1,3 @@
-Visual updates
-Bug fixes regarding 1.19
+Reformatted client
+Fixed few bugs
+Fuck mojang

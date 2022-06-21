@@ -270,15 +270,18 @@ public class Killaura extends Module {
                 })).toList().get(0);
             } else if (prio.getValue() == PriorityMode.Angle) {
                 // get entity in front of you (or closest to the front)
-                tar = attacks.stream().sorted(Comparator.comparingDouble(value -> {
+                tar = attacks.stream()
+                        .sorted(Comparator.comparingDouble(value -> {
                             Vec3d center = value.getBoundingBox().getCenter();
                             double offX = center.x - CoffeeMain.client.player.getX();
                             double offZ = center.z - CoffeeMain.client.player.getZ();
                             float yaw = (float) Math.toDegrees(Math.atan2(offZ, offX)) - 90F;
-                            float pitch = (float) -Math.toDegrees(Math.atan2(center.y - CoffeeMain.client.player.getEyeY(), Math.sqrt(offX * offX + offZ * offZ)));
+                            float pitch = (float) -Math.toDegrees(
+                                    Math.atan2(center.y - CoffeeMain.client.player.getEyeY(), Math.sqrt(offX * offX + offZ * offZ)));
                             return Math.abs(MathHelper.wrapDegrees(yaw - CoffeeMain.client.player.getYaw())) + Math.abs(
                                     MathHelper.wrapDegrees(pitch - CoffeeMain.client.player.getPitch()));
-                        })).sorted(Comparator.comparingDouble(value -> value.getPos().distanceTo(Objects.requireNonNull(CoffeeMain.client.player).getPos())))
+                        }))
+                        .sorted(Comparator.comparingDouble(value -> value.getPos().distanceTo(Objects.requireNonNull(CoffeeMain.client.player).getPos())))
                         .toList()
                         .get(0);
             }

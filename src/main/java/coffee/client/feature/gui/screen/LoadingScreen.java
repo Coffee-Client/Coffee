@@ -167,32 +167,32 @@ public class LoadingScreen extends AAScreen implements FastTickable {
                 return;
             }
         }
-        int o = (int) (opacity*255);
-        Renderer.R2D.renderQuad(stack,new Color(0,0,0,o),0,0,width,height);
+        int o = (int) (opacity * 255);
+        Renderer.R2D.renderQuad(stack, new Color(0, 0, 0, o), 0, 0, width, height);
 
         List<ProgressData> progM = new ArrayList<>(progressMap.values());
         double xOffset = 0;
-        double oneWidth = (double)width/progM.size();
+        double oneWidth = (double) width / progM.size();
         for (int i = 0; i < progM.size(); i++) {
-            double index = (double)i/progM.size();
+            double index = (double) i / progM.size();
             ProgressData progressData = progM.get(i);
             double progress = progressData.getProgressSmooth().get();
-            double wid = progress*oneWidth;
-            Color c = Color.getHSBColor((float) index,0.6f,1f);
-            Renderer.R2D.renderQuad(stack,Renderer.Util.modify(c, -1, -1, -1, o),xOffset,0,xOffset+wid,2);
+            double wid = progress * oneWidth;
+            Color c = Color.getHSBColor((float) index, 0.6f, 1f);
+            Renderer.R2D.renderQuad(stack, Renderer.Util.modify(c, -1, -1, -1, o), xOffset, 0, xOffset + wid, 2);
             xOffset += wid;
         }
         stack.push();
         double texDim = 32;
-        stack.translate(width/2d,height/2d,0);
-        double rot = (System.currentTimeMillis()%2000)/2000d*180;
+        stack.translate(width / 2d, height / 2d, 0);
+        double rot = (System.currentTimeMillis() % 2000) / 2000d * 180;
         float sin = (float) Math.sin(Math.toRadians(rot));
-        stack.scale(1f+MathHelper.lerp(sin, 0f, 0.2f),1f+MathHelper.lerp(sin, 0f, 0.2f),1);
+        stack.scale(1f + MathHelper.lerp(sin, 0f, 0.2f), 1f + MathHelper.lerp(sin, 0f, 0.2f), 1);
         RenderSystem.setShaderTexture(0, GameTexture.TEXTURE_ICON.getWhere());
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.setShaderColor(1f, 1f, 1f, (float) opacity);
-        Renderer.R2D.renderTexture(stack,-texDim/2,-texDim/2,texDim,texDim,0,0,texDim,texDim,texDim,texDim);
+        Renderer.R2D.renderTexture(stack, -texDim / 2, -texDim / 2, texDim, texDim, 0, 0, texDim, texDim, texDim, texDim);
         stack.pop();
         super.renderInternal(stack, mouseX, mouseY, delta);
     }

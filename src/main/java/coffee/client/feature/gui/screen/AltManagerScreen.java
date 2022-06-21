@@ -712,7 +712,8 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
                 parent.render(stack, mouseX, mouseY, delta);
             }
             Renderer.R2D.renderQuad(stack, backgroundOverlay, 0, 0, width, height);
-            Renderer.R2D.renderRoundedQuad(stack, overlayBackground, widgetStartX, widgetStartY, widgetStartX + widgetWidth, widgetStartY + widgetHeight, 5, 20);
+            Renderer.R2D.renderRoundedQuad(stack, overlayBackground, widgetStartX, widgetStartY, widgetStartX + widgetWidth, widgetStartY + widgetHeight, 5,
+                    20);
             for (RoundButton tag : tags) {
                 tag.render(stack, mouseX, mouseY, delta);
             }

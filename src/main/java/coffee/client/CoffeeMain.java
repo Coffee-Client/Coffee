@@ -20,6 +20,7 @@ import coffee.client.helper.font.adapter.impl.QuickFontAdapter;
 import coffee.client.helper.font.renderer.FontRenderer;
 import coffee.client.helper.manager.ConfigManager;
 import coffee.client.helper.util.Utils;
+import me.x150.analytics.Analytics;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Element;
@@ -70,6 +71,10 @@ public class CoffeeMain implements ModInitializer {
 
         log(Level.INFO, "Loading config");
         ConfigManager.loadState();
+
+        // view the info on top at Analytics before you say "analytics bad"
+        Analytics analytics = new Analytics(MOD_NAME);
+        analytics.gameLaunched();
 
         log(Level.INFO, "Done initializing");
     }

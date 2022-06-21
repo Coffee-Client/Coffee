@@ -47,9 +47,8 @@ public class Decimator extends Module {
                 Vec3d root = startPos.add(ox, 0, oz);
                 BlockPos pp = new BlockPos(root);
                 latest = Vec3d.of(pp);
-                String chat = String.format("fill %d %d %d %d %d %d minecraft:air", pp.getX() - 2,
-                        Objects.requireNonNull(CoffeeMain.client.world).getBottomY(), pp.getZ() - 2, pp.getX() + 2, CoffeeMain.client.world.getTopY() - 1,
-                        pp.getZ() + 2);
+                String chat = String.format("fill %d %d %d %d %d %d minecraft:air", pp.getX() - 2, Objects.requireNonNull(CoffeeMain.client.world).getBottomY(),
+                        pp.getZ() - 2, pp.getX() + 2, CoffeeMain.client.world.getTopY() - 1, pp.getZ() + 2);
                 Objects.requireNonNull(CoffeeMain.client.player).sendCommand(chat);
                 Utils.sleep((long) (delay.getValue() + 0));
             }

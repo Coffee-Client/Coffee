@@ -134,8 +134,9 @@ public class ConfigDisplay extends Element {
         Theme theme = ThemeManager.getMainTheme();
         double height = getHeight();
         Renderer.R2D.renderQuad(matrices, theme.getConfig(), x, this.y, x + width, this.y + height);
-//        Renderer.R2D.renderQuad(matrices, theme.getAccent(), x, this.y, x + 1, this.y + height);
-        Renderer.R2D.renderQuadGradient(matrices,new Color(0,0,0,0),new Color(0,0,0,100),this.x,this.y+this.getHeight()-10,this.x+this.getWidth(),this.y+this.getHeight(), true);
+        //        Renderer.R2D.renderQuad(matrices, theme.getAccent(), x, this.y, x + 1, this.y + height);
+        Renderer.R2D.renderQuadGradient(matrices, new Color(0, 0, 0, 0), new Color(0, 0, 0, 100), this.x, this.y + this.getHeight() - 10,
+                this.x + this.getWidth(), this.y + this.getHeight(), true);
         boolean hovered = inBounds(mouseX, mouseY);
         if (!hoveredBefore && hovered) {
             hoverStart = System.currentTimeMillis();

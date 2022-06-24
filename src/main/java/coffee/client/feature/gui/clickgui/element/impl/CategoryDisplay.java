@@ -151,7 +151,7 @@ public class CategoryDisplay extends Element {
         Theme theme = ThemeManager.getMainTheme();
         double openAnim = this.openAnim < 0.5 ? (1 - sqrt(1 - pow(2 * this.openAnim, 2))) / 2 : (sqrt(1 - pow(-2 * this.openAnim + 2, 2)) + 1) / 2;
         //        Renderer.R2D.fill(matrices, theme.getHeader(), x, y, x + width, y + headerHeight());
-        double r = 5;
+        double r = 3;
         double hheight = headerHeight();
         double texPad = 4;
         double texDim = hheight - texPad * 2;
@@ -167,7 +167,7 @@ public class CategoryDisplay extends Element {
             height += r * openAnim;
         }
         scroll(mouseX1, mouseY1, 0);
-        Renderer.R2D.renderRoundedQuad(matrices, theme.getHeader(), x, y, x + width, y + this.height, r, 20);
+        Renderer.R2D.renderRoundedQuad(matrices, theme.getHeader(), x, y, x + width, y + this.height, r, 10);
 
 
         RenderSystem.setShaderTexture(0, mt.getTex());
@@ -199,11 +199,9 @@ public class CategoryDisplay extends Element {
             for (ModuleDisplay moduleDisplay : getModules()) {
                 moduleDisplay.setX(this.x);
                 moduleDisplay.setY(this.y + y);
-                if (moduleDisplay.getY() + scroller.getScroll() > this.y + height) {
-                    continue;
+                if (!(moduleDisplay.getY() + scroller.getScroll() > this.y + height || moduleDisplay.getY() + moduleDisplay.getHeight() + scroller.getScroll() < this.y + headerHeight())) {
+                    moduleDisplay.render(matrices, mouseX1, mouseY1 - scroller.getScroll(), scrollBeingUsed);
                 }
-
-                moduleDisplay.render(matrices, mouseX1, mouseY1 - scroller.getScroll(), scrollBeingUsed);
                 y += moduleDisplay.getHeight();
             }
             matrices.pop();

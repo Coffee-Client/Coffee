@@ -16,6 +16,7 @@ import coffee.client.helper.event.EventType;
 import coffee.client.helper.event.Events;
 import coffee.client.helper.font.FontRenderers;
 import coffee.client.helper.font.adapter.FontAdapter;
+import coffee.client.helper.manager.ShaderManager;
 import coffee.client.helper.render.MSAAFramebuffer;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.Transitions;
@@ -144,7 +145,7 @@ public class ClickGUI extends Screen implements FastTickable {
 
     @Override
     protected void init() {
-
+        //        ShaderManager.blurProgressGoal = 1;
         closing = false;
         introAnimation = 0;
         //        this.real.particles.clear();
@@ -153,6 +154,7 @@ public class ClickGUI extends Screen implements FastTickable {
 
     @Override
     public void close() {
+        //        ShaderManager.blurProgressGoal = 0;
         closing = true;
         this.real.shouldAdd = false;
     }
@@ -205,6 +207,9 @@ public class ClickGUI extends Screen implements FastTickable {
             Objects.requireNonNull(client).setScreen(null);
             return;
         }
+        double intp = easeInOutQuint(introAnimation);
+        ShaderManager.BLUR.getEffect().setUniformValue("progress", (float) intp);
+        ShaderManager.BLUR.render(delta);
         MSAAFramebuffer.use(MSAAFramebuffer.MAX_SAMPLES, () -> renderIntern(matrices, mouseX, mouseY, delta));
     }
 

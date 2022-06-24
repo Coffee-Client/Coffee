@@ -16,6 +16,7 @@ import coffee.client.helper.GameTexture;
 import coffee.client.helper.Texture;
 import coffee.client.helper.font.FontRenderers;
 import coffee.client.helper.font.adapter.FontAdapter;
+import coffee.client.helper.manager.ShaderManager;
 import coffee.client.helper.render.ClipStack;
 import coffee.client.helper.render.Rectangle;
 import coffee.client.helper.render.Renderer;
@@ -104,11 +105,19 @@ public class SpotlightScreen extends ClientScreen implements FastTickable {
     }
 
     @Override
-    public void renderInternal(MatrixStack stack, int mouseX, int mouseY, float delta) {
+    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         double anim = ease(this.anim);
         if (anim == 0 && closing) {
             client.setScreen(null);
         }
+        ShaderManager.BLUR.getEffect().setUniformValue("progress", (float) anim);
+        ShaderManager.BLUR.render(delta);
+        super.render(matrices, mouseX, mouseY, delta);
+    }
+
+    @Override
+    public void renderInternal(MatrixStack stack, int mouseX, int mouseY, float delta) {
+        double anim = ease(this.anim);
         stack.translate(width / 2d * (1 - anim), (command.y + command.height / 2d) * (1 - anim), 0);
         stack.scale((float) anim, (float) anim, 1f);
         command.opacity = 1f;

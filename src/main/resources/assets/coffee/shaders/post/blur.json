@@ -1,0 +1,67 @@
+{
+  "targets": [
+    "swap"
+  ],
+  "passes": [
+    {
+      "name": "coffee:blur",
+      "intarget": "minecraft:main",
+      "outtarget": "swap",
+      "uniforms": [
+        {
+          "name": "BlurDir",
+          "values": [ 1.0, 0.0 ]
+        },
+        {
+          "name": "radius",
+          "values": [ 8.0 ]
+        }
+      ]
+    },
+    {
+      "name": "coffee:blur",
+      "intarget": "swap",
+      "outtarget": "minecraft:main",
+      "uniforms": [
+        {
+          "name": "BlurDir",
+          "values": [ 0.0, 1.0 ]
+        },
+        {
+          "name": "radius",
+          "values": [ 8.0 ]
+        }
+      ]
+    },
+    {
+      "name": "coffee:blur",
+      "intarget": "minecraft:main",
+      "outtarget": "swap",
+      "uniforms": [
+        {
+          "name": "BlurDir",
+          "values": [ 1.0, 0.0 ]
+        },
+        {
+          "name": "radius",
+          "values": [ 8.0 ]
+        }
+      ]
+    },
+    {
+      "name": "coffee:blur",
+      "intarget": "swap",
+      "outtarget": "minecraft:main",
+      "uniforms": [
+        {
+          "name": "BlurDir",
+          "values": [ 0.0, 1.0 ]
+        },
+        {
+          "name": "radius",
+          "values": [ 8.0 ]
+        }
+      ]
+    }
+  ]
+}

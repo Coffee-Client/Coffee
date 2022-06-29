@@ -110,8 +110,12 @@ public class EnumSettingEditor extends ConfigBase<EnumSetting<?>> {
 
         void render(MatrixStack stack) {
             FontRenderers.getRenderer()
-                    .drawCenteredString(stack, value.name(), x + width / 2d, y + height / 2d - FontRenderers.getRenderer().getMarginHeight() / 2d,
-                            instance.getColor(value));
+                    .drawCenteredString(stack,
+                            value.name(),
+                            x + width / 2d,
+                            y + height / 2d - FontRenderers.getRenderer().getMarginHeight() / 2d,
+                            instance.getColor(value)
+                    );
         }
 
         boolean inBounds(double cx, double cy) {

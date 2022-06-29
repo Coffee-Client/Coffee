@@ -50,7 +50,8 @@ public class ConfigUtils extends Command {
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
         return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.STRING, "load", "save"), new PossibleArgument(ArgumentType.STRING,
-                Arrays.stream(Objects.requireNonNull(CONFIG_STORAGE.listFiles())).map(File::getName).toList().toArray(String[]::new)));
+                Arrays.stream(Objects.requireNonNull(CONFIG_STORAGE.listFiles())).map(File::getName).toList().toArray(String[]::new)
+        ));
     }
 
     @Override

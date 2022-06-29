@@ -409,8 +409,15 @@ public class NbtEditorScreen extends ClientScreen implements FastTickable {
                     while (currentResult >= 0) {
                         double paddingX = FontRenderers.getMono().getStringWidth(s.substring(0, currentResult)) + 7 - smoothScrollX;
                         double markedTextWidth = FontRenderers.getMono().getStringWidth(s.substring(currentResult, currentResult + searchLen)) + 2;
-                        Renderer.R2D.renderRoundedQuad(stack, new Color(0xAB5907), paddingX, y, paddingX + markedTextWidth,
-                                y + FontRenderers.getMono().getMarginHeight(), 2, 10);
+                        Renderer.R2D.renderRoundedQuad(stack,
+                                new Color(0xAB5907),
+                                paddingX,
+                                y,
+                                paddingX + markedTextWidth,
+                                y + FontRenderers.getMono().getMarginHeight(),
+                                2,
+                                10
+                        );
                         currentResult = s.toLowerCase().indexOf(search.get().toLowerCase(), currentResult + 1);
                     }
                 }

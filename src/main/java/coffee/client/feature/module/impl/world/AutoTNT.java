@@ -31,8 +31,12 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class AutoTNT extends Module {
-    final DoubleSetting placeDistance = this.config.create(
-            new DoubleSetting.Builder(4).name("Place distance").description("How far to place the blocks apart").min(1).max(4).precision(0).get());
+    final DoubleSetting placeDistance = this.config.create(new DoubleSetting.Builder(4).name("Place distance")
+            .description("How far to place the blocks apart")
+            .min(1)
+            .max(4)
+            .precision(0)
+            .get());
     boolean missingTntAck = false;
 
     public AutoTNT() {

@@ -110,8 +110,11 @@ public class Socks4ServerDecoder extends ReplayingDecoder<Socks4ServerDecoder.St
             cause = new DecoderException(cause);
         }
 
-        Socks4CommandRequest m = new DefaultSocks4CommandRequest(type != null ? type : Socks4CommandType.CONNECT, dstAddr != null ? dstAddr : "",
-                dstPort != 0 ? dstPort : 65535, userId != null ? userId : "");
+        Socks4CommandRequest m = new DefaultSocks4CommandRequest(type != null ? type : Socks4CommandType.CONNECT,
+                dstAddr != null ? dstAddr : "",
+                dstPort != 0 ? dstPort : 65535,
+                userId != null ? userId : ""
+        );
 
         m.setDecoderResult(DecoderResult.failure(cause));
         out.add(m);

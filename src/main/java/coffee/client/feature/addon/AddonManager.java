@@ -258,12 +258,12 @@ public class AddonManager {
                     cSigP[i] = Byte.toUnsignedInt(cSig[i]);
                 }
                 if (!Arrays.equals(cSigP, EXPECTED_CLASS_SIGNATURE)) {
-                    throw new IllegalStateException(
-                            "Invalid class file signature for " + jarEntry.getName() + ": expected 0x" + Arrays.stream(EXPECTED_CLASS_SIGNATURE)
-                                    .mapToObj(value -> Integer.toHexString(value).toUpperCase())
-                                    .collect(Collectors.joining()) + ", got 0x" + Arrays.stream(cSigP)
-                                    .mapToObj(value -> Integer.toHexString(value).toUpperCase())
-                                    .collect(Collectors.joining()));
+                    throw new IllegalStateException("Invalid class file signature for " + jarEntry.getName() + ": expected 0x" + Arrays.stream(
+                                    EXPECTED_CLASS_SIGNATURE)
+                            .mapToObj(value -> Integer.toHexString(value).toUpperCase())
+                            .collect(Collectors.joining()) + ", got 0x" + Arrays.stream(cSigP)
+                            .mapToObj(value -> Integer.toHexString(value).toUpperCase())
+                            .collect(Collectors.joining()));
                 }
                 Class<?> loadedClass = classLoader.defineAndGetClass(classBytes);
                 if (Addon.class.isAssignableFrom(loadedClass)) {

@@ -64,8 +64,16 @@ public class BooleanSettingEditor extends ConfigBase<BooleanSetting> {
         double smoothAnimProgress = Transitions.easeOutExpo(animProgress);
 
         double dimensionsWeCanUse = 8;
-        Renderer.R2D.renderRoundedQuad(matrices, Renderer.Util.lerp(theme.getInactive(), theme.getActive(), 1 - smoothAnimProgress),
-                x + width - dimensionsWeCanUse - 1, y + height / 2d - dimensionsWeCanUse / 2d, x + width - 1, y + height / 2d + dimensionsWeCanUse / 2d, 2, 20);
+        Renderer.R2D.renderRoundedQuad(
+                matrices,
+                Renderer.Util.lerp(theme.getInactive(), theme.getActive(), 1 - smoothAnimProgress),
+                x + width - dimensionsWeCanUse - 1,
+                y + height / 2d - dimensionsWeCanUse / 2d,
+                x + width - 1,
+                y + height / 2d + dimensionsWeCanUse / 2d,
+                2,
+                20
+        );
         matrices.push();
 
         float rotateDeg = 45;

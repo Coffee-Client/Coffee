@@ -213,11 +213,23 @@ public class CategoryDisplay extends Element {
                 double ratio = modHeight / modHeightUnclamped;
                 double scrollerHeight = ratio * modHeight;
                 double sbW = 2;
-                Renderer.R2D.renderQuad(matrices, new Color(20, 20, 20, 150), x + width - sbW, this.y + headerHeight(), x + width,
-                        this.y + headerHeight() + modHeight);
+                Renderer.R2D.renderQuad(matrices,
+                        new Color(20, 20, 20, 150),
+                        x + width - sbW,
+                        this.y + headerHeight(),
+                        x + width,
+                        this.y + headerHeight() + modHeight
+                );
                 double scrollerStartY = MathHelper.lerp(scrollIndex, this.y + headerHeight(), this.y + headerHeight() + modHeight - scrollerHeight);
-                Renderer.R2D.renderRoundedQuad(matrices, new Color(40, 40, 40, 200), x + width - sbW, scrollerStartY, x + width,
-                        scrollerStartY + scrollerHeight, sbW / 2d, 20);
+                Renderer.R2D.renderRoundedQuad(matrices,
+                        new Color(40, 40, 40, 200),
+                        x + width - sbW,
+                        scrollerStartY,
+                        x + width,
+                        scrollerStartY + scrollerHeight,
+                        sbW / 2d,
+                        20
+                );
             }
             ClipStack.globalInstance.popWindow();
         }

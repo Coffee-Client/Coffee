@@ -69,8 +69,11 @@ public class Test extends Module {
         Vec3d camPos = c.getPos();
         matrices.translate(-camPos.x, -camPos.y, -camPos.z);
         vbo.bind();
-        vbo.draw(matrices.peek().getPositionMatrix(), CoffeeMain.client.gameRenderer.getBasicProjectionMatrix(CoffeeMain.client.options.getFov().getValue()),
-                GameRenderer.getPositionColorShader());
+        vbo.draw(
+                matrices.peek().getPositionMatrix(),
+                CoffeeMain.client.gameRenderer.getBasicProjectionMatrix(CoffeeMain.client.options.getFov().getValue()),
+                GameRenderer.getPositionColorShader()
+        );
         VertexBuffer.unbind();
         matrices.pop();
         Renderer.endRender();

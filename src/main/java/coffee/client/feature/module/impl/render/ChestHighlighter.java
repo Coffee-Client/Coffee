@@ -71,8 +71,12 @@ public class ChestHighlighter extends Module {
     @Override
     public void onWorldRender(MatrixStack matrices) {
         for (BlockPos position : positions) {
-            Renderer.R3D.renderFadingBlock(Utils.getCurrentRGB(), Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 100).darker(), Vec3d.of(position),
-                    new Vec3d(1, 1, 1), 500);
+            Renderer.R3D.renderFadingBlock(Utils.getCurrentRGB(),
+                    Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 100).darker(),
+                    Vec3d.of(position),
+                    new Vec3d(1, 1, 1),
+                    500
+            );
         }
     }
 

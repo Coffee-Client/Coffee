@@ -164,8 +164,15 @@ public class HomeScreen extends ClientScreen {
         double newH = 20;
         double per = newH / origH;
         double newW = origW * per;
-        Renderer.R2D.renderRoundedQuadWithShadow(stack, new Color(0, 0, 10, 200), padding, height - padding - padding - 20 - padding, width - padding,
-                height - padding, 10, 20);
+        Renderer.R2D.renderRoundedQuadWithShadow(stack,
+                new Color(0, 0, 10, 200),
+                padding,
+                height - padding - padding - 20 - padding,
+                width - padding,
+                height - padding,
+                10,
+                20
+        );
         RenderSystem.setShaderTexture(0, GameTexture.TEXTURE_ICON.getWhere());
         Renderer.R2D.renderTexture(stack, padding * 2, height - padding * 2 - newH, newW, newH, 0, 0, newW, newH, newW, newH);
         super.renderInternal(stack, mouseX, mouseY, delta); // render bottom row widgets
@@ -177,8 +184,18 @@ public class HomeScreen extends ClientScreen {
         RenderSystem.clear(GL40C.GL_COLOR_BUFFER_BIT, false);
         RenderSystem.colorMask(true, true, true, true);
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
-        Renderer.R2D.renderRoundedQuadInternal(stack.peek().getPositionMatrix(), 0, 0, 0, 1, width - padding - texDim, padding, width - padding,
-                padding + texDim, 3, 10);
+        Renderer.R2D.renderRoundedQuadInternal(stack.peek().getPositionMatrix(),
+                0,
+                0,
+                0,
+                1,
+                width - padding - texDim,
+                padding,
+                width - padding,
+                padding + texDim,
+                3,
+                10
+        );
 
         RenderSystem.blendFunc(GL40C.GL_DST_ALPHA, GL40C.GL_ONE_MINUS_DST_ALPHA);
         RenderSystem.setShaderTexture(0, currentAccountTextureLoaded ? currentAccountTexture : DefaultSkinHelper.getTexture());

@@ -54,8 +54,13 @@ public class SpotlightScreen extends ClientScreen implements FastTickable {
         closing = false;
         double thingWidth = 400;
         int thingFontHeight = 30;
-        command = new CommandTextField(FontRenderers.getCustomSize(thingFontHeight), (width - thingWidth) / 2d, 100, thingWidth, thingFontHeight + 5,
-                "Enter command");
+        command = new CommandTextField(FontRenderers.getCustomSize(thingFontHeight),
+                (width - thingWidth) / 2d,
+                100,
+                thingWidth,
+                thingFontHeight + 5,
+                "Enter command"
+        );
         addDrawableChild(command);
         command.setFocused(true);
         setInitialFocus(command);
@@ -85,13 +90,20 @@ public class SpotlightScreen extends ClientScreen implements FastTickable {
                 for (String alias : command1.getAliases()) {
                     if (alias.toLowerCase().startsWith(firstPart)) {
                         entries.add(new SuggestionsEntry(alias + " " + String.join(" ", Arrays.copyOfRange(cmdArgs, 1, cmdArgs.length)),
-                                GameTexture.ACTION_RUNCOMMAND.getWhere(), "Run command", () -> {
-                            CommandRegistry.execute(alias + " " + String.join(" ", Arrays.copyOfRange(cmdArgs, 1, cmdArgs.length)));
-                            close();
-                        }, 0, 0, 0, () -> {
-                            command.set(alias + " " + String.join(" ", Arrays.copyOfRange(cmdArgs, 1, cmdArgs.length)));
-                            command.setCursorMax();
-                        }));
+                                GameTexture.ACTION_RUNCOMMAND.getWhere(),
+                                "Run command",
+                                () -> {
+                                    CommandRegistry.execute(alias + " " + String.join(" ", Arrays.copyOfRange(cmdArgs, 1, cmdArgs.length)));
+                                    close();
+                                },
+                                0,
+                                0,
+                                0,
+                                () -> {
+                                    command.set(alias + " " + String.join(" ", Arrays.copyOfRange(cmdArgs, 1, cmdArgs.length)));
+                                    command.setCursorMax();
+                                }
+                        ));
                     }
                 }
             }
@@ -131,8 +143,11 @@ public class SpotlightScreen extends ClientScreen implements FastTickable {
         double pad = 2;
         if (suggestionsHeight > 0) {
             totalHeight += suggestionsHeight + pad;
-            this.suggestionsField = new Rectangle(command.x, command.y + command.height + pad, command.x + command.width,
-                    command.y + command.height + pad + suggestionsHeight);
+            this.suggestionsField = new Rectangle(command.x,
+                    command.y + command.height + pad,
+                    command.x + command.width,
+                    command.y + command.height + pad + suggestionsHeight
+            );
         } else {
             this.suggestionsField = new Rectangle(0, 0, 0, 0);
         }
@@ -601,8 +616,13 @@ public class SpotlightScreen extends ClientScreen implements FastTickable {
             ClipStack.globalInstance.popWindow();
             boolean renderCursor = (System.currentTimeMillis() % 1000) / 500d > 1;
             if (focused && renderCursor) {
-                Renderer.R2D.renderQuad(stack, new Color(1f, 1f, 1f, opacity), x + pad + getTextWidth(cursor) - overflowWidth, centerY,
-                        x + pad + getTextWidth(cursor) - overflowWidth + 1, centerY + fa.getMarginHeight());
+                Renderer.R2D.renderQuad(stack,
+                        new Color(1f, 1f, 1f, opacity),
+                        x + pad + getTextWidth(cursor) - overflowWidth,
+                        centerY,
+                        x + pad + getTextWidth(cursor) - overflowWidth + 1,
+                        centerY + fa.getMarginHeight()
+                );
             }
 
         }
@@ -793,12 +813,26 @@ public class SpotlightScreen extends ClientScreen implements FastTickable {
                 Renderer.R2D.renderRoundedQuad(stack, new Color(40, 40, 40), x, y, x + wid, y + height(), 5, 20);
             }
             RenderSystem.setShaderTexture(0, icon);
-            Renderer.R2D.renderTexture(stack, x + padUpDown, yCenter - contentSize / 2d, contentSize, contentSize, 0, 0, contentSize, contentSize, contentSize,
-                    contentSize);
+            Renderer.R2D.renderTexture(stack,
+                    x + padUpDown,
+                    yCenter - contentSize / 2d,
+                    contentSize,
+                    contentSize,
+                    0,
+                    0,
+                    contentSize,
+                    contentSize,
+                    contentSize,
+                    contentSize
+            );
             FontRenderers.getRenderer().drawString(stack, title, x + padUpDown + contentSize + padUpDown, yCenter - contentSize / 2d, 0xAAAAAA);
             FontRenderers.getRenderer()
-                    .drawString(stack, text, x + padUpDown + contentSize + padUpDown,
-                            yCenter - contentSize / 2d + FontRenderers.getRenderer().getMarginHeight(), 0xFFFFFF);
+                    .drawString(stack,
+                            text,
+                            x + padUpDown + contentSize + padUpDown,
+                            yCenter - contentSize / 2d + FontRenderers.getRenderer().getMarginHeight(),
+                            0xFFFFFF
+                    );
         }
 
         public double height() {

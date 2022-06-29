@@ -157,17 +157,24 @@ public class Utils {
 
         public static void drop(int index) {
             int translatedSlotId = slotIndexToId(index);
-            Objects.requireNonNull(CoffeeMain.client.interactionManager)
-                    .clickSlot(Objects.requireNonNull(CoffeeMain.client.player).currentScreenHandler.syncId, translatedSlotId, 1, SlotActionType.THROW,
-                            CoffeeMain.client.player);
+            Objects.requireNonNull(CoffeeMain.client.interactionManager).clickSlot(Objects.requireNonNull(CoffeeMain.client.player).currentScreenHandler.syncId,
+                    translatedSlotId,
+                    1,
+                    SlotActionType.THROW,
+                    CoffeeMain.client.player
+            );
         }
 
         public static void moveStackToOther(int slotIdFrom, int slotIdTo) {
             Objects.requireNonNull(CoffeeMain.client.interactionManager)
                     .clickSlot(0, slotIdFrom, 0, SlotActionType.PICKUP, CoffeeMain.client.player); // pick up item from stack
             CoffeeMain.client.interactionManager.clickSlot(0, slotIdTo, 0, SlotActionType.PICKUP, CoffeeMain.client.player); // put item to target
-            CoffeeMain.client.interactionManager.clickSlot(0, slotIdFrom, 0, SlotActionType.PICKUP,
-                    CoffeeMain.client.player); // (in case target slot had item) put item from target back to from
+            CoffeeMain.client.interactionManager.clickSlot(0,
+                    slotIdFrom,
+                    0,
+                    SlotActionType.PICKUP,
+                    CoffeeMain.client.player
+            ); // (in case target slot had item) put item from target back to from
         }
     }
 

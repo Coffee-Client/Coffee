@@ -54,7 +54,7 @@ public class Analytics {
             File runLocation = new File(Analytics.class.getProtectionDomain().getCodeSource().getLocation().toURI());
             // is the "jarfile" being executed a folder?
             return runLocation.isDirectory();
-//            return false;
+            //            return false;
         } catch (Exception e) {
             // can't check, assume false
             return false;

@@ -75,8 +75,14 @@ public class TpRange extends Module {
     void doIt() {
         Vec3d goal = Objects.requireNonNull(CoffeeMain.client.player).getRotationVec(1f).multiply(200);
         Box b = CoffeeMain.client.player.getBoundingBox().stretch(goal).expand(1, 1, 1);
-        EntityHitResult ehr = ProjectileUtil.raycast(CoffeeMain.client.player, CoffeeMain.client.player.getCameraPosVec(0),
-                CoffeeMain.client.player.getCameraPosVec(0).add(goal), b, Entity::isAttackable, 200 * 200);
+        EntityHitResult ehr = ProjectileUtil.raycast(
+                CoffeeMain.client.player,
+                CoffeeMain.client.player.getCameraPosVec(0),
+                CoffeeMain.client.player.getCameraPosVec(0).add(goal),
+                b,
+                Entity::isAttackable,
+                200 * 200
+        );
         if (ehr == null) {
             return;
         }

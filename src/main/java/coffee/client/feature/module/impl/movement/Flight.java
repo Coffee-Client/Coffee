@@ -35,8 +35,9 @@ import java.util.Random;
 public class Flight extends Module {
 
     final EnumSetting<FlightMode> mode = this.config.create(new EnumSetting.Builder<>(FlightMode.Static).name("Mode").description("How you fly").get());
-    final BooleanSetting bypassVanillaAc = this.config.create(
-            new BooleanSetting.Builder(true).name("Bypass vanilla AC").description("Whether to bypass the vanilla anticheat").get());
+    final BooleanSetting bypassVanillaAc = this.config.create(new BooleanSetting.Builder(true).name("Bypass vanilla AC")
+            .description("Whether to bypass the vanilla anticheat")
+            .get());
     final DoubleSetting speed = this.config.create(new DoubleSetting.Builder(1).name("Speed").description("How fast you fly").min(0).max(10).get());
     final List<Packet<?>> queue = new ArrayList<>();
     final Timer lag = new Timer();
@@ -119,8 +120,16 @@ public class Flight extends Module {
                     Vec3d vp = CoffeeMain.client.player.getPos();
                     Random r = new Random();
                     for (int i = 0; i < 10; i++) {
-                        CoffeeMain.client.world.addImportantParticle(ParticleTypes.SOUL_FIRE_FLAME, true, vp.x, vp.y, vp.z, (r.nextDouble() * 0.25) - .125,
-                                (r.nextDouble() * 0.25) - .125, (r.nextDouble() * 0.25) - .125);
+                        CoffeeMain.client.world.addImportantParticle(
+                                ParticleTypes.SOUL_FIRE_FLAME,
+                                true,
+                                vp.x,
+                                vp.y,
+                                vp.z,
+                                (r.nextDouble() * 0.25) - .125,
+                                (r.nextDouble() * 0.25) - .125,
+                                (r.nextDouble() * 0.25) - .125
+                        );
                     }
                 }
             }

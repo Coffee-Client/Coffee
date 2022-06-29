@@ -70,8 +70,10 @@ public class AutoIgnite extends Module {
 
         for (BlockPos blockPos : blocksToIgnite) {
             BlockHitResult bhr = new BlockHitResult(Vec3d.of(blockPos).add(0.5, 0.5, 0.5), Direction.DOWN, blockPos, false);
-            PlayerInteractBlockC2SPacket interact = new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, bhr,
-                    Utils.increaseAndCloseUpdateManager(CoffeeMain.client.world));
+            PlayerInteractBlockC2SPacket interact = new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND,
+                    bhr,
+                    Utils.increaseAndCloseUpdateManager(CoffeeMain.client.world)
+            );
             CoffeeMain.client.getNetworkHandler().sendPacket(interact);
         }
 

@@ -52,8 +52,8 @@ public class Tracers extends Module {
             return null;
         }
         return StreamSupport.stream(CoffeeMain.client.world.getEntities().spliterator(), false)
-                .filter(entity -> entity.squaredDistanceTo(
-                        CoffeeMain.client.player) < 4096 && entity.getUuid() != CoffeeMain.client.player.getUuid() && isEntityApplicable(entity))
+                .filter(entity -> entity.squaredDistanceTo(CoffeeMain.client.player) < 4096 && entity.getUuid() != CoffeeMain.client.player.getUuid() && isEntityApplicable(
+                        entity))
                 .count() + "";
     }
 

@@ -24,8 +24,9 @@ public class DoubleSettingEditor extends ConfigBase<DoubleSetting> {
     void handleClick(double x) {
         double translated = x - this.x;
         double perIn = MathHelper.clamp(translated / width, 0, 1);
-        configValue.setValue(
-                Utils.Math.roundToDecimal(perIn * (configValue.getMax() - configValue.getMin()) + configValue.getMin(), configValue.getPrecision()));
+        configValue.setValue(Utils.Math.roundToDecimal(perIn * (configValue.getMax() - configValue.getMin()) + configValue.getMin(),
+                configValue.getPrecision()
+        ));
     }
 
     @Override
@@ -86,8 +87,10 @@ public class DoubleSettingEditor extends ConfigBase<DoubleSetting> {
         if (inBounds(mouseX, mouseY)) {
             double delta = 1 / (double) (configValue.getPrecision() + 1);
             delta *= amount;
-            configValue.setValue(MathHelper.clamp(Utils.Math.roundToDecimal(configValue.getValue() + delta, configValue.getPrecision()), configValue.getMin(),
-                    configValue.getMax()));
+            configValue.setValue(MathHelper.clamp(Utils.Math.roundToDecimal(configValue.getValue() + delta, configValue.getPrecision()),
+                    configValue.getMin(),
+                    configValue.getMax()
+            ));
             return true;
         }
         return super.scroll(mouseX, mouseY, amount);

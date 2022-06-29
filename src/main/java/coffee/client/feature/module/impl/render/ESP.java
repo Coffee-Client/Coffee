@@ -38,15 +38,21 @@ import java.util.List;
 public class ESP extends Module {
     //static DumpVertexConsumer consumer = new DumpVertexConsumer();
     static DumpVertexProvider provider;
-    public final EnumSetting<Mode> outlineMode = this.config.create(
-            new EnumSetting.Builder<>(Mode.Filled).name("Outline mode").description("How to render the outline").get());
-    public final EnumSetting<ShaderMode> shaderMode = this.config.create(
-            new EnumSetting.Builder<>(ShaderMode.Simple).name("Shader mode").description("How to render the shader esp").get());
+    public final EnumSetting<Mode> outlineMode = this.config.create(new EnumSetting.Builder<>(Mode.Filled).name("Outline mode")
+            .description("How to render the outline")
+            .get());
+    public final EnumSetting<ShaderMode> shaderMode = this.config.create(new EnumSetting.Builder<>(ShaderMode.Simple).name("Shader mode")
+            .description("How to render the shader esp")
+            .get());
     public final BooleanSetting entities = this.config.create(new BooleanSetting.Builder(false).name("Show entities").description("Render entities").get());
     public final BooleanSetting players = this.config.create(new BooleanSetting.Builder(true).name("Show players").description("Render players").get());
     public final List<double[]> vertexDumps = new ArrayList<>();
-    final DoubleSetting range = this.config.create(
-            new DoubleSetting.Builder(64).name("Range").description("How far to render the entities").min(32).max(128).precision(1).get());
+    final DoubleSetting range = this.config.create(new DoubleSetting.Builder(64).name("Range")
+            .description("How far to render the entities")
+            .min(32)
+            .max(128)
+            .precision(1)
+            .get());
     public boolean recording = false;
 
     public ESP() {
@@ -137,11 +143,19 @@ public class ESP extends Module {
                 Color c = Utils.getCurrentRGB();
                 Vec3d eSource = Utils.getInterpolatedEntityPosition(entity);
                 switch (outlineMode.getValue()) {
-                    case Filled -> Renderer.R3D.renderFilled(eSource.subtract(new Vec3d(entity.getWidth(), 0, entity.getWidth()).multiply(0.5)),
-                            new Vec3d(entity.getWidth(), entity.getHeight(), entity.getWidth()), Renderer.Util.modify(c, -1, -1, -1, 130), matrices);
+                    case Filled -> Renderer.R3D.renderFilled(
+                            eSource.subtract(new Vec3d(entity.getWidth(), 0, entity.getWidth()).multiply(0.5)),
+                            new Vec3d(entity.getWidth(), entity.getHeight(), entity.getWidth()),
+                            Renderer.Util.modify(c, -1, -1, -1, 130),
+                            matrices
+                    );
                     case Rect -> renderOutline(entity, c, matrices);
-                    case Outline -> Renderer.R3D.renderOutline(eSource.subtract(new Vec3d(entity.getWidth(), 0, entity.getWidth()).multiply(0.5)),
-                            new Vec3d(entity.getWidth(), entity.getHeight(), entity.getWidth()), Renderer.Util.modify(c, -1, -1, -1, 130), matrices);
+                    case Outline -> Renderer.R3D.renderOutline(
+                            eSource.subtract(new Vec3d(entity.getWidth(), 0, entity.getWidth()).multiply(0.5)),
+                            new Vec3d(entity.getWidth(), entity.getHeight(), entity.getWidth()),
+                            Renderer.Util.modify(c, -1, -1, -1, 130),
+                            matrices
+                    );
                     case Shader -> renderShaderOutline(entity, matrices);
                 }
             }
@@ -173,11 +187,17 @@ public class ESP extends Module {
 
             Vec3d o = origin.subtract(w / 2d, 0, w / 2d);
 
-            boxPoints.addAll(List.of(new Vec3d(o.x + 0, o.y, o.z + 0), new Vec3d(o.x + w, o.y, o.z + 0), new Vec3d(o.x + 0, o.y, o.z + w),
+            boxPoints.addAll(List.of(
+                    new Vec3d(o.x + 0, o.y, o.z + 0),
+                    new Vec3d(o.x + w, o.y, o.z + 0),
+                    new Vec3d(o.x + 0, o.y, o.z + w),
                     new Vec3d(o.x + w, o.y, o.z + w),
 
-                    new Vec3d(o.x + 0, o.y + h, o.z + 0), new Vec3d(o.x + w, o.y + h, o.z + 0), new Vec3d(o.x + 0, o.y + h, o.z + w),
-                    new Vec3d(o.x + w, o.y + h, o.z + w)));
+                    new Vec3d(o.x + 0, o.y + h, o.z + 0),
+                    new Vec3d(o.x + w, o.y + h, o.z + 0),
+                    new Vec3d(o.x + 0, o.y + h, o.z + w),
+                    new Vec3d(o.x + w, o.y + h, o.z + w)
+            ));
         }
 
         Vec3d[] screenSpace = boxPoints.stream().map(ee -> Renderer.R2D.getScreenSpaceCoordinate(ee, stack)).toList().toArray(Vec3d[]::new);
@@ -217,7 +237,6 @@ public class ESP extends Module {
             float y1 = (float) finalLeastY.y;
             float x2 = (float) finalMostX.x;
             float y2 = (float) finalMostY.y;
-            Matrix4f matrix = stack.peek().getPositionMatrix();
             float r = 1f;
             float g = 1f;
             float b = 1f;
@@ -227,17 +246,17 @@ public class ESP extends Module {
             BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
             Renderer.setupRender();
 
-            renderCorner(bufferBuilder, matrix, r, g, b, a, x1, y1, desiredHeight, desiredWidth, 1, 1);
-            renderCorner(bufferBuilder, matrix, r, g, b, a, x2, y1, desiredHeight, desiredWidth, -1, 1);
-            renderCorner(bufferBuilder, matrix, r, g, b, a, x2, y2, desiredHeight, desiredWidth, -1, -1);
-            renderCorner(bufferBuilder, matrix, r, g, b, a, x1, y2, desiredHeight, desiredWidth, 1, -1);
+            renderCorner(bufferBuilder, r, g, b, a, x1, y1, desiredHeight, desiredWidth, 1, 1);
+            renderCorner(bufferBuilder, r, g, b, a, x2, y1, desiredHeight, desiredWidth, -1, 1);
+            renderCorner(bufferBuilder, r, g, b, a, x2, y2, desiredHeight, desiredWidth, -1, -1);
+            renderCorner(bufferBuilder, r, g, b, a, x1, y2, desiredHeight, desiredWidth, 1, -1);
 
             Renderer.endRender();
 
         });
     }
 
-    void renderCorner(BufferBuilder bb, Matrix4f matrix, float r, float g, float b, float a, float x, float y, float height, float topWidth, float xMul, float yMul) {
+    void renderCorner(BufferBuilder bb, float r, float g, float b, float a, float x, float y, float height, float topWidth, float xMul, float yMul) {
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
         bb.begin(VertexFormat.DrawMode.TRIANGLE_FAN, VertexFormats.POSITION_COLOR);
         float width = 1;
@@ -253,8 +272,7 @@ public class ESP extends Module {
         float[][] verts = new float[][] { new float[] { 0, 0 }, new float[] { 0, height }, new float[] { -width, height }, new float[] { -width, -width },
                 new float[] { topWidth, -width }, new float[] { topWidth, 0 }, new float[] { 0, 0 } };
         for (float[] vert : verts) {
-
-            bb.vertex(matrix, x + vert[0] * xMul, y + vert[1] * yMul, 0f).color(r, g, b, a).next();
+            bb.vertex(x + vert[0] * xMul, y + vert[1] * yMul, 0f).color(r, g, b, a).next();
         }
         BufferRenderer.drawWithShader(bb.end());
     }
@@ -265,8 +283,11 @@ public class ESP extends Module {
     }
 
     void renderOutline(Entity e, Color color, MatrixStack stack) {
-        Vec3d eSource = new Vec3d(MathHelper.lerp(CoffeeMain.client.getTickDelta(), e.prevX, e.getX()),
-                MathHelper.lerp(CoffeeMain.client.getTickDelta(), e.prevY, e.getY()), MathHelper.lerp(CoffeeMain.client.getTickDelta(), e.prevZ, e.getZ()));
+        Vec3d eSource = new Vec3d(
+                MathHelper.lerp(CoffeeMain.client.getTickDelta(), e.prevX, e.getX()),
+                MathHelper.lerp(CoffeeMain.client.getTickDelta(), e.prevY, e.getY()),
+                MathHelper.lerp(CoffeeMain.client.getTickDelta(), e.prevZ, e.getZ())
+        );
         float red = color.getRed() / 255f;
         float green = color.getGreen() / 255f;
         float blue = color.getBlue() / 255f;

@@ -114,8 +114,9 @@ public class AutoTrap extends Module {
             int slot = -1;
             for (int i = 0; i < 9; i++) {
                 ItemStack real = CoffeeMain.client.player.getInventory().getStack(i);
-                if (real.getItem() instanceof BlockItem bi && Block.isShapeFullCube(
-                        bi.getBlock().getDefaultState().getOutlineShape(CoffeeMain.client.world, new BlockPos(0, 0, 0), ShapeContext.absent()))) {
+                if (real.getItem() instanceof BlockItem bi && Block.isShapeFullCube(bi.getBlock()
+                        .getDefaultState()
+                        .getOutlineShape(CoffeeMain.client.world, new BlockPos(0, 0, 0), ShapeContext.absent()))) {
                     slot = i;
                 }
             }

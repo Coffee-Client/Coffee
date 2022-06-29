@@ -23,8 +23,11 @@ import java.util.Random;
 
 public class AutoFish extends Module {
     static int delay = 0;
-    final DoubleSetting lazytime = this.config.create(
-            new DoubleSetting.Builder(1).min(1).max(40).name("Random").description("the randomness added to fishing times").get());
+    final DoubleSetting lazytime = this.config.create(new DoubleSetting.Builder(1).min(1)
+            .max(40)
+            .name("Random")
+            .description("the randomness added to fishing times")
+            .get());
 
     public AutoFish() {
         super("AutoFish", "Automatically catches fish for you", ModuleType.WORLD);
@@ -89,8 +92,9 @@ public class AutoFish extends Module {
     }
 
     private void click() {
-        CoffeeMain.client.player.networkHandler.sendPacket(
-                new PlayerInteractItemC2SPacket(Hand.MAIN_HAND, Utils.increaseAndCloseUpdateManager(CoffeeMain.client.world)));
+        CoffeeMain.client.player.networkHandler.sendPacket(new PlayerInteractItemC2SPacket(Hand.MAIN_HAND,
+                Utils.increaseAndCloseUpdateManager(CoffeeMain.client.world)
+        ));
     }
 
     public int getFishingRod() {

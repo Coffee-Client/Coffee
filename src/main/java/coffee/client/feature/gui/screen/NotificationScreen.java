@@ -45,8 +45,14 @@ public class NotificationScreen extends ClientScreen implements FastTickable {
     protected void init() {
         double height = 5 + 32 + 5 + FontRenderers.getRenderer().getMarginHeight() + 5 + 20 + 5;
         double w = Math.max(120, FontRenderers.getRenderer().getStringWidth(t));
-        RoundButton rb = new RoundButton(RoundButton.STANDARD, width / 2d - w / 2d, this.height / 2d - height / 2d + height - 5 - 20, w, 20, "Close",
-                this::close);
+        RoundButton rb = new RoundButton(RoundButton.STANDARD,
+                width / 2d - w / 2d,
+                this.height / 2d - height / 2d + height - 5 - 20,
+                w,
+                20,
+                "Close",
+                this::close
+        );
         addDrawableChild(rb);
     }
 
@@ -69,16 +75,22 @@ public class NotificationScreen extends ClientScreen implements FastTickable {
 
         double height = 5 + 32 + 5 + FontRenderers.getRenderer().getMarginHeight() + 5 + 20 + 5;
         double w = Math.max(120, FontRenderers.getRenderer().getStringWidth(t)) + 10;
-        Renderer.R2D.renderRoundedQuad(stack, new Color(20, 20, 20, 255), (width - w) / 2d, (this.height - height) / 2d, (width - w) / 2d + w,
-                (this.height - height) / 2d + height, 5, 20);
+        Renderer.R2D.renderRoundedQuad(stack,
+                new Color(20, 20, 20, 255),
+                (width - w) / 2d,
+                (this.height - height) / 2d,
+                (width - w) / 2d + w,
+                (this.height - height) / 2d + height,
+                5,
+                20
+        );
         Color p = ty.getC();
         RenderSystem.setShaderColor(p.getRed() / 255f, p.getGreen() / 255f, p.getBlue() / 255f, p.getAlpha() / 255f);
         RenderSystem.setShaderTexture(0, ty.getI());
         Renderer.R2D.renderTexture(stack, width / 2d - 32 / 2d, this.height / 2d - height / 2d + 5, 32, 32, 0, 0, 32, 32, 32, 32);
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
         FontRenderers.getRenderer()
-                .drawCenteredString(stack, t, width / 2d, this.height / 2d + height / 2d - 5 - 20 - 5 - FontRenderers.getRenderer().getMarginHeight(),
-                        0xFFFFFF);
+                .drawCenteredString(stack, t, width / 2d, this.height / 2d + height / 2d - 5 - 20 - 5 - FontRenderers.getRenderer().getMarginHeight(), 0xFFFFFF);
         if (closing && anim == 0) {
             client.setScreen(parent);
         }

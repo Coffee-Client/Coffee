@@ -12,8 +12,12 @@ import net.minecraft.client.util.math.MatrixStack;
 public class Reach extends Module {
     // TODO: 10.04.22 finish this WHERE TF THE MIXIN GO????????
 
-    final DoubleSetting reachDist = this.config.create(
-            new DoubleSetting.Builder(3).min(3).max(10).precision(1).name("Distance").description("How far to reach").get());
+    final DoubleSetting reachDist = this.config.create(new DoubleSetting.Builder(3).min(3)
+            .max(10)
+            .precision(1)
+            .name("Distance")
+            .description("How far to reach")
+            .get());
 
     public Reach() {
         super("Reach", "Reach further", ModuleType.COMBAT);

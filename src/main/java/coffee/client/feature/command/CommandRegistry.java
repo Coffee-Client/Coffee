@@ -133,9 +133,13 @@ public class CommandRegistry {
     }
 
     public static void execute(String command) {
-        if (command.isEmpty() || command.isBlank()) return; // nothing to execute
+        if (command.isEmpty() || command.isBlank()) {
+            return; // nothing to execute
+        }
         String[] spl = command.split(" +");
-        if (spl.length == 0) return; // this shouldnt happen in theory
+        if (spl.length == 0) {
+            return; // this shouldnt happen in theory
+        }
         String cmd = spl[0].toLowerCase();
         String[] args = Arrays.copyOfRange(spl, 1, spl.length);
         Command c = CommandRegistry.getByAlias(cmd);

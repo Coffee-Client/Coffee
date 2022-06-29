@@ -21,8 +21,8 @@ public class EntityModelMixin {
     void coffee_preRender(MatrixStack matrices, VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float alpha, CallbackInfo ci) {
         // shut up retard
         //noinspection ConstantConditions
-        ModuleRegistry.getByClass(ESP.class).recording = ModuleRegistry.getByClass(ESP.class).isEnabled() && ModuleRegistry.getByClass(
-                ESP.class).outlineMode.getValue() == ESP.Mode.Model && ((((Object) this) instanceof PlayerEntityModel && ModuleRegistry.getByClass(
+        ModuleRegistry.getByClass(ESP.class).recording = ModuleRegistry.getByClass(ESP.class)
+                .isEnabled() && ModuleRegistry.getByClass(ESP.class).outlineMode.getValue() == ESP.Mode.Model && ((((Object) this) instanceof PlayerEntityModel && ModuleRegistry.getByClass(
                 ESP.class).players.getValue()) || ModuleRegistry.getByClass(ESP.class).entities.getValue());
     }
 

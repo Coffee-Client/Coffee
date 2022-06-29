@@ -24,8 +24,12 @@ public class Velocity extends Module {
             .max(2.5)
             .precision(1)
             .get());
-    final DoubleSetting multiplierY = this.config.create(
-            new DoubleSetting.Builder(0.2).name("Vertical velocity").description("How much to multiply Y velocity by").min(-2.5).max(2.5).precision(1).get());
+    final DoubleSetting multiplierY = this.config.create(new DoubleSetting.Builder(0.2).name("Vertical velocity")
+            .description("How much to multiply Y velocity by")
+            .min(-2.5)
+            .max(2.5)
+            .precision(1)
+            .get());
     final EnumSetting<Mode> mode = this.config.create(new EnumSetting.Builder<>(Mode.Modify).name("Mode").description("How to modify velocity").get());
 
     public Velocity() {

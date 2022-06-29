@@ -68,8 +68,12 @@ public class Renderer {
                 stack.push();
                 Color out = Util.modify(fade.outline, -1, -1, -1, (int) (fade.outline.getAlpha() * progress));
                 Color fill = Util.modify(fade.fill, -1, -1, -1, (int) (fade.fill.getAlpha() * progress));
-                Renderer.R3D.renderEdged(stack, fade.start.add(new Vec3d(0.2, 0.2, 0.2).multiply(ip)),
-                        fade.dimensions.subtract(new Vec3d(.4, .4, .4).multiply(ip)), fill, out);
+                Renderer.R3D.renderEdged(stack,
+                        fade.start.add(new Vec3d(0.2, 0.2, 0.2).multiply(ip)),
+                        fade.dimensions.subtract(new Vec3d(.4, .4, .4).multiply(ip)),
+                        fill,
+                        out
+                );
                 stack.pop();
             }
         }
@@ -476,8 +480,21 @@ public class Renderer {
 
             setupRender();
             RenderSystem.setShader(GameRenderer::getPositionColorShader);
-            renderRoundedQuadInternal(mat, color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f, roundStartX,
-                    roundStartY, roundStartX + width, roundStartY + height, 5, 5, 5, 5, 20);
+            renderRoundedQuadInternal(mat,
+                    color.getRed() / 255f,
+                    color.getGreen() / 255f,
+                    color.getBlue() / 255f,
+                    color.getAlpha() / 255f,
+                    roundStartX,
+                    roundStartY,
+                    roundStartX + width,
+                    roundStartY + height,
+                    5,
+                    5,
+                    5,
+                    5,
+                    20
+            );
             Tessellator t = Tessellator.getInstance();
             BufferBuilder bb = t.getBuffer();
             bb.begin(VertexFormat.DrawMode.TRIANGLES, VertexFormats.POSITION_COLOR);
@@ -525,8 +542,17 @@ public class Renderer {
             double x1 = x0 + width;
             double y1 = y0 + height;
             double z = 0;
-            renderTexturedQuad(matrices.peek().getPositionMatrix(), x0, x1, y0, y1, z, (u + 0.0F) / (float) textureWidth,
-                    (u + (float) regionWidth) / (float) textureWidth, (v + 0.0F) / (float) textureHeight, (v + (float) regionHeight) / (float) textureHeight);
+            renderTexturedQuad(matrices.peek().getPositionMatrix(),
+                    x0,
+                    x1,
+                    y0,
+                    y1,
+                    z,
+                    (u + 0.0F) / (float) textureWidth,
+                    (u + (float) regionWidth) / (float) textureWidth,
+                    (v + 0.0F) / (float) textureHeight,
+                    (v + (float) regionHeight) / (float) textureHeight
+            );
         }
 
         static Vec2f lerp(Vec2f p1, Vec2f p2, float delta) {
@@ -704,7 +730,9 @@ public class Renderer {
             Matrix4x4 matrix4x4Model = Matrix4x4.copyFromColumnMajor(RenderSystem.getModelViewMatrix());//but I do the math myself now :( (heck math)
             matrix4x4Proj.mul(matrix4x4Model).project(vector4f.getX(), vector4f.getY(), vector4f.getZ(), viewport, screenCoords);
             return new Vec3d(screenCoords.x / CoffeeMain.client.getWindow().getScaleFactor(),
-                    (displayHeight - screenCoords.y) / CoffeeMain.client.getWindow().getScaleFactor(), screenCoords.z);
+                    (displayHeight - screenCoords.y) / CoffeeMain.client.getWindow().getScaleFactor(),
+                    screenCoords.z
+            );
         }
 
         public static void renderQuad(MatrixStack matrices, Color c, double x1, double y1, double x2, double y2) {
@@ -877,8 +905,11 @@ public class Renderer {
         }
 
         public static Color lerp(Color a, Color b, double c) {
-            return new Color(lerp(a.getRed(), b.getRed(), c), lerp(a.getGreen(), b.getGreen(), c), lerp(a.getBlue(), b.getBlue(), c),
-                    lerp(a.getAlpha(), b.getAlpha(), c));
+            return new Color(lerp(a.getRed(), b.getRed(), c),
+                    lerp(a.getGreen(), b.getGreen(), c),
+                    lerp(a.getBlue(), b.getBlue(), c),
+                    lerp(a.getAlpha(), b.getAlpha(), c)
+            );
         }
 
         /**
@@ -890,8 +921,11 @@ public class Renderer {
          * @return the modified color
          */
         public static Color modify(Color original, int redOverwrite, int greenOverwrite, int blueOverwrite, int alphaOverwrite) {
-            return new Color(redOverwrite == -1 ? original.getRed() : redOverwrite, greenOverwrite == -1 ? original.getGreen() : greenOverwrite,
-                    blueOverwrite == -1 ? original.getBlue() : blueOverwrite, alphaOverwrite == -1 ? original.getAlpha() : alphaOverwrite);
+            return new Color(redOverwrite == -1 ? original.getRed() : redOverwrite,
+                    greenOverwrite == -1 ? original.getGreen() : greenOverwrite,
+                    blueOverwrite == -1 ? original.getBlue() : blueOverwrite,
+                    alphaOverwrite == -1 ? original.getAlpha() : alphaOverwrite
+            );
         }
 
     }

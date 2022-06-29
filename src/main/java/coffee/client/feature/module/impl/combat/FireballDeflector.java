@@ -60,16 +60,19 @@ public class FireballDeflector extends Module {
     }
 
     boolean inHitRange(Entity attacker, Entity target) {
-        return attacker.getCameraPosVec(1f).distanceTo(target.getPos().add(0, target.getHeight() / 2, 0)) <= Objects.requireNonNull(
-                CoffeeMain.client.interactionManager).getReachDistance();
+        return attacker.getCameraPosVec(1f)
+                .distanceTo(target.getPos().add(0, target.getHeight() / 2, 0)) <= Objects.requireNonNull(CoffeeMain.client.interactionManager)
+                .getReachDistance();
     }
 
     @Override
     public void onFastTick() {
         for (Entity entity : Objects.requireNonNull(CoffeeMain.client.world).getEntities()) {
             if (entity instanceof FireballEntity fe) {
-                if (inHitRange(Objects.requireNonNull(CoffeeMain.client.player), fe) && isApproaching(CoffeeMain.client.player.getPos(), fe.getPos(),
-                        fe.getVelocity())) {
+                if (inHitRange(Objects.requireNonNull(CoffeeMain.client.player), fe) && isApproaching(CoffeeMain.client.player.getPos(),
+                        fe.getPos(),
+                        fe.getVelocity()
+                )) {
                     hit(fe);
                 }
             }
@@ -104,12 +107,18 @@ public class FireballDeflector extends Module {
                     if (fe.getOwner() != null) {
                         Entity owner = fe.getOwner();
                         Renderer.R3D.renderLine(Utils.getInterpolatedEntityPosition(owner).add(0, owner.getHeight() / 2, 0),
-                                Utils.getInterpolatedEntityPosition(fe).add(0, fe.getHeight() / 2, 0), Color.MAGENTA, matrices);
+                                Utils.getInterpolatedEntityPosition(fe).add(0, fe.getHeight() / 2, 0),
+                                Color.MAGENTA,
+                                matrices
+                        );
                     }
                     if (inHitRange(Objects.requireNonNull(CoffeeMain.client.player), fe)) {
-                        Renderer.R3D.renderLine(
-                                Utils.getInterpolatedEntityPosition(CoffeeMain.client.player).add(0, CoffeeMain.client.player.getHeight() / 2, 0),
-                                Utils.getInterpolatedEntityPosition(fe).add(0, fe.getHeight() / 2, 0), Color.RED, matrices);
+                        Renderer.R3D.renderLine(Utils.getInterpolatedEntityPosition(CoffeeMain.client.player)
+                                        .add(0, CoffeeMain.client.player.getHeight() / 2, 0),
+                                Utils.getInterpolatedEntityPosition(fe).add(0, fe.getHeight() / 2, 0),
+                                Color.RED,
+                                matrices
+                        );
                     }
                 }
             }

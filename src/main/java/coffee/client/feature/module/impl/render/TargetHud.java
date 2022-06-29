@@ -185,8 +185,15 @@ public class TargetHud extends Module {
 
             Color MID_END = Renderer.Util.lerp(GREEN, RED, hPer);
             double pillHeight = 2;
-            Renderer.R2D.renderRoundedQuad(stack, new Color(0, 0, 0, 200), textLeftAlign, modalHeight - 5 - pillHeight, modalWidth - 5, modalHeight - 5,
-                    pillHeight / 2d, 10);
+            Renderer.R2D.renderRoundedQuad(stack,
+                    new Color(0, 0, 0, 200),
+                    textLeftAlign,
+                    modalHeight - 5 - pillHeight,
+                    modalWidth - 5,
+                    modalHeight - 5,
+                    pillHeight / 2d,
+                    10
+            );
             Renderer.R2D.renderRoundedQuad(stack, MID_END, textLeftAlign, modalHeight - 5 - pillHeight, renderToX, modalHeight - 5, pillHeight / 2d, 10);
             if (renderHP.getValue()) {
                 FontRenderers.getRenderer().drawString(stack, Utils.Math.roundToDecimal(trackedHp, 2) + " HP", textLeftAlign, yOffset, MID_END.getRGB());

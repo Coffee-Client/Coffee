@@ -47,11 +47,13 @@ public class Hud extends Module {
     final DateFormat minSec = new SimpleDateFormat("mm:ss");
     final BooleanSetting fps = this.config.create(new BooleanSetting.Builder(true).name("FPS").description("Whether to show FPS").get());
     final BooleanSetting tps = this.config.create(new BooleanSetting.Builder(true).name("TPS").description("Whether to show TPS").get());
-    final BooleanSetting coords = this.config.create(
-            new BooleanSetting.Builder(true).name("Coordinates").description("Whether to show current coordinates").get());
+    final BooleanSetting coords = this.config.create(new BooleanSetting.Builder(true).name("Coordinates")
+            .description("Whether to show current coordinates")
+            .get());
     final BooleanSetting ping = this.config.create(new BooleanSetting.Builder(true).name("Ping").description("Whether to show current ping").get());
-    final BooleanSetting modules = this.config.create(
-            new BooleanSetting.Builder(true).name("Array list").description("Whether to show currently enabled modules").get());
+    final BooleanSetting modules = this.config.create(new BooleanSetting.Builder(true).name("Array list")
+            .description("Whether to show currently enabled modules")
+            .get());
     //    final List<ModuleEntry> moduleList = new ArrayList<>();
     final Timer tpsUpdateTimer = new Timer();
     final List<Double> last5SecondTpsAverage = new ArrayList<>();
@@ -138,8 +140,12 @@ public class Hud extends Module {
             }
         } else {
             if (serverNotResponding == null) {
-                serverNotResponding = Notification.create(-1, "", true, Notification.Type.INFO,
-                        "Server not responding! " + minSec.format(System.currentTimeMillis() - lastTimePacketReceived));
+                serverNotResponding = Notification.create(-1,
+                        "",
+                        true,
+                        Notification.Type.INFO,
+                        "Server not responding! " + minSec.format(System.currentTimeMillis() - lastTimePacketReceived)
+                );
             }
             serverNotResponding.contents = new String[] { "Server not responding! " + minSec.format(System.currentTimeMillis() - lastTimePacketReceived) };
         }

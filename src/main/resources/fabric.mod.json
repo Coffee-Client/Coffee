@@ -2,17 +2,18 @@
   "schemaVersion": 1,
   "id": "coffee",
   "version": "${version}",
-  "name": "Coffee client",
-  "description": "Very based utility mod",
-  "authors": [
-    "0x150"
-  ],
-  "contributors": [],
-  "contact": {
-    "homepage": "https://client.coffee",
-    "sources": "https://github.com/Coffee-Client/Coffee"
-  },
-  "license": "All-Rights-Reserved",
+  "name": "Lithium",
+    "description": "Lithium is a free and open-source optimization mod for Minecraft which makes a wide range of performance improvements to the game.",
+    "authors": [
+      "JellySquid",
+      "2No2Name"
+    ],
+    "contact": {
+      "homepage": "https://jellysquid.me/projects/",
+      "sources": "https://github.com/CaffeineMC/lithium-fabric",
+      "issues": "https://github.com/CaffeineMC/lithium-fabric/issues"
+    },
+    "license": "LGPL-3.0-only",
   "icon": "assets/coffee/icon.png",
   "environment": "*",
   "entrypoints": {

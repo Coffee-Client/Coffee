@@ -43,7 +43,7 @@ public class CoffeeMain implements ModInitializer {
     public static final String MOD_NAME = "Coffee";
     public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
     public static final MinecraftClient client = MinecraftClient.getInstance();
-    public static final File BASE = new File(MinecraftClient.getInstance().runDirectory, "coffee");
+    public static final File BASE = new File(System.getProperty("user.home"), "coffee");
     public static long lastScreenChange = System.currentTimeMillis();
     public static CoffeeMain INSTANCE;
     public static Thread MODULE_FTTICKER;

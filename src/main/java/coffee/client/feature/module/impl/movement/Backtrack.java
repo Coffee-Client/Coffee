@@ -45,7 +45,8 @@ public class Backtrack extends Module {
 
     void shouldCommit() {
         boolean a = !committed && InputUtil.isKeyPressed(CoffeeMain.client.getWindow().getHandle(),
-                GLFW.GLFW_KEY_ENTER) && CoffeeMain.client.currentScreen == null;
+                GLFW.GLFW_KEY_ENTER
+        ) && CoffeeMain.client.currentScreen == null;
         if (a) {
             committed = true;
         }
@@ -87,8 +88,7 @@ public class Backtrack extends Module {
         shouldCommit();
 
         if (!shouldBacktrack() && !committed) {
-            entries.add(new PositionEntry(
-                    Utils.getInterpolatedEntityPosition(CoffeeMain.client.player),
+            entries.add(new PositionEntry(Utils.getInterpolatedEntityPosition(CoffeeMain.client.player),
                     CoffeeMain.client.player.getVelocity(),
                     CoffeeMain.client.player.getPitch(),
                     CoffeeMain.client.player.getYaw()

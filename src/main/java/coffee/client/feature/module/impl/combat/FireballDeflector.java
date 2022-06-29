@@ -51,7 +51,8 @@ public class FireballDeflector extends Module {
             }
             if (mode.getValue() == Mode.ReflectBack) {
                 Vec2f pitchYaw = Rotations.getPitchYawFromOtherEntity(fe.getPos().add(0, fe.getHeight() / 2, 0),
-                        owner.getPos().add(0, owner.getHeight() / 2, 0));
+                        owner.getPos().add(0, owner.getHeight() / 2, 0)
+                );
                 PlayerMoveC2SPacket p = new PlayerMoveC2SPacket.LookAndOnGround(pitchYaw.y, pitchYaw.x, CoffeeMain.client.player.isOnGround());
                 Objects.requireNonNull(CoffeeMain.client.getNetworkHandler()).sendPacket(p);
             }

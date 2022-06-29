@@ -64,7 +64,8 @@ public class MassUse extends Module {
                         }
                     } else if (pe.getPacket() instanceof PlayerInteractItemC2SPacket p1) {
                         PlayerInteractItemC2SPacket pp = new PlayerInteractItemC2SPacket(p1.getHand(),
-                                Utils.increaseAndCloseUpdateManager(CoffeeMain.client.world));
+                                Utils.increaseAndCloseUpdateManager(CoffeeMain.client.world)
+                        );
                         for (int i = 0; i < uses.getValue(); i++) {
                             dontRepeat.add(pp);
                             Objects.requireNonNull(client.getNetworkHandler()).sendPacket(pp);

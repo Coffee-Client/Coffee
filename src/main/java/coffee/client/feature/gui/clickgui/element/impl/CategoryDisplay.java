@@ -188,7 +188,8 @@ public class CategoryDisplay extends Element {
         if (openAnim != 0) {
             // rounding the height in the final param makes it more smooth, otherwise scissor will do something with the start y and it will rattle like shit
             ClipStack.globalInstance.addWindow(matrices,
-                    new Rectangle(x, y + headerHeight(), x + width, y + Math.round(this.height) - (modHeight != 0 ? r : 0)));
+                    new Rectangle(x, y + headerHeight(), x + width, y + Math.round(this.height) - (modHeight != 0 ? r : 0))
+            );
             double y = headerHeight();
             matrices.push();
             matrices.translate(0, scroller.getScroll(), 0);

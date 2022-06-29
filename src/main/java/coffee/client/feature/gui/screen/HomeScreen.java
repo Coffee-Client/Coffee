@@ -70,9 +70,11 @@ public class HomeScreen extends ClientScreen {
             File execF = new File(HomeScreen.class.getProtectionDomain().getCodeSource().getLocation().toURI());
             isDev = execF.isDirectory();
             HomeScreen.version = IOUtils.toString(Objects.requireNonNull(HomeScreen.class.getClassLoader().getResourceAsStream("version.txt")),
-                    StandardCharsets.UTF_8);
+                    StandardCharsets.UTF_8
+            );
             HomeScreen.changelog = IOUtils.toString(Objects.requireNonNull(HomeScreen.class.getClassLoader().getResourceAsStream("changelogLatest.txt")),
-                    StandardCharsets.UTF_8);
+                    StandardCharsets.UTF_8
+            );
             updateCurrentAccount(() -> {
 
             });

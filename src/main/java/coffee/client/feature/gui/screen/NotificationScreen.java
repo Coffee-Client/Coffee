@@ -90,7 +90,12 @@ public class NotificationScreen extends ClientScreen implements FastTickable {
         Renderer.R2D.renderTexture(stack, width / 2d - 32 / 2d, this.height / 2d - height / 2d + 5, 32, 32, 0, 0, 32, 32, 32, 32);
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
         FontRenderers.getRenderer()
-                .drawCenteredString(stack, t, width / 2d, this.height / 2d + height / 2d - 5 - 20 - 5 - FontRenderers.getRenderer().getMarginHeight(), 0xFFFFFF);
+                .drawCenteredString(stack,
+                        t,
+                        width / 2d,
+                        this.height / 2d + height / 2d - 5 - 20 - 5 - FontRenderers.getRenderer().getMarginHeight(),
+                        0xFFFFFF
+                );
         if (closing && anim == 0) {
             client.setScreen(parent);
         }

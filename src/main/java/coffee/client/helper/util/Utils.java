@@ -232,7 +232,8 @@ public class Utils {
 
             var packet = new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND,
                     new BlockHitResult(new Vec3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5), Direction.UP, pos, false),
-                    pendingUpdateManager.getSequence());
+                    pendingUpdateManager.getSequence()
+            );
 
             pendingUpdateManager.close();
 

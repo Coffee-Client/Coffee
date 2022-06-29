@@ -94,7 +94,8 @@ public class ColorSettingEditor extends ConfigBase<ColorSetting> {
                     }
 
 
-                });
+                }
+        );
         //        this.height = red.getHeight()+green.getHeight()+blue.getHeight()+5;
     }
 

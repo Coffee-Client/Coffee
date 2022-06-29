@@ -179,7 +179,8 @@ public class NbtEditorScreen extends ClientScreen implements FastTickable {
         // if the index of the next : from where we are right now is smaller than the index of the last , or the last , is beyond where we are now
         // and the next : from where we are right now is beyond where we are right now, mark it
         if ((total.indexOf(':', index) < total.lastIndexOf(',') || total.lastIndexOf(',') < index) && total.indexOf(' ', index) > total.indexOf(':',
-                index) && total.indexOf(':', index) > index) {
+                index
+        ) && total.indexOf(':', index) > index) {
             return 0x55FFFF;
         }
         boolean isSuffix = false;

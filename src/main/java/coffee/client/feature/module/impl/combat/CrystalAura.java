@@ -81,7 +81,8 @@ public class CrystalAura extends Module {
                 for (BlockPos obsidianPosition : obsidianPositions) {
                     Vec3d center = Vec3d.of(obsidianPosition);
                     if (!isABObstructed(center.add(.5, 1, .5), entity.getPos()) || !isABObstructed(center.add(.5, 1, .5),
-                            entity.getPos().add(0, entity.getHeight(), 0))) {
+                            entity.getPos().add(0, entity.getHeight(), 0)
+                    )) {
                         potentialTargets.add(center);
                     }
                 }

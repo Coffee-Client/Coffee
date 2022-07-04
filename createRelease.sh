@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-# test 2
-# test 3
 if [[ $1 != "--rebuild" ]]; then
   echo "Input changelog, enter \"end\" when done"
   echo -n "" > ./src/main/resources/changelogLatest.txt

@@ -1,3 +1,2 @@
-Reformatted client
-Fixed few bugs
-Fuck mojang
+SHADERS!!!
+some bug fixes idfk

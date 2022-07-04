@@ -122,8 +122,8 @@ public class SpotlightScreen extends ClientScreen implements FastTickable {
         if (anim == 0 && closing) {
             client.setScreen(null);
         }
-        ShaderManager.BLUR.getEffect().setUniformValue("progress", (float) anim);
-        ShaderManager.BLUR.render(delta);
+        ShaderManager.FROSTED_GLASS_BLUR.getEffect().setUniformValue("Progress", (float) anim);
+        ShaderManager.FROSTED_GLASS_BLUR.render(delta);
         super.render(matrices, mouseX, mouseY, delta);
     }
 

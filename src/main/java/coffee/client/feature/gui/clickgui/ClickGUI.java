@@ -21,6 +21,7 @@ import coffee.client.helper.render.MSAAFramebuffer;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.Transitions;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
@@ -145,11 +146,22 @@ public class ClickGUI extends Screen implements FastTickable {
 
     @Override
     protected void init() {
+        if (skipNextInit) {
+            skipNextInit = false;
+            return;
+        }
         //        ShaderManager.blurProgressGoal = 1;
         closing = false;
         introAnimation = 0;
         //        this.real.particles.clear();
         this.real.shouldAdd = true;
+    }
+    boolean skipNextInit = false;
+
+    @Override
+    public void resize(MinecraftClient client, int width, int height) {
+        skipNextInit = true;
+        super.resize(client, width, height);
     }
 
     @Override
@@ -208,9 +220,12 @@ public class ClickGUI extends Screen implements FastTickable {
             return;
         }
         double intp = easeInOutQuint(introAnimation);
-        ShaderManager.BLUR.getEffect().setUniformValue("progress", (float) intp);
-        ShaderManager.BLUR.render(delta);
+//        ShaderManager.BLUR.getEffect().setUniformValue("progress", (float) intp);
+//        ShaderManager.BLUR.render(delta);
+        ShaderManager.FROSTED_GLASS_BLUR.getEffect().setUniformValue("Progress", (float) intp);
+        ShaderManager.FROSTED_GLASS_BLUR.render(delta);
         MSAAFramebuffer.use(MSAAFramebuffer.MAX_SAMPLES, () -> renderIntern(matrices, mouseX, mouseY, delta));
+
     }
 
     void renderIntern(MatrixStack matrices, int mouseX, int mouseY, float delta) {
@@ -260,6 +275,7 @@ public class ClickGUI extends Screen implements FastTickable {
 
             desc = null;
         }
+
     }
 
     @Override

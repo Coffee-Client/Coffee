@@ -85,7 +85,7 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
     Texture currentAccountTexture = new Texture("dynamic/currentaccount");
 
     private AltManagerScreen() {
-        super(HomeScreen.instance());
+        super(MSAAFramebuffer.MAX_SAMPLES);
         loadAlts();
         updateCurrentAccount();
     }
@@ -230,7 +230,6 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
 
     @Override
     protected void init() {
-        super.init();
         search = new RoundTextFieldWidget(width - 200 - 5 - 100 - 5 - 60 - 5 - 20 - getPadding(),
                 10 + title.getMarginHeight() / 2d - 20 / 2d,
                 200,
@@ -347,7 +346,6 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
             alt.tickAnim();
         }
         scrollSmooth = Transitions.transition(scrollSmooth, scroll, 7, 0);
-        super.onFastTick();
     }
 
     @Override
@@ -366,7 +364,7 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
 
     @Override
     public void renderInternal(MatrixStack stack, int mouseX, int mouseY, float delta) {
-        //        Renderer.R2D.renderQuad(stack, bg, 0, 0, width, height);
+        Renderer.R2D.renderQuad(stack, bg, 0, 0, width, height);
         title.drawString(stack, "Coffee", 10, 10, 0xFFFFFF, false);
         titleSmall.drawString(stack,
                 "Alt manager",

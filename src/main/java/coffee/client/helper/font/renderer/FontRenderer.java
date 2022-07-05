@@ -65,13 +65,7 @@ public class FontRenderer {
     }
 
     void init() {
-        char[] chars = { 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2a, 0x2b, 0x2c, 0x2d, 0x2e, 0x2f, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35,
-                0x36, 0x37, 0x38, 0x39, 0x3a, 0x3b, 0x3c, 0x3d, 0x3e, 0x3f, 0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4a, 0x4b, 0x4c, 0x4d,
-                0x4e, 0x4f, 0x50, 0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5a, 0x5b, 0x5c, 0x5d, 0x5e, 0x5f, 0x60, 0x61, 0x62, 0x63, 0x64, 0x65,
-                0x66, 0x67, 0x68, 0x69, 0x6a, 0x6b, 0x6c, 0x6d, 0x6e, 0x6f, 0x70, 0x71, 0x72, 0x73, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7a, 0x7b, 0x7c, 0x7d,
-                0x7e, 0xa2, 0xa3, 0xa7, 0xa9, 0xb0, 0xb2, 0xb3, 0xb4, 0xb7, 0xb9, 0xbb, 0xbc, 0xbd, 0xbe, 0xc0, 0xc1, 0xc2, 0xc3, 0xc4, 0xc5, 0xc6, 0xd2, 0xd3,
-                0xd4, 0xd5, 0xd6, 0xd8, 0xd9, 0xda, 0xdb, 0xdc, 0xdf, 0xe0, 0xe1, 0xe2, 0xe3, 0xe4, 0xe5, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf8, 0xf9, 0xfa, 0xfb,
-                0xfc };
+        char[] chars = "ABCabc 123+-".toCharArray(); // basic abc + specials, more gets generated on the fly
         for (char aChar : chars) {
             Glyph glyph = new Glyph(aChar, f);
             glyphMap.put(aChar, glyph);
@@ -182,22 +176,20 @@ public class FontRenderer {
     }
 
     private double drawChar(BufferBuilder bufferBuilder, Matrix4f matrix, char c, float r, float g, float b, float a) {
-        Glyph glyph = glyphMap.get(c);
-        if (glyph == null) {
-            double missingW = 20;
-            drawMissing(bufferBuilder, matrix, (float) missingW, getFontHeight() * 4);
-            return missingW;
-        }
+        Glyph glyph = glyphMap.computeIfAbsent(c, character -> new Glyph(character, this.f));
         RenderSystem.setShaderTexture(0, glyph.getImageTex());
 
         float height = (float) glyph.dimensions.getHeight();
         float width = (float) glyph.dimensions.getWidth();
 
+        float inOffsetX = glyph.offsetX / (width + 10);
+        float inOffsetY = glyph.offsetY / (height + 10);
+
         bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
-        bufferBuilder.vertex(matrix, 0, height, 0).texture(0, 1).color(r, g, b, a).next();
-        bufferBuilder.vertex(matrix, width, height, 0).texture(1, 1).color(r, g, b, a).next();
-        bufferBuilder.vertex(matrix, width, 0, 0).texture(1, 0).color(r, g, b, a).next();
-        bufferBuilder.vertex(matrix, 0, 0, 0).texture(0, 0).color(r, g, b, a).next();
+        bufferBuilder.vertex(matrix, 0, height, 0).texture(0 + inOffsetX, 1 - inOffsetY).color(r, g, b, a).next();
+        bufferBuilder.vertex(matrix, width, height, 0).texture(1 - inOffsetX, 1 - inOffsetY).color(r, g, b, a).next();
+        bufferBuilder.vertex(matrix, width, 0, 0).texture(1 - inOffsetX, 0 + inOffsetY).color(r, g, b, a).next();
+        bufferBuilder.vertex(matrix, 0, 0, 0).texture(0 + inOffsetX, 0 + inOffsetY).color(r, g, b, a).next();
         BufferRenderer.drawWithShader(bufferBuilder.end());
 
         return width;

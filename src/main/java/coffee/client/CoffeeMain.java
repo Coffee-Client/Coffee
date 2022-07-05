@@ -156,6 +156,7 @@ public class CoffeeMain implements ModInitializer {
         MODULE_FTTICKER.start();
         FAST_TICKER.start();
         CommandRegistry.init();
+        //        coffee.client.helper.font.renderer.nfont.Font.initialize();
         log(Level.INFO, "Sending post window init");
         Events.fireEvent(EventType.POST_INIT, new NonCancellableEvent());
         for (Module module : new ArrayList<>(ModuleRegistry.getModules())) {

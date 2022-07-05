@@ -5,6 +5,7 @@
 package coffee.client.feature.module.impl.render;
 
 import coffee.client.CoffeeMain;
+import coffee.client.feature.config.BooleanSetting;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
 import coffee.client.feature.module.NoNotificationDefault;
@@ -13,6 +14,9 @@ import org.lwjgl.glfw.GLFW;
 
 @NoNotificationDefault
 public class ClickGUI extends Module {
+    public BooleanSetting skipAnimation = this.config.create(new BooleanSetting.Builder(false).name("Skip animation")
+            .description("Skips the animation sequence for the clickgui")
+            .get());
     int t = 2;
 
     public ClickGUI() {

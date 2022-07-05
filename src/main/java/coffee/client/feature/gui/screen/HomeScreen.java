@@ -12,7 +12,6 @@ import coffee.client.helper.GameTexture;
 import coffee.client.helper.Texture;
 import coffee.client.helper.font.FontRenderers;
 import coffee.client.helper.font.adapter.FontAdapter;
-import coffee.client.helper.render.MSAAFramebuffer;
 import coffee.client.helper.render.PlayerHeadResolver;
 import coffee.client.helper.render.Renderer;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -53,8 +52,8 @@ public class HomeScreen extends ClientScreen {
     boolean currentAccountTextureLoaded = false;
     UUID previousChecked = null;
 
-    private HomeScreen() {
-        super(MSAAFramebuffer.MAX_SAMPLES);
+    public HomeScreen() {
+        super(null);
     }
 
     public static HomeScreen instance() {
@@ -100,7 +99,7 @@ public class HomeScreen extends ClientScreen {
         buttonsMap.add(new AbstractMap.SimpleEntry<>("Realms", () -> CoffeeMain.client.setScreen(new RealmsMainScreen(this))));
         buttonsMap.add(new AbstractMap.SimpleEntry<>("Alts", () -> {
             CoffeeMain.client.setScreen(AltManagerScreen.instance());
-            //CoffeeMain.client.setScreen(new ProxyManagerScreen(this));
+            //            CoffeeMain.client.setScreen(new TestScreen());
         }));
         buttonsMap.add(new AbstractMap.SimpleEntry<>("Settings", () -> CoffeeMain.client.setScreen(new OptionsScreen(this, CoffeeMain.client.options))));
         buttonsMap.add(new AbstractMap.SimpleEntry<>("Quit", CoffeeMain.client::scheduleStop));

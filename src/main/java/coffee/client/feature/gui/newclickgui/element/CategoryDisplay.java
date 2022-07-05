@@ -13,48 +13,57 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CategoryDisplay extends Element {
+    static final double maxHeight = 200;
     ModuleType type;
     List<Module> modules = new ArrayList<>();
     FlexLayoutElement layout;
-    static final double maxHeight = 200;
+    FontAdapter big = FontRenderers.getCustomSize(20);
+
+
     public CategoryDisplay(ModuleType type, double x, double y, double width) {
         super(x, y, width, 0);
         this.type = type;
         for (Module module : ModuleRegistry.getModules()) {
-            if (module.getModuleType() == type) this.modules.add(module);
+            if (module.getModuleType() == type) {
+                this.modules.add(module);
+            }
         }
         List<ModuleDisplay> displays = new ArrayList<>();
         for (Module module : modules) {
-            displays.add(new ModuleDisplay(module,0,0,width));
+            displays.add(new ModuleDisplay(module, 0, 0, width));
         }
-        layout = new FlexLayoutElement(FlexLayoutElement.LayoutDirection.DOWN,x,y,width,maxHeight,3,displays.toArray(ModuleDisplay[]::new));
+        layout = new FlexLayoutElement(FlexLayoutElement.LayoutDirection.DOWN, x, y, width, maxHeight, 3, displays.toArray(ModuleDisplay[]::new));
 
         // this.setHeight(calcHeight());
     }
-
-
 
     @Override
     public void tickAnimations() {
         layout.tickAnimations();
     }
 
-    FontAdapter big = FontRenderers.getCustomSize(20);
-
     double headerHeight() {
-        return big.getFontHeight()+3*2;
+        return big.getFontHeight() + 3 * 2;
     }
 
     @Override
     public double getHeight() {
-        return headerHeight()+super.getHeight();
+        return headerHeight() + super.getHeight();
     }
 
     @Override
     public void render(MatrixStack stack, double mouseX, double mouseY) {
-        big.drawCenteredString(stack,type.getName(),getPositionX()+getWidth()/2d,getPositionY()+headerHeight()/2d-big.getFontHeight()/2d,1f,1f,1f,1f);
+        big.drawCenteredString(stack,
+                type.getName(),
+                getPositionX() + getWidth() / 2d,
+                getPositionY() + headerHeight() / 2d - big.getFontHeight() / 2d,
+                1f,
+                1f,
+                1f,
+                1f
+        );
         layout.setPositionX(getPositionX());
-        layout.setPositionY(getPositionY()+headerHeight());
+        layout.setPositionY(getPositionY() + headerHeight());
         layout.render(stack, mouseX, mouseY);
     }
 

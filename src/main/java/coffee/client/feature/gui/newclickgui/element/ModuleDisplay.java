@@ -10,6 +10,7 @@ import java.awt.Color;
 
 public class ModuleDisplay extends Element {
     Module module;
+
     public ModuleDisplay(Module module, double x, double y, double width) {
         super(x, y, width, 20);
         this.module = module;
@@ -22,9 +23,26 @@ public class ModuleDisplay extends Element {
 
     @Override
     public void render(MatrixStack stack, double mouseX, double mouseY) {
-        Renderer.R2D.renderRoundedQuad(stack,module.isEnabled()?new Color(0x607D8B):new Color(0x37474F),getPositionX(),getPositionY(),getPositionX()+getWidth(),getPositionY()+getHeight(),5,20);
-        FontRenderers.getRenderer().drawCenteredString(stack,module.getName(),getPositionX()+getWidth()/2d,getPositionY()+getHeight()/2d-FontRenderers.getRenderer()
-                .getFontHeight()/2d,1f,1f,1f,1f);
+        Renderer.R2D.renderRoundedQuad(
+                stack,
+                module.isEnabled() ? new Color(0x607D8B) : new Color(0x37474F),
+                getPositionX(),
+                getPositionY(),
+                getPositionX() + getWidth(),
+                getPositionY() + getHeight(),
+                5,
+                20
+        );
+        FontRenderers.getRenderer().drawCenteredString(
+                stack,
+                module.getName(),
+                getPositionX() + getWidth() / 2d,
+                getPositionY() + getHeight() / 2d - FontRenderers.getRenderer().getFontHeight() / 2d,
+                1f,
+                1f,
+                1f,
+                1f
+        );
     }
 
     @Override

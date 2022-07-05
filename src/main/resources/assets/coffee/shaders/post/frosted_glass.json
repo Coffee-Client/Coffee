@@ -4,7 +4,7 @@
   ],
   "passes": [
     {
-      "name": "coffee:test",
+      "name": "coffee:frosted_glass",
       "intarget": "minecraft:main",
       "outtarget": "swap",
       "uniforms": [
@@ -15,7 +15,7 @@
       ]
     },
     {
-      "name": "coffee:test",
+      "name": "coffee:frosted_glass",
       "intarget": "swap",
       "outtarget": "minecraft:main",
       "uniforms": [
@@ -26,7 +26,7 @@
       ]
     },
     {
-      "name": "coffee:test",
+      "name": "coffee:frosted_glass",
       "intarget": "minecraft:main",
       "outtarget": "swap",
       "uniforms": [
@@ -37,7 +37,7 @@
       ]
     },
     {
-      "name": "coffee:test",
+      "name": "coffee:frosted_glass",
       "intarget": "swap",
       "outtarget": "minecraft:main",
       "uniforms": [

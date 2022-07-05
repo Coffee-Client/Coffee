@@ -5,7 +5,7 @@
     "dstrgb": "1-srcalpha"
   },
   "vertex": "sobel",
-  "fragment": "coffee:test",
+  "fragment": "coffee:frosted_glass",
   "attributes": [ "Position" ],
   "samplers": [
     { "name": "DiffuseSampler" }

@@ -55,6 +55,8 @@ public class ClickGUI extends Screen implements FastTickable {
     double trackedScroll = 0;
     double introAnimation = 0;
     boolean closing = false;
+    boolean skipNextInit = false;
+    coffee.client.feature.module.impl.render.ClickGUI daModule = ModuleRegistry.getByClass(coffee.client.feature.module.impl.render.ClickGUI.class);
 
     private ClickGUI() {
         super(Text.of(""));
@@ -156,7 +158,6 @@ public class ClickGUI extends Screen implements FastTickable {
         //        this.real.particles.clear();
         this.real.shouldAdd = true;
     }
-    boolean skipNextInit = false;
 
     @Override
     public void resize(MinecraftClient client, int width, int height) {
@@ -220,8 +221,8 @@ public class ClickGUI extends Screen implements FastTickable {
             return;
         }
         double intp = easeInOutQuint(introAnimation);
-//        ShaderManager.BLUR.getEffect().setUniformValue("progress", (float) intp);
-//        ShaderManager.BLUR.render(delta);
+        //        ShaderManager.BLUR.getEffect().setUniformValue("progress", (float) intp);
+        //        ShaderManager.BLUR.render(delta);
         ShaderManager.FROSTED_GLASS_BLUR.getEffect().setUniformValue("Progress", (float) intp);
         ShaderManager.FROSTED_GLASS_BLUR.render(delta);
         MSAAFramebuffer.use(MSAAFramebuffer.MAX_SAMPLES, () -> renderIntern(matrices, mouseX, mouseY, delta));
@@ -314,7 +315,6 @@ public class ClickGUI extends Screen implements FastTickable {
         return super.mouseDragged(mouseX, mouseY1, button, deltaX, deltaY);
     }
 
-
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         for (Element element : elements) {
@@ -340,6 +340,9 @@ public class ClickGUI extends Screen implements FastTickable {
     @Override
     public void onFastTick() {
         double d = 0.03;
+        if (daModule.skipAnimation.getValue()) {
+            d = 1;
+        }
         if (closing) {
             d *= -1;
         }

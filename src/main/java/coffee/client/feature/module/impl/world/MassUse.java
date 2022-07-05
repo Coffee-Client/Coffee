@@ -22,6 +22,7 @@ import net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerInteractItemC2SPacket;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
@@ -74,18 +75,21 @@ public class MassUse extends Module {
                 }
 
                 case MassPlace -> {
-                    BlockHitResult r = (BlockHitResult) client.crosshairTarget;
-                    BlockPos p = r.getBlockPos();
                     if (pe.getPacket() instanceof PlayerInteractBlockC2SPacket) {
-                        for (int i = 0; i < uses.getValue(); i++) {
-                            PlayerInteractBlockC2SPacket pp = new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND,
-                                    r,
-                                    Utils.increaseAndCloseUpdateManager(CoffeeMain.client.world)
-                            );
-                            dontRepeat.add(pp);
-                            client.player.networkHandler.sendPacket(new PlayerActionC2SPacket(Action.START_DESTROY_BLOCK, p, Direction.UP));
-                            client.player.networkHandler.sendPacket(new PlayerActionC2SPacket(Action.STOP_DESTROY_BLOCK, p, Direction.UP));
-                            client.player.networkHandler.sendPacket(pp);
+                        HitResult hr = client.crosshairTarget;
+                        if (hr instanceof BlockHitResult r) {
+                            BlockPos p = r.getBlockPos();
+
+                            for (int i = 0; i < uses.getValue(); i++) {
+                                PlayerInteractBlockC2SPacket pp = new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND,
+                                        r,
+                                        Utils.increaseAndCloseUpdateManager(CoffeeMain.client.world)
+                                );
+                                dontRepeat.add(pp);
+                                client.player.networkHandler.sendPacket(new PlayerActionC2SPacket(Action.START_DESTROY_BLOCK, p, Direction.UP));
+                                client.player.networkHandler.sendPacket(new PlayerActionC2SPacket(Action.STOP_DESTROY_BLOCK, p, Direction.UP));
+                                client.player.networkHandler.sendPacket(pp);
+                            }
                         }
                     }
                 }

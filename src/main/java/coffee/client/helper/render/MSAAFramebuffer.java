@@ -28,7 +28,7 @@ public class MSAAFramebuffer extends Framebuffer {
     private int rboDepth;
     private boolean inUse;
 
-    private MSAAFramebuffer(int samples) {
+    public MSAAFramebuffer(int samples) {
         super(true);
         if (samples < MIN_SAMPLES || samples > MAX_SAMPLES) {
             throw new IllegalArgumentException(String.format("The number of samples should be >= %s and <= %s.", MIN_SAMPLES, MAX_SAMPLES));

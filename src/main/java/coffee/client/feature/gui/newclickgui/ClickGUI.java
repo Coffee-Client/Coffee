@@ -12,10 +12,13 @@ public class ClickGUI extends AAScreen {
     boolean initialized = false;
     boolean closing = false;
     double progress = 0;
+
     @Override
     protected void initInternal() {
         closing = false;
-        if (initialized) return;
+        if (initialized) {
+            return;
+        }
         initialized = true;
         double x = 5;
         for (ModuleType value : ModuleType.values()) {
@@ -38,7 +41,9 @@ public class ClickGUI extends AAScreen {
     @Override
     public void onFastTick() {
         double delta = 0.02;
-        if (closing) delta *= -1;
+        if (closing) {
+            delta *= -1;
+        }
         progress += delta;
         progress = MathHelper.clamp(progress, 0, 1);
         super.onFastTick();

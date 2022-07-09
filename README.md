@@ -9,7 +9,7 @@ A very based 1.19 client that was discontinued, now back in development and even
 ### How to install
 1. Get the latest release, `latest.jar`, from the `bin` directory in this repository.
 2. Drag `latest.jar` into your mods folder.
-3. Launch Minecraft with your Fabric launch profile.
+3. Launch Minecraft with your Fabric launcher profile.
 ## Using
 Simply press Right Shift to open the ClickGUI.
 

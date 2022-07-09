@@ -1,24 +1,24 @@
-# Coffee client
-A very based 1.18.2 client that was recently discontinued, now reuploaded and even better.
+# Coffee Client
+A very based 1.19 client that was discontinued, now back in development and even more based.
 
 ## Installing
-### You will need
-- Minecraft java
-- Fabric mod loader
+### You will need:
+- Minecraft: Java Edition
+- Fabric Mod Loader
 
 ### How to install
-1. Get the latest release from the `bin` folder in this repository
-2. Drag it into your mods folder
-3. Launch the game
+1. Get the latest release, `latest.jar`, from the `bin` directory in this repository.
+2. Drag `latest.jar` into your mods folder.
+3. Launch Minecraft with your Fabric launch profile.
 ## Using
-The client is very easy to use, although the clickgui is **not** bound by default. Use `.bind ClickGUI` to bind the module.
+Simply press Right Shift to open the ClickGUI.
 
-Everything else is pretty self explanatory.
-## Reporting bugs
-Go to the issues page and open an issue, make sure to attach everything needed. Describe the bug as precise as possible and attach a crash report / log files, if present.
+Everything else is pretty self-explanatory.
+## Reporting bugs:
+Go to the issues page and open an issue. Make sure to attach anything related. Describe the bug as precisely as possible, and attach related crash report/log files, if available.
 
 ## Making suggestions
-Go to the issues page and describe the suggestion as precisely as possible, explain exactly what you want to add to the client.
+Go to the issues page and describe the suggestion as descriptively as possible. Explain exactly what you want added to the client.
 
 ## Contributing
-Fork the project, add your code and make a pull request. **MAKE SURE TO TEST THE FEATURE BEFORE OPENING THE PULL REQUEST**
+Fork this repository, add your code, and make a pull request. **MAKE SURE TO TEST THE FEATURE BEFORE OPENING THE PULL REQUEST**

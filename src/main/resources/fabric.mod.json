@@ -7,7 +7,10 @@
   "authors": [
     "0x150"
   ],
-  "contributors": [],
+  "contributors": [
+    "Authom",
+    "Twelve"
+  ],
   "contact": {
     "homepage": "https://client.coffee",
     "sources": "https://github.com/Coffee-Client/Coffee"

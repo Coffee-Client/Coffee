@@ -53,6 +53,7 @@ import coffee.client.feature.module.impl.movement.Boost;
 import coffee.client.feature.module.impl.movement.ClickTP;
 import coffee.client.feature.module.impl.movement.EdgeJump;
 import coffee.client.feature.module.impl.movement.EdgeSneak;
+import coffee.client.feature.module.impl.movement.ElytraFly;
 import coffee.client.feature.module.impl.movement.EntityFly;
 import coffee.client.feature.module.impl.movement.Flight;
 import coffee.client.feature.module.impl.movement.IgnoreWorldBorder;
@@ -305,6 +306,7 @@ public class ModuleRegistry {
         registerModule(Radar.class);
         registerModule(CrystalAura.class);
         registerModule(SuperheroFX.class);
+        registerModule(ElytraFly.class);
 
         rebuildSharedModuleList();
 

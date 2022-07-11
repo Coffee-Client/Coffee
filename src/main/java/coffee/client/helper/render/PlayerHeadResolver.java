@@ -5,7 +5,6 @@
 package coffee.client.helper.render;
 
 import coffee.client.CoffeeMain;
-import coffee.client.helper.Texture;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.texture.NativeImageBackedTexture;
 import org.apache.logging.log4j.Level;

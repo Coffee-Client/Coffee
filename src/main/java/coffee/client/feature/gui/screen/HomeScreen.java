@@ -5,16 +5,16 @@
 package coffee.client.feature.gui.screen;
 
 import coffee.client.CoffeeMain;
-import coffee.client.feature.gui.clickgui.ParticleRenderer;
+import coffee.client.feature.gui.ParticleRenderer;
 import coffee.client.feature.gui.screen.base.ClientScreen;
 import coffee.client.feature.gui.widget.RoundButton;
-import coffee.client.helper.GameTexture;
-import coffee.client.helper.Texture;
 import coffee.client.helper.font.FontRenderers;
 import coffee.client.helper.font.adapter.FontAdapter;
+import coffee.client.helper.render.GameTexture;
 import coffee.client.helper.render.MSAAFramebuffer;
 import coffee.client.helper.render.PlayerHeadResolver;
 import coffee.client.helper.render.Renderer;
+import coffee.client.helper.render.Texture;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;

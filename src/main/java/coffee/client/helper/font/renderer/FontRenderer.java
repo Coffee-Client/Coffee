@@ -4,6 +4,7 @@
 
 package coffee.client.helper.font.renderer;
 
+import coffee.client.helper.util.Utils;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.render.BufferBuilder;
@@ -73,11 +74,13 @@ public class FontRenderer {
     }
 
     public void drawString(MatrixStack matrices, String s, float x, float y, float r, float g, float b, float a) {
+        float roundedX = (float) Utils.Math.roundToDecimal(x, 1);
+        float roundedY = (float) Utils.Math.roundToDecimal(y, 1);
         float r1 = r;
         float g1 = g;
         float b1 = b;
         matrices.push();
-        matrices.translate(x, y, 0);
+        matrices.translate(roundedX, roundedY, 0);
         matrices.scale(0.25F, 0.25F, 1f);
 
         RenderSystem.enableBlend();

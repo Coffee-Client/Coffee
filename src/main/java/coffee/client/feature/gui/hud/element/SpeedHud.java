@@ -5,11 +5,11 @@
 package coffee.client.feature.gui.hud.element;
 
 import coffee.client.CoffeeMain;
-import coffee.client.feature.gui.clickgui.theme.ThemeManager;
+import coffee.client.feature.gui.theme.ThemeManager;
 import coffee.client.feature.module.ModuleRegistry;
 import coffee.client.feature.module.impl.render.Hud;
-import coffee.client.helper.Timer;
 import coffee.client.helper.render.Renderer;
+import coffee.client.helper.util.Timer;
 import net.minecraft.client.util.math.MatrixStack;
 
 import java.util.ArrayList;

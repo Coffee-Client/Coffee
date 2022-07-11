@@ -42,9 +42,10 @@ final class SocksCommonUtils {
     }
 
     private static void ipv6toStr(StringBuilder sb, byte[] src, int fromHextet, int toHextet) {
+        int toHextet1 = toHextet;
         int i;
-        toHextet--;
-        for (i = fromHextet; i < toHextet; i++) {
+        toHextet1--;
+        for (i = fromHextet; i < toHextet1; i++) {
             appendHextet(sb, src, i);
             sb.append(ipv6hextetSeparator);
         }

@@ -4,9 +4,9 @@
 
 package coffee.client.feature.gui.notifications;
 
-import coffee.client.helper.GameTexture;
-import coffee.client.helper.Texture;
 import coffee.client.helper.font.FontRenderers;
+import coffee.client.helper.render.GameTexture;
+import coffee.client.helper.render.Texture;
 
 import java.awt.Color;
 import java.util.ArrayList;

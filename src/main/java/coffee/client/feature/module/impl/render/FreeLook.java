@@ -11,7 +11,7 @@ import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleRegistry;
 import coffee.client.feature.module.ModuleType;
 import coffee.client.helper.Keybind;
-import coffee.client.helper.Rotations;
+import coffee.client.helper.util.Rotations;
 import lombok.Getter;
 import net.minecraft.client.option.Perspective;
 import net.minecraft.client.util.math.MatrixStack;

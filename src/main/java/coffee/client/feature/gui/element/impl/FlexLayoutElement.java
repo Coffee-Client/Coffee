@@ -5,19 +5,24 @@ import coffee.client.helper.render.ClipStack;
 import coffee.client.helper.render.Scroller;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.math.Vec2f;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class FlexLayoutElement extends Element {
-    @Getter
     List<Element> elements;
     LayoutDirection direction;
     double padding;
     double viewportHeight, viewportWidth;
     Scroller scroller = new Scroller(0);
+    @Getter
+    @Setter
+    Vec2f heightMulMatrix = new Vec2f(1, 1);
 
     public FlexLayoutElement(FlexLayoutElement.LayoutDirection direction, double x, double y, double width, double height, double padding, Element... elements) {
         super(x, y, width, height);
@@ -45,25 +50,29 @@ public class FlexLayoutElement extends Element {
         setHeight(getActualHeight());
     }
 
+    public List<Element> getElements() {
+        return elements.stream().filter(Element::isActive).collect(Collectors.toList());
+    }
+
     public double getActualHeight() {
         if (direction == LayoutDirection.DOWN) {
-            return elements.stream().map(element -> element.getHeight() + padding).reduce(Double::sum).orElse(0d) - padding;
+            return getElements().stream().map(element -> element.getHeight() + padding).reduce(Double::sum).orElse(padding) - padding;
         } else {
-            return elements.stream().map(Element::getHeight).max(Comparator.comparingDouble(value -> value)).orElse(0d);
+            return getElements().stream().map(Element::getHeight).max(Comparator.comparingDouble(value -> value)).orElse(0d);
         }
     }
 
     public double getActualWidth() {
         if (direction == LayoutDirection.RIGHT) {
-            return elements.stream().map(element -> element.getWidth() + padding).reduce(Double::sum).orElse(0d) - padding;
+            return getElements().stream().map(element -> element.getWidth() + padding).reduce(Double::sum).orElse(padding) - padding;
         } else {
-            return elements.stream().map(Element::getWidth).max(Comparator.comparingDouble(value -> value)).orElse(0d);
+            return getElements().stream().map(Element::getWidth).max(Comparator.comparingDouble(value -> value)).orElse(0d);
         }
     }
 
     @Override
     public void tickAnimations() {
-        for (Element element : elements) {
+        for (Element element : getElements()) {
             element.tickAnimations();
         }
         scroller.tick();
@@ -72,10 +81,10 @@ public class FlexLayoutElement extends Element {
     @Override
     public void render(MatrixStack stack, double mouseX, double mouseY) {
         double posX = 0, posY = 0;
-        ClipStack.globalInstance.addWindow(stack, getBounds());
+        ClipStack.globalInstance.addWindow(stack, getBounds().multiplyWidthHeight(heightMulMatrix));
         stack.push();
         stack.translate(0, scroller.getScroll(), 0);
-        for (Element element : elements) {
+        for (Element element : getElements()) {
             element.setPositionX(getPositionX() + posX * direction.mulX);
             element.setPositionY(getPositionY() + posY * direction.mulY);
             if (element.getPositionY() + scroller.getScroll() <= getPositionY() + getHeight() && element.getPositionY() + element.getHeight() + scroller.getScroll() >= getPositionY() && element.getPositionX() >= getPositionX() && element.getPositionX() <= getPositionX() + getWidth()) {
@@ -155,6 +164,14 @@ public class FlexLayoutElement extends Element {
             return true;
         }
         return false;
+    }
+
+    public void updateScroller() {
+        double viewport = getActualHeight();
+        double current = getHeight();
+        double scrollToAllow = Math.max(viewport - current, 0);
+        scroller.setBounds(0, scrollToAllow);
+        scroller.scroll(0);
     }
 
     private boolean iterateOverChildren(Function<Element, Boolean> supp) {

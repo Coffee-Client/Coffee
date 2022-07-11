@@ -8,7 +8,7 @@ import coffee.client.CoffeeMain;
 import coffee.client.feature.config.DoubleSetting;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
-import coffee.client.helper.Rotations;
+import coffee.client.helper.util.Rotations;
 import coffee.client.helper.util.Utils;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.packet.c2s.play.PlayerInteractItemC2SPacket;

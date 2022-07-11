@@ -39,7 +39,7 @@ public class Socks5InitialResponseDecoder extends ReplayingDecoder<Socks5Initial
     }
 
     @Override
-    protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
+    protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) {
         try {
             switch (state()) {
                 case INIT: {
@@ -70,14 +70,15 @@ public class Socks5InitialResponseDecoder extends ReplayingDecoder<Socks5Initial
     }
 
     private void fail(List<Object> out, Exception cause) {
-        if (!(cause instanceof DecoderException)) {
-            cause = new DecoderException(cause);
+        Exception cause1 = cause;
+        if (!(cause1 instanceof DecoderException)) {
+            cause1 = new DecoderException(cause1);
         }
 
         checkpoint(State.FAILURE);
 
         Socks5Message m = new DefaultSocks5InitialResponse(Socks5AuthMethod.UNACCEPTED);
-        m.setDecoderResult(DecoderResult.failure(cause));
+        m.setDecoderResult(DecoderResult.failure(cause1));
         out.add(m);
     }
 

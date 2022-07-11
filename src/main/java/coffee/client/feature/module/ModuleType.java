@@ -4,8 +4,8 @@
 
 package coffee.client.feature.module;
 
-import coffee.client.helper.GameTexture;
-import coffee.client.helper.Texture;
+import coffee.client.helper.render.GameTexture;
+import coffee.client.helper.render.Texture;
 
 public enum ModuleType {
     RENDER("Render", GameTexture.ICONS_RENDER.getWhere()),

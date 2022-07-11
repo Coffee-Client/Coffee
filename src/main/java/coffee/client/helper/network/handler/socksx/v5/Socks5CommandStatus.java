@@ -46,28 +46,19 @@ public class Socks5CommandStatus implements Comparable<Socks5CommandStatus> {
     }
 
     public static Socks5CommandStatus valueOf(byte b) {
-        switch (b) {
-            case 0x00:
-                return SUCCESS;
-            case 0x01:
-                return FAILURE;
-            case 0x02:
-                return FORBIDDEN;
-            case 0x03:
-                return NETWORK_UNREACHABLE;
-            case 0x04:
-                return HOST_UNREACHABLE;
-            case 0x05:
-                return CONNECTION_REFUSED;
-            case 0x06:
-                return TTL_EXPIRED;
-            case 0x07:
-                return COMMAND_UNSUPPORTED;
-            case 0x08:
-                return ADDRESS_UNSUPPORTED;
-        }
+        return switch (b) {
+            case 0x00 -> SUCCESS;
+            case 0x01 -> FAILURE;
+            case 0x02 -> FORBIDDEN;
+            case 0x03 -> NETWORK_UNREACHABLE;
+            case 0x04 -> HOST_UNREACHABLE;
+            case 0x05 -> CONNECTION_REFUSED;
+            case 0x06 -> TTL_EXPIRED;
+            case 0x07 -> COMMAND_UNSUPPORTED;
+            case 0x08 -> ADDRESS_UNSUPPORTED;
+            default -> new Socks5CommandStatus(b);
+        };
 
-        return new Socks5CommandStatus(b);
     }
 
     public byte byteValue() {

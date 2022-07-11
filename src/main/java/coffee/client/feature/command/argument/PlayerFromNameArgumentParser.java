@@ -9,7 +9,6 @@ import coffee.client.feature.command.exception.CommandException;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 
-@SuppressWarnings("ClassCanBeRecord")
 public class PlayerFromNameArgumentParser implements ArgumentParser<PlayerEntity> {
     final boolean ignoreCase;
 

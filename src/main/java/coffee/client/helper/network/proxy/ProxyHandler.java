@@ -2,7 +2,6 @@ package coffee.client.helper.network.proxy;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelDuplexHandler;
-import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
@@ -14,6 +13,7 @@ import io.netty.util.concurrent.Future;
 import io.netty.util.internal.ObjectUtil;
 import io.netty.util.internal.logging.InternalLogger;
 import io.netty.util.internal.logging.InternalLoggerFactory;
+import org.jetbrains.annotations.NotNull;
 
 import java.net.SocketAddress;
 import java.nio.channels.ConnectionPendingException;
@@ -39,12 +39,9 @@ public abstract class ProxyHandler extends ChannelDuplexHandler {
     private boolean suppressChannelReadComplete;
     private boolean flushedPrematurely;
     private Future<?> connectTimeoutFuture;
-    private final ChannelFutureListener writeListener = new ChannelFutureListener() {
-        @Override
-        public void operationComplete(ChannelFuture future) throws Exception {
-            if (!future.isSuccess()) {
-                setConnectFailure(future.cause());
-            }
+    private final ChannelFutureListener writeListener = future -> {
+        if (!future.isSuccess()) {
+            setConnectFailure(future.cause());
         }
     };
 
@@ -112,11 +109,12 @@ public abstract class ProxyHandler extends ChannelDuplexHandler {
      * the timeout, the connection attempt will be failed.
      */
     public final void setConnectTimeoutMillis(long connectTimeoutMillis) {
-        if (connectTimeoutMillis <= 0) {
-            connectTimeoutMillis = 0;
+        long connectTimeoutMillis1 = connectTimeoutMillis;
+        if (connectTimeoutMillis1 <= 0) {
+            connectTimeoutMillis1 = 0;
         }
 
-        this.connectTimeoutMillis = connectTimeoutMillis;
+        this.connectTimeoutMillis = connectTimeoutMillis1;
     }
 
     @Override
@@ -128,29 +126,29 @@ public abstract class ProxyHandler extends ChannelDuplexHandler {
             // channelActive() event has been fired already, which means this.channelActive() will
             // not be invoked. We have to initialize here instead.
             sendInitialMessage(ctx);
-        } else {
-            // channelActive() event has not been fired yet.  this.channelOpen() will be invoked
-            // and initialization will occur there.
         }
+        // channelActive() event has not been fired yet.  this.channelOpen() will be invoked
+        // and initialization will occur there.
+
     }
 
     /**
      * Adds the codec handlers required to communicate with the proxy server.
      */
-    protected abstract void addCodec(ChannelHandlerContext ctx) throws Exception;
+    protected abstract void addCodec(ChannelHandlerContext ctx);
 
     /**
      * Removes the encoders added in {@link #addCodec(ChannelHandlerContext)}.
      */
-    protected abstract void removeEncoder(ChannelHandlerContext ctx) throws Exception;
+    protected abstract void removeEncoder(ChannelHandlerContext ctx);
 
     /**
      * Removes the decoders added in {@link #addCodec(ChannelHandlerContext)}.
      */
-    protected abstract void removeDecoder(ChannelHandlerContext ctx) throws Exception;
+    protected abstract void removeDecoder(ChannelHandlerContext ctx);
 
     @Override
-    public final void connect(ChannelHandlerContext ctx, SocketAddress remoteAddress, SocketAddress localAddress, ChannelPromise promise) throws Exception {
+    public final void connect(ChannelHandlerContext ctx, SocketAddress remoteAddress, SocketAddress localAddress, ChannelPromise promise) {
 
         if (destinationAddress != null) {
             promise.setFailure(new ConnectionPendingException());
@@ -162,7 +160,7 @@ public abstract class ProxyHandler extends ChannelDuplexHandler {
     }
 
     @Override
-    public final void channelActive(ChannelHandlerContext ctx) throws Exception {
+    public final void channelActive(@NotNull ChannelHandlerContext ctx) throws Exception {
         sendInitialMessage(ctx);
         ctx.fireChannelActive();
     }
@@ -174,12 +172,9 @@ public abstract class ProxyHandler extends ChannelDuplexHandler {
     private void sendInitialMessage(final ChannelHandlerContext ctx) throws Exception {
         final long connectTimeoutMillis = this.connectTimeoutMillis;
         if (connectTimeoutMillis > 0) {
-            connectTimeoutFuture = ctx.executor().schedule(new Runnable() {
-                @Override
-                public void run() {
-                    if (!connectPromise.isDone()) {
-                        setConnectFailure(new ProxyConnectException(exceptionMessage("timeout")));
-                    }
+            connectTimeoutFuture = ctx.executor().schedule(() -> {
+                if (!connectPromise.isDone()) {
+                    setConnectFailure(new ProxyConnectException(exceptionMessage("timeout")));
                 }
             }, connectTimeoutMillis, TimeUnit.MILLISECONDS);
         }
@@ -197,7 +192,7 @@ public abstract class ProxyHandler extends ChannelDuplexHandler {
      *
      * @return the initial message, or {@code null} if the proxy server is expected to send the first message instead
      */
-    protected abstract Object newInitialMessage(ChannelHandlerContext ctx) throws Exception;
+    protected abstract Object newInitialMessage(ChannelHandlerContext ctx);
 
     /**
      * Sends the specified message to the proxy server.  Use this method to send a response to the proxy server in
@@ -208,7 +203,7 @@ public abstract class ProxyHandler extends ChannelDuplexHandler {
     }
 
     @Override
-    public final void channelInactive(ChannelHandlerContext ctx) throws Exception {
+    public final void channelInactive(@NotNull ChannelHandlerContext ctx) {
         if (finished) {
             ctx.fireChannelInactive();
         } else {
@@ -218,7 +213,7 @@ public abstract class ProxyHandler extends ChannelDuplexHandler {
     }
 
     @Override
-    public final void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+    public final void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         if (finished) {
             ctx.fireExceptionCaught(cause);
         } else {
@@ -228,7 +223,7 @@ public abstract class ProxyHandler extends ChannelDuplexHandler {
     }
 
     @Override
-    public final void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+    public final void channelRead(@NotNull ChannelHandlerContext ctx, @NotNull Object msg) {
         if (finished) {
             // Received a message after the connection has been established; pass through.
             suppressChannelReadComplete = false;
@@ -312,18 +307,19 @@ public abstract class ProxyHandler extends ChannelDuplexHandler {
     }
 
     private void setConnectFailure(Throwable cause) {
+        Throwable cause1 = cause;
         finished = true;
         cancelConnectTimeoutFuture();
 
         if (!connectPromise.isDone()) {
 
-            if (!(cause instanceof ProxyConnectException)) {
-                cause = new ProxyConnectException(exceptionMessage(cause.toString()), cause);
+            if (!(cause1 instanceof ProxyConnectException)) {
+                cause1 = new ProxyConnectException(exceptionMessage(cause1.toString()), cause1);
             }
 
             safeRemoveDecoder();
             safeRemoveEncoder();
-            failPendingWritesAndClose(cause);
+            failPendingWritesAndClose(cause1);
         }
     }
 
@@ -366,7 +362,7 @@ public abstract class ProxyHandler extends ChannelDuplexHandler {
     }
 
     @Override
-    public final void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+    public final void channelReadComplete(ChannelHandlerContext ctx) {
         if (suppressChannelReadComplete) {
             suppressChannelReadComplete = false;
 
@@ -377,7 +373,7 @@ public abstract class ProxyHandler extends ChannelDuplexHandler {
     }
 
     @Override
-    public final void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
+    public final void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) {
         if (finished) {
             writePendingWrites();
             ctx.write(msg, promise);
@@ -387,7 +383,7 @@ public abstract class ProxyHandler extends ChannelDuplexHandler {
     }
 
     @Override
-    public final void flush(ChannelHandlerContext ctx) throws Exception {
+    public final void flush(ChannelHandlerContext ctx) {
         if (finished) {
             writePendingWrites();
             ctx.flush();

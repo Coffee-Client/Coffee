@@ -9,9 +9,9 @@ import coffee.client.feature.command.Command;
 import coffee.client.feature.command.coloring.ArgumentType;
 import coffee.client.feature.command.coloring.PossibleArgument;
 import coffee.client.feature.command.exception.CommandException;
-import coffee.client.helper.Texture;
 import coffee.client.helper.event.EventType;
 import coffee.client.helper.event.Events;
+import coffee.client.helper.render.Texture;
 import coffee.client.helper.util.Utils;
 import com.google.gson.Gson;
 import org.apache.commons.io.FileUtils;
@@ -68,8 +68,8 @@ public class Taco extends Command {
         } catch (Exception ignored) {
 
         }
-        if (!gifPath.exists()) //noinspection ResultOfMethodCallIgnored
-        {
+        if (!gifPath.exists()) {
+            //noinspection ResultOfMethodCallIgnored
             gifPath.mkdir();
         }
         try {

@@ -25,11 +25,6 @@ public class ProxyManagerScreen extends CenterOverlayScreen {
         super(p, "Proxy manager", "Manage your proxy connection");
     }
 
-    @Override
-    public void onFastTick() {
-        super.onFastTick();
-    }
-
     boolean canApply() {
         String currentIp = this.ip.get();
         if (currentIp.isEmpty()) {

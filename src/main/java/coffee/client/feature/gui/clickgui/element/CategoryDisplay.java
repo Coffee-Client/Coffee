@@ -1,4 +1,4 @@
-package coffee.client.feature.gui.newclickgui.element;
+package coffee.client.feature.gui.clickgui.element;
 
 import coffee.client.feature.gui.element.Element;
 import coffee.client.feature.gui.element.impl.FlexLayoutElement;
@@ -7,17 +7,20 @@ import coffee.client.feature.module.ModuleRegistry;
 import coffee.client.feature.module.ModuleType;
 import coffee.client.helper.font.FontRenderers;
 import coffee.client.helper.font.adapter.FontAdapter;
+import coffee.client.helper.render.Renderer;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.util.math.MatrixStack;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CategoryDisplay extends Element {
-    static final double maxHeight = 200;
+    static final double maxHeight = 300;
     ModuleType type;
     List<Module> modules = new ArrayList<>();
     FlexLayoutElement layout;
-    FontAdapter big = FontRenderers.getCustomSize(20);
+    FontAdapter titleRenderer = FontRenderers.getRenderer();
 
 
     public CategoryDisplay(ModuleType type, double x, double y, double width) {
@@ -30,11 +33,15 @@ public class CategoryDisplay extends Element {
         }
         List<ModuleDisplay> displays = new ArrayList<>();
         for (Module module : modules) {
-            displays.add(new ModuleDisplay(module, 0, 0, width));
+            displays.add(new ModuleDisplay(module, 0, 0, width - 4));
         }
-        layout = new FlexLayoutElement(FlexLayoutElement.LayoutDirection.DOWN, x, y, width, maxHeight, 3, displays.toArray(ModuleDisplay[]::new));
+        layout = new FlexLayoutElement(FlexLayoutElement.LayoutDirection.DOWN, x + 2, y, width - 4, maxHeight, 2, displays.toArray(ModuleDisplay[]::new));
 
-        // this.setHeight(calcHeight());
+        double nh = Math.min(layout.getActualHeight(), maxHeight);
+        if (nh != 0) {
+            nh += 2;
+        }
+        setHeight(nh);
     }
 
     @Override
@@ -43,26 +50,46 @@ public class CategoryDisplay extends Element {
     }
 
     double headerHeight() {
-        return big.getFontHeight() + 3 * 2;
+        return Math.round(titleRenderer.getFontHeight() + 5 * 2);
     }
 
     @Override
     public double getHeight() {
-        return headerHeight() + super.getHeight();
+        return Math.round(headerHeight() + super.getHeight());
     }
 
     @Override
     public void render(MatrixStack stack, double mouseX, double mouseY) {
-        big.drawCenteredString(stack,
+        double nh = Math.min(layout.getActualHeight(), maxHeight);
+        if (nh != 0) {
+            nh += 2;
+        }
+        setHeight(nh);
+        layout.updateScroller();
+        Renderer.R2D.renderRoundedQuadWithShadow(stack,
+                new Color(20, 20, 20),
+                getPositionX(),
+                getPositionY(),
+                getPositionX() + getWidth(),
+                getPositionY() + getHeight(),
+                3,
+                10
+        );
+        double iconPad = 4;
+        double iconDims = headerHeight() - iconPad * 2;
+        RenderSystem.setShaderTexture(0, type.getTex());
+
+        Renderer.R2D.renderTexture(stack, getPositionX() + iconPad, getPositionY() + iconPad, iconDims, iconDims, 0, 0, iconDims, iconDims, iconDims, iconDims);
+        titleRenderer.drawString(stack,
                 type.getName(),
-                getPositionX() + getWidth() / 2d,
-                getPositionY() + headerHeight() / 2d - big.getFontHeight() / 2d,
+                (float) (getPositionX() + iconDims + iconPad * 2),
+                (float) (getPositionY() + headerHeight() / 2d - Math.round(titleRenderer.getFontHeight()) / 2d),
                 1f,
                 1f,
                 1f,
                 1f
         );
-        layout.setPositionX(getPositionX());
+        layout.setPositionX(getPositionX() + 2);
         layout.setPositionY(getPositionY() + headerHeight());
         layout.render(stack, mouseX, mouseY);
     }

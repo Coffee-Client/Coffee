@@ -1,7 +1,7 @@
 package coffee.client.feature.gui.element.impl;
 
 import coffee.client.feature.gui.element.Element;
-import coffee.client.helper.GameTexture;
+import coffee.client.helper.render.GameTexture;
 import coffee.client.helper.render.Rectangle;
 import coffee.client.helper.render.Renderer;
 import com.mojang.blaze3d.systems.RenderSystem;

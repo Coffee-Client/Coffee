@@ -57,25 +57,26 @@ public final class SocksCmdResponse extends SocksResponse {
      */
     public SocksCmdResponse(SocksCmdStatus cmdStatus, SocksAddressType addressType, String host, int port) {
         super(SocksResponseType.CMD);
+        String host1 = host;
         ObjectUtil.checkNotNull(cmdStatus, "cmdStatus");
         ObjectUtil.checkNotNull(addressType, "addressType");
-        if (host != null) {
+        if (host1 != null) {
             switch (addressType) {
                 case IPv4:
-                    if (!NetUtil.isValidIpV4Address(host)) {
-                        throw new IllegalArgumentException(host + " is not a valid IPv4 address");
+                    if (!NetUtil.isValidIpV4Address(host1)) {
+                        throw new IllegalArgumentException(host1 + " is not a valid IPv4 address");
                     }
                     break;
                 case DOMAIN:
-                    String asciiHost = IDN.toASCII(host);
+                    String asciiHost = IDN.toASCII(host1);
                     if (asciiHost.length() > 255) {
-                        throw new IllegalArgumentException(host + " IDN: " + asciiHost + " exceeds 255 char limit");
+                        throw new IllegalArgumentException(host1 + " IDN: " + asciiHost + " exceeds 255 char limit");
                     }
-                    host = asciiHost;
+                    host1 = asciiHost;
                     break;
                 case IPv6:
-                    if (!NetUtil.isValidIpV6Address(host)) {
-                        throw new IllegalArgumentException(host + " is not a valid IPv6 address");
+                    if (!NetUtil.isValidIpV6Address(host1)) {
+                        throw new IllegalArgumentException(host1 + " is not a valid IPv6 address");
                     }
                     break;
                 case UNKNOWN:
@@ -87,7 +88,7 @@ public final class SocksCmdResponse extends SocksResponse {
         }
         this.cmdStatus = cmdStatus;
         this.addressType = addressType;
-        this.host = host;
+        this.host = host1;
         this.port = port;
     }
 
@@ -138,13 +139,12 @@ public final class SocksCmdResponse extends SocksResponse {
         byteBuf.writeByte(0x00);
         byteBuf.writeByte(addressType.byteValue());
         switch (addressType) {
-            case IPv4: {
+            case IPv4 -> {
                 byte[] hostContent = host == null ? IPv4_HOSTNAME_ZEROED : NetUtil.createByteArrayFromIpAddressString(host);
                 byteBuf.writeBytes(hostContent);
                 byteBuf.writeShort(port);
-                break;
             }
-            case DOMAIN: {
+            case DOMAIN -> {
                 if (host != null) {
                     byteBuf.writeByte(host.length());
                     byteBuf.writeCharSequence(host, CharsetUtil.US_ASCII);
@@ -153,13 +153,11 @@ public final class SocksCmdResponse extends SocksResponse {
                     byteBuf.writeBytes(DOMAIN_ZEROED);
                 }
                 byteBuf.writeShort(port);
-                break;
             }
-            case IPv6: {
+            case IPv6 -> {
                 byte[] hostContent = host == null ? IPv6_HOSTNAME_ZEROED : NetUtil.createByteArrayFromIpAddressString(host);
                 byteBuf.writeBytes(hostContent);
                 byteBuf.writeShort(port);
-                break;
             }
         }
     }

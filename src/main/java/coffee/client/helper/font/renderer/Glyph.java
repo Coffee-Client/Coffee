@@ -4,7 +4,7 @@
 
 package coffee.client.helper.font.renderer;
 
-import coffee.client.helper.Texture;
+import coffee.client.helper.render.Texture;
 import coffee.client.helper.util.Utils;
 import lombok.Getter;
 

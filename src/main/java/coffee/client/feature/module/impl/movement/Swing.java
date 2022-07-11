@@ -5,7 +5,7 @@
 package coffee.client.feature.module.impl.movement;
 
 import coffee.client.CoffeeMain;
-import coffee.client.feature.gui.clickgui.theme.ThemeManager;
+import coffee.client.feature.gui.theme.ThemeManager;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
 import coffee.client.helper.event.EventType;

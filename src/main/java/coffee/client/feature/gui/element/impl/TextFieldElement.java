@@ -8,6 +8,7 @@ import coffee.client.helper.render.ClipStack;
 import coffee.client.helper.render.Cursor;
 import coffee.client.helper.render.Rectangle;
 import coffee.client.helper.render.Renderer;
+import lombok.Setter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
@@ -18,6 +19,7 @@ import java.awt.Color;
 
 public class TextFieldElement extends Element implements HasSpecialCursor {
     protected final String suggestion;
+    @Setter
     public Runnable changeListener = () -> {
     };
     protected String text = "";
@@ -99,7 +101,7 @@ public class TextFieldElement extends Element implements HasSpecialCursor {
             selectionEnd = cursor;
         } else if (mods == ((MinecraftClient.IS_SYSTEM_MAC ? GLFW.GLFW_MOD_SUPER : GLFW.GLFW_MOD_CONTROL) | GLFW.GLFW_MOD_SHIFT) && key == GLFW.GLFW_KEY_A) {
             resetSelection();
-        } else if (key == GLFW.GLFW_KEY_ENTER || key == GLFW.GLFW_KEY_KP_ENTER) {
+        } else if (key == GLFW.GLFW_KEY_ENTER || key == GLFW.GLFW_KEY_KP_ENTER || key == GLFW.GLFW_KEY_ESCAPE) {
             setFocused(false);
             return true;
         }

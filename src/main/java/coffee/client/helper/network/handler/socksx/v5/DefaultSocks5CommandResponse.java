@@ -38,22 +38,23 @@ public final class DefaultSocks5CommandResponse extends AbstractSocks5Message im
 
     public DefaultSocks5CommandResponse(Socks5CommandStatus status, Socks5AddressType bndAddrType, String bndAddr, int bndPort) {
 
+        String bndAddr1 = bndAddr;
         ObjectUtil.checkNotNull(status, "status");
         ObjectUtil.checkNotNull(bndAddrType, "bndAddrType");
 
-        if (bndAddr != null) {
+        if (bndAddr1 != null) {
             if (bndAddrType == Socks5AddressType.IPv4) {
-                if (!NetUtil.isValidIpV4Address(bndAddr)) {
-                    throw new IllegalArgumentException("bndAddr: " + bndAddr + " (expected: a valid IPv4 address)");
+                if (!NetUtil.isValidIpV4Address(bndAddr1)) {
+                    throw new IllegalArgumentException("bndAddr: " + bndAddr1 + " (expected: a valid IPv4 address)");
                 }
             } else if (bndAddrType == Socks5AddressType.DOMAIN) {
-                bndAddr = IDN.toASCII(bndAddr);
-                if (bndAddr.length() > 255) {
-                    throw new IllegalArgumentException("bndAddr: " + bndAddr + " (expected: less than 256 chars)");
+                bndAddr1 = IDN.toASCII(bndAddr1);
+                if (bndAddr1.length() > 255) {
+                    throw new IllegalArgumentException("bndAddr: " + bndAddr1 + " (expected: less than 256 chars)");
                 }
             } else if (bndAddrType == Socks5AddressType.IPv6) {
-                if (!NetUtil.isValidIpV6Address(bndAddr)) {
-                    throw new IllegalArgumentException("bndAddr: " + bndAddr + " (expected: a valid IPv6 address)");
+                if (!NetUtil.isValidIpV6Address(bndAddr1)) {
+                    throw new IllegalArgumentException("bndAddr: " + bndAddr1 + " (expected: a valid IPv6 address)");
                 }
             }
         }
@@ -63,7 +64,7 @@ public final class DefaultSocks5CommandResponse extends AbstractSocks5Message im
         }
         this.status = status;
         this.bndAddrType = bndAddrType;
-        this.bndAddr = bndAddr;
+        this.bndAddr = bndAddr1;
         this.bndPort = bndPort;
     }
 

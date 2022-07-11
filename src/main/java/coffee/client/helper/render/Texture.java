@@ -2,7 +2,7 @@
  * Copyright (c) 2022 Coffee client, 0x150 and contributors. See copyright file in project root.
  */
 
-package coffee.client.helper;
+package coffee.client.helper.render;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.util.Identifier;

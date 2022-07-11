@@ -5,7 +5,7 @@
 package coffee.client.feature.gui.hud.element;
 
 import coffee.client.CoffeeMain;
-import coffee.client.feature.gui.clickgui.theme.ThemeManager;
+import coffee.client.feature.gui.theme.ThemeManager;
 import coffee.client.helper.font.FontRenderers;
 import coffee.client.helper.render.Renderer;
 import net.minecraft.client.util.math.MatrixStack;

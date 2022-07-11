@@ -10,7 +10,6 @@ import java.util.List;
 /**
  * A group of settings
  */
-@SuppressWarnings("ClassCanBeRecord")
 public class SettingsGroup {
     final String name;
     final String description;

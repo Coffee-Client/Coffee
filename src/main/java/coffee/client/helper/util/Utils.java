@@ -5,8 +5,8 @@
 package coffee.client.helper.util;
 
 import coffee.client.CoffeeMain;
-import coffee.client.helper.Texture;
 import coffee.client.helper.font.adapter.FontAdapter;
+import coffee.client.helper.render.Texture;
 import coffee.client.mixin.ClientWorldMixin;
 import coffee.client.mixin.IMinecraftClientMixin;
 import coffee.client.mixin.IRenderTickCounterMixin;

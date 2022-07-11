@@ -1,9 +1,11 @@
 package coffee.client.helper.network.proxy;
 
 
+import java.io.Serial;
 import java.net.ConnectException;
 
 public class ProxyConnectException extends ConnectException {
+    @Serial
     private static final long serialVersionUID = 5211364632246265538L;
 
     public ProxyConnectException() {

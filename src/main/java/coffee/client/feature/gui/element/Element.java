@@ -42,4 +42,8 @@ public abstract class Element {
     public boolean inBounds(double x, double y) {
         return getBounds().contains(x, y);
     }
+
+    public boolean isActive() {
+        return true;
+    }
 }

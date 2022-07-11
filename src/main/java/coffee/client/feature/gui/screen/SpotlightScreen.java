@@ -12,14 +12,14 @@ import coffee.client.feature.gui.FastTickable;
 import coffee.client.feature.gui.screen.base.ClientScreen;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleRegistry;
-import coffee.client.helper.GameTexture;
-import coffee.client.helper.Texture;
 import coffee.client.helper.font.FontRenderers;
 import coffee.client.helper.font.adapter.FontAdapter;
 import coffee.client.helper.manager.ShaderManager;
 import coffee.client.helper.render.ClipStack;
+import coffee.client.helper.render.GameTexture;
 import coffee.client.helper.render.Rectangle;
 import coffee.client.helper.render.Renderer;
+import coffee.client.helper.render.Texture;
 import coffee.client.helper.util.Transitions;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
@@ -729,10 +729,6 @@ public class SpotlightScreen extends ClientScreen implements FastTickable {
             selectionEnd = cursor;
 
             cursorChanged();
-        }
-
-        public boolean isFocused() {
-            return focused;
         }
 
         public void setFocused(boolean focused) {

@@ -37,7 +37,7 @@ public class SocksCmdResponseDecoder extends ReplayingDecoder<SocksCmdResponseDe
     }
 
     @Override
-    protected void decode(ChannelHandlerContext ctx, ByteBuf byteBuf, List<Object> out) throws Exception {
+    protected void decode(ChannelHandlerContext ctx, ByteBuf byteBuf, List<Object> out) {
         switch (state()) {
             case CHECK_PROTOCOL_VERSION: {
                 if (byteBuf.readByte() != SocksProtocolVersion.SOCKS5.byteValue()) {
@@ -54,32 +54,28 @@ public class SocksCmdResponseDecoder extends ReplayingDecoder<SocksCmdResponseDe
             }
             case READ_CMD_ADDRESS: {
                 switch (addressType) {
-                    case IPv4: {
+                    case IPv4 -> {
                         String host = NetUtil.intToIpAddress(byteBuf.readInt());
                         int port = byteBuf.readUnsignedShort();
                         out.add(new SocksCmdResponse(cmdStatus, addressType, host, port));
-                        break;
                     }
-                    case DOMAIN: {
+                    case DOMAIN -> {
                         int fieldLength = byteBuf.readByte();
                         String host = SocksCommonUtils.readUsAscii(byteBuf, fieldLength);
                         int port = byteBuf.readUnsignedShort();
                         out.add(new SocksCmdResponse(cmdStatus, addressType, host, port));
-                        break;
                     }
-                    case IPv6: {
+                    case IPv6 -> {
                         byte[] bytes = new byte[16];
                         byteBuf.readBytes(bytes);
                         String host = SocksCommonUtils.ipv6toStr(bytes);
                         int port = byteBuf.readUnsignedShort();
                         out.add(new SocksCmdResponse(cmdStatus, addressType, host, port));
-                        break;
                     }
-                    case UNKNOWN: {
+                    case UNKNOWN -> {
                         out.add(SocksCommonUtils.UNKNOWN_SOCKS_RESPONSE);
-                        break;
                     }
-                    default: {
+                    default -> {
                         throw new Error();
                     }
                 }

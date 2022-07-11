@@ -67,7 +67,7 @@ public class SocksPortUnificationServerHandler extends ByteToMessageDecoder {
     }
 
     @Override
-    protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
+    protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) {
         final int readerIndex = in.readerIndex();
         if (in.writerIndex() == readerIndex) {
             return;
@@ -78,21 +78,22 @@ public class SocksPortUnificationServerHandler extends ByteToMessageDecoder {
         SocksVersion version = SocksVersion.valueOf(versionVal);
 
         switch (version) {
-            case SOCKS4a:
+            case SOCKS4a -> {
                 logKnownVersion(ctx, version);
                 p.addAfter(ctx.name(), null, Socks4ServerEncoder.INSTANCE);
                 p.addAfter(ctx.name(), null, new Socks4ServerDecoder());
-                break;
-            case SOCKS5:
+            }
+            case SOCKS5 -> {
                 logKnownVersion(ctx, version);
                 p.addAfter(ctx.name(), null, socks5encoder);
                 p.addAfter(ctx.name(), null, new Socks5InitialRequestDecoder());
-                break;
-            default:
+            }
+            default -> {
                 logUnknownVersion(ctx, versionVal);
                 in.skipBytes(in.readableBytes());
                 ctx.close();
                 return;
+            }
         }
 
         p.remove(this);

@@ -6,10 +6,10 @@ package coffee.client.feature.module.impl.render;
 
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
-import coffee.client.helper.ByteCounter;
 import coffee.client.helper.event.EventType;
 import coffee.client.helper.event.Events;
 import coffee.client.helper.event.events.LoreQueryEvent;
+import coffee.client.helper.util.ByteCounter;
 import net.minecraft.client.util.math.MatrixStack;
 
 import java.text.StringCharacterIterator;

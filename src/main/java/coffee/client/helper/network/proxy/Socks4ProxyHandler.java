@@ -28,10 +28,11 @@ public final class Socks4ProxyHandler extends ProxyHandler {
 
     public Socks4ProxyHandler(SocketAddress proxyAddress, String username) {
         super(proxyAddress);
-        if (username != null && username.isEmpty()) {
-            username = null;
+        String username1 = username;
+        if (username1 != null && username1.isEmpty()) {
+            username1 = null;
         }
-        this.username = username;
+        this.username = username1;
     }
 
     @Override
@@ -49,7 +50,7 @@ public final class Socks4ProxyHandler extends ProxyHandler {
     }
 
     @Override
-    protected void addCodec(ChannelHandlerContext ctx) throws Exception {
+    protected void addCodec(ChannelHandlerContext ctx) {
         ChannelPipeline p = ctx.pipeline();
         String name = ctx.name();
 
@@ -63,19 +64,19 @@ public final class Socks4ProxyHandler extends ProxyHandler {
     }
 
     @Override
-    protected void removeEncoder(ChannelHandlerContext ctx) throws Exception {
+    protected void removeEncoder(ChannelHandlerContext ctx) {
         ChannelPipeline p = ctx.pipeline();
         p.remove(encoderName);
     }
 
     @Override
-    protected void removeDecoder(ChannelHandlerContext ctx) throws Exception {
+    protected void removeDecoder(ChannelHandlerContext ctx) {
         ChannelPipeline p = ctx.pipeline();
         p.remove(decoderName);
     }
 
     @Override
-    protected Object newInitialMessage(ChannelHandlerContext ctx) throws Exception {
+    protected Object newInitialMessage(ChannelHandlerContext ctx) {
         InetSocketAddress raddr = destinationAddress();
         String rhost;
         if (raddr.isUnresolved()) {

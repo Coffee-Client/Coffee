@@ -2,11 +2,11 @@
  * Copyright (c) 2022 Coffee client, 0x150 and contributors. See copyright file in project root.
  */
 
-package coffee.client.feature.gui.clickgui;
+package coffee.client.feature.gui;
 
 import coffee.client.CoffeeMain;
-import coffee.client.feature.gui.clickgui.theme.Theme;
-import coffee.client.feature.gui.clickgui.theme.ThemeManager;
+import coffee.client.feature.gui.theme.Theme;
+import coffee.client.feature.gui.theme.ThemeManager;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.Transitions;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -71,7 +71,7 @@ public class ParticleRenderer {
             addParticle();
         }
         for (Particle particle : particles) {
-            particle.render(particles, stack);
+            particle.render(stack);
         }
         RenderSystem.setShaderColor(1, 1, 1, 1);
     }
@@ -175,7 +175,7 @@ public class ParticleRenderer {
             y = Math.min(y, h);
         }
 
-        void render(List<Particle> others, MatrixStack stack) {
+        void render(MatrixStack stack) {
             long fadeTime = 40;
             long startDelta = Math.min(origLife - life, fadeTime);
             long endDelta = Math.min(life, fadeTime);

@@ -47,7 +47,7 @@ public class Socks5CommandRequestDecoder extends ReplayingDecoder<Socks5CommandR
     }
 
     @Override
-    protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
+    protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) {
         try {
             switch (state()) {
                 case INIT: {
@@ -83,14 +83,15 @@ public class Socks5CommandRequestDecoder extends ReplayingDecoder<Socks5CommandR
     }
 
     private void fail(List<Object> out, Exception cause) {
-        if (!(cause instanceof DecoderException)) {
-            cause = new DecoderException(cause);
+        Exception cause1 = cause;
+        if (!(cause1 instanceof DecoderException)) {
+            cause1 = new DecoderException(cause1);
         }
 
         checkpoint(State.FAILURE);
 
         Socks5Message m = new DefaultSocks5CommandRequest(Socks5CommandType.CONNECT, Socks5AddressType.IPv4, "0.0.0.0", 1);
-        m.setDecoderResult(DecoderResult.failure(cause));
+        m.setDecoderResult(DecoderResult.failure(cause1));
         out.add(m);
     }
 

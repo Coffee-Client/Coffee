@@ -36,26 +36,27 @@ public final class SocksCmdRequest extends SocksRequest {
 
     public SocksCmdRequest(SocksCmdType cmdType, SocksAddressType addressType, String host, int port) {
         super(SocksRequestType.CMD);
+        String host1 = host;
         ObjectUtil.checkNotNull(cmdType, "cmdType");
         ObjectUtil.checkNotNull(addressType, "addressType");
-        ObjectUtil.checkNotNull(host, "host");
+        ObjectUtil.checkNotNull(host1, "host");
 
         switch (addressType) {
             case IPv4:
-                if (!NetUtil.isValidIpV4Address(host)) {
-                    throw new IllegalArgumentException(host + " is not a valid IPv4 address");
+                if (!NetUtil.isValidIpV4Address(host1)) {
+                    throw new IllegalArgumentException(host1 + " is not a valid IPv4 address");
                 }
                 break;
             case DOMAIN:
-                String asciiHost = IDN.toASCII(host);
+                String asciiHost = IDN.toASCII(host1);
                 if (asciiHost.length() > 255) {
-                    throw new IllegalArgumentException(host + " IDN: " + asciiHost + " exceeds 255 char limit");
+                    throw new IllegalArgumentException(host1 + " IDN: " + asciiHost + " exceeds 255 char limit");
                 }
-                host = asciiHost;
+                host1 = asciiHost;
                 break;
             case IPv6:
-                if (!NetUtil.isValidIpV6Address(host)) {
-                    throw new IllegalArgumentException(host + " is not a valid IPv6 address");
+                if (!NetUtil.isValidIpV6Address(host1)) {
+                    throw new IllegalArgumentException(host1 + " is not a valid IPv6 address");
                 }
                 break;
             case UNKNOWN:
@@ -66,7 +67,7 @@ public final class SocksCmdRequest extends SocksRequest {
         }
         this.cmdType = cmdType;
         this.addressType = addressType;
-        this.host = host;
+        this.host = host1;
         this.port = port;
     }
 
@@ -113,23 +114,14 @@ public final class SocksCmdRequest extends SocksRequest {
         byteBuf.writeByte(0x00);
         byteBuf.writeByte(addressType.byteValue());
         switch (addressType) {
-            case IPv4: {
+            case IPv4, IPv6 -> {
                 byteBuf.writeBytes(NetUtil.createByteArrayFromIpAddressString(host));
                 byteBuf.writeShort(port);
-                break;
             }
-
-            case DOMAIN: {
+            case DOMAIN -> {
                 byteBuf.writeByte(host.length());
                 byteBuf.writeCharSequence(host, CharsetUtil.US_ASCII);
                 byteBuf.writeShort(port);
-                break;
-            }
-
-            case IPv6: {
-                byteBuf.writeBytes(NetUtil.createByteArrayFromIpAddressString(host));
-                byteBuf.writeShort(port);
-                break;
             }
         }
     }

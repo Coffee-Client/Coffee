@@ -2,7 +2,7 @@
  * Copyright (c) 2022 Coffee client, 0x150 and contributors. See copyright file in project root.
  */
 
-package coffee.client.helper;
+package coffee.client.helper.util;
 
 import coffee.client.CoffeeMain;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;

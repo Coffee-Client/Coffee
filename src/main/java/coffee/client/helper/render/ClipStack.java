@@ -4,8 +4,6 @@
 
 package coffee.client.helper.render;
 
-import coffee.client.feature.module.ModuleRegistry;
-import coffee.client.feature.module.impl.render.ClickGUI;
 import coffee.client.mixin.render.IMatrixStackMixin;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
@@ -65,9 +63,6 @@ public class ClipStack {
     public void popWindow() {
 
         TransformationEntry e = clipStack.pop();
-        if (ModuleRegistry.getByClass(ClickGUI.class).isDebuggerEnabled()) {
-            renderDebug(e.rect.getX(), e.rect.getY(), e.rect.getX1(), e.rect.getY1());
-        }
         if (clipStack.empty()) {
             Renderer.R2D.endScissor();
         } else {

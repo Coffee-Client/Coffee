@@ -39,7 +39,7 @@ public class Socks4ClientDecoder extends ReplayingDecoder<Socks4ClientDecoder.St
     }
 
     @Override
-    protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
+    protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) {
         try {
             switch (state()) {
                 case START: {
@@ -73,12 +73,13 @@ public class Socks4ClientDecoder extends ReplayingDecoder<Socks4ClientDecoder.St
     }
 
     private void fail(List<Object> out, Exception cause) {
-        if (!(cause instanceof DecoderException)) {
-            cause = new DecoderException(cause);
+        Exception cause1 = cause;
+        if (!(cause1 instanceof DecoderException)) {
+            cause1 = new DecoderException(cause1);
         }
 
         Socks4CommandResponse m = new DefaultSocks4CommandResponse(Socks4CommandStatus.REJECTED_OR_FAILED);
-        m.setDecoderResult(DecoderResult.failure(cause));
+        m.setDecoderResult(DecoderResult.failure(cause1));
         out.add(m);
 
         checkpoint(State.FAILURE);

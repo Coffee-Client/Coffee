@@ -5,8 +5,8 @@
 package coffee.client.feature.gui.hud.element;
 
 import coffee.client.CoffeeMain;
-import coffee.client.helper.Texture;
 import coffee.client.helper.font.FontRenderers;
+import coffee.client.helper.render.Texture;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.render.GameRenderer;

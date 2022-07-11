@@ -49,14 +49,16 @@ public final class Socks5ProxyHandler extends ProxyHandler {
 
     public Socks5ProxyHandler(SocketAddress proxyAddress, String username, String password) {
         super(proxyAddress);
-        if (username != null && username.isEmpty()) {
-            username = null;
+        String username1 = username;
+        String password1 = password;
+        if (username1 != null && username1.isEmpty()) {
+            username1 = null;
         }
-        if (password != null && password.isEmpty()) {
-            password = null;
+        if (password1 != null && password1.isEmpty()) {
+            password1 = null;
         }
-        this.username = username;
-        this.password = password;
+        this.username = username1;
+        this.password = password1;
     }
 
     @Override
@@ -78,7 +80,7 @@ public final class Socks5ProxyHandler extends ProxyHandler {
     }
 
     @Override
-    protected void addCodec(ChannelHandlerContext ctx) throws Exception {
+    protected void addCodec(ChannelHandlerContext ctx) {
         ChannelPipeline p = ctx.pipeline();
         String name = ctx.name();
 
@@ -92,12 +94,12 @@ public final class Socks5ProxyHandler extends ProxyHandler {
     }
 
     @Override
-    protected void removeEncoder(ChannelHandlerContext ctx) throws Exception {
+    protected void removeEncoder(ChannelHandlerContext ctx) {
         ctx.pipeline().remove(encoderName);
     }
 
     @Override
-    protected void removeDecoder(ChannelHandlerContext ctx) throws Exception {
+    protected void removeDecoder(ChannelHandlerContext ctx) {
         ChannelPipeline p = ctx.pipeline();
         if (p.context(decoderName) != null) {
             p.remove(decoderName);
@@ -105,14 +107,13 @@ public final class Socks5ProxyHandler extends ProxyHandler {
     }
 
     @Override
-    protected Object newInitialMessage(ChannelHandlerContext ctx) throws Exception {
+    protected Object newInitialMessage(ChannelHandlerContext ctx) {
         return socksAuthMethod() == Socks5AuthMethod.PASSWORD ? INIT_REQUEST_PASSWORD : INIT_REQUEST_NO_AUTH;
     }
 
     @Override
     protected boolean handleResponse(ChannelHandlerContext ctx, Object response) throws Exception {
-        if (response instanceof Socks5InitialResponse) {
-            Socks5InitialResponse res = (Socks5InitialResponse) response;
+        if (response instanceof Socks5InitialResponse res) {
             Socks5AuthMethod authMethod = socksAuthMethod();
 
             if (res.authMethod() != Socks5AuthMethod.NO_AUTH && res.authMethod() != authMethod) {
@@ -134,9 +135,8 @@ public final class Socks5ProxyHandler extends ProxyHandler {
             return false;
         }
 
-        if (response instanceof Socks5PasswordAuthResponse) {
+        if (response instanceof Socks5PasswordAuthResponse res) {
             // Received an authentication response from the server.
-            Socks5PasswordAuthResponse res = (Socks5PasswordAuthResponse) response;
             if (res.status() != Socks5PasswordAuthStatus.SUCCESS) {
                 throw new ProxyConnectException(exceptionMessage("authStatus: " + res.status()));
             }

@@ -38,7 +38,7 @@ public class AAScreen extends Screen implements FastTickable {
     }
 
     @Override
-    protected final void init() {
+    protected void init() {
         elements.clear();
         initInternal();
     }
@@ -53,6 +53,10 @@ public class AAScreen extends Screen implements FastTickable {
 
     public void removeChild(Element element) {
         elements.remove(element);
+    }
+
+    public void clearWidgets() {
+        elements.clear();
     }
 
     @Override
@@ -105,7 +109,7 @@ public class AAScreen extends Screen implements FastTickable {
         return iterateOverChildren(element -> element.mouseScrolled(mouseX, mouseY, amount));
     }
 
-    private boolean iterateOverChildren(Function<Element, Boolean> supp) {
+    protected boolean iterateOverChildren(Function<Element, Boolean> supp) {
         for (Element element : getElements()) {
             if (supp.apply(element)) {
                 return true;

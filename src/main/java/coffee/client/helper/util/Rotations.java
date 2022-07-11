@@ -2,7 +2,7 @@
  * Copyright (c) 2022 Coffee client, 0x150 and contributors. See copyright file in project root.
  */
 
-package coffee.client.helper;
+package coffee.client.helper.util;
 
 import coffee.client.CoffeeMain;
 import coffee.client.feature.module.ModuleRegistry;

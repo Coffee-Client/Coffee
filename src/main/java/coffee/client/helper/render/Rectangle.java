@@ -7,6 +7,7 @@ package coffee.client.helper.render;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import net.minecraft.util.math.Vec2f;
 
 @AllArgsConstructor
 public class Rectangle {
@@ -24,5 +25,13 @@ public class Rectangle {
 
     public double getHeight() {
         return y1 - y;
+    }
+
+    public Rectangle multiplyWidthHeight(Vec2f multiplier) {
+        double w = getWidth() * multiplier.x;
+        double h = getHeight() * multiplier.y;
+        setX1(getX() + w);
+        setY1(getY() + h);
+        return this;
     }
 }

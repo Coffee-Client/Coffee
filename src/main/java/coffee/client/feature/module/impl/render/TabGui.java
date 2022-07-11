@@ -4,7 +4,7 @@
 
 package coffee.client.feature.module.impl.render;
 
-import coffee.client.feature.gui.clickgui.theme.ThemeManager;
+import coffee.client.feature.gui.theme.ThemeManager;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleRegistry;
 import coffee.client.feature.module.ModuleType;

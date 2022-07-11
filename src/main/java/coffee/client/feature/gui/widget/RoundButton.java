@@ -113,10 +113,6 @@ public class RoundButton implements Element, Drawable, Selectable, FastTickable,
 
     }
 
-    double easeInOutQuint(double x) {
-        return x < 0.5 ? 16 * x * x * x * x * x : 1 - Math.pow(-2 * x + 2, 5) / 2;
-    }
-
     boolean inBounds(double cx, double cy) {
         return cx >= x && cx < x + width && cy >= y && cy < y + height;
     }

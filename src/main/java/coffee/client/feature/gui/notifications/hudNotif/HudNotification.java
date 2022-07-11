@@ -4,13 +4,13 @@
 
 package coffee.client.feature.gui.notifications.hudNotif;
 
-import coffee.client.helper.GameTexture;
-import coffee.client.helper.Texture;
 import coffee.client.helper.font.FontRenderers;
 import coffee.client.helper.font.adapter.FontAdapter;
 import coffee.client.helper.render.ClipStack;
+import coffee.client.helper.render.GameTexture;
 import coffee.client.helper.render.Rectangle;
 import coffee.client.helper.render.Renderer;
+import coffee.client.helper.render.Texture;
 import com.mojang.blaze3d.systems.RenderSystem;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

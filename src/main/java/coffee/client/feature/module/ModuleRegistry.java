@@ -90,7 +90,6 @@ import coffee.client.feature.module.impl.render.Spotlight;
 import coffee.client.feature.module.impl.render.SuperheroFX;
 import coffee.client.feature.module.impl.render.TabGui;
 import coffee.client.feature.module.impl.render.TargetHud;
-import coffee.client.feature.module.impl.render.Theme;
 import coffee.client.feature.module.impl.render.Tracers;
 import coffee.client.feature.module.impl.render.Trail;
 import coffee.client.feature.module.impl.render.Zoom;
@@ -287,7 +286,6 @@ public class ModuleRegistry {
         registerModule(AutoLavacast.class);
         registerModule(Backtrack.class);
         registerModule(TabGui.class);
-        registerModule(Theme.class);
         registerModule(AntiCrash.class);
         registerModule(ClientSettings.class);
         registerModule(NoLiquidFog.class);

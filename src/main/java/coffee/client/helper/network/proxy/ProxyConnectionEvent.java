@@ -59,17 +59,8 @@ public final class ProxyConnectionEvent {
             return strVal;
         }
 
-        StringBuilder buf = new StringBuilder(128).append(StringUtil.simpleClassName(this))
-                .append('(')
-                .append(protocol)
-                .append(", ")
-                .append(authScheme)
-                .append(", ")
-                .append(proxyAddress)
-                .append(" => ")
-                .append(destinationAddress)
-                .append(')');
+        String buf = StringUtil.simpleClassName(this) + '(' + protocol + ", " + authScheme + ", " + proxyAddress + " => " + destinationAddress + ')';
 
-        return strVal = buf.toString();
+        return strVal = buf;
     }
 }

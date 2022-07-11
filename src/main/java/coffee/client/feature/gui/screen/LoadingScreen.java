@@ -7,7 +7,7 @@ package coffee.client.feature.gui.screen;
 import coffee.client.CoffeeMain;
 import coffee.client.feature.gui.FastTickable;
 import coffee.client.feature.gui.screen.base.AAScreen;
-import coffee.client.helper.GameTexture;
+import coffee.client.helper.render.GameTexture;
 import coffee.client.helper.render.MSAAFramebuffer;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.Transitions;

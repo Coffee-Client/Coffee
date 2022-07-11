@@ -5,7 +5,7 @@
 package coffee.client.mixin.render;
 
 import coffee.client.CoffeeMain;
-import coffee.client.helper.Rotations;
+import coffee.client.helper.util.Rotations;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;

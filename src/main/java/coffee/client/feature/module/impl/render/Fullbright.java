@@ -38,11 +38,6 @@ public class Fullbright extends Module {
     }
 
     @Override
-    public void onFastTick() {
-
-    }
-
-    @Override
     public String getContext() {
         return null;
     }

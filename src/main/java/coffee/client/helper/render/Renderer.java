@@ -831,13 +831,17 @@ public class Renderer {
                     new double[] { fromX + radC1, fromY + radC1, radC1 }, new double[] { fromX + radC3, toY - radC3, radC3 } };
             for (int i = 0; i < 4; i++) {
                 double[] current = map[i];
+                double rad = current[2];
                 for (double r = i * 90d; r < (360 / 4d + i * 90d); r += (90 / samples)) {
-                    double rad = current[2];
                     float rad1 = (float) Math.toRadians(r);
                     float sin = (float) (Math.sin(rad1) * rad);
                     float cos = (float) (Math.cos(rad1) * rad);
                     bufferBuilder.vertex(matrix, (float) current[0] + sin, (float) current[1] + cos, 0.0F).color(cr, cg, cb, ca).next();
                 }
+                float rad1 = (float) Math.toRadians((360 / 4d + i * 90d));
+                float sin = (float) (Math.sin(rad1) * rad);
+                float cos = (float) (Math.cos(rad1) * rad);
+                bufferBuilder.vertex(matrix, (float) current[0] + sin, (float) current[1] + cos, 0.0F).color(cr, cg, cb, ca).next();
             }
             BufferRenderer.drawWithShader(bufferBuilder.end());
         }

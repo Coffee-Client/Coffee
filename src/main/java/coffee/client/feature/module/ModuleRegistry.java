@@ -49,6 +49,7 @@ import coffee.client.feature.module.impl.movement.Backtrack;
 import coffee.client.feature.module.impl.movement.Blink;
 import coffee.client.feature.module.impl.movement.BlocksMCFlight;
 import coffee.client.feature.module.impl.movement.BoatPhase;
+import coffee.client.feature.module.impl.movement.BoingBoing;
 import coffee.client.feature.module.impl.movement.Boost;
 import coffee.client.feature.module.impl.movement.ClickTP;
 import coffee.client.feature.module.impl.movement.EdgeJump;
@@ -66,6 +67,7 @@ import coffee.client.feature.module.impl.movement.NoJumpCool;
 import coffee.client.feature.module.impl.movement.NoLevitation;
 import coffee.client.feature.module.impl.movement.NoPush;
 import coffee.client.feature.module.impl.movement.Phase;
+import coffee.client.feature.module.impl.movement.Slippy;
 import coffee.client.feature.module.impl.movement.Sprint;
 import coffee.client.feature.module.impl.movement.Step;
 import coffee.client.feature.module.impl.movement.Swing;
@@ -120,6 +122,8 @@ import org.apache.logging.log4j.Level;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ModuleRegistry {
@@ -128,6 +132,7 @@ public class ModuleRegistry {
     static final List<Module> sharedModuleList = new ArrayList<>();
     static final AtomicBoolean reloadInProgress = new AtomicBoolean(false);
     static final AtomicBoolean initialized = new AtomicBoolean(false);
+    static final Map<Class<? extends Module>, Module> cachedModuleClassMap = new ConcurrentHashMap<>();
 
     public static List<AddonModuleEntry> getCustomModules() {
         return customModules;
@@ -156,6 +161,7 @@ public class ModuleRegistry {
     private static void rebuildSharedModuleList() {
         reloadInProgress.set(true);
         sharedModuleList.clear();
+        cachedModuleClassMap.clear();
         sharedModuleList.addAll(vanillaModules);
         for (AddonModuleEntry customModule : customModules) {
             sharedModuleList.add(customModule.module);
@@ -305,6 +311,8 @@ public class ModuleRegistry {
         registerModule(CrystalAura.class);
         registerModule(SuperheroFX.class);
         registerModule(ElytraFly.class);
+        registerModule(BoingBoing.class);
+        registerModule(Slippy.class);
 
         rebuildSharedModuleList();
 
@@ -340,9 +348,13 @@ public class ModuleRegistry {
         if (!initialized.get()) {
             init();
         }
+        if (cachedModuleClassMap.containsKey(clazz)) {
+            return (T) cachedModuleClassMap.get(clazz);
+        }
         awaitLockOpen();
         for (Module module : getModules()) {
             if (module.getClass() == clazz) {
+                cachedModuleClassMap.put(clazz, module);
                 return (T) module;
             }
         }

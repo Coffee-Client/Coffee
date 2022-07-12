@@ -67,7 +67,9 @@
     "screen.SignEditScreenMixin",
     "screen.TitleScreenMixin"
   ],
-  "client": [],
+  "client": [
+
+  ],
   "server": [],
   "injectors": {
     "defaultRequire": 1

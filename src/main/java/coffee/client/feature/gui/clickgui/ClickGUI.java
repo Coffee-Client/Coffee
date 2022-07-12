@@ -12,6 +12,8 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
 
 import java.awt.Color;
+import java.util.Arrays;
+import java.util.Comparator;
 
 public class ClickGUI extends AAScreen {
     private static ClickGUI instance;
@@ -37,7 +39,7 @@ public class ClickGUI extends AAScreen {
 
     public void setTooltip(String content) {
         tooltipX = Utils.Mouse.getMouseX();
-        tooltipY = Utils.Mouse.getMouseY()+10;
+        tooltipY = Utils.Mouse.getMouseY() + 10;
         tooltipContent = content;
     }
 
@@ -124,18 +126,20 @@ public class ClickGUI extends AAScreen {
     public void renderInternal(MatrixStack stack, int mouseX, int mouseY, float delta) {
         super.renderInternal(stack, mouseX, mouseY, delta);
         if (tooltipContent != null) {
-            double wid = FontRenderers.getRenderer().getStringWidth(tooltipContent) + 2;
-            if (wid > 2) {
-                Renderer.R2D.renderRoundedQuadWithShadow(stack,
-                        new Color(30, 30, 30),
-                        tooltipX,
-                        tooltipY,
-                        tooltipX + wid,
-                        tooltipY + FontRenderers.getRenderer().getFontHeight() + 2,
-                        2,
-                        6);
-                FontRenderers.getRenderer().drawString(stack, tooltipContent, tooltipX + 1, tooltipY + 1, 0xFFFFFF);
+            String[] split = tooltipContent.split("\n");
+            double height = FontRenderers.getRenderer().getFontHeight() * split.length + 2;
+            double width = Arrays.stream(split)
+                    .map(s -> FontRenderers.getRenderer().getStringWidth(s))
+                    .max(Comparator.comparingDouble(value -> value))
+                    .orElse(0f) + 4f;
+
+            Renderer.R2D.renderRoundedQuadWithShadow(stack, new Color(30, 30, 30), tooltipX, tooltipY, tooltipX + width, tooltipY + height, 2, 6);
+            double y = 0;
+            for (String s : split) {
+                FontRenderers.getRenderer().drawString(stack, s, tooltipX + 2, tooltipY + 1 + y, 0xFFFFFF);
+                y += FontRenderers.getRenderer().getFontHeight();
             }
+
             tooltipContent = null;
         }
     }

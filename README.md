@@ -22,3 +22,6 @@ Go to the issues page and describe the suggestion as descriptively as possible. 
 
 ## Contributing
 Fork this repository, add your code, and make a pull request. **MAKE SURE TO TEST THE FEATURE BEFORE OPENING THE PULL REQUEST**
+
+
+celestial is cringe

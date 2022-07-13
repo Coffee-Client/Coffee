@@ -245,14 +245,11 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
                 "Show email",
                 this::toggleCensor
         );
-        add = new RoundButton(RoundButton.SUCCESS,
-                width - 60 - 5 - 20 - getPadding(),
-                10 + title.getMarginHeight() / 2d - 20 / 2d,
-                60,
-                20,
-                "Add",
-                () -> client.setScreen(new AddScreenOverlay(this))
-        );
+        add = new RoundButton(RoundButton.SUCCESS, width - 60 - 5 - 20 - getPadding(), 10 + title.getMarginHeight() / 2d - 20 / 2d, 60, 20, "Add", () -> {
+            if (!isLoggingIn.get()) {
+                client.setScreen(new AddScreenOverlay(this));
+            }
+        });
         exit = new RoundButton(RoundButton.DANGER, width - 20 - getPadding(), 10 + title.getMarginHeight() / 2d - 20 / 2d, 20, 20, "X", this::close);
 
         double padding = 5;
@@ -263,14 +260,22 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
         double fromX = width - (leftWidth + getPadding());
         double texDim = widRHeight - padding * 2;
         double buttonWidth = (toX - (fromX + texDim + padding * 2)) / 3d - padding / 4d;
-        login = new RoundButton(RoundButton.SUCCESS, fromX + texDim + padding * 2, toY - 20 - padding, buttonWidth - padding, 20, "Login", this::login);
+        login = new RoundButton(RoundButton.SUCCESS, fromX + texDim + padding * 2, toY - 20 - padding, buttonWidth - padding, 20, "Login", () -> {
+            if (!this.isLoggingIn.get()) {
+                this.login();
+            }
+        });
         remove = new RoundButton(RoundButton.DANGER,
                 fromX + texDim + padding * 2 + buttonWidth + padding / 2d,
                 toY - 20 - padding,
                 buttonWidth - padding,
                 20,
                 "Remove",
-                this::remove
+                () -> {
+                    if (!this.isLoggingIn.get()) {
+                        this.remove();
+                    }
+                }
         );
         tags = new RoundButton(RoundButton.STANDARD,
                 fromX + texDim + padding * 2 + buttonWidth + padding / 2d + buttonWidth + padding / 2d,
@@ -284,7 +289,9 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
         toY = height - getPadding();
         buttonWidth = toX - fromX - padding * 3 - texDim;
         session = new RoundButton(RoundButton.STANDARD, fromX + texDim + padding * 2, toY - 20 - padding, buttonWidth, 20, "Session", () -> {
-            Objects.requireNonNull(client).setScreen(new SessionEditor(this, CoffeeMain.client.getSession())); // this is not a session stealer
+            if (!this.isLoggingIn.get()) {
+                Objects.requireNonNull(client).setScreen(new SessionEditor(this, CoffeeMain.client.getSession())); // this is not a session stealer
+            }
         });
 
         addDrawableChild(censorMail);
@@ -535,11 +542,11 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         Rectangle rBounds = new Rectangle(getPadding(), getHeaderHeight(), getPadding() + (width - (getPadding() + leftWidth + getPadding() * 2)), height);
 
-        if (isLoggingIn.get()) {
-            return false;
-        }
+        //        if (isLoggingIn.get()) {
+        //            return false;
+        //        }
         boolean a = super.mouseClicked(mouseX, mouseY, button);
-        if (a) {
+        if (a || isLoggingIn.get()) {
             return true;
         }
         if (mouseX >= rBounds.getX() && mouseX <= rBounds.getX1() && mouseY >= rBounds.getY() && mouseY <= rBounds.getY1()) {

@@ -27,11 +27,13 @@ public class ModuleDisplay extends Element {
     Module module;
     ConfigDisplay cfd;
     double leftAnim = 0;
+    CategoryDisplay parent;
 
-    public ModuleDisplay(Module module, double x, double y, double width) {
+    public ModuleDisplay(Module module, double x, double y, double width, CategoryDisplay parent) {
         super(x, y, width, actualHeight);
         this.module = module;
         this.cfd = new ConfigDisplay(x, y + actualHeight + margin, width, this.module.config);
+        this.parent = parent;
     }
 
     @Override
@@ -49,16 +51,32 @@ public class ModuleDisplay extends Element {
     public void render(MatrixStack stack, double x, double y) {
         double bruhHeight = actualHeight;
         if (new Rectangle(getPositionX(), getPositionY(), getPositionX() + getWidth(), getPositionY() + bruhHeight).contains(x, y)) {
-            Renderer.R2D.renderRoundedQuad(stack,
-                    new Color(255, 255, 255, 30),
-                    getPositionX(),
-                    getPositionY(),
-                    getPositionX() + getWidth(),
-                    getPositionY() + bruhHeight,
-                    2,
-                    10
-            );
-            ClickGUI.instance().setTooltip(module.getDescription());
+            int parentIndex = ClickGUI.instance().getIndex(parent); // get index of current element (index 0 = last in render queue)
+            if (parentIndex >= 0) { // was the element found? (this should always be yes)
+                boolean render = true;
+                if (parentIndex > 0) { // are we *NOT* first in queue?
+                    for (int i = parentIndex - 1; i >= 0; i--) { // go over all the elements before us
+                        Element e = ClickGUI.instance().getChild(i);
+                        if (e.inBounds(x, y)) { // is the mouse over said element before us? (will be above us in rendering)
+                            render = false; // dont render our tooltip and selection
+                            break;
+                        }
+                    }
+                }
+                if (render) { // should we render our tooltip and selection?
+                    Renderer.R2D.renderRoundedQuad(
+                            stack,
+                            new Color(255, 255, 255, 30),
+                            getPositionX(),
+                            getPositionY(),
+                            getPositionX() + getWidth(),
+                            getPositionY() + bruhHeight,
+                            2,
+                            10
+                    );
+                    ClickGUI.instance().setTooltip(module.getDescription());
+                }
+            }
         }
         if (leftAnim != 0) {
             double a = Transitions.easeOutExpo(leftAnim);

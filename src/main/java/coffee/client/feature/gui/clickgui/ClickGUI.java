@@ -1,6 +1,7 @@
 package coffee.client.feature.gui.clickgui;
 
 import coffee.client.feature.gui.clickgui.element.CategoryDisplay;
+import coffee.client.feature.gui.element.Element;
 import coffee.client.feature.gui.screen.base.AAScreen;
 import coffee.client.feature.module.ModuleType;
 import coffee.client.helper.font.FontRenderers;
@@ -12,8 +13,11 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 public class ClickGUI extends AAScreen {
     private static ClickGUI instance;
@@ -61,9 +65,17 @@ public class ClickGUI extends AAScreen {
     public void initWidgets() {
         clearWidgets();
         double x = 5;
+        double lineY = 0;
+        double y = 5;
         for (ModuleType value : ModuleType.values()) {
-            CategoryDisplay gd = new CategoryDisplay(value, x, 5, 100);
+            if (x + 100 > width) {
+                x = 5;
+                y += lineY + 5;
+                lineY = 0;
+            }
+            CategoryDisplay gd = new CategoryDisplay(value, x, y, 100);
             x += gd.getWidth() + 5;
+            lineY = Math.max(lineY, gd.getHeight());
             addChild(gd);
         }
     }
@@ -124,7 +136,12 @@ public class ClickGUI extends AAScreen {
 
     @Override
     public void renderInternal(MatrixStack stack, int mouseX, int mouseY, float delta) {
-        super.renderInternal(stack, mouseX, mouseY, delta);
+        //        super.renderInternal(stack, mouseX, mouseY, delta);
+        List<Element> elcpy = new ArrayList<>(getElements());
+        Collections.reverse(elcpy);
+        for (Element element : elcpy) {
+            element.render(stack, mouseX, mouseY);
+        }
         if (tooltipContent != null) {
             String[] split = tooltipContent.split("\n");
             double height = FontRenderers.getRenderer().getFontHeight() * split.length + 2;

@@ -51,6 +51,18 @@ public class AAScreen extends Screen implements FastTickable {
         elements.add(element);
     }
 
+    public void addChild(int index, Element element) {
+        elements.add(index, element);
+    }
+
+    public int getIndex(Element element) {
+        return elements.indexOf(element);
+    }
+
+    public Element getChild(int index) {
+        return elements.get(index);
+    }
+
     public void removeChild(Element element) {
         elements.remove(element);
     }

@@ -11,6 +11,7 @@ import coffee.client.feature.module.impl.movement.NoPush;
 import coffee.client.feature.module.impl.movement.Phase;
 import coffee.client.feature.module.impl.render.Freecam;
 import coffee.client.helper.manager.ConfigManager;
+import coffee.client.helper.util.Rotations;
 import coffee.client.helper.util.Utils;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -47,6 +48,24 @@ public class ClientPlayerEntityMixin {
         if (Objects.requireNonNull(ModuleRegistry.getByClass(Freecam.class)).isEnabled() || Objects.requireNonNull(ModuleRegistry.getByClass(NoPush.class))
                 .isEnabled() || Objects.requireNonNull(ModuleRegistry.getByClass(Phase.class)).isEnabled()) {
             ci.cancel();
+        }
+    }
+
+    @Redirect(method = "sendMovementPackets", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;getYaw()F"))
+    float coffee_replaceMovementPacketYaw(ClientPlayerEntity instance) {
+        if (Rotations.isEnabled()) {
+            return Rotations.getClientYaw();
+        } else {
+            return instance.getYaw();
+        }
+    }
+
+    @Redirect(method = "sendMovementPackets", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;getPitch()F"))
+    float coffee_replaceMovementPacketPitch(ClientPlayerEntity instance) {
+        if (Rotations.isEnabled()) {
+            return Rotations.getClientPitch();
+        } else {
+            return instance.getPitch();
         }
     }
 

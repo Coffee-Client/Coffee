@@ -114,6 +114,6 @@ public class Events {
         return argument.isCancelled();
     }
 
-    record ListenerEntry(int id, EventType type, Consumer<? extends Event> eventListener, Class<?> owner) {
+    public record ListenerEntry(int id, EventType type, Consumer<? extends Event> eventListener, Class<?> owner) {
     }
 }

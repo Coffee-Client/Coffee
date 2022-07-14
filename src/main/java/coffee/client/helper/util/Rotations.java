@@ -10,8 +10,8 @@ import coffee.client.feature.module.impl.render.FreeLook;
 import coffee.client.helper.event.EventType;
 import coffee.client.helper.event.Events;
 import coffee.client.helper.event.events.PacketEvent;
-import coffee.client.mixin.network.IPlayerMoveC2SPacketMixin;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
+import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
@@ -29,10 +29,16 @@ public class Rotations {
     static {
         Events.registerEventHandler(EventType.PACKET_SEND, event1 -> {
             PacketEvent event = (PacketEvent) event1;
-            if (isEnabled() && event.getPacket() instanceof PlayerMoveC2SPacket packet) {
-                IPlayerMoveC2SPacketMixin accessor = (IPlayerMoveC2SPacketMixin) packet;
-                accessor.setPitch(getClientPitch());
-                accessor.setYaw(getClientYaw());
+            if (event.getPacket() instanceof PlayerMoveC2SPacket packet) {
+                clientYaw = packet.getYaw(clientYaw);
+                clientPitch = packet.getPitch(clientPitch);
+            }
+        });
+        Events.registerEventHandler(EventType.PACKET_RECEIVE, event -> {
+            PacketEvent pe = (PacketEvent) event;
+            if (pe.getPacket() instanceof PlayerPositionLookS2CPacket p) {
+                clientYaw = p.getYaw();
+                clientPitch = p.getPitch();
             }
         });
     }
@@ -73,6 +79,37 @@ public class Rotations {
         double e = vec3d2.y * zOffset + vec3d3.y * yOffset + vec3d4.y * xOffset;
         double l = vec3d2.z * zOffset + vec3d3.z * yOffset + vec3d4.z * xOffset;
         return new Vec3d(absRootPos.x + d, absRootPos.y + e, absRootPos.z + l);
+    }
+
+    public static void lookAtPositionSmoothServerSide(Vec3d target, double laziness) {
+        double delX = target.x - Objects.requireNonNull(CoffeeMain.client.player).getX();
+        double delZ = target.z - CoffeeMain.client.player.getZ();
+        double delY = target.y - (CoffeeMain.client.player.getY() + CoffeeMain.client.player.getEyeHeight(CoffeeMain.client.player.getPose()));
+
+        double required = Math.toDegrees(Math.atan2(delZ, delX)) - 90, delta, add, speed;
+        double sqrt1 = Math.sqrt(delX * delX + delZ * delZ);
+        double degTan = -Math.toDegrees(Math.atan2(delY, sqrt1));
+
+        // setting yaw
+        delta = MathHelper.wrapDegrees(required - clientYaw);
+        speed = Math.abs(delta / laziness);
+        add = speed * (delta >= 0 ? 1 : -1);
+        if ((add >= 0 && add > delta) || (add < 0 && add < delta)) {
+            add = delta;
+        }
+        setClientYaw(clientYaw + (float) add);
+        //        CoffeeMain.client.player.setYaw(CoffeeMain.client.player.getYaw() + (float) add);
+
+        // setting pitch
+        required = degTan;
+        delta = MathHelper.wrapDegrees(required - clientPitch);
+        speed = Math.abs(delta / laziness);
+        add = speed * (delta >= 0 ? 1 : -1);
+        if ((add >= 0 && add > delta) || (add < 0 && add < delta)) {
+            add = delta;
+        }
+        setClientPitch(clientPitch + (float) add);
+        //        CoffeeMain.client.player.setPitch(CoffeeMain.client.player.getPitch() + (float) add);
     }
 
     public static void lookAtPositionSmooth(Vec3d target, double laziness) {
@@ -129,6 +166,16 @@ public class Rotations {
 
     public static Vec2f getPitchYaw(Vec3d targetV3) {
         return getPitchYawFromOtherEntity(Objects.requireNonNull(CoffeeMain.client.player).getEyePos(), targetV3);
+    }
+
+    public static Vec3d getRotationVector(float pitch, float yaw) {
+        float f = pitch * ((float) Math.PI / 180);
+        float g = -yaw * ((float) Math.PI / 180);
+        float h = MathHelper.cos(g);
+        float i = MathHelper.sin(g);
+        float j = MathHelper.cos(f);
+        float k = MathHelper.sin(f);
+        return new Vec3d(i * j, -k, h * j);
     }
 
     public static Vec2f getPitchYawFromOtherEntity(Vec3d eyePos, Vec3d targetV3) {

@@ -17,5 +17,9 @@ public @interface Setting {
 
     double max() default -1d;
 
+    double upperMin() default -1d;
+
+    double upperMax() default -1d;
+
     int precision() default -1;
 }

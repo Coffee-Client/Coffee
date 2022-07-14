@@ -38,6 +38,11 @@ import java.util.Arrays;
 import java.util.List;
 
 public class SpotlightScreen extends ClientScreen implements FastTickable {
+    static List<StaticEntry> staticEntries = List.of(new StaticEntry("Gamemode change", "Switch to creative", GameTexture.ACTION_RUNCOMMAND.getWhere(), () -> {
+        CoffeeMain.client.player.sendCommand("gamemode creative");
+    }, "gmc", "creative", "gmcreative"), new StaticEntry("Gamemode change", "Switch to survival", GameTexture.ACTION_RUNCOMMAND.getWhere(), () -> {
+        CoffeeMain.client.player.sendCommand("gamemode survival");
+    }, "gms", "survival", "gmsurvival"));
     CommandTextField command;
     List<SuggestionsEntry> entries = new ArrayList<>();
     double anim = 0;
@@ -49,25 +54,6 @@ public class SpotlightScreen extends ClientScreen implements FastTickable {
     int selectingIndex = 0;
     boolean useSelectingIndex = false;
 
-    @Override
-    protected void init() {
-        closing = false;
-        double thingWidth = 400;
-        int thingFontHeight = 30;
-        command = new CommandTextField(FontRenderers.getCustomSize(thingFontHeight),
-                (width - thingWidth) / 2d,
-                100,
-                thingWidth,
-                thingFontHeight + 5,
-                "Enter command"
-        );
-        addDrawableChild(command);
-        command.setFocused(true);
-        setInitialFocus(command);
-
-        super.init();
-    }
-
     void updateActions() {
         String action = command.get();
         ArrayList<SuggestionsEntry> entries = new ArrayList<>(this.entries);
@@ -75,6 +61,17 @@ public class SpotlightScreen extends ClientScreen implements FastTickable {
         if (!action.isEmpty()) {
             String[] cmdArgs = action.split(" +");
             String firstPart = cmdArgs[0].toLowerCase();
+            for (StaticEntry staticEntry : staticEntries) {
+                if (Arrays.stream(staticEntry.triggers()).anyMatch(s -> (s).startsWith(firstPart))) {
+                    String matchingEntry = Arrays.stream(staticEntry.triggers()).filter(s -> (s).startsWith(firstPart)).findFirst().orElseThrow();
+                    entries.add(new SuggestionsEntry(staticEntry.desc(), staticEntry.texture(), staticEntry.type(), () -> {
+                        staticEntry.onRun().run();
+                        close();
+                    }, 0, 0, 0, () -> {
+                        command.set(matchingEntry);
+                    }));
+                }
+            }
             for (Module module : ModuleRegistry.getModules()) {
                 if (module.getName().toLowerCase().startsWith(firstPart)) {
                     entries.add(new SuggestionsEntry(module.getName(), GameTexture.ACTION_TOGGLEMODULE.getWhere(), "Toggle module", () -> {
@@ -88,7 +85,7 @@ public class SpotlightScreen extends ClientScreen implements FastTickable {
             }
             for (Command command1 : CommandRegistry.getCommands()) {
                 for (String alias : command1.getAliases()) {
-                    if (alias.toLowerCase().startsWith(firstPart)) {
+                    if ((alias).toLowerCase().startsWith(firstPart)) {
                         entries.add(new SuggestionsEntry(alias + " " + String.join(" ", Arrays.copyOfRange(cmdArgs, 1, cmdArgs.length)),
                                 GameTexture.ACTION_RUNCOMMAND.getWhere(),
                                 "Run command",
@@ -109,6 +106,25 @@ public class SpotlightScreen extends ClientScreen implements FastTickable {
             }
         }
         this.entries = entries;
+    }
+
+    @Override
+    protected void init() {
+        closing = false;
+        double thingWidth = 400;
+        int thingFontHeight = 30;
+        command = new CommandTextField(FontRenderers.getCustomSize(thingFontHeight),
+                (width - thingWidth) / 2d,
+                100,
+                thingWidth,
+                thingFontHeight + 5,
+                "Enter command"
+        );
+        addDrawableChild(command);
+        command.setFocused(true);
+        setInitialFocus(command);
+
+        super.init();
     }
 
     @Override
@@ -177,7 +193,6 @@ public class SpotlightScreen extends ClientScreen implements FastTickable {
         stack.pop();
         super.renderInternal(stack, mouseX, mouseY, delta);
     }
-
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
@@ -270,6 +285,10 @@ public class SpotlightScreen extends ClientScreen implements FastTickable {
     @Override
     public void close() {
         closing = true;
+    }
+
+    record StaticEntry(String type, String desc, Texture texture, Runnable onRun, String... triggers) {
+
     }
 
     public static class CommandTextField implements Element, Drawable, Selectable, DoesMSAA {

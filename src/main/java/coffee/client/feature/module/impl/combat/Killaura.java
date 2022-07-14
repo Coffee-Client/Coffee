@@ -5,6 +5,7 @@
 package coffee.client.feature.module.impl.combat;
 
 import coffee.client.CoffeeMain;
+import coffee.client.feature.config.RangeSetting;
 import coffee.client.feature.config.annotation.Setting;
 import coffee.client.feature.config.annotation.VisibilitySpecifier;
 import coffee.client.feature.module.Module;
@@ -32,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -52,6 +54,9 @@ public class Killaura extends Module {
     @Setting(name = "Delay", description = "Delay in milliseconds", min = 0, max = 2000, precision = 0)
     double delay = 500;
 
+    @Setting(name = "Delay random", description = "How much randomness to apply to the delay (in ms)", min = 0, max = 1000, precision = 0)
+    RangeSetting.Range delayRandom = new RangeSetting.Range(0, 200);
+
     @Setting(name = "Automatic range", description = "Automatically uses your max range as range")
     boolean automaticRange = true;
     @Setting(name = "Range", description = "How far to attack entities", min = 1, max = 7, precision = 1)
@@ -68,6 +73,19 @@ public class Killaura extends Module {
 
     @Setting(name = "Attack players", description = "Attacks players")
     boolean attackPlayers = true;
+
+    @Setting(name = "Attack all", description = "Attacks all remaining entities")
+    boolean attackAll = false;
+
+    //    @Setting(name="Aim random",description = "How much randomness to apply to aiming at the entity",min=-5,max=5,precision = 2)
+    //    RangeSetting.Range aimRandom = new RangeSetting.Range(-3, 3);
+    //
+    //    @VisibilitySpecifier("Aim random")
+    //    boolean shouldShowAimRandom() {
+    //        return smoothLook;
+    //    }
+    int currentRandomDelay = 0;
+    Random r = new Random();
 
     public Killaura() {
         super("Killaura", "Automatically attacks all entities in range", ModuleType.COMBAT);
@@ -129,17 +147,6 @@ public class Killaura extends Module {
         }
     }
 
-    boolean isEntityApplicable(LivingEntity le) {
-        if (le instanceof PlayerEntity) {
-            return attackPlayers;
-        } else if (le instanceof Monster) {
-            return attackHostile;
-        } else if (le instanceof PassiveEntity) {
-            return attackPassive;
-        }
-        return false;
-    }
-
     List<LivingEntity> selectTargets() {
         List<LivingEntity> entities = new ArrayList<>(StreamSupport.stream(client.world.getEntities().spliterator(), false)
                 .filter(entity -> !entity.equals(client.player)) // filter our player out
@@ -164,10 +171,21 @@ public class Killaura extends Module {
         };
     }
 
+    boolean isEntityApplicable(LivingEntity le) {
+        if (le instanceof PlayerEntity) {
+            return attackPlayers;
+        } else if (le instanceof Monster) {
+            return attackHostile;
+        } else if (le instanceof PassiveEntity) {
+            return attackPassive;
+        }
+        return attackAll;
+    }
+
     @Override
     public void tick() {
         targets = selectTargets();
-        if (!attackCooldown.hasExpired(getDelay())) {
+        if (!attackCooldown.hasExpired(getDelay() + currentRandomDelay)) {
             return;
         }
         if (targets.isEmpty()) {
@@ -188,13 +206,25 @@ public class Killaura extends Module {
             );
             if (ehr != null && ehr.getEntity().equals(target)) {
                 attack(target);
+                pickNextRandomDelay();
                 attackCooldown.reset();
             }
         } else {
+            pickNextRandomDelay();
             attackCooldown.reset();
             for (LivingEntity target : targets) {
                 attack(target);
             }
+        }
+    }
+
+    void pickNextRandomDelay() {
+        int min = (int) delayRandom.getMin();
+        int max = (int) delayRandom.getMax();
+        if (min >= max) {
+            currentRandomDelay = 0;
+        } else {
+            currentRandomDelay = r.nextInt(min, max);
         }
     }
 
@@ -225,7 +255,7 @@ public class Killaura extends Module {
     @Override
     public String getContext() {
         LinkedHashMap<String, Object> data = new LinkedHashMap<>();
-        data.put("Del", getDelay());
+        data.put("Del", getDelay() + "+" + currentRandomDelay);
         data.put("Ran", getRange());
         data.put("Tar", targets.size());
         return data.keySet().stream().map(s -> s + ":" + data.get(s).toString()).collect(Collectors.joining(" | "));

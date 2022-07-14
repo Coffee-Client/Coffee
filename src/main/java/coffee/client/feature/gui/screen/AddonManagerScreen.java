@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Coffee client, 0x150 and contributors. See copyright file in project root.
+ * Copyright (c) 2022 Coffee Client, 0x150 and contributors. All rights reserved.
  */
 
 package coffee.client.feature.gui.screen;
@@ -59,10 +59,7 @@ public class AddonManagerScreen extends ClientScreen implements FastTickable {
                 height / 2d - WIDGET_HEIGHT / 2d,
                 width / 2d + WIDGET_WIDTH / 2d,
                 height / 2d + WIDGET_HEIGHT / 2d
-        ).contains(
-                mouseX,
-                mouseY
-        )) {
+        ).contains(mouseX, mouseY)) {
             double contentHeight = viewerList.stream().map(addonViewer -> addonViewer.getHeight() + 5).reduce(Double::sum).orElse(0d) + 5;
             double entitledScroll = Math.max(0, contentHeight - WIDGET_HEIGHT);
             scroller.setBounds(0, entitledScroll);

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Coffee client, 0x150 and contributors. See copyright file in project root.
+ * Copyright (c) 2022 Coffee Client, 0x150 and contributors. All rights reserved.
  */
 
 package coffee.client.mixin.render;

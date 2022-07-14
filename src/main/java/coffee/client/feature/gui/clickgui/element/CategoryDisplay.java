@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2022 Coffee Client, 0x150 and contributors. All rights reserved.
+ */
+
 package coffee.client.feature.gui.clickgui.element;
 
 import coffee.client.feature.gui.clickgui.ClickGUI;
@@ -27,20 +31,6 @@ public class CategoryDisplay extends Element {
 
     boolean held = false;
 
-    @Override
-    public void tickAnimations() {
-        layout.tickAnimations();
-    }
-
-    double headerHeight() {
-        return Math.round(titleRenderer.getFontHeight() + 5 * 2);
-    }
-
-    @Override
-    public double getHeight() {
-        return Math.round(headerHeight() + super.getHeight());
-    }
-
     public CategoryDisplay(ModuleType type, double x, double y, double width) {
         super(x, y, width, 0);
         this.type = type;
@@ -60,6 +50,20 @@ public class CategoryDisplay extends Element {
             nh += 2;
         }
         setHeight(nh);
+    }
+
+    @Override
+    public void tickAnimations() {
+        layout.tickAnimations();
+    }
+
+    double headerHeight() {
+        return Math.round(titleRenderer.getFontHeight() + 5 * 2);
+    }
+
+    @Override
+    public double getHeight() {
+        return Math.round(headerHeight() + super.getHeight());
     }
 
     @Override
@@ -87,7 +91,11 @@ public class CategoryDisplay extends Element {
         titleRenderer.drawString(stack,
                 type.getName(),
                 (float) (getPositionX() + iconDims + iconPad * 2),
-                (float) (getPositionY() + headerHeight() / 2d - Math.round(titleRenderer.getFontHeight()) / 2d), 1f, 1f, 1f, 1f
+                (float) (getPositionY() + headerHeight() / 2d - Math.round(titleRenderer.getFontHeight()) / 2d),
+                1f,
+                1f,
+                1f,
+                1f
         );
         layout.setPositionX(getPositionX() + 2);
         layout.setPositionY(getPositionY() + headerHeight());

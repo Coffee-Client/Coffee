@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2022 Coffee Client, 0x150 and contributors. All rights reserved.
+ */
+
 package coffee.client.feature.command.impl;
 
 import coffee.client.CoffeeMain;
@@ -24,12 +28,18 @@ public class FakeNick extends Command {
 
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
-        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.PLAYER, () -> Objects.requireNonNull(CoffeeMain.client.world)
-                .getPlayers()
-                .stream()
-                .map(abstractClientPlayerEntity -> abstractClientPlayerEntity.getGameProfile().getName())
-                .toList()
-                .toArray(String[]::new)), new PossibleArgument(ArgumentType.STRING, "Adolf", "Fred", "Mark"));
+        return StaticArgumentServer.serveFromStatic(index,
+                new PossibleArgument(
+                        ArgumentType.PLAYER,
+                        () -> Objects.requireNonNull(CoffeeMain.client.world)
+                                .getPlayers()
+                                .stream()
+                                .map(abstractClientPlayerEntity -> abstractClientPlayerEntity.getGameProfile().getName())
+                                .toList()
+                                .toArray(String[]::new)
+                ),
+                new PossibleArgument(ArgumentType.STRING, "Adolf", "Fred", "Mark")
+        );
     }
 
     @Override
@@ -39,11 +49,11 @@ public class FakeNick extends Command {
         String newName = String.join("_", Arrays.copyOfRange(args, 1, args.length)).replaceAll("&", "§");
         for (AbstractClientPlayerEntity player : CoffeeMain.client.world.getPlayers()) {
             if (player.getGameProfile().getName().equals(pname)) {
-                success("Renamed "+player.getGameProfile().getName());
+                success("Renamed " + player.getGameProfile().getName());
                 ((IGameProfileMixin) player.getGameProfile()).coffee_setName(newName);
                 return;
             }
         }
-        error("No players called \""+pname+"\" found");
+        error("No players called \"" + pname + "\" found");
     }
 }

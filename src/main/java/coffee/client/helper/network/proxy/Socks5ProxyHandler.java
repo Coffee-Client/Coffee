@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2022 Coffee Client, 0x150 and contributors. All rights reserved.
+ */
+
 package coffee.client.helper.network.proxy;
 
 import coffee.client.helper.network.handler.socksx.v5.DefaultSocks5CommandRequest;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Coffee client, 0x150 and contributors. See copyright file in project root.
+ * Copyright (c) 2022 Coffee Client, 0x150 and contributors. All rights reserved.
  */
 
 package coffee.client.feature.command.impl;
@@ -49,9 +49,13 @@ public class ConfigUtils extends Command {
 
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
-        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.STRING, "load", "save"), new PossibleArgument(ArgumentType.STRING,
-                Arrays.stream(Objects.requireNonNull(CONFIG_STORAGE.listFiles())).map(File::getName).toList().toArray(String[]::new)
-        ));
+        return StaticArgumentServer.serveFromStatic(
+                index,
+                new PossibleArgument(ArgumentType.STRING, "load", "save"),
+                new PossibleArgument(ArgumentType.STRING,
+                        Arrays.stream(Objects.requireNonNull(CONFIG_STORAGE.listFiles())).map(File::getName).toList().toArray(String[]::new)
+                )
+        );
     }
 
     @Override

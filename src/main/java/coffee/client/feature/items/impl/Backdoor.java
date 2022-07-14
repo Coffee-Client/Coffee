@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Shadow client, Saturn5VFive and contributors 2022. All rights reserved.
+ * Copyright (c) 2022 Coffee Client, 0x150 and contributors. All rights reserved.
  */
 
 package coffee.client.feature.items.impl;

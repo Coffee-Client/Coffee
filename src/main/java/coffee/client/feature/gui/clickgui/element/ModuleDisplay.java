@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2022 Coffee Client, 0x150 and contributors. All rights reserved.
+ */
+
 package coffee.client.feature.gui.clickgui.element;
 
 import coffee.client.feature.gui.clickgui.ClickGUI;
@@ -64,8 +68,7 @@ public class ModuleDisplay extends Element {
                     }
                 }
                 if (render) { // should we render our tooltip and selection?
-                    Renderer.R2D.renderRoundedQuad(
-                            stack,
+                    Renderer.R2D.renderRoundedQuad(stack,
                             new Color(255, 255, 255, 30),
                             getPositionX(),
                             getPositionY(),

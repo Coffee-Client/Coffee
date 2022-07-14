@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2022 Coffee Client, 0x150 and contributors. All rights reserved.
+ */
+
 package me.x150.analytics;
 
 import coffee.client.feature.gui.screen.HomeScreen;

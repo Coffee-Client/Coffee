@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2022 Coffee Client, 0x150 and contributors. All rights reserved.
+ */
+
 package coffee.client.helper.render.shader;
 
 import ladysnake.satin.api.managed.ManagedShaderEffect;

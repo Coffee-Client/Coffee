@@ -1,2 +1,3 @@
-Complete clickgui redesign
-Rewrite of most of the gui system
+ARemade killaura
+Added fakenick
+Improved chat suggestions

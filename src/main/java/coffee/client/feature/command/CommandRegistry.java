@@ -19,6 +19,7 @@ import coffee.client.feature.command.impl.EVclip;
 import coffee.client.feature.command.impl.Effect;
 import coffee.client.feature.command.impl.Equip;
 import coffee.client.feature.command.impl.FakeItem;
+import coffee.client.feature.command.impl.FakeNick;
 import coffee.client.feature.command.impl.ForEach;
 import coffee.client.feature.command.impl.Gamemode;
 import coffee.client.feature.command.impl.HClip;
@@ -124,6 +125,7 @@ public class CommandRegistry {
         vanillaCommands.add(new SocketKick());
         vanillaCommands.add(new SelfDestruct());
         vanillaCommands.add(new ItemExploit());
+        vanillaCommands.add(new FakeNick());
 
         rebuildSharedCommands();
     }

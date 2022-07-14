@@ -89,7 +89,7 @@ public class AChatScreenMixin extends Screen {
         if (args.length > 0) {
             Command c = CommandRegistry.getByAlias(cmd);
             if (c != null) {
-                a = List.of(c.getSuggestionsWithType(args.length - 1, args).suggestions());
+                a = List.of(c.getSuggestionsWithType(args.length - 1, args).suggestionSupplier().get());
             } else {
                 return new ArrayList<>(); // we have no command to ask -> we have no suggestions
             }
@@ -242,7 +242,7 @@ public class AChatScreenMixin extends Screen {
                             continue;
                         }
                         if (countedGaps >= 1) {
-                            ArgumentType current = c.getSuggestionsWithType(countedGaps - 1, args).type();
+                            ArgumentType current = c.getSuggestionsWithType(countedGaps - 1, args).argType();
                             int col = 0xFFFFFF;
                             if (current != null) {
                                 col = current.getColor().getRGB();

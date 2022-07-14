@@ -4,5 +4,10 @@
 
 package coffee.client.feature.command.coloring;
 
-public record PossibleArgument(ArgumentType type, String... suggestions) {
+import java.util.function.Supplier;
+
+public record PossibleArgument(ArgumentType argType, Supplier<String[]> suggestionSupplier) {
+    public PossibleArgument(ArgumentType type, String... suggestions) {
+        this(type, () -> suggestions);
+    }
 }

@@ -25,7 +25,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Objects;
 
-@Mixin(LivingEntity.class)
+@Mixin(value = LivingEntity.class, priority = 990)
 public class LivingEntityMixin {
     @Inject(method = "onAttacking", at = @At("HEAD"))
     public void coffee_setLastAttacked(Entity target, CallbackInfo ci) {

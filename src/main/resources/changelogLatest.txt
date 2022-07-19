@@ -1,3 +1,4 @@
-Better killaura, bypasses aac for a while
-Range sliders
-METEOR AND BARITONE COMPAT!!!!!!!!!!!!!!
+Fixed a few bugs with rotations
+Clickgui search
+No obfuscated text setting in anticrash
+some more shit idk

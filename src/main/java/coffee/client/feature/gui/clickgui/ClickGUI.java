@@ -198,26 +198,28 @@ public class ClickGUI extends AAScreen {
         for (Element element : elcpy) {
             element.render(stack, mouseX, mouseY);
         }
-        stack.push();
-        double pad = 2;
-        double hei = pad + FontRenderers.getRenderer().getFontHeight() + pad;
-        stack.translate(0, (hei + pad) * (1 - Transitions.easeOutExpo(searchAnim)), 0);
-        double textWid = FontRenderers.getRenderer().getStringWidth(oldSearchTerm);
-        Renderer.R2D.renderRoundedQuad(stack,
-                new Color(20, 20, 20),
-                width - pad - pad - textWid - pad,
-                height - pad - hei,
-                width - pad,
-                height - pad,
-                5,
-                2,
-                2,
-                2,
-                10
-        );
-        FontRenderers.getRenderer()
-                .drawString(stack, oldSearchTerm, width - pad - pad - textWid, height - pad - pad - FontRenderers.getRenderer().getFontHeight(), 0xFFFFFF);
-        stack.pop();
+        if (searchAnim != 0) {
+            stack.push();
+            double pad = 2;
+            double hei = pad + FontRenderers.getRenderer().getFontHeight() + pad;
+            stack.translate(0, (hei + pad) * (1 - Transitions.easeOutExpo(searchAnim)), 0);
+            double textWid = FontRenderers.getRenderer().getStringWidth(oldSearchTerm);
+            Renderer.R2D.renderRoundedQuad(stack,
+                    new Color(20, 20, 20),
+                    width - pad - pad - textWid - pad,
+                    height - pad - hei,
+                    width - pad,
+                    height - pad,
+                    5,
+                    2,
+                    2,
+                    2,
+                    10
+            );
+            FontRenderers.getRenderer()
+                    .drawString(stack, oldSearchTerm, width - pad - pad - textWid, height - pad - pad - FontRenderers.getRenderer().getFontHeight(), 0xFFFFFF);
+            stack.pop();
+        }
         if (tooltipContent != null) {
             String[] split = tooltipContent.split("\n");
             double height = FontRenderers.getRenderer().getFontHeight() * split.length + 2;

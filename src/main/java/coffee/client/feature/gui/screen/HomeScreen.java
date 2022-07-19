@@ -54,6 +54,7 @@ public class HomeScreen extends ClientScreen {
     boolean fadeOut = false;
     boolean currentAccountTextureLoaded = false;
     UUID previousChecked = null;
+    boolean showedMeteorWarn = false;
 
     private HomeScreen() {
         super(MSAAFramebuffer.MAX_SAMPLES);
@@ -116,7 +117,7 @@ public class HomeScreen extends ClientScreen {
             rootX += w + 5;
         }
     }
-    boolean showedMeteorWarn = false;
+
     @Override
     protected void init() {
         super.init();

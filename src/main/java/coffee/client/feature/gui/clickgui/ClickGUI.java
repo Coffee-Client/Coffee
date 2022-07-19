@@ -13,8 +13,10 @@ import coffee.client.helper.manager.ShaderManager;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.Transitions;
 import coffee.client.helper.util.Utils;
+import lombok.Getter;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
+import org.lwjgl.glfw.GLFW;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -28,6 +30,11 @@ public class ClickGUI extends AAScreen {
     boolean initialized = false;
     boolean closing = false;
     double progress = 0;
+
+    @Getter
+    String searchTerm = "", oldSearchTerm = "";
+
+    double searchAnim = 0;
 
     double tooltipX, tooltipY;
     String tooltipContent;
@@ -43,6 +50,15 @@ public class ClickGUI extends AAScreen {
             instance = new ClickGUI();
         }
         return instance;
+    }
+
+    public boolean matchesSearchTerm(String content) {
+        for (char c : searchTerm.toLowerCase().toCharArray()) {
+            if (!content.toLowerCase().contains(String.valueOf(c))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public void setTooltip(String content) {
@@ -103,6 +119,13 @@ public class ClickGUI extends AAScreen {
         progress += delta;
         progress = MathHelper.clamp(progress, 0, 1);
 
+        double d = 0.04;
+        if (searchTerm.isEmpty()) {
+            d *= -1;
+        }
+        searchAnim += d;
+        searchAnim = MathHelper.clamp(searchAnim, 0, 1);
+
         super.onFastTick();
     }
 
@@ -112,11 +135,39 @@ public class ClickGUI extends AAScreen {
         if (b) {
             return true;
         }
-        if (keyCode == 256) {
-            closing = true;
-            return true;
+        switch (keyCode) {
+            case GLFW.GLFW_KEY_ESCAPE -> {
+                if (!searchTerm.isEmpty()) {
+                    searchTerm = "";
+                } else {
+                    closing = true;
+                }
+                return true;
+            }
+            case GLFW.GLFW_KEY_BACKSPACE -> {
+                if (!searchTerm.isEmpty()) {
+                    searchTerm = searchTerm.substring(0, searchTerm.length() - 1);
+                    if (!searchTerm.isEmpty()) {
+                        oldSearchTerm = searchTerm;
+                    }
+                }
+            }
         }
         return false;
+    }
+
+    @Override
+    public boolean charTyped(char chr, int modifiers) {
+        boolean b = super.charTyped(chr, modifiers);
+        if (b) {
+            return true;
+        }
+        if (searchTerm.isEmpty()) {
+            oldSearchTerm = "";
+        }
+        searchTerm += chr;
+        oldSearchTerm += chr;
+        return true;
     }
 
     @Override
@@ -131,6 +182,7 @@ public class ClickGUI extends AAScreen {
         matrices.scale((float) interpolated, (float) interpolated, 1);
         super.render(matrices, mouseX, mouseY, delta);
         matrices.pop();
+
     }
 
     @Override
@@ -146,6 +198,25 @@ public class ClickGUI extends AAScreen {
         for (Element element : elcpy) {
             element.render(stack, mouseX, mouseY);
         }
+        stack.push();
+        double pad = 2;
+        double hei = pad + FontRenderers.getRenderer().getFontHeight() + pad;
+        stack.translate(0, (hei + pad) * (1 - Transitions.easeOutExpo(searchAnim)), 0);
+        double textWid = FontRenderers.getRenderer().getStringWidth(oldSearchTerm);
+        Renderer.R2D.renderRoundedQuad(stack,
+                new Color(20, 20, 20),
+                width - pad - pad - textWid - pad,
+                height - pad - hei,
+                width - pad,
+                height - pad,
+                5,
+                2,
+                2,
+                2,
+                10);
+        FontRenderers.getRenderer()
+                .drawString(stack, oldSearchTerm, width - pad - pad - textWid, height - pad - pad - FontRenderers.getRenderer().getFontHeight(), 0xFFFFFF);
+        stack.pop();
         if (tooltipContent != null) {
             String[] split = tooltipContent.split("\n");
             double height = FontRenderers.getRenderer().getFontHeight() * split.length + 2;

@@ -51,6 +51,15 @@ public class ModuleDisplay extends Element {
         leftAnim = MathHelper.clamp(leftAnim, 0, 1);
     }
 
+    boolean shouldBeActive() {
+        return ClickGUI.instance().matchesSearchTerm(module.getName());
+    }
+
+    @Override
+    public boolean isActive() {
+        return shouldBeActive();
+    }
+
     @Override
     public void render(MatrixStack stack, double x, double y) {
         double bruhHeight = actualHeight;

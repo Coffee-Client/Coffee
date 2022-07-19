@@ -28,7 +28,8 @@ public class FakeNick extends Command {
 
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
-        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.PLAYER,
+        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(
+                ArgumentType.PLAYER,
                 () -> Objects.requireNonNull(CoffeeMain.client.world)
                         .getPlayers()
                         .stream()

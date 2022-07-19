@@ -38,7 +38,7 @@ public class Freecam extends Module {
         super("Freecam", "Imitates spectator without you having permission to use it", ModuleType.RENDER);
     }
 
-    @EventListener(type = EventType.PACKET_SEND)
+    @EventListener(value = EventType.PACKET_SEND)
     void onPacketSend(PacketEvent event) {
         if (event.getPacket() instanceof PlayerMoveC2SPacket) {
             event.setCancelled(true);
@@ -48,7 +48,7 @@ public class Freecam extends Module {
         }
     }
 
-    @EventListener(type = EventType.NOCLIP_QUERY)
+    @EventListener(value = EventType.NOCLIP_QUERY)
     void onNoclip(PlayerNoClipQueryEvent event) {
         if (event.getPlayer().isOnGround()) {
             return;
@@ -56,7 +56,7 @@ public class Freecam extends Module {
         event.setNoClipState(PlayerNoClipQueryEvent.NoClipState.ACTIVE);
     }
 
-    @EventListener(type = EventType.SHOULD_RENDER_CHUNK)
+    @EventListener(value = EventType.SHOULD_RENDER_CHUNK)
     void shouldRenderChunk(ChunkRenderQueryEvent event) {
         event.setShouldRender(true);
     }

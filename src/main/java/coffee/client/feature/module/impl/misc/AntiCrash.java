@@ -11,10 +11,9 @@ import coffee.client.feature.gui.notifications.Notification;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleRegistry;
 import coffee.client.feature.module.ModuleType;
+import coffee.client.helper.event.EventListener;
 import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.Events;
 import coffee.client.helper.event.events.PacketEvent;
-import coffee.client.helper.event.events.base.Event;
 import coffee.client.helper.util.Utils;
 import coffee.client.mixin.network.IParticleS2CPacketMixin;
 import coffee.client.mixinUtil.ParticleManagerDuck;
@@ -30,7 +29,7 @@ public class AntiCrash extends Module {
             .description("Prevents too many screens from being opened")
             .get());
     final BooleanSetting capVel = this.config.create(new BooleanSetting.Builder(true).name("Cap velocity")
-            .description("Prevents an abnormal sized velocity packet from going through")
+            .description("Prevents an abnormally sized velocity packet from going through")
             .get());
     @Getter
     final BooleanSetting capParticles = this.config.create(new BooleanSetting.Builder(true).name("Cap particles")
@@ -60,6 +59,11 @@ public class AntiCrash extends Module {
             .description("Does not render bossbars")
             .get());
 
+    @Getter
+    BooleanSetting disableObfText = this.config.create(new BooleanSetting.Builder(true).name("Disable obfuscation")
+            .description("Disables obfuscated text")
+            .get());
+
     long lastScreen = System.currentTimeMillis();
     Notification lastCrashNotif = null;
 
@@ -67,7 +71,6 @@ public class AntiCrash extends Module {
         super("AntiCrash", "Prevents you from being fucked", ModuleType.MISC);
         nameMax.showIf(capNames::getValue);
         particleMax.showIf(capParticles::getValue);
-        Events.registerEventHandler(EventType.PACKET_RECEIVE, this::handlePacketEvent);
     }
 
     public static AntiCrash instance() {
@@ -77,12 +80,12 @@ public class AntiCrash extends Module {
         return instance;
     }
 
-    void handlePacketEvent(Event e) {
+    @EventListener(EventType.PACKET_RECEIVE)
+    void handlePacketEvent(PacketEvent e) {
         if (!this.isEnabled()) {
             return;
         }
-        PacketEvent pe = (PacketEvent) e;
-        if (pe.getPacket() instanceof OpenScreenS2CPacket && screenGui.getValue()) {
+        if (e.getPacket() instanceof OpenScreenS2CPacket && screenGui.getValue()) {
             long current = System.currentTimeMillis();
             long diff = current - lastScreen;
             lastScreen = current;
@@ -91,15 +94,15 @@ public class AntiCrash extends Module {
                 e.setCancelled(true);
             }
         }
-        if (pe.getPacket() instanceof EntityVelocityUpdateS2CPacket p && capVel.getValue()) {
-            double vx = p.getVelocityX() / 800d;
-            double vy = p.getVelocityY() / 800d;
-            double vz = p.getVelocityZ() / 800d;
-            if (vx > 500 || vy > 500 || vz > 500) {
-                Utils.Logging.warn("Server sent velocity packet that was too big!");
+        if (e.getPacket() instanceof EntityVelocityUpdateS2CPacket p && capVel.getValue()) {
+            double vx = p.getVelocityX() / 8000d;
+            double vy = p.getVelocityY() / 8000d;
+            double vz = p.getVelocityZ() / 8000d;
+            if (Math.abs(vx) >= 20 || Math.abs(vy) >= 20 || Math.abs(vz) >= 20) {
+                Utils.Logging.warn(String.format("Server sent abnormally big velocity packet (X:%f Y:%f Z:%f)", vx, vy, vz));
             }
         }
-        if (pe.getPacket() instanceof ParticleS2CPacket p && capParticles.getValue()) {
+        if (e.getPacket() instanceof ParticleS2CPacket p && capParticles.getValue()) {
             int partTotal = ((ParticleManagerDuck) CoffeeMain.client.particleManager).getTotalParticles();
             int newCount = partTotal + p.getCount();
             if (newCount >= particleMax.getValue()) {

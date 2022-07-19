@@ -77,16 +77,20 @@ public class ModuleDisplay extends Element {
                     }
                 }
                 if (render) { // should we render our tooltip and selection?
-                    Renderer.R2D.renderRoundedQuad(stack,
-                            new Color(255, 255, 255, 30),
-                            getPositionX(),
-                            getPositionY(),
-                            getPositionX() + getWidth(),
-                            getPositionY() + bruhHeight,
-                            2,
-                            10
-                    );
-                    ClickGUI.instance().setTooltip(module.getDescription());
+                    if (!module.isDisabled()) {
+                        Renderer.R2D.renderRoundedQuad(stack,
+                                new Color(255, 255, 255, 30),
+                                getPositionX(),
+                                getPositionY(),
+                                getPositionX() + getWidth(),
+                                getPositionY() + bruhHeight,
+                                2,
+                                10
+                        );
+                        ClickGUI.instance().setTooltip(module.getDescription());
+                    } else {
+                        ClickGUI.instance().setTooltip(module.getDescription() + "\nThis module is disabled: " + module.getDisabledReason());
+                    }
                 }
             }
         }
@@ -132,7 +136,7 @@ public class ModuleDisplay extends Element {
                 1f,
                 1f,
                 1f,
-                1f
+                module.isDisabled() ? 0.4f : 1f
         );
         this.cfd.setPositionX(getPositionX());
         this.cfd.setPositionY(getPositionY() + actualHeight + margin);

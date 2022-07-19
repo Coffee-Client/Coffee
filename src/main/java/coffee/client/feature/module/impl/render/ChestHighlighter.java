@@ -38,7 +38,7 @@ public class ChestHighlighter extends Module {
         positions.removeIf(blockPos -> blockPos.equals(p));
     }
 
-    @EventListener(type = EventType.BLOCK_ENTITY_RENDER)
+    @EventListener(value = EventType.BLOCK_ENTITY_RENDER)
     void r(BlockEntityRenderEvent be) {
         if (!this.isEnabled()) {
             return;

@@ -40,14 +40,14 @@ public class XRAY extends Module {
         return c1 || c2;
     }
 
-    @EventListener(type = EventType.BLOCK_RENDER)
+    @EventListener(value = EventType.BLOCK_RENDER)
     void blockRender(BlockRenderEvent bre) {
         if (!blockApplicable(bre.getBlockState().getBlock())) {
             bre.setCancelled(true);
         }
     }
 
-    @EventListener(type = EventType.SHOULD_RENDER_CHUNK)
+    @EventListener(value = EventType.SHOULD_RENDER_CHUNK)
     void shouldRenderChunk(ChunkRenderQueryEvent event) {
         event.setShouldRender(true);
     }

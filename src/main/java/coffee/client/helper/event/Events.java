@@ -61,22 +61,22 @@ public class Events {
                 if (declaredAnnotation.annotationType() == EventListener.class) {
                     EventListener ev = (EventListener) declaredAnnotation;
                     Class<?>[] params = declaredMethod.getParameterTypes();
-                    if (params.length != 1 || !params[0].isAssignableFrom(ev.type().getExpectedType())) {
+                    if (params.length != 1 || !params[0].isAssignableFrom(ev.value().getExpectedType())) {
                         throw new IllegalArgumentException(String.format(
                                 "Invalid signature: Expected %s.%s(%s) -> void, got %s.%s(%s) -> %s. Listener: %s",
                                 instance.getClass().getSimpleName(),
                                 declaredMethod.getName(),
-                                ev.type().getExpectedType().getSimpleName(),
+                                ev.value().getExpectedType().getSimpleName(),
                                 instance.getClass().getSimpleName(),
                                 declaredMethod.getName(),
                                 Arrays.stream(params).map(Class::getSimpleName).collect(Collectors.joining(", ")),
                                 declaredMethod.getReturnType().getName(),
-                                ev.type().name()
+                                ev.value().name()
                         ));
                     } else {
                         declaredMethod.setAccessible(true);
 
-                        ListenerEntry l = registerEventHandler((instance.getClass().getName() + declaredMethod.getName()).hashCode(), ev.type(), event -> {
+                        ListenerEntry l = registerEventHandler((instance.getClass().getName() + declaredMethod.getName()).hashCode(), ev.value(), event -> {
                             try {
                                 declaredMethod.invoke(instance, event);
                             } catch (IllegalAccessException | InvocationTargetException e) {

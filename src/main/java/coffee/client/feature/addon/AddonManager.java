@@ -70,7 +70,7 @@ public class AddonManager {
         new AddonManager();
     }
 
-    @EventListener(type = EventType.GAME_EXIT)
+    @EventListener(value = EventType.GAME_EXIT)
     @SuppressWarnings("unused")
     void saveConfig(Event event) {
         try {

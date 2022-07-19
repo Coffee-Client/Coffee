@@ -9,6 +9,7 @@ import coffee.client.feature.gui.ParticleRenderer;
 import coffee.client.feature.gui.notifications.Notification;
 import coffee.client.feature.gui.screen.base.ClientScreen;
 import coffee.client.feature.gui.widget.RoundButton;
+import coffee.client.helper.CompatHelper;
 import coffee.client.helper.font.FontRenderers;
 import coffee.client.helper.font.adapter.FontAdapter;
 import coffee.client.helper.render.GameTexture;
@@ -17,7 +18,6 @@ import coffee.client.helper.render.PlayerHeadResolver;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.render.Texture;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.screen.option.OptionsScreen;
@@ -54,7 +54,7 @@ public class HomeScreen extends ClientScreen {
     boolean fadeOut = false;
     boolean currentAccountTextureLoaded = false;
     UUID previousChecked = null;
-    boolean showedMeteorWarn = false;
+    boolean showedCompatWarn = false;
 
     private HomeScreen() {
         super(MSAAFramebuffer.MAX_SAMPLES);
@@ -121,9 +121,9 @@ public class HomeScreen extends ClientScreen {
     @Override
     protected void init() {
         super.init();
-        if (FabricLoader.getInstance().isModLoaded("meteor-client") && !showedMeteorWarn && client.currentScreen == this) {
-            showedMeteorWarn = true;
-            client.setScreen(new NotificationScreen(this, "Meteor is loaded, some features might not be available", Notification.Type.WARNING));
+        if (CompatHelper.wereAnyFound() && !showedCompatWarn && client.currentScreen == this) {
+            showedCompatWarn = true;
+            client.setScreen(new NotificationScreen(this, "Compatibility issues found, some features might not be available", Notification.Type.WARNING));
         }
         initTime = System.currentTimeMillis();
         initWidgets();

@@ -209,7 +209,7 @@ public class Flight extends Module {
                 .sendPacket(new ClientCommandC2SPacket(CoffeeMain.client.player, ClientCommandC2SPacket.Mode.RELEASE_SHIFT_KEY));
     }
 
-    @EventListener(type = EventType.PACKET_SEND)
+    @EventListener(value = EventType.PACKET_SEND)
     void giveTwoShits(PacketEvent event) {
         if (mode.getValue() == FlightMode.Walk) {
             if (!this.isEnabled()) {

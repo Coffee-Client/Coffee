@@ -130,7 +130,7 @@ public class SuperheroFX extends Module {
         }
     }
 
-    @EventListener(type = EventType.PACKET_SEND)
+    @EventListener(value = EventType.PACKET_SEND)
     void packetSend(PacketEvent pe) {
         if (pe.getPacket() instanceof PlayerInteractEntityC2SPacket packet) {
             PlayerInteractEntityC2SPacketMixin mixin = (PlayerInteractEntityC2SPacketMixin) packet;

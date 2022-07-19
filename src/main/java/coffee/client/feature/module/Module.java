@@ -10,6 +10,8 @@ import coffee.client.feature.config.DoubleSetting;
 import coffee.client.feature.config.ModuleConfig;
 import coffee.client.feature.gui.notifications.Notification;
 import coffee.client.helper.event.Events;
+import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.math.MatrixStack;
 
@@ -26,6 +28,14 @@ public abstract class Module {
     private final ModuleType moduleType;
     private final BooleanSetting toasts;
     private boolean enabled = false;
+
+    @Getter
+    @Setter
+    private boolean disabled = false;
+
+    @Getter
+    @Setter
+    private String disabledReason = "";
 
     public Module(String n, String d, ModuleType type) {
         this.name = n;
@@ -107,6 +117,10 @@ public abstract class Module {
     }
 
     public void setEnabled(boolean enabled) {
+        if (isDisabled()) {
+            this.enabled = false;
+            return;
+        }
         this.enabled = enabled;
         if (toasts.getValue()) {
             Notification.create(1000, "Module toggle", Notification.Type.INFO, (this.enabled ? "§aEn" : "§cDis") + "abled §r" + this.getName());

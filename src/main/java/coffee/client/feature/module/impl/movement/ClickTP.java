@@ -67,7 +67,7 @@ public class ClickTP extends Module {
         return null;
     }
 
-    @EventListener(type = EventType.MOUSE_EVENT)
+    @EventListener(value = EventType.MOUSE_EVENT)
     void onMouseEvent(MouseEvent event) {
         if (!this.isEnabled()) {
             return;

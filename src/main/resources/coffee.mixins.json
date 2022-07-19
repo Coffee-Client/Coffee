@@ -19,6 +19,7 @@
     "ParticleManagerMixin",
     "SharedConstantsMixin",
     "SimpleOptionMixin",
+    "StyleMixin",
     "entity.AreaEffectCloudEntityMixin",
     "entity.ClientPlayerEntityMixin",
     "entity.EntityMixin",

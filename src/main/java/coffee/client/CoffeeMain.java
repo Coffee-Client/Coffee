@@ -10,6 +10,7 @@ import coffee.client.feature.gui.FastTickable;
 import coffee.client.feature.gui.notifications.NotificationRenderer;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleRegistry;
+import coffee.client.helper.CompatHelper;
 import coffee.client.helper.event.EventType;
 import coffee.client.helper.event.Events;
 import coffee.client.helper.event.events.base.NonCancellableEvent;
@@ -71,6 +72,9 @@ public class CoffeeMain implements ModInitializer {
 
         log(Level.INFO, "Loading config");
         ConfigManager.loadState();
+
+        log(Level.INFO, "Checking for compat issues");
+        CompatHelper.init();
 
         // view the info on top at Analytics before you say "analytics bad"
         Analytics analytics = new Analytics(MOD_NAME);

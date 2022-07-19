@@ -213,7 +213,8 @@ public class ClickGUI extends AAScreen {
                 2,
                 2,
                 2,
-                10);
+                10
+        );
         FontRenderers.getRenderer()
                 .drawString(stack, oldSearchTerm, width - pad - pad - textWid, height - pad - pad - FontRenderers.getRenderer().getFontHeight(), 0xFFFFFF);
         stack.pop();

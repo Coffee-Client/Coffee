@@ -110,7 +110,7 @@ public class Utils {
             List<String> splitContent = new ArrayList<>();
             StringBuilder line = new StringBuilder();
             for (String c : s.split(" ")) {
-                if (rendererUsed.getStringWidth(line + c) >= maxWidth - 10) {
+                if (rendererUsed.getStringWidth(line + c) >= maxWidth) {
                     splitContent.add(line.toString().trim());
                     line = new StringBuilder();
                 }

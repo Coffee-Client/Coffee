@@ -13,6 +13,7 @@ import coffee.client.feature.module.ModuleRegistry;
 import coffee.client.feature.module.impl.misc.ClientSettings;
 import coffee.client.feature.module.impl.misc.InfChatLength;
 import coffee.client.helper.font.FontRenderers;
+import coffee.client.helper.render.MSAAFramebuffer;
 import coffee.client.helper.render.Renderer;
 import lombok.val;
 import net.minecraft.client.gui.screen.ChatScreen;
@@ -174,7 +175,7 @@ public class AChatScreenMixin extends Screen {
         String p = getPrefix();
         String t = chatField.getText();
         if (t.startsWith(p) && !SelfDestruct.shouldSelfDestruct()) {
-            renderSuggestions(matrices);
+            MSAAFramebuffer.use(MSAAFramebuffer.MAX_SAMPLES, () -> renderSuggestions(matrices));
         }
     }
 

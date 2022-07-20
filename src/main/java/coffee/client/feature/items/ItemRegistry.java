@@ -7,6 +7,7 @@ package coffee.client.feature.items;
 
 import coffee.client.feature.items.impl.Backdoor;
 import coffee.client.feature.items.impl.Fireball;
+import coffee.client.feature.items.impl.InfiniSculk;
 import coffee.client.feature.items.impl.InfiniteEntity;
 import coffee.client.feature.items.impl.Nuke;
 import coffee.client.feature.items.impl.Plague;
@@ -31,6 +32,7 @@ public class ItemRegistry {
         items.add(new Backdoor());
         items.add(new Fireball());
         items.add(new InfiniteEntity());
+        items.add(new InfiniSculk());
     }
 
     public List<Item> getItems() {

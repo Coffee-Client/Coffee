@@ -38,13 +38,13 @@ import java.util.List;
 public class ESP extends Module {
     //static DumpVertexConsumer consumer = new DumpVertexConsumer();
     static DumpVertexProvider provider;
-    public final EnumSetting<Mode> outlineMode = this.config.create(new EnumSetting.Builder<>(Mode.Filled).name("Outline mode")
+    public final EnumSetting<Mode> outlineMode = this.config.create(new EnumSetting.Builder<>(Mode.Shader).name("Outline mode")
             .description("How to render the outline")
             .get());
     public final EnumSetting<ShaderMode> shaderMode = this.config.create(new EnumSetting.Builder<>(ShaderMode.Simple).name("Shader mode")
             .description("How to render the shader esp")
             .get());
-    public final BooleanSetting entities = this.config.create(new BooleanSetting.Builder(false).name("Show entities").description("Render entities").get());
+    public final BooleanSetting entities = this.config.create(new BooleanSetting.Builder(true).name("Show entities").description("Render entities").get());
     public final BooleanSetting players = this.config.create(new BooleanSetting.Builder(true).name("Show players").description("Render players").get());
     public final List<double[]> vertexDumps = new ArrayList<>();
     final DoubleSetting range = this.config.create(new DoubleSetting.Builder(64).name("Range")

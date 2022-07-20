@@ -4,8 +4,10 @@
 
 package coffee.client.feature.gui.element.impl;
 
+import coffee.client.feature.gui.HasSpecialCursor;
 import coffee.client.feature.gui.element.Element;
 import coffee.client.helper.font.FontRenderers;
+import coffee.client.helper.render.Cursor;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.Transitions;
 import lombok.Getter;
@@ -15,7 +17,7 @@ import net.minecraft.util.math.MathHelper;
 
 import java.awt.Color;
 
-public class ButtonElement extends Element {
+public class ButtonElement extends Element implements HasSpecialCursor {
 
     public static final Color STANDARD = new Color(255, 255, 255);
     public static final Color SUCCESS = new Color(0x24FC2B);
@@ -127,5 +129,15 @@ public class ButtonElement extends Element {
     @Override
     public boolean mouseScrolled(double x, double y, double amount) {
         return false;
+    }
+
+    @Override
+    public long getCursor() {
+        return Cursor.CLICK;
+    }
+
+    @Override
+    public boolean shouldApplyCustomCursor() {
+        return isHovered;
     }
 }

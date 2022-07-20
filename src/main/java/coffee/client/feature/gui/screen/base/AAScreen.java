@@ -5,8 +5,11 @@
 package coffee.client.feature.gui.screen.base;
 
 import coffee.client.CoffeeMain;
+import coffee.client.feature.command.impl.SelfDestruct;
 import coffee.client.feature.gui.FastTickable;
+import coffee.client.feature.gui.HasSpecialCursor;
 import coffee.client.feature.gui.element.Element;
+import coffee.client.helper.render.Cursor;
 import coffee.client.helper.render.MSAAFramebuffer;
 import lombok.Getter;
 import net.minecraft.client.gui.Drawable;
@@ -123,6 +126,21 @@ public class AAScreen extends Screen implements FastTickable {
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
         return iterateOverChildren(element -> element.mouseScrolled(mouseX, mouseY, amount));
+    }
+
+    @Override
+    public void mouseMoved(double mouseX, double mouseY) {
+        long c = Cursor.STANDARD;
+        if (!SelfDestruct.shouldSelfDestruct()) {
+            for (Element child : getElements()) {
+                if (child instanceof HasSpecialCursor specialCursor) {
+                    if (specialCursor.shouldApplyCustomCursor()) {
+                        c = specialCursor.getCursor();
+                    }
+                }
+            }
+        }
+        Cursor.setGlfwCursor(c);
     }
 
     protected boolean iterateOverChildren(Function<Element, Boolean> supp) {

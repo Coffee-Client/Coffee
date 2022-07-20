@@ -4,12 +4,14 @@
 
 package coffee.client.feature.gui.screen;
 
-import coffee.client.feature.gui.FastTickable;
+import coffee.client.feature.gui.element.impl.ButtonElement;
 import coffee.client.feature.gui.notifications.Notification;
-import coffee.client.feature.gui.screen.base.ClientScreen;
-import coffee.client.feature.gui.widget.RoundButton;
+import coffee.client.feature.gui.screen.base.AAScreen;
 import coffee.client.helper.font.FontRenderers;
+import coffee.client.helper.manager.ShaderManager;
 import coffee.client.helper.render.Renderer;
+import coffee.client.helper.util.Transitions;
+import coffee.client.helper.util.Utils;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
@@ -17,43 +19,42 @@ import net.minecraft.util.math.MathHelper;
 
 import java.awt.Color;
 
-public class NotificationScreen extends ClientScreen implements FastTickable {
-    final String t;
-    final Notification.Type ty;
-    final Screen parent;
-    final Color bg = new Color(20, 20, 20, 100);
+public class NotificationScreen extends AAScreen {
+    Notification.Type icon;
+    String title;
+    String[] contentSplit;
+    int maxWidth = 200;
+    int pad = 5;
+    ButtonElement ok;
+    Screen parent;
     boolean closing = false;
     double anim = 0;
 
-    public NotificationScreen(Screen parent, String text, Notification.Type type) {
-        this.ty = type;
-        this.t = text;
+    public NotificationScreen(Notification.Type icon, String title, String content, Screen parent) {
+        this.title = title;
+        this.icon = icon;
+        contentSplit = Utils.splitLinesToWidth(content, maxWidth - pad * 2, FontRenderers.getRenderer());
         this.parent = parent;
     }
 
     @Override
-    public void onFastTick() {
-        double d = 0.05;
-        if (closing) {
-            d *= -1;
-        }
-        anim += d;
-        anim = MathHelper.clamp(anim, 0, 1);
+    protected void init() {
+        //        System.out.println("init");
+        closing = false;
+        anim = 0;
+        this.ok = new ButtonElement(ButtonElement.STANDARD, 0, 0, 0, 20, "Close", this::close);
+        addChild(this.ok);
     }
 
     @Override
-    protected void init() {
-        double height = 5 + 32 + 5 + FontRenderers.getRenderer().getMarginHeight() + 5 + 20 + 5;
-        double w = Math.max(120, FontRenderers.getRenderer().getStringWidth(t));
-        RoundButton rb = new RoundButton(RoundButton.STANDARD,
-                width / 2d - w / 2d,
-                this.height / 2d - height / 2d + height - 5 - 20,
-                w,
-                20,
-                "Close",
-                this::close
-        );
-        addDrawableChild(rb);
+    public void onFastTick() {
+        double delta = 0.04;
+        if (closing) {
+            delta *= -1;
+        }
+        anim += delta;
+        anim = MathHelper.clamp(anim, 0, 1);
+        super.onFastTick();
     }
 
     @Override
@@ -62,45 +63,70 @@ public class NotificationScreen extends ClientScreen implements FastTickable {
     }
 
     @Override
-    public void renderInternal(MatrixStack stack, int mouseX, int mouseY, float delta) {
-        double x = anim;
-        double anim = x < 0.5 ? 16 * x * x * x * x * x : 1 - Math.pow(-2 * x + 2, 5) / 2;
-        if (parent != null) {
-            parent.render(stack, mouseX, mouseY, delta);
+    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+        double anim = Transitions.easeOutExpo(this.anim);
+        if (anim == 0 && closing) {
+            client.setScreen(parent);
+            return;
         }
-        Renderer.R2D.renderQuad(stack, Renderer.Util.modify(bg, -1, -1, -1, (int) (160 * anim)), 0, 0, width, height);
-        stack.push();
-        stack.translate(width / 2d * (1 - anim), height / 2d * (1 - anim), 10);
-        stack.scale((float) anim, (float) anim, 1);
+        if (parent != null) {
+            parent.render(matrices, mouseX, mouseY, delta);
+        }
+        ShaderManager.BLUR.getEffect().setUniformValue("progress", (float) anim);
+        ShaderManager.BLUR.render(delta);
+        matrices.push();
+        matrices.translate(this.width / 2d * (1 - anim), this.height / 2d * (1 - anim), 0);
+        matrices.scale((float) anim, (float) anim, 1);
+        super.render(matrices, mouseX, mouseY, delta);
+        matrices.pop();
+    }
 
-        double height = 5 + 32 + 5 + FontRenderers.getRenderer().getMarginHeight() + 5 + 20 + 5;
-        double w = Math.max(120, FontRenderers.getRenderer().getStringWidth(t)) + 10;
-        Renderer.R2D.renderRoundedQuad(stack,
-                new Color(20, 20, 20, 255),
-                (width - w) / 2d,
-                (this.height - height) / 2d,
-                (width - w) / 2d + w,
-                (this.height - height) / 2d + height,
-                5,
-                20
-        );
-        Color p = ty.getC();
-        RenderSystem.setShaderColor(p.getRed() / 255f, p.getGreen() / 255f, p.getBlue() / 255f, p.getAlpha() / 255f);
-        RenderSystem.setShaderTexture(0, ty.getI());
-        Renderer.R2D.renderTexture(stack, width / 2d - 32 / 2d, this.height / 2d - height / 2d + 5, 32, 32, 0, 0, 32, 32, 32, 32);
+    @Override
+    public void renderInternal(MatrixStack stack, int mouseX, int mouseY, float delta) {
+        //        double anim = Transitions.easeOutExpo(this.anim);
+        double width = 0;
+        double headheight = FontRenderers.getRenderer().getFontHeight();
+        double height = pad+headheight+pad + FontRenderers.getRenderer().getFontHeight() * contentSplit.length + pad + 20 + pad;
+        for (String s : contentSplit) {
+            width = Math.max(FontRenderers.getRenderer().getStringWidth(s), width);
+        }
+        width += pad * 2;
+//        width = Math.max(width, 100);
+        double startX = this.width / 2d - width / 2d;
+        double startY = this.height / 2d - height / 2d;
+        Renderer.R2D.renderRoundedQuadWithShadow(stack, new Color(20, 20, 20), startX, startY, startX + width, startY + height, 5, 10);
+        double texDims = 12;
+        RenderSystem.setShaderTexture(0, icon.getI());
+        Color c = icon.getC();
+        RenderSystem.setShaderColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, 1f);
+        Renderer.R2D.renderTexture(stack,
+                startX + pad,
+                startY + pad + (headheight) / 2d - texDims / 2d,
+                texDims,
+                texDims,
+                0,
+                0,
+                texDims,
+                texDims,
+                texDims,
+                texDims);
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
         FontRenderers.getRenderer()
-                .drawCenteredString(stack,
-                        t,
-                        width / 2d,
-                        this.height / 2d + height / 2d - 5 - 20 - 5 - FontRenderers.getRenderer().getMarginHeight(),
-                        0xFFFFFF
-                );
-        if (closing && anim == 0) {
-            client.setScreen(parent);
+                .drawString(stack,
+                        title,
+                        startX + pad + texDims + pad,
+                        startY + pad + (headheight) / 2d - FontRenderers.getRenderer().getFontHeight() / 2d,
+                        0xCCCCCC);
+        double yOffset = 0;
+        for (String s : contentSplit) {
+            FontRenderers.getRenderer().drawString(stack, s, startX + pad, startY + FontRenderers.getRenderer().getFontHeight() + pad * 2 + yOffset, 0xFFFFFF);
+            yOffset += FontRenderers.getRenderer().getFontHeight();
         }
+        this.ok.setPositionX(startX + pad);
+        this.ok.setPositionY(startY + FontRenderers.getRenderer().getFontHeight() + pad * 2 + FontRenderers.getRenderer()
+                .getFontHeight() * contentSplit.length + pad);
+        this.ok.setWidth(width - pad * 2);
 
         super.renderInternal(stack, mouseX, mouseY, delta);
-        stack.pop();
     }
 }

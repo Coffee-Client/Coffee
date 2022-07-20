@@ -34,7 +34,7 @@ public abstract class ScreenMixin extends AbstractParentElement {
         return this.children;
     }
 
-    void handleCursor(double x, double y) {
+    void handleCursor(double y) {
         long c = Cursor.STANDARD;
         if (!SelfDestruct.shouldSelfDestruct()) {
             for (Element child : this.children) {
@@ -50,7 +50,7 @@ public abstract class ScreenMixin extends AbstractParentElement {
 
     @Override
     public void mouseMoved(double mouseX, double mouseY) {
-        handleCursor(mouseX, mouseY);
+        handleCursor(mouseY);
         super.mouseMoved(mouseX, mouseY);
     }
 }

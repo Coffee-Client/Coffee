@@ -93,7 +93,7 @@ public class NbtEditorScreen extends ClientScreen implements FastTickable {
             }
             initial.add(current.toString());
         } catch (Exception e) {
-            client.setScreen(new NotificationScreen(this, "Invalid JSON!", Notification.Type.ERROR));
+            client.setScreen(new NotificationScreen(Notification.Type.ERROR, "Invalid NBT", "The nbt provided is invalid", this));
         }
     }
 
@@ -104,7 +104,7 @@ public class NbtEditorScreen extends ClientScreen implements FastTickable {
             this.stack.setNbt(nc);
             this.close();
         } catch (Exception e) {
-            client.setScreen(new NotificationScreen(this, "Invalid JSON!", Notification.Type.ERROR));
+            client.setScreen(new NotificationScreen(Notification.Type.ERROR, "Invalid NBT", "The nbt provided is invalid", this));
         }
     }
 

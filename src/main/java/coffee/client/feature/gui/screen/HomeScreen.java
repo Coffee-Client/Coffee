@@ -102,7 +102,13 @@ public class HomeScreen extends ClientScreen {
         buttonsMap.add(new AbstractMap.SimpleEntry<>("Multiplayer", () -> CoffeeMain.client.setScreen(new MultiplayerScreen(this))));
         buttonsMap.add(new AbstractMap.SimpleEntry<>("Realms", () -> CoffeeMain.client.setScreen(new RealmsMainScreen(this))));
         buttonsMap.add(new AbstractMap.SimpleEntry<>("Alts", () -> {
-            CoffeeMain.client.setScreen(AltManagerScreen.instance());
+            //            CoffeeMain.client.setScreen(AltManagerScreen.instance());
+            CoffeeMain.client.setScreen(new NotificationScreen(
+                    Notification.Type.INFO,
+                    "GAMING",
+                    "gming moment this is fucking epic abcdajdkhfkjs fsjdkfhsdk fhsdjkf hsjdkfh sdjkfhsjkfh sk",
+                    this
+            ));
             //CoffeeMain.client.setScreen(new ProxyManagerScreen(this));
         }));
         buttonsMap.add(new AbstractMap.SimpleEntry<>("Settings", () -> CoffeeMain.client.setScreen(new OptionsScreen(this, CoffeeMain.client.options))));
@@ -123,7 +129,12 @@ public class HomeScreen extends ClientScreen {
         super.init();
         if (CompatHelper.wereAnyFound() && !showedCompatWarn && client.currentScreen == this) {
             showedCompatWarn = true;
-            client.setScreen(new NotificationScreen(this, "Compatibility issues found, some features might not be available", Notification.Type.WARNING));
+            client.setScreen(new NotificationScreen(
+                    Notification.Type.WARNING,
+                    "Compatability",
+                    "Compatibility issues found, some features might not be available",
+                    this
+            ));
         }
         initTime = System.currentTimeMillis();
         initWidgets();

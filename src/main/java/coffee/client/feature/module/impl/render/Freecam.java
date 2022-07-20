@@ -23,7 +23,7 @@ import java.util.Objects;
 public class Freecam extends Module {
 
     //    final SliderValue speed = (SliderValue) this.config.create("Speed", 1, 0, 10, 1).description("The speed to fly with");
-    final DoubleSetting speed = this.config.create(new DoubleSetting.Builder(1).name("Speed")
+    final DoubleSetting speed = this.config.create(new DoubleSetting.Builder(2).name("Speed")
             .description("The speed to fly with")
             .min(0)
             .max(10)

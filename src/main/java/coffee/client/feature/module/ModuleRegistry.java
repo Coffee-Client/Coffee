@@ -284,7 +284,7 @@ public class ModuleRegistry {
         registerModule(SurvivalNuker.class);
         registerModule(Nuker.class);
         registerModule(Scaffold.class);
-        registerModule(Test.class);
+        // registerModule(Test.class);
         registerModule(BlocksMCFlight.class);
         registerModule(NameTags.class);
         registerModule(Trail.class);

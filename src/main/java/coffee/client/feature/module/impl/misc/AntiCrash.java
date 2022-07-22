@@ -64,6 +64,21 @@ public class AntiCrash extends Module {
             .description("Disables obfuscated text")
             .get());
 
+    @Getter
+    BooleanSetting capAttributes = this.config.create(new BooleanSetting.Builder(true).name("Cap attributes")
+            .description("Caps the amount of attributes being rendered")
+            .get());
+
+    @Getter
+    DoubleSetting capAttributesAmount = this.config.create(new DoubleSetting.Builder(4)
+                .name("Cap attrib. max")
+                .description("How many attributes should be allowed to render (per modifier equipment slot)")
+                .min(0)
+                .max(64)
+                .precision(0)
+                .get());
+
+
     long lastScreen = System.currentTimeMillis();
     Notification lastCrashNotif = null;
 
@@ -71,6 +86,7 @@ public class AntiCrash extends Module {
         super("AntiCrash", "Prevents you from being fucked", ModuleType.MISC);
         nameMax.showIf(capNames::getValue);
         particleMax.showIf(capParticles::getValue);
+        capAttributesAmount.showIf(capAttributes::getValue);
     }
 
     public static AntiCrash instance() {

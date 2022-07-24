@@ -12,6 +12,7 @@ import coffee.client.feature.gui.screen.base.ClientScreen;
 import coffee.client.feature.gui.widget.RoundButton;
 import coffee.client.helper.font.FontRenderers;
 import coffee.client.helper.font.adapter.FontAdapter;
+import coffee.client.helper.font.adapter.impl.QuickFontAdapter;
 import coffee.client.helper.render.ClipStack;
 import coffee.client.helper.render.GameTexture;
 import coffee.client.helper.render.Rectangle;
@@ -26,6 +27,8 @@ import net.minecraft.util.Util;
 import org.lwjgl.opengl.GL40C;
 
 import java.awt.Color;
+import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,6 +70,14 @@ public class AddonManagerScreen extends ClientScreen implements FastTickable {
 
         }
         return super.mouseScrolled(mouseX, mouseY, amount);
+    }
+
+    @Override
+    public void filesDragged(List<Path> paths) {
+        for (Path path : paths) {
+            File file = path.toFile();
+            if (file.getName().endsWith(".jar")) AddonManager.INSTANCE.loadFromFile(file);
+        }
     }
 
     @Override
@@ -112,6 +123,12 @@ public class AddonManagerScreen extends ClientScreen implements FastTickable {
         double yOffset = 0;
         double xRoot = width / 2d - WIDGET_WIDTH / 2d + 5;
         double yRoot = height / 2d - WIDGET_HEIGHT / 2d + 5;
+        if (viewerList.isEmpty()) {
+            QuickFontAdapter customSize = FontRenderers.getCustomSize(40);
+            QuickFontAdapter customSize1 = FontRenderers.getCustomSize(30);
+            customSize.drawCenteredString(stack,"No addons",width/2d,height/2d-customSize.getFontHeight(),0xAAAAAA);
+            customSize1.drawCenteredString(stack,"Drag some in to load them",width/2d,height/2d,0xAAAAAA);
+        }
         for (AddonViewer addonViewer : new ArrayList<>(viewerList)) {
             addonViewer.render(stack, xRoot, yRoot + yOffset + scroller.getScroll(), mouseX, mouseY);
             yOffset += addonViewer.getHeight() + 5;
@@ -162,7 +179,7 @@ public class AddonManagerScreen extends ClientScreen implements FastTickable {
 
         public void render(MatrixStack stack, double x, double y, int mouseX, int mouseY) {
 
-            Color background = new Color(30, 30, 30);
+            Color background = new Color(25, 25, 25);
             Renderer.R2D.renderRoundedQuad(stack, background, x, y, x + width, y + getHeight(), 5, 20);
             RenderSystem.enableBlend();
             RenderSystem.colorMask(false, false, false, true);

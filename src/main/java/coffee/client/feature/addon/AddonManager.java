@@ -10,6 +10,7 @@ import coffee.client.feature.command.CommandRegistry;
 import coffee.client.feature.config.ModuleConfig;
 import coffee.client.feature.config.SettingBase;
 import coffee.client.feature.gui.clickgui.ClickGUI;
+import coffee.client.feature.gui.notifications.hudNotif.HudNotification;
 import coffee.client.feature.module.AddonModule;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleRegistry;
@@ -27,7 +28,9 @@ import java.io.InputStream;
 import java.nio.file.FileVisitResult;
 import java.nio.file.FileVisitor;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -118,7 +121,6 @@ public class AddonManager {
     Addon safeLoadAddon(File file) {
         CoffeeMain.log(Level.INFO, "Attempting to load addon " + file.getName());
         try {
-
             return loadAddon(file);
         } catch (Throwable e) {
             CoffeeMain.log(Level.ERROR, "Failed to load " + file.getName());
@@ -141,6 +143,10 @@ public class AddonManager {
             if (e instanceof ClassCastException) {
                 CoffeeMain.log(Level.INFO, "This error probably occurs because of an outdated coffee SDK. Please report this error to the addon developer(s).");
             }
+            if (e instanceof NoSuchFileException) {
+                CoffeeMain.log(Level.INFO, "This error means that the file was deleted when trying to load the addon, nothing to worry about.");
+                HudNotification.create("Addon "+file.getName()+" was deleted, removing.",5000, HudNotification.Type.ERROR);
+            }
         }
         return null;
     }
@@ -157,6 +163,17 @@ public class AddonManager {
                     file.renameTo(new File(file.getAbsolutePath() + ".disabled"));
                 }
             }
+        }
+    }
+
+    public void loadFromFile(File f) {
+        File file = new File(ADDON_DIRECTORY, f.getName());
+        try {
+            Files.copy(f.toPath(), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            safeLoadAddon(file);
+        } catch (Exception e) {
+            e.printStackTrace();
+            HudNotification.create("Failed to copy addon "+f.getName(),5000, HudNotification.Type.ERROR);
         }
     }
 

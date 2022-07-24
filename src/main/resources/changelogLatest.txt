@@ -1,4 +1,2 @@
-Fixed a few bugs with rotations
-Clickgui search
-No obfuscated text setting in anticrash
-some more shit idk
+Some more addon stuff
+i dont even know what i did in this one tbh

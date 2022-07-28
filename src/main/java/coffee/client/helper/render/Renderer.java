@@ -27,6 +27,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
@@ -61,6 +62,12 @@ public class Renderer {
 
         public static void renderFadingBlocks(MatrixStack stack) {
             fades.removeIf(FadingBlock::isDead);
+            fades.sort(Comparator.comparingDouble(value -> {
+                Vec3d pos = value.start.add(value.dimensions.multiply(.5));
+                Camera camera = CoffeeMain.client.getEntityRenderDispatcher().camera;
+                Vec3d camPos = camera.getPos();
+                return -pos.distanceTo(camPos);
+            }));
             for (FadingBlock fade : fades) {
                 if (fade == null) {
                     continue;

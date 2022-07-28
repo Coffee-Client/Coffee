@@ -76,7 +76,9 @@ public class AddonManagerScreen extends ClientScreen implements FastTickable {
     public void filesDragged(List<Path> paths) {
         for (Path path : paths) {
             File file = path.toFile();
-            if (file.getName().endsWith(".jar")) AddonManager.INSTANCE.loadFromFile(file);
+            if (file.getName().endsWith(".jar")) {
+                AddonManager.INSTANCE.loadFromFile(file);
+            }
         }
     }
 
@@ -126,8 +128,8 @@ public class AddonManagerScreen extends ClientScreen implements FastTickable {
         if (viewerList.isEmpty()) {
             QuickFontAdapter customSize = FontRenderers.getCustomSize(40);
             QuickFontAdapter customSize1 = FontRenderers.getCustomSize(30);
-            customSize.drawCenteredString(stack,"No addons",width/2d,height/2d-customSize.getFontHeight(),0xAAAAAA);
-            customSize1.drawCenteredString(stack,"Drag some in to load them",width/2d,height/2d,0xAAAAAA);
+            customSize.drawCenteredString(stack, "No addons", width / 2d, height / 2d - customSize.getFontHeight(), 0xAAAAAA);
+            customSize1.drawCenteredString(stack, "Drag some in to load them", width / 2d, height / 2d, 0xAAAAAA);
         }
         for (AddonViewer addonViewer : new ArrayList<>(viewerList)) {
             addonViewer.render(stack, xRoot, yRoot + yOffset + scroller.getScroll(), mouseX, mouseY);

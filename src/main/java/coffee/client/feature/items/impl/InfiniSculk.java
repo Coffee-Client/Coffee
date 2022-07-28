@@ -43,7 +43,8 @@ public class InfiniSculk extends Item {
             return null;
         }
         ItemStack stack = new ItemStack(Items.SCULK_CATALYST);
-        NbtObject catalyst = new NbtObject("",
+        NbtObject catalyst = new NbtObject(
+                "",
                 new NbtProperty("charge", strength.getValue()),
                 new NbtProperty("decay_delay", 1),
                 new NbtList("facings"),

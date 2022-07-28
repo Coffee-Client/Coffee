@@ -77,7 +77,7 @@ public class Nuker extends Module {
                         Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 100).darker(),
                         Vec3d.of(bp),
                         new Vec3d(1, 1, 1),
-                        1000
+                        500
                 );
                 //                    client.getNetworkHandler().sendPacket(new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND,bhr));
             });
@@ -94,8 +94,7 @@ public class Nuker extends Module {
                             Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 255),
                             Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 100).darker(),
                             Vec3d.of(bp),
-                            new Vec3d(1, 1, 1),
-                            1000
+                            new Vec3d(1, 1, 1), 500
                     );
                 }
             });
@@ -114,8 +113,7 @@ public class Nuker extends Module {
                         Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 255),
                         Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 100).darker(),
                         Vec3d.of(bp),
-                        new Vec3d(1, 1, 1),
-                        1000
+                        new Vec3d(1, 1, 1), 500
                 );
             });
         }

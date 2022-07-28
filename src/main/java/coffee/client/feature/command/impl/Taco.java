@@ -124,7 +124,6 @@ public class Taco extends Command {
                     BufferedImage frame = reader.read(index);
                     Frame frame1 = new Frame(frame);
                     frames.add(frame1);
-                    // Here you go
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -166,14 +165,14 @@ public class Taco extends Command {
     }
 
     static void checkGifPath() {
-        if (!gifPath.isFile()) {
+        if (!gifPath.isDirectory()) {
             //noinspection ResultOfMethodCallIgnored
             gifPath.delete();
         }
         if (!gifPath.exists()) {
             try {
                 //noinspection ResultOfMethodCallIgnored
-                gifPath.createNewFile();
+                gifPath.mkdir();
             } catch (Exception e) {
                 e.printStackTrace();
             }

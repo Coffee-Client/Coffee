@@ -12,6 +12,7 @@ import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.BufferRenderer;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.render.Shader;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormats;
@@ -22,20 +23,23 @@ import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vector4f;
-import net.minecraft.util.shape.VoxelShape;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class Renderer {
     public static void setupRender() {
-        RenderSystem.disableCull();
+        //        RenderSystem.disableCull();
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+        //        RenderSystem.enableDepthTest();
+        //        RenderSystem.depthFunc(GL11.GL_LEQUAL);
     }
 
     public static void endRender() {
@@ -70,112 +74,103 @@ public class Renderer {
                 Color fill = Util.modify(fade.fill, -1, -1, -1, (int) (fade.fill.getAlpha() * progress));
                 Renderer.R3D.renderEdged(stack,
                         fade.start.add(new Vec3d(0.2, 0.2, 0.2).multiply(ip)),
-                        fade.dimensions.subtract(new Vec3d(.4, .4, .4).multiply(ip)),
-                        fill,
-                        out
+                        fade.dimensions.subtract(new Vec3d(.4, .4, .4).multiply(ip)), fill, out
                 );
                 stack.pop();
             }
         }
 
-        public static void renderCircleOutline(MatrixStack stack, Color c, Vec3d start, double rad, double width, double segments) {
+        static Matrix4f setupStack(MatrixStack stack) {
             Camera camera = CoffeeMain.client.gameRenderer.getCamera();
             Vec3d camPos = camera.getPos();
-            Vec3d start1 = start.subtract(camPos);
+            stack.translate(-camPos.x, -camPos.y, -camPos.z);
+            return stack.peek().getPositionMatrix();
+            //            stack.translate(start.x,start.y,start.z);
+        }
+
+        static float[] getColor(Color c) {
+            return new float[] { c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, c.getAlpha() / 255f };
+        }
+
+        private static void useBuffer(VertexFormat.DrawMode mode, VertexFormat format, Supplier<Shader> shader, Consumer<BufferBuilder> runner) {
+            Tessellator t = Tessellator.getInstance();
+            BufferBuilder bb = t.getBuffer();
+
+            bb.begin(mode, format);
+
+            runner.accept(bb);
+
+            setupRender();
+            RenderSystem.setShader(shader);
+            BufferRenderer.drawWithShader(bb.end());
+            endRender();
+        }
+
+        public static void renderCircleOutline(MatrixStack stack, Color c, Vec3d start, double rad, double width, double segments) {
             stack.push();
-            stack.translate(start1.x, start1.y, start1.z);
+            setupStack(stack);
+            stack.translate(start.x, start.y, start.z);
             double segments1 = MathHelper.clamp(segments, 2, 90);
-            int color = c.getRGB();
 
             Matrix4f matrix = stack.peek().getPositionMatrix();
-            float f = (float) (color >> 24 & 255) / 255.0F;
-            float g = (float) (color >> 16 & 255) / 255.0F;
-            float h = (float) (color >> 8 & 255) / 255.0F;
-            float k = (float) (color & 255) / 255.0F;
+            float[] col = getColor(c);
 
-            BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
-            setupRender();
-            RenderSystem.setShader(GameRenderer::getPositionColorShader);
-            bufferBuilder.begin(VertexFormat.DrawMode.TRIANGLE_STRIP, VertexFormats.POSITION_COLOR);
-            for (double r = 0; r < 360; r += (360 / segments1)) {
-                double rad1 = Math.toRadians(r);
-                double sin = Math.sin(rad1);
-                double cos = Math.cos(rad1);
-                double offX = sin * rad;
-                double offY = cos * rad;
-                bufferBuilder.vertex(matrix, (float) offX, 0, (float) offY).color(g, h, k, f).next();
-                bufferBuilder.vertex(matrix, (float) (offX + sin * width), 0, (float) (offY + cos * width)).color(g, h, k, f).next();
+            useBuffer(VertexFormat.DrawMode.TRIANGLE_STRIP, VertexFormats.POSITION_COLOR, GameRenderer::getPositionColorShader, bufferBuilder1 -> {
+                for (double r = 0; r < 360; r += (360 / segments1)) {
+                    double rad1 = Math.toRadians(r);
+                    double sin = Math.sin(rad1);
+                    double cos = Math.cos(rad1);
+                    double offX = sin * rad;
+                    double offY = cos * rad;
+                    bufferBuilder1.vertex(matrix, (float) offX, 0, (float) offY).color(col[0], col[1], col[2], col[3]).next();
+                    bufferBuilder1.vertex(matrix, (float) (offX + sin * width), 0, (float) (offY + cos * width)).color(col[0], col[1], col[2], col[3]).next();
+                }
+            });
 
-            }
-            BufferRenderer.drawWithShader(bufferBuilder.end());
-            RenderSystem.enableTexture();
-            RenderSystem.disableBlend();
             stack.pop();
-            endRender();
         }
 
-        //you can call renderOutlineIntern multiple times to save performance
         public static void renderOutline(Vec3d start, Vec3d dimensions, Color color, MatrixStack stack) {
-            float red = color.getRed() / 255f;
-            float green = color.getGreen() / 255f;
-            float blue = color.getBlue() / 255f;
-            float alpha = color.getAlpha() / 255f;
+            genericAABBRender(
+                    VertexFormat.DrawMode.DEBUG_LINES,
+                    VertexFormats.POSITION_COLOR,
+                    GameRenderer::getPositionColorShader,
+                    stack,
+                    start,
+                    dimensions,
+                    color,
+                    (buffer, x1, y1, z1, x2, y2, z2, red, green, blue, alpha, matrix) -> {
+                        buffer.vertex(matrix, x1, y1, z1).color(red, green, blue, alpha).next();
+                        buffer.vertex(matrix, x1, y1, z2).color(red, green, blue, alpha).next();
+                        buffer.vertex(matrix, x1, y1, z2).color(red, green, blue, alpha).next();
+                        buffer.vertex(matrix, x2, y1, z2).color(red, green, blue, alpha).next();
+                        buffer.vertex(matrix, x2, y1, z2).color(red, green, blue, alpha).next();
+                        buffer.vertex(matrix, x2, y1, z1).color(red, green, blue, alpha).next();
+                        buffer.vertex(matrix, x2, y1, z1).color(red, green, blue, alpha).next();
+                        buffer.vertex(matrix, x1, y1, z1).color(red, green, blue, alpha).next();
 
-            GL11.glDepthFunc(GL11.GL_LEQUAL);
-            BufferBuilder buffer = Tessellator.getInstance().getBuffer();
+                        buffer.vertex(matrix, x1, y2, z1).color(red, green, blue, alpha).next();
+                        buffer.vertex(matrix, x1, y2, z2).color(red, green, blue, alpha).next();
+                        buffer.vertex(matrix, x1, y2, z2).color(red, green, blue, alpha).next();
+                        buffer.vertex(matrix, x2, y2, z2).color(red, green, blue, alpha).next();
+                        buffer.vertex(matrix, x2, y2, z2).color(red, green, blue, alpha).next();
+                        buffer.vertex(matrix, x2, y2, z1).color(red, green, blue, alpha).next();
+                        buffer.vertex(matrix, x2, y2, z1).color(red, green, blue, alpha).next();
+                        buffer.vertex(matrix, x1, y2, z1).color(red, green, blue, alpha).next();
 
-            Camera c = CoffeeMain.client.gameRenderer.getCamera();
-            Vec3d camPos = c.getPos();
-            Vec3d start1 = start.subtract(camPos);
-            Vec3d end = start1.add(dimensions);
-            Matrix4f matrix = stack.peek().getPositionMatrix();
-            float x1 = (float) start1.x;
-            float y1 = (float) start1.y;
-            float z1 = (float) start1.z;
-            float x2 = (float) end.x;
-            float y2 = (float) end.y;
-            float z2 = (float) end.z;
+                        buffer.vertex(matrix, x1, y1, z1).color(red, green, blue, alpha).next();
+                        buffer.vertex(matrix, x1, y2, z1).color(red, green, blue, alpha).next();
 
-            setupRender();
-            RenderSystem.setShader(GameRenderer::getPositionColorShader);
-            buffer.begin(VertexFormat.DrawMode.DEBUG_LINES, VertexFormats.POSITION_COLOR);
-            buffer.vertex(matrix, x1, y1, z1).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x1, y1, z2).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x1, y1, z2).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x2, y1, z2).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x2, y1, z2).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x2, y1, z1).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x2, y1, z1).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x1, y1, z1).color(red, green, blue, alpha).next();
+                        buffer.vertex(matrix, x2, y1, z1).color(red, green, blue, alpha).next();
+                        buffer.vertex(matrix, x2, y2, z1).color(red, green, blue, alpha).next();
 
-            buffer.vertex(matrix, x1, y2, z1).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x1, y2, z2).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x1, y2, z2).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x2, y2, z2).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x2, y2, z2).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x2, y2, z1).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x2, y2, z1).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x1, y2, z1).color(red, green, blue, alpha).next();
+                        buffer.vertex(matrix, x2, y1, z2).color(red, green, blue, alpha).next();
+                        buffer.vertex(matrix, x2, y2, z2).color(red, green, blue, alpha).next();
 
-            buffer.vertex(matrix, x1, y1, z1).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x1, y2, z1).color(red, green, blue, alpha).next();
-
-            buffer.vertex(matrix, x2, y1, z1).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x2, y2, z1).color(red, green, blue, alpha).next();
-
-            buffer.vertex(matrix, x2, y1, z2).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x2, y2, z2).color(red, green, blue, alpha).next();
-
-            buffer.vertex(matrix, x1, y1, z2).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x1, y2, z2).color(red, green, blue, alpha).next();
-
-            BufferRenderer.drawWithShader(buffer.end());
-            GL11.glDepthFunc(GL11.GL_LEQUAL);
-            endRender();
-        }
-
-        public static void renderFilled(Vec3d start, Vec3d dimensions, Color color, MatrixStack stack) {
-            renderFilled(start, dimensions, color, stack, GL11.GL_LEQUAL);
+                        buffer.vertex(matrix, x1, y1, z2).color(red, green, blue, alpha).next();
+                        buffer.vertex(matrix, x1, y2, z2).color(red, green, blue, alpha).next();
+                    }
+            );
         }
 
         public static MatrixStack getEmptyMatrixStack() {
@@ -184,232 +179,185 @@ public class Renderer {
         }
 
         public static void renderEdged(MatrixStack stack, Vec3d start, Vec3d dimensions, Color colorFill, Color colorOutline) {
-            float red = colorFill.getRed() / 255f;
-            float green = colorFill.getGreen() / 255f;
-            float blue = colorFill.getBlue() / 255f;
-            float alpha = colorFill.getAlpha() / 255f;
+            float[] fill = getColor(colorFill);
+            float[] outline = getColor(colorOutline);
 
-            float r1 = colorOutline.getRed() / 255f;
-            float g1 = colorOutline.getGreen() / 255f;
-            float b1 = colorOutline.getBlue() / 255f;
-            float a1 = colorOutline.getAlpha() / 255f;
-
-            Camera c = CoffeeMain.client.gameRenderer.getCamera();
-            Vec3d camPos = c.getPos();
-            Vec3d start1 = start.subtract(camPos);
-            Vec3d end = start1.add(dimensions);
-            Matrix4f matrix = stack.peek().getPositionMatrix();
-            float x1 = (float) start1.x;
-            float y1 = (float) start1.y;
-            float z1 = (float) start1.z;
+            stack.push();
+            Matrix4f matrix = setupStack(stack);
+            Vec3d end = start.add(dimensions);
+            float x1 = (float) start.x;
+            float y1 = (float) start.y;
+            float z1 = (float) start.z;
             float x2 = (float) end.x;
             float y2 = (float) end.y;
             float z2 = (float) end.z;
-            BufferBuilder buffer = Tessellator.getInstance().getBuffer();
 
-            GL11.glDepthFunc(GL11.GL_LEQUAL);
-            setupRender();
-            RenderSystem.setShader(GameRenderer::getPositionColorShader);
-            buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
-            buffer.vertex(matrix, x1, y2, z1).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x1, y2, z2).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x2, y2, z2).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x2, y2, z1).color(red, green, blue, alpha).next();
+            useBuffer(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR, GameRenderer::getPositionColorShader, buffer -> {
+                float red = fill[0];
+                float green = fill[1];
+                float blue = fill[2];
+                float alpha = fill[3];
+                buffer.vertex(matrix, x1, y2, z1).color(red, green, blue, alpha).next();
+                buffer.vertex(matrix, x1, y2, z2).color(red, green, blue, alpha).next();
+                buffer.vertex(matrix, x2, y2, z2).color(red, green, blue, alpha).next();
+                buffer.vertex(matrix, x2, y2, z1).color(red, green, blue, alpha).next();
 
-            buffer.vertex(matrix, x1, y1, z2).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x2, y1, z2).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x2, y2, z2).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x1, y2, z2).color(red, green, blue, alpha).next();
+                buffer.vertex(matrix, x1, y1, z2).color(red, green, blue, alpha).next();
+                buffer.vertex(matrix, x2, y1, z2).color(red, green, blue, alpha).next();
+                buffer.vertex(matrix, x2, y2, z2).color(red, green, blue, alpha).next();
+                buffer.vertex(matrix, x1, y2, z2).color(red, green, blue, alpha).next();
 
-            buffer.vertex(matrix, x2, y2, z2).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x2, y1, z2).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x2, y1, z1).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x2, y2, z1).color(red, green, blue, alpha).next();
+                buffer.vertex(matrix, x2, y2, z2).color(red, green, blue, alpha).next();
+                buffer.vertex(matrix, x2, y1, z2).color(red, green, blue, alpha).next();
+                buffer.vertex(matrix, x2, y1, z1).color(red, green, blue, alpha).next();
+                buffer.vertex(matrix, x2, y2, z1).color(red, green, blue, alpha).next();
 
-            buffer.vertex(matrix, x2, y2, z1).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x2, y1, z1).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x1, y1, z1).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x1, y2, z1).color(red, green, blue, alpha).next();
+                buffer.vertex(matrix, x2, y2, z1).color(red, green, blue, alpha).next();
+                buffer.vertex(matrix, x2, y1, z1).color(red, green, blue, alpha).next();
+                buffer.vertex(matrix, x1, y1, z1).color(red, green, blue, alpha).next();
+                buffer.vertex(matrix, x1, y2, z1).color(red, green, blue, alpha).next();
 
-            buffer.vertex(matrix, x1, y2, z1).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x1, y1, z1).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x1, y1, z2).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x1, y2, z2).color(red, green, blue, alpha).next();
+                buffer.vertex(matrix, x1, y2, z1).color(red, green, blue, alpha).next();
+                buffer.vertex(matrix, x1, y1, z1).color(red, green, blue, alpha).next();
+                buffer.vertex(matrix, x1, y1, z2).color(red, green, blue, alpha).next();
+                buffer.vertex(matrix, x1, y2, z2).color(red, green, blue, alpha).next();
 
-            buffer.vertex(matrix, x1, y1, z1).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x2, y1, z1).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x2, y1, z2).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x1, y1, z2).color(red, green, blue, alpha).next();
-
-            BufferRenderer.drawWithShader(buffer.end());
-
-            RenderSystem.setShader(GameRenderer::getPositionColorShader);
-            buffer.begin(VertexFormat.DrawMode.DEBUG_LINES, VertexFormats.POSITION_COLOR);
-            buffer.vertex(matrix, x1, y1, z1).color(r1, g1, b1, a1).next();
-            buffer.vertex(matrix, x1, y1, z2).color(r1, g1, b1, a1).next();
-            buffer.vertex(matrix, x1, y1, z2).color(r1, g1, b1, a1).next();
-            buffer.vertex(matrix, x2, y1, z2).color(r1, g1, b1, a1).next();
-            buffer.vertex(matrix, x2, y1, z2).color(r1, g1, b1, a1).next();
-            buffer.vertex(matrix, x2, y1, z1).color(r1, g1, b1, a1).next();
-            buffer.vertex(matrix, x2, y1, z1).color(r1, g1, b1, a1).next();
-            buffer.vertex(matrix, x1, y1, z1).color(r1, g1, b1, a1).next();
-
-            buffer.vertex(matrix, x1, y2, z1).color(r1, g1, b1, a1).next();
-            buffer.vertex(matrix, x1, y2, z2).color(r1, g1, b1, a1).next();
-            buffer.vertex(matrix, x1, y2, z2).color(r1, g1, b1, a1).next();
-            buffer.vertex(matrix, x2, y2, z2).color(r1, g1, b1, a1).next();
-            buffer.vertex(matrix, x2, y2, z2).color(r1, g1, b1, a1).next();
-            buffer.vertex(matrix, x2, y2, z1).color(r1, g1, b1, a1).next();
-            buffer.vertex(matrix, x2, y2, z1).color(r1, g1, b1, a1).next();
-            buffer.vertex(matrix, x1, y2, z1).color(r1, g1, b1, a1).next();
-
-            buffer.vertex(matrix, x1, y1, z1).color(r1, g1, b1, a1).next();
-            buffer.vertex(matrix, x1, y2, z1).color(r1, g1, b1, a1).next();
-
-            buffer.vertex(matrix, x2, y1, z1).color(r1, g1, b1, a1).next();
-            buffer.vertex(matrix, x2, y2, z1).color(r1, g1, b1, a1).next();
-
-            buffer.vertex(matrix, x2, y1, z2).color(r1, g1, b1, a1).next();
-            buffer.vertex(matrix, x2, y2, z2).color(r1, g1, b1, a1).next();
-
-            buffer.vertex(matrix, x1, y1, z2).color(r1, g1, b1, a1).next();
-            buffer.vertex(matrix, x1, y2, z2).color(r1, g1, b1, a1).next();
-
-            BufferRenderer.drawWithShader(buffer.end());
-            GL11.glDepthFunc(GL11.GL_LEQUAL);
-            endRender();
-        }
-
-        public static void renderFilled(Vec3d start, Vec3d dimensions, Color color, MatrixStack stack, int GLMODE) {
-            float red = color.getRed() / 255f;
-            float green = color.getGreen() / 255f;
-            float blue = color.getBlue() / 255f;
-            float alpha = color.getAlpha() / 255f;
-            Camera c = CoffeeMain.client.gameRenderer.getCamera();
-            Vec3d camPos = c.getPos();
-            Vec3d start1 = start.subtract(camPos);
-            Vec3d end = start1.add(dimensions);
-            Matrix4f matrix = stack.peek().getPositionMatrix();
-            float x1 = (float) start1.x;
-            float y1 = (float) start1.y;
-            float z1 = (float) start1.z;
-            float x2 = (float) end.x;
-            float y2 = (float) end.y;
-            float z2 = (float) end.z;
-            BufferBuilder buffer = Tessellator.getInstance().getBuffer();
-
-            GL11.glDepthFunc(GLMODE);
-            setupRender();
-            RenderSystem.setShader(GameRenderer::getPositionColorShader);
-            buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
-            buffer.vertex(matrix, x1, y2, z1).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x1, y2, z2).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x2, y2, z2).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x2, y2, z1).color(red, green, blue, alpha).next();
-
-            buffer.vertex(matrix, x1, y1, z2).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x2, y1, z2).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x2, y2, z2).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x1, y2, z2).color(red, green, blue, alpha).next();
-
-            buffer.vertex(matrix, x2, y2, z2).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x2, y1, z2).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x2, y1, z1).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x2, y2, z1).color(red, green, blue, alpha).next();
-
-            buffer.vertex(matrix, x2, y2, z1).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x2, y1, z1).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x1, y1, z1).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x1, y2, z1).color(red, green, blue, alpha).next();
-
-            buffer.vertex(matrix, x1, y2, z1).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x1, y1, z1).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x1, y1, z2).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x1, y2, z2).color(red, green, blue, alpha).next();
-
-            buffer.vertex(matrix, x1, y1, z1).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x2, y1, z1).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x2, y1, z2).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x1, y1, z2).color(red, green, blue, alpha).next();
-
-            BufferRenderer.drawWithShader(buffer.end());
-            GL11.glDepthFunc(GL11.GL_LEQUAL);
-            endRender();
-        }
-
-        public static void renderShape(Vec3d start, VoxelShape shape, MatrixStack matrices, Color color) {
-            float red = color.getRed() / 255f;
-            float green = color.getGreen() / 255f;
-            float blue = color.getBlue() / 255f;
-            float alpha = color.getAlpha() / 255f;
-            Camera c = CoffeeMain.client.gameRenderer.getCamera();
-            Vec3d camPos = c.getPos();
-            Vec3d start1 = start.subtract(camPos);
-            Matrix4f matrix = matrices.peek().getPositionMatrix();
-            float x1 = (float) start1.x;
-            float y1 = (float) start1.y;
-            float z1 = (float) start1.z;
-            BufferBuilder buffer = Tessellator.getInstance().getBuffer();
-
-            GL11.glDepthFunc(GL11.GL_LEQUAL);
-            setupRender();
-            RenderSystem.setShader(GameRenderer::getPositionColorShader);
-            buffer.begin(VertexFormat.DrawMode.DEBUG_LINES, VertexFormats.POSITION_COLOR);
-
-            shape.forEachEdge((minX, minY, minZ, maxX, maxY, maxZ) -> {
-                buffer.vertex(matrix, (float) (x1 + minX), (float) (y1 + minY), (float) (z1 + minZ)).color(red, green, blue, alpha).next();
-                buffer.vertex(matrix, (float) (x1 + maxX), (float) (y1 + maxY), (float) (z1 + maxZ)).color(red, green, blue, alpha).next();
+                buffer.vertex(matrix, x1, y1, z1).color(red, green, blue, alpha).next();
+                buffer.vertex(matrix, x2, y1, z1).color(red, green, blue, alpha).next();
+                buffer.vertex(matrix, x2, y1, z2).color(red, green, blue, alpha).next();
+                buffer.vertex(matrix, x1, y1, z2).color(red, green, blue, alpha).next();
             });
 
-            BufferRenderer.drawWithShader(buffer.end());
-            GL11.glDepthFunc(GL11.GL_LEQUAL);
-            endRender();
+            useBuffer(VertexFormat.DrawMode.DEBUG_LINES, VertexFormats.POSITION_COLOR, GameRenderer::getPositionColorShader, buffer -> {
+                float red = outline[0];
+                float green = outline[1];
+                float blue = outline[2];
+                float alpha = outline[3];
+                buffer.vertex(matrix, x1, y1, z1).color(red, green, blue, alpha).next();
+                buffer.vertex(matrix, x1, y1, z2).color(red, green, blue, alpha).next();
+                buffer.vertex(matrix, x1, y1, z2).color(red, green, blue, alpha).next();
+                buffer.vertex(matrix, x2, y1, z2).color(red, green, blue, alpha).next();
+                buffer.vertex(matrix, x2, y1, z2).color(red, green, blue, alpha).next();
+                buffer.vertex(matrix, x2, y1, z1).color(red, green, blue, alpha).next();
+                buffer.vertex(matrix, x2, y1, z1).color(red, green, blue, alpha).next();
+                buffer.vertex(matrix, x1, y1, z1).color(red, green, blue, alpha).next();
+
+                buffer.vertex(matrix, x1, y2, z1).color(red, green, blue, alpha).next();
+                buffer.vertex(matrix, x1, y2, z2).color(red, green, blue, alpha).next();
+                buffer.vertex(matrix, x1, y2, z2).color(red, green, blue, alpha).next();
+                buffer.vertex(matrix, x2, y2, z2).color(red, green, blue, alpha).next();
+                buffer.vertex(matrix, x2, y2, z2).color(red, green, blue, alpha).next();
+                buffer.vertex(matrix, x2, y2, z1).color(red, green, blue, alpha).next();
+                buffer.vertex(matrix, x2, y2, z1).color(red, green, blue, alpha).next();
+                buffer.vertex(matrix, x1, y2, z1).color(red, green, blue, alpha).next();
+
+                buffer.vertex(matrix, x1, y1, z1).color(red, green, blue, alpha).next();
+                buffer.vertex(matrix, x1, y2, z1).color(red, green, blue, alpha).next();
+
+                buffer.vertex(matrix, x2, y1, z1).color(red, green, blue, alpha).next();
+                buffer.vertex(matrix, x2, y2, z1).color(red, green, blue, alpha).next();
+
+                buffer.vertex(matrix, x2, y1, z2).color(red, green, blue, alpha).next();
+                buffer.vertex(matrix, x2, y2, z2).color(red, green, blue, alpha).next();
+
+                buffer.vertex(matrix, x1, y1, z2).color(red, green, blue, alpha).next();
+                buffer.vertex(matrix, x1, y2, z2).color(red, green, blue, alpha).next();
+            });
+            stack.pop();
+        }
+
+        private static void genericAABBRender(VertexFormat.DrawMode mode, VertexFormat format, Supplier<Shader> shader, MatrixStack stack, Vec3d start, Vec3d dimensions, Color color, RenderAction action) {
+            float red = color.getRed() / 255f;
+            float green = color.getGreen() / 255f;
+            float blue = color.getBlue() / 255f;
+            float alpha = color.getAlpha() / 255f;
+            stack.push();
+            Matrix4f matrix = setupStack(stack);
+            Vec3d end = start.add(dimensions);
+            float x1 = (float) start.x;
+            float y1 = (float) start.y;
+            float z1 = (float) start.z;
+            float x2 = (float) end.x;
+            float y2 = (float) end.y;
+            float z2 = (float) end.z;
+            useBuffer(mode, format, shader, bufferBuilder -> action.run(bufferBuilder, x1, y1, z1, x2, y2, z2, red, green, blue, alpha, matrix));
+            stack.pop();
+        }
+
+        public static void renderFilled(Vec3d start, Vec3d dimensions, Color color, MatrixStack stack) {
+            genericAABBRender(
+                    VertexFormat.DrawMode.QUADS,
+                    VertexFormats.POSITION_COLOR,
+                    GameRenderer::getPositionColorShader,
+                    stack,
+                    start,
+                    dimensions,
+                    color,
+                    (buffer, x1, y1, z1, x2, y2, z2, red, green, blue, alpha, matrix) -> {
+                        buffer.vertex(matrix, x1, y2, z1).color(red, green, blue, alpha).next();
+                        buffer.vertex(matrix, x1, y2, z2).color(red, green, blue, alpha).next();
+                        buffer.vertex(matrix, x2, y2, z2).color(red, green, blue, alpha).next();
+                        buffer.vertex(matrix, x2, y2, z1).color(red, green, blue, alpha).next();
+
+                        buffer.vertex(matrix, x1, y1, z2).color(red, green, blue, alpha).next();
+                        buffer.vertex(matrix, x2, y1, z2).color(red, green, blue, alpha).next();
+                        buffer.vertex(matrix, x2, y2, z2).color(red, green, blue, alpha).next();
+                        buffer.vertex(matrix, x1, y2, z2).color(red, green, blue, alpha).next();
+
+                        buffer.vertex(matrix, x2, y2, z2).color(red, green, blue, alpha).next();
+                        buffer.vertex(matrix, x2, y1, z2).color(red, green, blue, alpha).next();
+                        buffer.vertex(matrix, x2, y1, z1).color(red, green, blue, alpha).next();
+                        buffer.vertex(matrix, x2, y2, z1).color(red, green, blue, alpha).next();
+
+                        buffer.vertex(matrix, x2, y2, z1).color(red, green, blue, alpha).next();
+                        buffer.vertex(matrix, x2, y1, z1).color(red, green, blue, alpha).next();
+                        buffer.vertex(matrix, x1, y1, z1).color(red, green, blue, alpha).next();
+                        buffer.vertex(matrix, x1, y2, z1).color(red, green, blue, alpha).next();
+
+                        buffer.vertex(matrix, x1, y2, z1).color(red, green, blue, alpha).next();
+                        buffer.vertex(matrix, x1, y1, z1).color(red, green, blue, alpha).next();
+                        buffer.vertex(matrix, x1, y1, z2).color(red, green, blue, alpha).next();
+                        buffer.vertex(matrix, x1, y2, z2).color(red, green, blue, alpha).next();
+
+                        buffer.vertex(matrix, x1, y1, z1).color(red, green, blue, alpha).next();
+                        buffer.vertex(matrix, x2, y1, z1).color(red, green, blue, alpha).next();
+                        buffer.vertex(matrix, x2, y1, z2).color(red, green, blue, alpha).next();
+                        buffer.vertex(matrix, x1, y1, z2).color(red, green, blue, alpha).next();
+                    });
         }
 
         public static void renderLine(Vec3d start, Vec3d end, Color color, MatrixStack matrices) {
-            float red = color.getRed() / 255f;
-            float green = color.getGreen() / 255f;
-            float blue = color.getBlue() / 255f;
-            float alpha = color.getAlpha() / 255f;
-            Camera c = CoffeeMain.client.gameRenderer.getCamera();
-            Vec3d camPos = c.getPos();
-            Vec3d start1 = start.subtract(camPos);
-            Vec3d end1 = end.subtract(camPos);
-            Matrix4f matrix = matrices.peek().getPositionMatrix();
-            float x1 = (float) start1.x;
-            float y1 = (float) start1.y;
-            float z1 = (float) start1.z;
-            float x2 = (float) end1.x;
-            float y2 = (float) end1.y;
-            float z2 = (float) end1.z;
-            BufferBuilder buffer = Tessellator.getInstance().getBuffer();
-
-            GL11.glDepthFunc(GL11.GL_LEQUAL);
-            setupRender();
-            RenderSystem.setShader(GameRenderer::getPositionColorShader);
-            buffer.begin(VertexFormat.DrawMode.DEBUG_LINES, VertexFormats.POSITION_COLOR);
-
-            buffer.vertex(matrix, x1, y1, z1).color(red, green, blue, alpha).next();
-            buffer.vertex(matrix, x2, y2, z2).color(red, green, blue, alpha).next();
-
-            BufferRenderer.drawWithShader(buffer.end());
-            GL11.glDepthFunc(GL11.GL_LEQUAL);
-            endRender();
+            genericAABBRender(
+                    VertexFormat.DrawMode.DEBUG_LINES,
+                    VertexFormats.POSITION_COLOR,
+                    GameRenderer::getPositionColorShader,
+                    matrices,
+                    start,
+                    end.subtract(start),
+                    color,
+                    (buffer, x, y, z, x1, y1, z1, red, green, blue, alpha, matrix) -> {
+                        buffer.vertex(matrix, x, y, z).color(red, green, blue, alpha).next();
+                        buffer.vertex(matrix, x1, y1, z1).color(red, green, blue, alpha).next();
+                    }
+            );
         }
 
         public static Vec3d getCrosshairVector() {
-
             Camera camera = CoffeeMain.client.gameRenderer.getCamera();
 
-            float vec = 0.017453292F;
             float pi = (float) Math.PI;
-
-            float f1 = MathHelper.cos(-camera.getYaw() * vec - pi);
-            float f2 = MathHelper.sin(-camera.getYaw() * vec - pi);
-            float f3 = -MathHelper.cos(-camera.getPitch() * vec);
-            float f4 = MathHelper.sin(-camera.getPitch() * vec);
+            float yawRad = (float) Math.toRadians(-camera.getYaw());
+            float pitchRad = (float) Math.toRadians(-camera.getPitch());
+            float f1 = MathHelper.cos(yawRad - pi);
+            float f2 = MathHelper.sin(yawRad - pi);
+            float f3 = -MathHelper.cos(pitchRad);
+            float f4 = MathHelper.sin(pitchRad);
 
             return new Vec3d(f2 * f3, f4, f1 * f3).add(camera.getPos());
+        }
+
+        interface RenderAction {
+            void run(BufferBuilder buffer, float x, float y, float z, float x1, float y1, float z1, float red, float green, float blue, float alpha, Matrix4f matrix);
         }
 
         record FadingBlock(Color outline, Color fill, Vec3d start, Vec3d dimensions, long created, long lifeTime) {

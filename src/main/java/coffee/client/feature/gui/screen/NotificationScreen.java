@@ -86,12 +86,12 @@ public class NotificationScreen extends AAScreen {
         //        double anim = Transitions.easeOutExpo(this.anim);
         double width = 0;
         double headheight = FontRenderers.getRenderer().getFontHeight();
-        double height = pad+headheight+pad + FontRenderers.getRenderer().getFontHeight() * contentSplit.length + pad + 20 + pad;
+        double height = pad + headheight + pad + FontRenderers.getRenderer().getFontHeight() * contentSplit.length + pad + 20 + pad;
         for (String s : contentSplit) {
             width = Math.max(FontRenderers.getRenderer().getStringWidth(s), width);
         }
         width += pad * 2;
-//        width = Math.max(width, 100);
+        //        width = Math.max(width, 100);
         double startX = this.width / 2d - width / 2d;
         double startY = this.height / 2d - height / 2d;
         Renderer.R2D.renderRoundedQuadWithShadow(stack, new Color(20, 20, 20), startX, startY, startX + width, startY + height, 5, 10);
@@ -109,14 +109,16 @@ public class NotificationScreen extends AAScreen {
                 texDims,
                 texDims,
                 texDims,
-                texDims);
+                texDims
+        );
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
         FontRenderers.getRenderer()
                 .drawString(stack,
                         title,
                         startX + pad + texDims + pad,
                         startY + pad + (headheight) / 2d - FontRenderers.getRenderer().getFontHeight() / 2d,
-                        0xCCCCCC);
+                        0xCCCCCC
+                );
         double yOffset = 0;
         for (String s : contentSplit) {
             FontRenderers.getRenderer().drawString(stack, s, startX + pad, startY + FontRenderers.getRenderer().getFontHeight() + pad * 2 + yOffset, 0xFFFFFF);

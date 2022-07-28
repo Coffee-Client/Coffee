@@ -31,6 +31,7 @@ import java.util.Map;
 @Mixin(ItemStack.class)
 public class ItemStackMixin {
     private static int omitted = 0;
+
     @Inject(method = "getTooltip", at = @At("RETURN"), cancellable = true)
     void coffee_dispatchTooltipRender(PlayerEntity player, TooltipContext context, CallbackInfoReturnable<List<Text>> cir) {
         List<Text> cval = cir.getReturnValue();
@@ -40,24 +41,24 @@ public class ItemStackMixin {
     }
 
     // these 2 look incredibly fucked but they work
-    @Redirect(method="getTooltip",at=@At(value="INVOKE",target="Lcom/google/common/collect/Multimap;entries()Ljava/util/Collection;"))
+    @Redirect(method = "getTooltip", at = @At(value = "INVOKE", target = "Lcom/google/common/collect/Multimap;entries()Ljava/util/Collection;"))
     Collection<Map.Entry<EntityAttribute, EntityAttributeModifier>> coffee_limitCollectionLength(Multimap<EntityAttribute, EntityAttributeModifier> instance) {
         Collection<Map.Entry<EntityAttribute, EntityAttributeModifier>> normalEntries = instance.entries();
         if (AntiCrash.instance().isEnabled() && AntiCrash.instance().getCapAttributes().getValue()) {
             int size = instance.size();
-            int maxSize = (int) (AntiCrash.instance().getCapAttributesAmount().getValue()+0);
+            int maxSize = (int) (AntiCrash.instance().getCapAttributesAmount().getValue() + 0);
             if (size > maxSize) {
-                omitted = size-maxSize;
+                omitted = size - maxSize;
                 return normalEntries.stream().limit(maxSize).toList();
             }
         }
         return normalEntries;
     }
 
-    @Inject(method="getTooltip",at=@At(value="INVOKE",target="Lcom/google/common/collect/Multimap;entries()Ljava/util/Collection;",shift = At.Shift.AFTER),locals = LocalCapture.CAPTURE_FAILEXCEPTION)
+    @Inject(method = "getTooltip", at = @At(value = "INVOKE", target = "Lcom/google/common/collect/Multimap;entries()Ljava/util/Collection;", shift = At.Shift.AFTER), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
     void coffee_addOmittedTooltip(@Nullable PlayerEntity player, TooltipContext context, CallbackInfoReturnable<List<Text>> cir, List<Text> list) {
         if (omitted != 0) {
-            list.add(Text.literal("(Coffee: Omitted "+omitted+" entries)").formatted(Formatting.GRAY));
+            list.add(Text.literal("(Coffee: Omitted " + omitted + " entries)").formatted(Formatting.GRAY));
             omitted = 0;
         }
     }

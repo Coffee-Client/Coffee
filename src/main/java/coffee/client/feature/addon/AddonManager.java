@@ -145,7 +145,7 @@ public class AddonManager {
             }
             if (e instanceof NoSuchFileException) {
                 CoffeeMain.log(Level.INFO, "This error means that the file was deleted when trying to load the addon, nothing to worry about.");
-                HudNotification.create("Addon "+file.getName()+" was deleted, removing.",5000, HudNotification.Type.ERROR);
+                HudNotification.create("Addon " + file.getName() + " was deleted, removing.", 5000, HudNotification.Type.ERROR);
             }
         }
         return null;
@@ -173,7 +173,7 @@ public class AddonManager {
             safeLoadAddon(file);
         } catch (Exception e) {
             e.printStackTrace();
-            HudNotification.create("Failed to copy addon "+f.getName(),5000, HudNotification.Type.ERROR);
+            HudNotification.create("Failed to copy addon " + f.getName(), 5000, HudNotification.Type.ERROR);
         }
     }
 

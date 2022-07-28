@@ -4,19 +4,15 @@
 
 package coffee.client.feature.module.impl.misc;
 
-import coffee.client.feature.config.RangeSetting;
+import coffee.client.CoffeeMain;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
-import coffee.client.helper.util.Utils;
+import coffee.client.helper.render.Renderer;
 import net.minecraft.client.util.math.MatrixStack;
 
+import java.awt.Color;
+
 public class Test extends Module {
-    RangeSetting rs = this.config.create(new RangeSetting.Builder(new RangeSetting.Range(5, 10)).name("among")
-            .description("sus")
-            .uniformMin(0)
-            .uniformMax(20)
-            .precision(1)
-            .get());
 
     public Test() {
         super("Test", "Testing stuff with the client, can be ignored", ModuleType.MISC);
@@ -39,6 +35,7 @@ public class Test extends Module {
 
     @Override
     public void onWorldRender(MatrixStack matrices) {
+        Renderer.R3D.renderCircleOutline(matrices, Color.WHITE, CoffeeMain.client.player.getPos(), 5, 0.2, 16);
     }
 
     @Override
@@ -48,6 +45,6 @@ public class Test extends Module {
 
     @Override
     public void tick() {
-        Utils.Logging.message(rs.getValue().toString());
+
     }
 }

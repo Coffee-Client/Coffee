@@ -19,7 +19,6 @@ import java.util.Objects;
 
 public class SpinAutism extends Module {
 
-    final double r = 0;
     //    final SliderValue speed = (SliderValue) this.config.create("Timeout", 5, 0, 100, 0).description("How much to wait between rotations");
     final DoubleSetting speed = this.config.create(new DoubleSetting.Builder(5).name("Delay")
             .description("How much to wait when spinning")

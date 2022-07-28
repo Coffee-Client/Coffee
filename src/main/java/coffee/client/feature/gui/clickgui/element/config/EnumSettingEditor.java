@@ -184,7 +184,4 @@ public class EnumSettingEditor extends SettingEditor<EnumSetting<?>> {
         return false;
     }
 
-    record EnumSettingEntry(String text, int ordinal, Enum<?> value) {
-
-    }
 }

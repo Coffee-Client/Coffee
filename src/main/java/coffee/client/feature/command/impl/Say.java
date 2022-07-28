@@ -27,6 +27,6 @@ public class Say extends Command {
     @Override
     public void onExecute(String[] args) throws CommandException {
         validateArgumentsLength(args, 1, "Provide message");
-        Objects.requireNonNull(CoffeeMain.client.player).sendChatMessage(String.join(" ", args));
+        Objects.requireNonNull(CoffeeMain.client.player).sendChatMessage(String.join(" ", args), null);
     }
 }

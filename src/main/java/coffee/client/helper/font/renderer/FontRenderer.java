@@ -162,22 +162,6 @@ public class FontRenderer {
         return cachedHeight;
     }
 
-    private void drawMissing(BufferBuilder bufferBuilder, Matrix4f matrix, float width, float height) {
-        float r = 1f;
-        float g = 1f;
-        float b = 1f;
-        float a = 1f;
-        RenderSystem.setShader(GameRenderer::getPositionColorShader);
-        bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR);
-        bufferBuilder.vertex(matrix, 0, height, 0).color(r, g, b, a).next();
-        bufferBuilder.vertex(matrix, width, height, 0).color(r, g, b, a).next();
-        bufferBuilder.vertex(matrix, width, 0, 0).color(r, g, b, a).next();
-        bufferBuilder.vertex(matrix, 0, 0, 0).color(r, g, b, a).next();
-        bufferBuilder.vertex(matrix, 0, height, 0).color(r, g, b, a).next();
-        BufferRenderer.drawWithShader(bufferBuilder.end());
-        RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
-    }
-
     private double drawChar(BufferBuilder bufferBuilder, Matrix4f matrix, char c, float r, float g, float b, float a) {
         Glyph glyph = glyphMap.computeIfAbsent(c, character -> new Glyph(character, this.f));
         RenderSystem.setShaderTexture(0, glyph.getImageTex());

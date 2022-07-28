@@ -11,7 +11,6 @@ import coffee.client.feature.module.impl.combat.AimAssist;
 import coffee.client.feature.module.impl.combat.AutoAttack;
 import coffee.client.feature.module.impl.combat.AutoTrap;
 import coffee.client.feature.module.impl.combat.Criticals;
-import coffee.client.feature.module.impl.combat.CrystalAura;
 import coffee.client.feature.module.impl.combat.FireballDeflector;
 import coffee.client.feature.module.impl.combat.Killaura;
 import coffee.client.feature.module.impl.combat.Reach;
@@ -308,7 +307,6 @@ public class ModuleRegistry {
         registerModule(ChestHighlighter.class);
         registerModule(MoreChatHistory.class);
         registerModule(Radar.class);
-        registerModule(CrystalAura.class);
         registerModule(SuperheroFX.class);
         registerModule(ElytraFly.class);
         registerModule(BoingBoing.class);

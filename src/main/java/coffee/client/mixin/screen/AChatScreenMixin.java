@@ -16,8 +16,8 @@ import coffee.client.helper.font.FontRenderers;
 import coffee.client.helper.render.MSAAFramebuffer;
 import coffee.client.helper.render.Renderer;
 import lombok.val;
+import net.minecraft.client.gui.screen.ChatInputSuggestor;
 import net.minecraft.client.gui.screen.ChatScreen;
-import net.minecraft.client.gui.screen.CommandSuggestor;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
@@ -48,7 +48,7 @@ public class AChatScreenMixin extends Screen {
     protected TextFieldWidget chatField;
     String previousSuggestionInput = "";
     @Shadow
-    CommandSuggestor commandSuggestor;
+    private ChatInputSuggestor chatInputSuggestor;
 
     protected AChatScreenMixin(Text title) {
         super(title);
@@ -58,19 +58,20 @@ public class AChatScreenMixin extends Screen {
         return ModuleRegistry.getByClass(ClientSettings.class).getPrefix().getValue();
     }
 
-    @Redirect(method = "keyPressed", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/ChatScreen;sendMessage(Ljava/lang/String;Z)V"))
-    void coffee_interceptChatMessage(ChatScreen instance, String s, boolean t) {
+    @Redirect(method = "keyPressed", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/ChatScreen;sendMessage(Ljava/lang/String;Z)Z"))
+    boolean coffee_interceptChatMessage(ChatScreen instance, String s, boolean t) {
         String p = getPrefix();
         if (SelfDestruct.shouldSelfDestruct()) {
             if (SelfDestruct.handleMessage(s)) {
-                return;
+                return true;
             }
         } else if (s.startsWith(p)) { // filter all messages starting with .
             CoffeeMain.client.inGameHud.getChatHud().addToMessageHistory(s);
             CommandRegistry.execute(s.substring(p.length())); // cut off prefix
-            return;
+            return true;
         }
         instance.sendMessage(s, true); // else, go
+        return true;
     }
 
     List<String> getSuggestions(String command) {
@@ -189,7 +190,7 @@ public class AChatScreenMixin extends Screen {
     }
 
     OrderedText vanillaTextProvider(String s, int integer) {
-        return ((ICommandSuggestorMixin) this.commandSuggestor).invokeProvideRenderText(s, integer);
+        return ((ICommandSuggestorMixin) this.chatInputSuggestor).invokeProvideRenderText(s, integer);
     }
 
     @Inject(method = "init", at = @At("TAIL"))

@@ -54,6 +54,7 @@ public class AnnotationParser {
                 try {
                     declaredField.set(inst, o);
                 } catch (IllegalAccessException e) {
+                    e.printStackTrace();
                     throw new RuntimeException(e);
                 }
             }).get();

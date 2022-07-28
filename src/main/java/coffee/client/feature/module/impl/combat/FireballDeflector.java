@@ -9,9 +9,7 @@ import coffee.client.feature.config.BooleanSetting;
 import coffee.client.feature.config.EnumSetting;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
-import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.Rotations;
-import coffee.client.helper.util.Utils;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.FireballEntity;
@@ -19,7 +17,6 @@ import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 
-import java.awt.Color;
 import java.util.Objects;
 
 public class FireballDeflector extends Module {
@@ -102,28 +99,7 @@ public class FireballDeflector extends Module {
 
     @Override
     public void onWorldRender(MatrixStack matrices) {
-        if (isDebuggerEnabled()) {
-            for (Entity entity : Objects.requireNonNull(CoffeeMain.client.world).getEntities()) {
-                if (entity instanceof FireballEntity fe) {
-                    if (fe.getOwner() != null) {
-                        Entity owner = fe.getOwner();
-                        Renderer.R3D.renderLine(Utils.getInterpolatedEntityPosition(owner).add(0, owner.getHeight() / 2, 0),
-                                Utils.getInterpolatedEntityPosition(fe).add(0, fe.getHeight() / 2, 0),
-                                Color.MAGENTA,
-                                matrices
-                        );
-                    }
-                    if (inHitRange(Objects.requireNonNull(CoffeeMain.client.player), fe)) {
-                        Renderer.R3D.renderLine(Utils.getInterpolatedEntityPosition(CoffeeMain.client.player)
-                                        .add(0, CoffeeMain.client.player.getHeight() / 2, 0),
-                                Utils.getInterpolatedEntityPosition(fe).add(0, fe.getHeight() / 2, 0),
-                                Color.RED,
-                                matrices
-                        );
-                    }
-                }
-            }
-        }
+
     }
 
     @Override

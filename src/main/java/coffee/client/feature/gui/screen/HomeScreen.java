@@ -30,7 +30,6 @@ import org.apache.commons.io.IOUtils;
 import org.lwjgl.opengl.GL40C;
 
 import java.awt.Color;
-import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -42,16 +41,12 @@ import java.util.UUID;
 public class HomeScreen extends ClientScreen {
     static final double padding = 6;
     static final Texture background = GameTexture.TEXTURE_BACKGROUND.getWhere();
-    static boolean isDev = false;
-    static String version = "unknown";
     static String changelog = "";
     private static HomeScreen instance;
     final ParticleRenderer prend = new ParticleRenderer(600);
     final FontAdapter propFr = FontRenderers.getCustomSize(22);
     final Texture currentAccountTexture = new Texture("dynamic/tex_currentaccount_home");
     boolean loaded = false;
-    long initTime = System.currentTimeMillis();
-    boolean fadeOut = false;
     boolean currentAccountTextureLoaded = false;
     UUID previousChecked = null;
     boolean showedCompatWarn = false;
@@ -70,11 +65,6 @@ public class HomeScreen extends ClientScreen {
     void load() {
         loaded = true;
         try {
-            File execF = new File(HomeScreen.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-            isDev = execF.isDirectory();
-            HomeScreen.version = IOUtils.toString(Objects.requireNonNull(HomeScreen.class.getClassLoader().getResourceAsStream("version.txt")),
-                    StandardCharsets.UTF_8
-            );
             HomeScreen.changelog = IOUtils.toString(Objects.requireNonNull(HomeScreen.class.getClassLoader().getResourceAsStream("changelogLatest.txt")),
                     StandardCharsets.UTF_8
             );
@@ -101,9 +91,7 @@ public class HomeScreen extends ClientScreen {
         buttonsMap.add(new AbstractMap.SimpleEntry<>("Singleplayer", () -> CoffeeMain.client.setScreen(new SelectWorldScreen(this))));
         buttonsMap.add(new AbstractMap.SimpleEntry<>("Multiplayer", () -> CoffeeMain.client.setScreen(new MultiplayerScreen(this))));
         buttonsMap.add(new AbstractMap.SimpleEntry<>("Realms", () -> CoffeeMain.client.setScreen(new RealmsMainScreen(this))));
-        buttonsMap.add(new AbstractMap.SimpleEntry<>("Alts", () -> {
-            CoffeeMain.client.setScreen(AltManagerScreen.instance());
-        }));
+        buttonsMap.add(new AbstractMap.SimpleEntry<>("Alts", () -> CoffeeMain.client.setScreen(AltManagerScreen.instance())));
         buttonsMap.add(new AbstractMap.SimpleEntry<>("Settings", () -> CoffeeMain.client.setScreen(new OptionsScreen(this, CoffeeMain.client.options))));
         buttonsMap.add(new AbstractMap.SimpleEntry<>("Quit", CoffeeMain.client::scheduleStop));
         double w = 60;
@@ -128,7 +116,6 @@ public class HomeScreen extends ClientScreen {
                     this
             ));
         }
-        initTime = System.currentTimeMillis();
         initWidgets();
         if (loaded) {
             updateCurrentAccount(() -> {
@@ -139,7 +126,6 @@ public class HomeScreen extends ClientScreen {
     }
 
     void complete() {
-        fadeOut = true;
     }
 
     void updateCurrentAccount(Runnable callback) {

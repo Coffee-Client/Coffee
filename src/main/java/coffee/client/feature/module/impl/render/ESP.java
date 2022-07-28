@@ -245,12 +245,12 @@ public class ESP extends Module {
             float desiredWidth = (float) ((finalMostX.x - finalLeastX.x) / 3f);
             BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
             Renderer.setupRender();
-
+            RenderSystem.disableCull();
             renderCorner(bufferBuilder, r, g, b, a, x1, y1, desiredHeight, desiredWidth, 1, 1);
             renderCorner(bufferBuilder, r, g, b, a, x2, y1, desiredHeight, desiredWidth, -1, 1);
             renderCorner(bufferBuilder, r, g, b, a, x2, y2, desiredHeight, desiredWidth, -1, -1);
             renderCorner(bufferBuilder, r, g, b, a, x1, y2, desiredHeight, desiredWidth, 1, -1);
-
+            RenderSystem.enableCull();
             Renderer.endRender();
 
         });

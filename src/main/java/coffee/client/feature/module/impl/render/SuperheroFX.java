@@ -35,45 +35,45 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class SuperheroFX extends Module {
 
     @Setting(name = "Gravity", description = "How much gravity to apply to the particles", min = 0, max = 10, precision = 1)
-    final double gravity = 2;
+    double gravity = 2;
 
     @Setting(name = "Bounce", description = "How much to bounce up when spawned", min = 0, max = 10, precision = 1)
-    final double bounceUp = 2;
+    double bounceUp = 2;
 
     @Setting(name = "Size random", description = "How much randomness to apply to the size", min = 0, max = 1, precision = 2)
-    final double sizeRandom = 0.1;
+    double sizeRandom = 0.1;
 
     @Setting(name = "Size", description = "How big the font should be", min = 3, max = 50, precision = 1)
-    final double size = 1;
+    double size = 1;
 
     @Setting(name = "Amount", description = "How many fucks to spawn", min = 1, max = 20, precision = 0)
-    final double amount = 5;
+    double amount = 5;
 
     @Setting(name = "Spread", description = "How much area to give the fuck to spawn", min = 0.1, max = 3, precision = 2)
-    final double spread = 1;
+    double spread = 1;
 
     @Setting(name = "Lifetime", description = "How long the fucks should stay", min = 100, max = 10000, precision = 0)
-    final double lifetime = 2000;
+    double lifetime = 2000;
 
     @Setting(name = "Lifetime random", description = "How much randomness to apply to the lifetime", min = 0, max = 3000, precision = 0)
-    final double lifetimeRandom = 300;
+    double lifetimeRandom = 300;
 
     @Setting(name = "Shadows", description = "Adds shadows to the text")
-    final boolean shadows = true;
+    boolean shadows = true;
 
     @Setting(name = "Sync RGB", description = "Makes all the RGB use the same seed")
-    final boolean syncRgb = false;
+    boolean syncRgb = false;
 
     @Setting(name = "Words", description = "Comma seperated list of words to use")
-    final String words = "Boom, Pow, Wham, Smash, Kapow";
+    String words = "Boom, Pow, Wham, Smash, Kapow";
 
     @Setting(name = "RGB", description = "Whether or not to apply RGB to the fucks")
-    final boolean rgb = false;
+    boolean rgb = false;
 
     @Setting(name = "Color", description = "The color of the fucks")
-    final Color c = new Color(255, 255, 255);
-    final List<FxEntry> entries = new CopyOnWriteArrayList<>();
-    final Random r = new Random();
+    Color c = new Color(255, 255, 255);
+    List<FxEntry> entries = new CopyOnWriteArrayList<>();
+    Random r = new Random();
     FontRenderer renderer;
 
     public SuperheroFX() {
@@ -138,7 +138,7 @@ public class SuperheroFX extends Module {
             if (e == null) {
                 return;
             }
-            final boolean[] isAttack = { false };
+            boolean[] isAttack = { false };
             packet.handle(new PlayerInteractEntityC2SPacket.Handler() {
                 @Override
                 public void interact(Hand hand) {

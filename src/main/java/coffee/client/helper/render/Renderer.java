@@ -501,12 +501,6 @@ public class Renderer {
             );
         }
 
-        static Vec2f lerp(Vec2f p1, Vec2f p2, float delta) {
-            float x = MathHelper.lerp(delta, p1.x, p2.x);
-            float y = MathHelper.lerp(delta, p1.y, p2.y);
-            return new Vec2f(x, y);
-        }
-
         public static void renderRoundedShadowInternal(Matrix4f matrix, float cr, float cg, float cb, float ca, double fromX, double fromY, double toX, double toY, double rad, double samples, double wid) {
             BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
             bufferBuilder.begin(VertexFormat.DrawMode.TRIANGLE_STRIP, VertexFormats.POSITION_COLOR);

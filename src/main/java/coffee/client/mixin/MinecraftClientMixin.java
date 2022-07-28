@@ -45,9 +45,6 @@ public abstract class MinecraftClientMixin {
                 .add("Analytics enabled", !Analytics.shouldDisableAnalytics());
     }
 
-    @Shadow
-    public abstract CrashReport addDetailsToCrashReport(CrashReport report);
-
     @Inject(method = "stop", at = @At("HEAD"))
     void coffee_dispatchExit(CallbackInfo ci) {
         ConfigManager.saveState();

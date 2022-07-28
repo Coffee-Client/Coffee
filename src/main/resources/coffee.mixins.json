@@ -62,7 +62,6 @@
     "screen.GameMenuMixin",
     "screen.ICommandSuggestorMixin",
     "screen.IDebugHudMixin",
-    "screen.ISliderWidgetMixin",
     "screen.MultiplayerScreenMixin",
     "screen.ScreenMixin",
     "screen.SelectWorldScreenMixin",

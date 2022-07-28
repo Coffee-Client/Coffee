@@ -38,34 +38,34 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 public class Killaura extends Module {
-    final Timer attackCooldown = new Timer();
+    Timer attackCooldown = new Timer();
     @Setting(name = "Attack mode", description = "How to attack the selected entities")
-    final AttackMode attackMode = AttackMode.Single;
+    AttackMode attackMode = AttackMode.Single;
     @Setting(name = "Amount", description = "Amount of entities to attack at once (in multi mode)", min = 1, max = 10, precision = 0)
-    final double amount = 3;
+    double amount = 3;
     @Setting(name = "Select mode", description = "How to select the next target")
-    final SelectMode selectMode = SelectMode.Distance;
+    SelectMode selectMode = SelectMode.Distance;
     @Setting(name = "Automatic delay", description = "Automatically sets the delay")
-    final boolean automaticDelay = true;
+    boolean automaticDelay = true;
     @Setting(name = "Delay", description = "Delay in milliseconds", min = 0, max = 2000, precision = 0)
-    final double delay = 500;
+    double delay = 500;
     @Setting(name = "Delay random", description = "How much randomness to apply to the delay (in ms)", min = 0, max = 1000, precision = 0)
-    final RangeSetting.Range delayRandom = new RangeSetting.Range(0, 200);
+    RangeSetting.Range delayRandom = new RangeSetting.Range(0, 200);
     @Setting(name = "Automatic range", description = "Automatically uses your max range as range")
-    final boolean automaticRange = true;
+    boolean automaticRange = true;
     @Setting(name = "Range", description = "How far to attack entities", min = 1, max = 7, precision = 1)
-    final double range = 5;
+    double range = 5;
     @Setting(name = "Smooth look", description = "Smoothly looks at the target entity before attacking it\nHelps bypass anticheats")
-    final boolean smoothLook = true;
+    boolean smoothLook = true;
     @Setting(name = "Attack passive", description = "Attacks passive mobs")
-    final boolean attackPassive = false;
+    boolean attackPassive = false;
     @Setting(name = "Attack hostile", description = "Attacks hostile mobs")
-    final boolean attackHostile = true;
+    boolean attackHostile = true;
     @Setting(name = "Attack players", description = "Attacks players")
-    final boolean attackPlayers = true;
+    boolean attackPlayers = true;
     @Setting(name = "Attack all", description = "Attacks all remaining entities")
-    final boolean attackAll = false;
-    final Random r = new Random();
+    boolean attackAll = false;
+    Random r = new Random();
     List<LivingEntity> targets = new ArrayList<>();
     int currentRandomDelay = 0;
 

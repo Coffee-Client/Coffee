@@ -38,25 +38,21 @@ import java.util.Arrays;
 import java.util.List;
 
 public class SpotlightScreen extends ClientScreen implements FastTickable {
-    static final List<StaticEntry> staticEntries = List.of(
-            new StaticEntry(
-                    "Gamemode change",
-                    "Switch to creative",
-                    GameTexture.ACTION_RUNCOMMAND.getWhere(),
-                    () -> CoffeeMain.client.player.sendCommand("gamemode creative"),
-                    "gmc",
-                    "creative",
-                    "gmcreative"
-            ),
-            new StaticEntry("Gamemode change",
-                    "Switch to survival",
-                    GameTexture.ACTION_RUNCOMMAND.getWhere(),
-                    () -> CoffeeMain.client.player.sendCommand("gamemode survival"),
-                    "gms",
-                    "survival",
-                    "gmsurvival"
-            )
-    );
+    static final List<StaticEntry> staticEntries = List.of(new StaticEntry("Gamemode change",
+            "Switch to creative",
+            GameTexture.ACTION_RUNCOMMAND.getWhere(),
+            () -> CoffeeMain.client.player.sendCommand("gamemode creative"),
+            "gmc",
+            "creative",
+            "gmcreative"
+    ), new StaticEntry("Gamemode change",
+            "Switch to survival",
+            GameTexture.ACTION_RUNCOMMAND.getWhere(),
+            () -> CoffeeMain.client.player.sendCommand("gamemode survival"),
+            "gms",
+            "survival",
+            "gmsurvival"
+    ));
     CommandTextField command;
     List<SuggestionsEntry> entries = new ArrayList<>();
     double anim = 0;

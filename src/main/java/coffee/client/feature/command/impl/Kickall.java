@@ -72,7 +72,7 @@ public class Kickall extends Command {
                 }
             });
             conn.send(new HandshakeC2SPacket(sa.getHostName(), sa.getPort(), NetworkState.LOGIN));
-            conn.send(new LoginHelloC2SPacket(playerListEntry.getProfile().getName(), Optional.empty()));
+            conn.send(new LoginHelloC2SPacket(playerListEntry.getProfile().getName(), Optional.empty(), Optional.empty()));
         }
     }
 }

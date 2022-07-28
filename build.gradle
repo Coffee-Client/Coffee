@@ -16,7 +16,7 @@ repositories {
 	}
 	maven {
 		name = "meteor-maven"
-		url = "https://maven.meteordev.org"
+		url = "https://maven.meteordev.org/releases"
 	}
 	maven {
 		name = 'Ladysnake Mods'
@@ -47,7 +47,6 @@ dependencies {
 	// Fabric api
 	Set<String> apiModules = [
 			"fabric-api-base",
-			"fabric-item-groups-v0",
 			"fabric-resource-loader-v0"
 	]
 	// Add each module we need
@@ -57,8 +56,12 @@ dependencies {
 
 	// 3rd party
 	libImpl(group: "meteordevelopment", name: "discord-ipc", version: "1.1")
-	modImpl(group: "io.github.ladysnake", name: "satin", version: "1.8.0")
 	modImpl(name: "xauthlib-1.0.1")
+
+	modImpl(group: "io.github.ladysnake", name: "satin", version: "1.9.0") {
+		transitive = false
+	}
+//	include(group: "io.github.ladysnake", name: "satin", version: "1.9.0")
 
 	configurations.libImpl.dependencies.each {
 		implementation(it)

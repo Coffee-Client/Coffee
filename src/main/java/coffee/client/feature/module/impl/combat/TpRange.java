@@ -13,7 +13,6 @@ import coffee.client.helper.event.EventType;
 import coffee.client.helper.event.Events;
 import coffee.client.helper.event.events.MouseEvent;
 import coffee.client.helper.event.events.PacketEvent;
-import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.Utils;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
@@ -25,7 +24,6 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
-import java.awt.Color;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -151,9 +149,7 @@ public class TpRange extends Module {
 
     @Override
     public void onWorldRender(MatrixStack matrices) {
-        if (isDebuggerEnabled() && spoofedPos != null && previousSpoofedPos != null) {
-            Renderer.R3D.renderLine(spoofedPos, previousSpoofedPos, Color.RED, matrices);
-        }
+
     }
 
     @Override

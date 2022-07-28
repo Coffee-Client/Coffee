@@ -14,7 +14,6 @@ import coffee.client.helper.event.EventListener;
 import coffee.client.helper.event.EventType;
 import coffee.client.helper.event.Events;
 import coffee.client.helper.event.events.PacketEvent;
-import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.Timer;
 import coffee.client.helper.util.Utils;
 import net.minecraft.client.option.GameOptions;
@@ -26,7 +25,6 @@ import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.math.Vec3d;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -249,11 +247,7 @@ public class Flight extends Module {
 
     @Override
     public void onWorldRender(MatrixStack matrices) {
-        if (isDebuggerEnabled()) {
-            Vec3d a = Utils.getInterpolatedEntityPosition(Objects.requireNonNull(CoffeeMain.client.player));
-            Vec3d b = a.add(CoffeeMain.client.player.getVelocity());
-            Renderer.R3D.renderLine(a, b, Color.CYAN, matrices);
-        }
+
     }
 
     @Override

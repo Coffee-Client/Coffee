@@ -22,7 +22,6 @@ public abstract class Module {
     protected static final MinecraftClient client = CoffeeMain.client;
     public final ModuleConfig config;
     public final DoubleSetting keybind;
-    private final BooleanSetting debuggerEnabled;
     private final String name;
     private final String description;
     private final ModuleType moduleType;
@@ -49,9 +48,6 @@ public abstract class Module {
                 .precision(0)
                 .get());
         //        this.keybind.showIf(() -> false);
-        this.debuggerEnabled = this.config.create(new BooleanSetting.Builder(false).name("Debugger")
-                .description("Shows a lot of funky visuals describing whats going on")
-                .get());
         boolean hasAnnotation = false;
         for (Annotation declaredAnnotation : this.getClass().getDeclaredAnnotations()) {
             if (declaredAnnotation.annotationType() == NoNotificationDefault.class) {
@@ -65,10 +61,6 @@ public abstract class Module {
 
     public final void postModuleInit() {
         this.config.addSettingsFromAnnotations(this);
-    }
-
-    public boolean isDebuggerEnabled() {
-        return this.debuggerEnabled.getValue();
     }
 
     public final ModuleType getModuleType() {

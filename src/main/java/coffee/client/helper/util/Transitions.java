@@ -4,8 +4,6 @@
 
 package coffee.client.helper.util;
 
-import java.awt.Color;
-
 public class Transitions {
 
     /**
@@ -26,14 +24,6 @@ public class Transitions {
             diffCalc = diff;
         }
         return value + diffCalc;
-    }
-
-    public static Color transition(Color value, Color goal, double speed) {
-        int rn = (int) Math.floor(transition(value.getRed(), goal.getRed(), speed));
-        int gn = (int) Math.floor(transition(value.getGreen(), goal.getGreen(), speed));
-        int bn = (int) Math.floor(transition(value.getBlue(), goal.getBlue(), speed));
-        int an = (int) Math.floor(transition(value.getAlpha(), goal.getAlpha(), speed));
-        return new Color(rn, gn, bn, an);
     }
 
     public static double easeOutExpo(double x) {

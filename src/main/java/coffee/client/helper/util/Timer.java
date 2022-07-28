@@ -19,7 +19,4 @@ public class Timer {
         return System.currentTimeMillis() - lastReset > timeout;
     }
 
-    public long getLastReset() {
-        return lastReset;
-    }
 }

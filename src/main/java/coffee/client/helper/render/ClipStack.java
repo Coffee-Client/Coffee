@@ -10,7 +10,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.math.Vector4f;
 
-import java.awt.Color;
 import java.util.Deque;
 import java.util.Stack;
 
@@ -49,20 +48,9 @@ public class ClipStack {
         }
     }
 
-    void renderDebug(double x, double y, double x1, double y1) {
-        MatrixStack stack = Renderer.R3D.getEmptyMatrixStack();
-        Renderer.R2D.renderLine(stack, Color.RED, x, y, x1, y);
-        Renderer.R2D.renderLine(stack, Color.RED, x1, y, x1, y1);
-        Renderer.R2D.renderLine(stack, Color.RED, x1, y1, x, y1);
-        Renderer.R2D.renderLine(stack, Color.RED, x, y1, x, y);
-
-        Renderer.R2D.renderLine(stack, Color.RED, x, y, x1, y1);
-
-    }
-
     public void popWindow() {
 
-        TransformationEntry e = clipStack.pop();
+        clipStack.pop();
         if (clipStack.empty()) {
             Renderer.R2D.endScissor();
         } else {

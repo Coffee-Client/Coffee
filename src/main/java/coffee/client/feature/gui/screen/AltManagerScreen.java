@@ -66,7 +66,6 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
             """;
     static final Color bg = new Color(20, 20, 20);
     static final Color pillColor = new Color(25, 25, 25, 100);
-    static final Color widgetColor = new Color(40, 40, 40);
     static final Color backgroundOverlay = new Color(0, 0, 0, 130);
     static final Color overlayBackground = new Color(25, 25, 25);
     private static AltManagerScreen instance = null;

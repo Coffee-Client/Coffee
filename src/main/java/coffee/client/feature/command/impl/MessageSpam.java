@@ -32,7 +32,7 @@ public class MessageSpam extends Command {
         validateArgumentsLength(args, 2, "Provide amount and message");
         int amount = new IntegerArgumentParser().parse(args[0]);
         for (int i = 0; i < amount; i++) {
-            CoffeeMain.client.player.sendChatMessage(String.join("", Arrays.copyOfRange(args, 1, args.length)));
+            CoffeeMain.client.player.sendChatMessage(String.join("", Arrays.copyOfRange(args, 1, args.length)), null);
         }
     }
 }

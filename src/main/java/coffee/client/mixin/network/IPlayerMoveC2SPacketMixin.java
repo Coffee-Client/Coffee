@@ -16,11 +16,4 @@ public interface IPlayerMoveC2SPacketMixin {
     @Accessor("onGround")
     void setOnGround(boolean onGround);
 
-    @Mutable
-    @Accessor("yaw")
-    void setYaw(float yaw);
-
-    @Mutable
-    @Accessor("pitch")
-    void setPitch(float pitch);
 }

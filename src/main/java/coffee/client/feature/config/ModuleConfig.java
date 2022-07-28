@@ -11,15 +11,9 @@ import java.util.List;
 
 public class ModuleConfig {
     final List<SettingBase<?>> settings = new ArrayList<>();
-    final List<SettingsGroup> groups = new ArrayList<>();
 
     public <S extends SettingBase<?>> S create(S in) { // used as a proxy to make a one liner
         settings.add(in);
-        return in;
-    }
-
-    public SettingsGroup create(SettingsGroup in) {
-        groups.add(in);
         return in;
     }
 
@@ -34,10 +28,6 @@ public class ModuleConfig {
 
     public List<SettingBase<?>> getSettings() {
         return settings;
-    }
-
-    public List<SettingsGroup> getGroups() {
-        return groups;
     }
 
     public void addSettingsFromAnnotations(Object moduleInstance) {

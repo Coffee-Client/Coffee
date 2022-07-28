@@ -7,7 +7,6 @@ package coffee.client.feature.module.impl.combat;
 import coffee.client.CoffeeMain;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
-import coffee.client.helper.render.Renderer;
 import net.minecraft.block.Block;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.client.util.math.MatrixStack;
@@ -20,7 +19,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 
-import java.awt.Color;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -165,41 +163,7 @@ public class AutoTrap extends Module {
 
     @Override
     public void onWorldRender(MatrixStack matrices) {
-        if (isDebuggerEnabled()) {
-            for (Entity player : Objects.requireNonNull(CoffeeMain.client.world).getPlayers()) {
-                if (player.equals(CoffeeMain.client.player)) {
-                    continue;
-                }
-                if (isTrappedAlready(player)) {
-                    continue;
-                }
-                Vec3d pos = player.getPos();
-                BlockPos bp = new BlockPos(pos);
-                double eWidth = player.getWidth();
-                BlockPos corner = new BlockPos(pos.subtract(eWidth / 2, 0, eWidth / 2));
-                BlockPos otherCorner = new BlockPos(pos.add(eWidth / 2, 0, eWidth / 2));
-                double[][] planToUse;
-                if (corner.getX() == bp.getX() && corner.getZ() == bp.getZ() && otherCorner.getX() == bp.getX() && otherCorner.getZ() == bp.getZ()) {
-                    planToUse = buildOffsetsSmall;
-                } else {
-                    planToUse = buildOffsetsBig;
-                }
 
-                for (double[] ints : planToUse) {
-                    BlockPos current = new BlockPos(pos.add(ints[0], ints[1], ints[2]));
-                    Vec3d v3 = Vec3d.of(current);
-                    if (!inHitRange(CoffeeMain.client.player, v3.add(.5, .5, .5))) {
-                        Renderer.R3D.renderOutline(v3, new Vec3d(1, 1, 1), Color.RED, matrices);
-                        continue;
-                    }
-                    if (!CoffeeMain.client.world.getBlockState(current).isAir()) {
-                        Renderer.R3D.renderOutline(v3, new Vec3d(1, 1, 1), Color.BLUE, matrices);
-                        continue;
-                    }
-                    Renderer.R3D.renderOutline(v3, new Vec3d(1, 1, 1), Color.GREEN, matrices);
-                }
-            }
-        }
     }
 
     @Override

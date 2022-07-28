@@ -10,7 +10,6 @@ import coffee.client.feature.module.ModuleType;
 import coffee.client.helper.event.EventType;
 import coffee.client.helper.event.Events;
 import coffee.client.helper.event.events.MouseEvent;
-import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.Utils;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
@@ -27,7 +26,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 
-import java.awt.Color;
 import java.util.Objects;
 
 public class AnyPlacer extends Module {
@@ -97,11 +95,7 @@ public class AnyPlacer extends Module {
 
     @Override
     public void onWorldRender(MatrixStack matrices) {
-        if (isDebuggerEnabled()) {
-            HitResult hr = Objects.requireNonNull(CoffeeMain.client.player).raycast(500, 0, true);
-            Vec3d spawnPos = hr.getPos();
-            Renderer.R3D.renderFilled(spawnPos.subtract(.3, 0, .3), new Vec3d(.6, 0.001, .6), Color.WHITE, matrices);
-        }
+
     }
 
     @Override

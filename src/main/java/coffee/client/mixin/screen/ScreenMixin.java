@@ -18,11 +18,6 @@ import java.util.List;
 
 @Mixin(Screen.class)
 public abstract class ScreenMixin extends AbstractParentElement {
-    @Shadow
-    public int height;
-
-    @Shadow
-    public int width;
 
     @Shadow
     @Final
@@ -34,7 +29,7 @@ public abstract class ScreenMixin extends AbstractParentElement {
         return this.children;
     }
 
-    void handleCursor(double y) {
+    void handleCursor() {
         long c = Cursor.STANDARD;
         if (!SelfDestruct.shouldSelfDestruct()) {
             for (Element child : this.children) {
@@ -50,7 +45,7 @@ public abstract class ScreenMixin extends AbstractParentElement {
 
     @Override
     public void mouseMoved(double mouseX, double mouseY) {
-        handleCursor(mouseY);
+        handleCursor();
         super.mouseMoved(mouseX, mouseY);
     }
 }

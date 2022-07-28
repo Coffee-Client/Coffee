@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 public class DumpVertexProvider implements VertexConsumerProvider {
-    static Map<RenderLayer, VertexConsumer> dumps = new HashMap<>();
+    static final Map<RenderLayer, VertexConsumer> dumps = new HashMap<>();
 
     public List<DumpVertexConsumer> getBuffers() {
         return new ArrayList<>(dumps.values()).stream()

@@ -15,7 +15,7 @@ import net.minecraft.util.math.MathHelper;
 import java.awt.Color;
 
 public class BooleanSettingEditor extends SettingEditor<BooleanSetting> {
-    static FontAdapter theReal = FontRenderers.getCustomSize(14);
+    static final FontAdapter theReal = FontRenderers.getCustomSize(14);
     double anim = 0;
 
     public BooleanSettingEditor(double x, double y, double width, BooleanSetting confValue) {

@@ -22,9 +22,11 @@ public class Glyph {
     final Texture imageTex;
     final Font f;
     final char c;
-    Rectangle2D dimensions;
     @Getter
-    int offsetX = 5, offsetY = 5;
+    final int offsetX = 5;
+    @Getter
+    final int offsetY = 5;
+    Rectangle2D dimensions;
 
     public Glyph(char c, Font f) {
         this.imageTex = new Texture("font/glyphs/" + ((int) c) + "-" + f.getName().toLowerCase().hashCode() + (int) Math.floor(Math.random() * 0xFFFF));

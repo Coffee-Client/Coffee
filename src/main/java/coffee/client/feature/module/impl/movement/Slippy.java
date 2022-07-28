@@ -11,7 +11,7 @@ import net.minecraft.client.util.math.MatrixStack;
 
 public class Slippy extends Module {
     @Setting(name = "Slipperiness", description = "How slippy to make the blocks\n§cSetting this to > 1 can lead to never stopping", min = 0, max = 3, precision = 1)
-    public double slipperiness = .8;
+    public final double slipperiness = .8;
 
     public Slippy() {
         super("Slippy", "Makes every block slippy like ice", ModuleType.MOVEMENT);

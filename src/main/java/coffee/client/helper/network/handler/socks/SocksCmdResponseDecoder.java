@@ -60,12 +60,8 @@ public class SocksCmdResponseDecoder extends ReplayingDecoder<SocksCmdResponseDe
                         int port = byteBuf.readUnsignedShort();
                         out.add(new SocksCmdResponse(cmdStatus, addressType, host, port));
                     }
-                    case UNKNOWN -> {
-                        out.add(SocksCommonUtils.UNKNOWN_SOCKS_RESPONSE);
-                    }
-                    default -> {
-                        throw new Error();
-                    }
+                    case UNKNOWN -> out.add(SocksCommonUtils.UNKNOWN_SOCKS_RESPONSE);
+                    default -> throw new Error();
                 }
                 break;
             }

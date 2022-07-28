@@ -24,12 +24,12 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class CrystalAura extends Module {
     @Setting(name = "Through walls", description = "Places crystals through walls")
-    boolean throughWalls = false;
+    final boolean throughWalls = false;
     @Setting(name = "Range", description = "How far to target entities from", min = 3, max = 16, precision = 1)
-    double range = 10;
-    List<EntityEntry> targets = new CopyOnWriteArrayList<>();
-    List<BlockPos> obsidianPositions = new CopyOnWriteArrayList<>();
-    Thread obsidianUpdater = new Thread(() -> {
+    final double range = 10;
+    final List<EntityEntry> targets = new CopyOnWriteArrayList<>();
+    final List<BlockPos> obsidianPositions = new CopyOnWriteArrayList<>();
+    final Thread obsidianUpdater = new Thread(() -> {
         while (true) {
             Utils.sleep(30);
             if (!this.isEnabled() || client.world == null || client.player == null) {

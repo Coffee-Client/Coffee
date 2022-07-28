@@ -29,11 +29,11 @@ import java.util.List;
 
 public class EnumSettingEditor extends SettingEditor<EnumSetting<?>> {
 
-    static FontAdapter fa = FontRenderers.getCustomSize(14);
+    static final FontAdapter fa = FontRenderers.getCustomSize(14);
+    final double headerPad = 4;
+    final List<Enum<?>> ese = new ArrayList<>();
     double expandProg = 0;
     boolean expanded = false;
-    double headerPad = 4;
-    List<Enum<?>> ese = new ArrayList<>();
 
     public EnumSettingEditor(double x, double y, double width, EnumSetting<?> confValue) {
         super(x, y, width, 0, confValue);

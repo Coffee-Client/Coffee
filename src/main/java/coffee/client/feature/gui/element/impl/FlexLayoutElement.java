@@ -19,11 +19,12 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class FlexLayoutElement extends Element {
-    List<Element> elements;
-    LayoutDirection direction;
-    double padding;
-    double viewportHeight, viewportWidth;
-    Scroller scroller = new Scroller(0);
+    final List<Element> elements;
+    final LayoutDirection direction;
+    final double padding;
+    final double viewportHeight;
+    final double viewportWidth;
+    final Scroller scroller = new Scroller(0);
     @Getter
     @Setter
     Vec2f heightMulMatrix = new Vec2f(1, 1);

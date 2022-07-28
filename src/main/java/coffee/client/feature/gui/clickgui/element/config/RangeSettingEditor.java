@@ -28,14 +28,6 @@ public class RangeSettingEditor extends SettingEditor<RangeSetting> {
 
     }
 
-    //    void handleClick(double x) {
-    //        double translated = x - (this.getPositionX());
-    //        double perIn = MathHelper.clamp(translated / (width), 0, 1);
-    ////        configValue.setValue(Utils.Math.roundToDecimal(perIn * (configValue.getMax() - configValue.getMin()) + configValue.getMin(),
-    ////                configValue.getPrecision()
-    ////        ));
-    //    }
-
     @Override
     public void render(MatrixStack matrices, double mouseX, double mouseY) {
         super.render(matrices, mouseX, mouseY);
@@ -52,15 +44,6 @@ public class RangeSettingEditor extends SettingEditor<RangeSetting> {
         double barWidth = xB - xA;
         barWidth = Math.max(barWidth, 1.5);
         Renderer.R2D.renderRoundedQuad(matrices, new Color(9, 162, 104), actualX + xA, remainingH, actualX + xA + barWidth, remainingH + 1.5, 1.5 / 2, 5);
-        //        Renderer.R2D.renderRoundedQuad(matrices,
-        //                new Color(9, 162, 104),
-        //                actualX,
-        //                remainingH,
-        //                actualX + Math.max(actualWidth * getPer(), 1.5),
-        //                remainingH + 1.5,
-        //                1.5 / 2,
-        //                5
-        //        );
     }
 
     void handleClickA(double translated) {
@@ -110,9 +93,6 @@ public class RangeSettingEditor extends SettingEditor<RangeSetting> {
                     handleClickB(translated);
                 }
             }
-            //            if (button == 0) {
-            //                handleClick(x);
-            //            }
             return true;
         }
         return false;

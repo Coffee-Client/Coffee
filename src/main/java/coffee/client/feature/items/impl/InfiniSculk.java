@@ -23,7 +23,7 @@ import net.minecraft.util.math.BlockPos;
 import java.util.Arrays;
 
 public class InfiniSculk extends Item {
-    Option<Integer> strength = new Option<>("charge", 300, Integer.class);
+    final Option<Integer> strength = new Option<>("charge", 300, Integer.class);
 
     public InfiniSculk() {
         super("InfiniSculk", "Makes a sculk catalyst that infects a very big region");

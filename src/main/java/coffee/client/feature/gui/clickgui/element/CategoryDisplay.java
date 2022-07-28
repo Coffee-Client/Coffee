@@ -23,10 +23,10 @@ import java.util.List;
 
 public class CategoryDisplay extends Element {
     static final double maxHeight = 300;
-    ModuleType type;
-    List<Module> modules = new ArrayList<>();
-    FlexLayoutElement layout;
-    FontAdapter titleRenderer = FontRenderers.getRenderer();
+    final ModuleType type;
+    final List<Module> modules = new ArrayList<>();
+    final FlexLayoutElement layout;
+    final FontAdapter titleRenderer = FontRenderers.getRenderer();
 
 
     boolean held = false;

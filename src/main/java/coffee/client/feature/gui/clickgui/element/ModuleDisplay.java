@@ -26,12 +26,12 @@ import net.minecraft.util.math.Matrix4f;
 import java.awt.Color;
 
 public class ModuleDisplay extends Element {
-    static double margin = 2;
-    static double actualHeight = 16;
-    Module module;
-    ConfigDisplay cfd;
+    static final double margin = 2;
+    static final double actualHeight = 16;
+    final Module module;
+    final ConfigDisplay cfd;
+    final CategoryDisplay parent;
     double leftAnim = 0;
-    CategoryDisplay parent;
 
     public ModuleDisplay(Module module, double x, double y, double width, CategoryDisplay parent) {
         super(x, y, width, actualHeight);

@@ -26,7 +26,6 @@ import net.minecraft.util.math.Vector4f;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -35,12 +34,9 @@ import java.util.function.Supplier;
 
 public class Renderer {
     public static void setupRender() {
-        //        RenderSystem.disableCull();
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
-        //        RenderSystem.enableDepthTest();
-        //        RenderSystem.depthFunc(GL11.GL_LEQUAL);
     }
 
     public static void endRender() {
@@ -51,7 +47,7 @@ public class Renderer {
     public static class R3D {
 
         static final MatrixStack empty = new MatrixStack();
-        static List<FadingBlock> fades = new CopyOnWriteArrayList<>();
+        static final List<FadingBlock> fades = new CopyOnWriteArrayList<>();
 
         public static void renderFadingBlock(Color outlineColor, Color fillColor, Vec3d start, Vec3d dimensions, long lifeTimeMs) {
             FadingBlock fb = new FadingBlock(outlineColor, fillColor, start, dimensions, System.currentTimeMillis(), lifeTimeMs);
@@ -62,10 +58,10 @@ public class Renderer {
 
         public static void renderFadingBlocks(MatrixStack stack) {
             fades.removeIf(FadingBlock::isDead);
+            Camera camera = CoffeeMain.client.getEntityRenderDispatcher().camera;
+            Vec3d camPos = camera.getPos();
             fades.sort(Comparator.comparingDouble(value -> {
                 Vec3d pos = value.start.add(value.dimensions.multiply(.5));
-                Camera camera = CoffeeMain.client.getEntityRenderDispatcher().camera;
-                Vec3d camPos = camera.getPos();
                 return -pos.distanceTo(camPos);
             }));
             for (FadingBlock fade : fades) {
@@ -81,7 +77,9 @@ public class Renderer {
                 Color fill = Util.modify(fade.fill, -1, -1, -1, (int) (fade.fill.getAlpha() * progress));
                 Renderer.R3D.renderEdged(stack,
                         fade.start.add(new Vec3d(0.2, 0.2, 0.2).multiply(ip)),
-                        fade.dimensions.subtract(new Vec3d(.4, .4, .4).multiply(ip)), fill, out
+                        fade.dimensions.subtract(new Vec3d(.4, .4, .4).multiply(ip)),
+                        fill,
+                        out
                 );
                 stack.pop();
             }
@@ -92,7 +90,6 @@ public class Renderer {
             Vec3d camPos = camera.getPos();
             stack.translate(-camPos.x, -camPos.y, -camPos.z);
             return stack.peek().getPositionMatrix();
-            //            stack.translate(start.x,start.y,start.z);
         }
 
         static float[] getColor(Color c) {
@@ -138,8 +135,7 @@ public class Renderer {
         }
 
         public static void renderOutline(Vec3d start, Vec3d dimensions, Color color, MatrixStack stack) {
-            genericAABBRender(
-                    VertexFormat.DrawMode.DEBUG_LINES,
+            genericAABBRender(VertexFormat.DrawMode.DEBUG_LINES,
                     VertexFormats.POSITION_COLOR,
                     GameRenderer::getPositionColorShader,
                     stack,
@@ -292,8 +288,7 @@ public class Renderer {
         }
 
         public static void renderFilled(Vec3d start, Vec3d dimensions, Color color, MatrixStack stack) {
-            genericAABBRender(
-                    VertexFormat.DrawMode.QUADS,
+            genericAABBRender(VertexFormat.DrawMode.QUADS,
                     VertexFormats.POSITION_COLOR,
                     GameRenderer::getPositionColorShader,
                     stack,
@@ -330,12 +325,12 @@ public class Renderer {
                         buffer.vertex(matrix, x2, y1, z1).color(red, green, blue, alpha).next();
                         buffer.vertex(matrix, x2, y1, z2).color(red, green, blue, alpha).next();
                         buffer.vertex(matrix, x1, y1, z2).color(red, green, blue, alpha).next();
-                    });
+                    }
+            );
         }
 
         public static void renderLine(Vec3d start, Vec3d end, Color color, MatrixStack matrices) {
-            genericAABBRender(
-                    VertexFormat.DrawMode.DEBUG_LINES,
+            genericAABBRender(VertexFormat.DrawMode.DEBUG_LINES,
                     VertexFormats.POSITION_COLOR,
                     GameRenderer::getPositionColorShader,
                     matrices,
@@ -380,10 +375,6 @@ public class Renderer {
     }
 
     public static class R2D {
-
-        public static Vec2f renderTooltip(MatrixStack stack, double arrowX, double arrowY, double width, double height, Color color) {
-            return renderTooltip(stack, arrowX, arrowY, width, height, color, false);
-        }
 
         /**
          * Renders an arrow tooltip
@@ -516,19 +507,6 @@ public class Renderer {
             return new Vec2f(x, y);
         }
 
-        static Vec2f getMultiBezPoint(Vec2f[] vertecies, float delta) {
-            List<Vec2f> verts = new ArrayList<>(List.of(vertecies));
-            while (verts.size() > 1) {
-                for (int i = 0; i < verts.size() - 1; i++) {
-                    Vec2f current = verts.get(i);
-                    Vec2f next = verts.get(i + 1);
-                    verts.set(i, lerp(current, next, delta));
-                }
-                verts.remove(verts.size() - 1);
-            }
-            return verts.get(0);
-        }
-
         public static void renderRoundedShadowInternal(Matrix4f matrix, float cr, float cg, float cb, float ca, double fromX, double fromY, double toX, double toY, double rad, double samples, double wid) {
             BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
             bufferBuilder.begin(VertexFormat.DrawMode.TRIANGLE_STRIP, VertexFormats.POSITION_COLOR);
@@ -576,25 +554,6 @@ public class Renderer {
 
             renderRoundedShadowInternal(matrix, g, h, k, f, fromX, fromY, toX, toY, rad, samples, shadowWidth);
             endRender();
-        }
-
-        public static void renderBezierCurve(MatrixStack stack, Vec2f[] points, float r, float g, float b, float a, float laziness) {
-            if (points.length < 2) {
-                return;
-            }
-            float minIncr = 0.0001f;
-            float laziness1 = MathHelper.clamp(laziness, minIncr, 1);
-            Vec2f prev = null;
-            for (float d = 0; d <= 1; d += Math.min(laziness1, Math.max(minIncr, 1 - d))) {
-                Vec2f pos = getMultiBezPoint(points, d);
-                if (prev == null) {
-                    prev = pos;
-                    continue;
-                }
-                renderLine(stack, new Color(r, g, b, a), prev.x, prev.y, pos.x, pos.y);
-                prev = pos;
-            }
-
         }
 
         public static void renderLoadingSpinner(MatrixStack stack, float alpha, double x, double y, double rad, double width, double segments) {

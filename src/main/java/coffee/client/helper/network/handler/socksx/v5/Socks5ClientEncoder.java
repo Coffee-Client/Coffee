@@ -90,7 +90,7 @@ public class Socks5ClientEncoder extends MessageToByteEncoder<Socks5Message> {
         }
     }
 
-    private void encodeCommandRequest(Socks5CommandRequest msg, ByteBuf out) throws Exception {
+    private void encodeCommandRequest(Socks5CommandRequest msg, ByteBuf out) {
         out.writeByte(msg.version().byteValue());
         out.writeByte(msg.type().byteValue());
         out.writeByte(0x00);

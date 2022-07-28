@@ -17,9 +17,9 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class SelfDestruct extends Command {
+    static final List<Module> modulesToReenable = new ArrayList<>();
     private static final AtomicBoolean selfDestruct = new AtomicBoolean(false);
     static String reset = "";
-    static List<Module> modulesToReenable = new ArrayList<>();
 
     public SelfDestruct() {
         super("SelfDestruct", "Hides the client entirely", "selfdestruct", "sd");

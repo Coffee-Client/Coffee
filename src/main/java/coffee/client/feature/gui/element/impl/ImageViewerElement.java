@@ -13,7 +13,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
 public class ImageViewerElement extends Element {
-    Identifier tex;
+    final Identifier tex;
 
     public ImageViewerElement(double x, double y, GameTexture texture) {
         super(x, y, texture.getDimensions().getWidth(), texture.getDimensions().getHeight());

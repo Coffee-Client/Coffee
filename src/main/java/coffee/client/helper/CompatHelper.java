@@ -16,10 +16,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CompatHelper {
+    static final Map<String, Runnable> modsToLookOutFor = Util.make(
+            new HashMap<>(),
+            stringRunnableHashMap -> stringRunnableHashMap.put("meteor-client", () -> disableModule(NoLevitation.class, "Meteor client is loaded"))
+    );
     static boolean anyFound = false;
-    static Map<String, Runnable> modsToLookOutFor = Util.make(new HashMap<>(), stringRunnableHashMap -> {
-        stringRunnableHashMap.put("meteor-client", () -> disableModule(NoLevitation.class, "Meteor client is loaded"));
-    });
 
     static <T extends Module> void disableModule(Class<T> clazz, String reason) {
         Module c = ModuleRegistry.getByClass(clazz);

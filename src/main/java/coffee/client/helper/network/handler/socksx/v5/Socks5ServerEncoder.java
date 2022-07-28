@@ -66,7 +66,7 @@ public class Socks5ServerEncoder extends MessageToByteEncoder<Socks5Message> {
         }
     }
 
-    private void encodeCommandResponse(Socks5CommandResponse msg, ByteBuf out) throws Exception {
+    private void encodeCommandResponse(Socks5CommandResponse msg, ByteBuf out) {
         out.writeByte(msg.version().byteValue());
         out.writeByte(msg.status().byteValue());
         out.writeByte(0x00);

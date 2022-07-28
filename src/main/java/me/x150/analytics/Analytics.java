@@ -81,7 +81,7 @@ public class Analytics {
      * Telemetry uri to send analytics to
      */
     private static final URI telemetryURI = URI.create("https://track.client.coffee/analytics");
-    String modName;
+    final String modName;
 
     public Analytics(String name) {
         this.modName = name;

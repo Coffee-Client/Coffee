@@ -94,7 +94,8 @@ public class Nuker extends Module {
                             Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 255),
                             Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 100).darker(),
                             Vec3d.of(bp),
-                            new Vec3d(1, 1, 1), 500
+                            new Vec3d(1, 1, 1),
+                            500
                     );
                 }
             });
@@ -113,7 +114,8 @@ public class Nuker extends Module {
                         Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 255),
                         Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 100).darker(),
                         Vec3d.of(bp),
-                        new Vec3d(1, 1, 1), 500
+                        new Vec3d(1, 1, 1),
+                        500
                 );
             });
         }

@@ -20,13 +20,13 @@ import net.minecraft.util.math.MathHelper;
 import java.awt.Color;
 
 public class NotificationScreen extends AAScreen {
-    Notification.Type icon;
-    String title;
-    String[] contentSplit;
-    int maxWidth = 200;
-    int pad = 5;
+    final Notification.Type icon;
+    final String title;
+    final String[] contentSplit;
+    final int maxWidth = 200;
+    final int pad = 5;
+    final Screen parent;
     ButtonElement ok;
-    Screen parent;
     boolean closing = false;
     double anim = 0;
 

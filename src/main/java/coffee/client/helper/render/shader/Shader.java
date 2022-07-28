@@ -11,7 +11,7 @@ import net.minecraft.util.Identifier;
 import java.util.function.Consumer;
 
 public class Shader {
-    ManagedShaderEffect effect;
+    final ManagedShaderEffect effect;
 
     private Shader(Identifier ident, Consumer<ManagedShaderEffect> init) {
         this.effect = ShaderEffectManager.getInstance().manage(ident, init);

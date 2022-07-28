@@ -37,16 +37,16 @@ import java.util.Map;
 
 public class ConfigDisplay extends Element {
     @SuppressWarnings("rawtypes")
-    static Map<Class<? extends SettingBase>, Class<? extends Element>> settingTypeMappings = Util.make(new HashMap<>(), classClassHashMap -> {
+    static final Map<Class<? extends SettingBase>, Class<? extends Element>> settingTypeMappings = Util.make(new HashMap<>(), classClassHashMap -> {
         classClassHashMap.put(BooleanSetting.class, BooleanSettingEditor.class);
         classClassHashMap.put(EnumSetting.class, EnumSettingEditor.class);
         classClassHashMap.put(DoubleSetting.class, DoubleSettingEditor.class);
         classClassHashMap.put(StringSetting.class, StringSettingEditor.class);
         classClassHashMap.put(RangeSetting.class, RangeSettingEditor.class);
     });
+    final double leftPadding = 6;
     boolean expanded = false;
     double progress = 0;
-    double leftPadding = 6;
     FlexLayoutElement fle;
 
     public ConfigDisplay(double x, double y, double width, ModuleConfig mconf) {

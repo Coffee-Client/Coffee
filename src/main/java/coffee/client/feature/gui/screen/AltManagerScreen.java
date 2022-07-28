@@ -542,9 +542,6 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         Rectangle rBounds = new Rectangle(getPadding(), getHeaderHeight(), getPadding() + (width - (getPadding() + leftWidth + getPadding() * 2)), height);
 
-        //        if (isLoggingIn.get()) {
-        //            return false;
-        //        }
         boolean a = super.mouseClicked(mouseX, mouseY, button);
         if (a || isLoggingIn.get()) {
             return true;

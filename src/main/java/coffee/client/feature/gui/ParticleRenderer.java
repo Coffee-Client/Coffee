@@ -29,8 +29,8 @@ import java.util.List;
 public class ParticleRenderer {
     static final Color DYING = new Color(255, 255, 255, 0); // it goes gradient so you can still see the white
     public final List<Particle> particles = new ArrayList<>();
+    public final boolean shouldAdd = true;
     final int pc;
-    public boolean shouldAdd = true;
     long lastTick = System.currentTimeMillis();
 
     public ParticleRenderer(int pc) {

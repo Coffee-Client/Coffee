@@ -11,10 +11,10 @@ import net.minecraft.client.util.math.MatrixStack;
 
 public class BoingBoing extends Module {
     @Setting(name = "Bounce mul", description = "How much to multiply your velocity by when bouncing", min = 0, max = 3, precision = 1)
-    public double bounceMul = .8;
+    public final double bounceMul = .8;
 
     @Setting(name = "Allow bounce back", description = "Allows you to bounce back when you hit your head.\n§cCAN LEAD TO FAST BOUNCING AND CRASH WHEN MUL > 1.0")
-    public boolean bounceBack = false;
+    public final boolean bounceBack = false;
 
     public BoingBoing() {
         super("BoingBoing", "Makes every block a slime block", ModuleType.MOVEMENT);

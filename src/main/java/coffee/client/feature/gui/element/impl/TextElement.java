@@ -12,7 +12,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import java.awt.Color;
 
 public class TextElement extends Element {
-    FontAdapter fa;
+    final FontAdapter fa;
     @Setter
     String text;
     @Setter

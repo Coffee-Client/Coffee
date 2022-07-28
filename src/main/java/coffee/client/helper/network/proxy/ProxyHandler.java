@@ -173,7 +173,7 @@ public abstract class ProxyHandler extends ChannelDuplexHandler {
      * Sends the initial message to be sent to the proxy server. This method also starts a timeout task which marks
      * the {@link #connectPromise} as failure if the connection attempt does not success within the timeout.
      */
-    private void sendInitialMessage(final ChannelHandlerContext ctx) throws Exception {
+    private void sendInitialMessage(final ChannelHandlerContext ctx) {
         final long connectTimeoutMillis = this.connectTimeoutMillis;
         if (connectTimeoutMillis > 0) {
             connectTimeoutFuture = ctx.executor().schedule(() -> {

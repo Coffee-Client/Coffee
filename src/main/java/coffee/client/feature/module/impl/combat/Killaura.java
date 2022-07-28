@@ -38,54 +38,36 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 public class Killaura extends Module {
-    List<LivingEntity> targets = new ArrayList<>();
-    Timer attackCooldown = new Timer();
-
+    final Timer attackCooldown = new Timer();
     @Setting(name = "Attack mode", description = "How to attack the selected entities")
-    AttackMode attackMode = AttackMode.Single;
-
+    final AttackMode attackMode = AttackMode.Single;
     @Setting(name = "Amount", description = "Amount of entities to attack at once (in multi mode)", min = 1, max = 10, precision = 0)
-    double amount = 3;
+    final double amount = 3;
     @Setting(name = "Select mode", description = "How to select the next target")
-    SelectMode selectMode = SelectMode.Distance;
-
+    final SelectMode selectMode = SelectMode.Distance;
     @Setting(name = "Automatic delay", description = "Automatically sets the delay")
-    boolean automaticDelay = true;
+    final boolean automaticDelay = true;
     @Setting(name = "Delay", description = "Delay in milliseconds", min = 0, max = 2000, precision = 0)
-    double delay = 500;
-
+    final double delay = 500;
     @Setting(name = "Delay random", description = "How much randomness to apply to the delay (in ms)", min = 0, max = 1000, precision = 0)
-    RangeSetting.Range delayRandom = new RangeSetting.Range(0, 200);
-
+    final RangeSetting.Range delayRandom = new RangeSetting.Range(0, 200);
     @Setting(name = "Automatic range", description = "Automatically uses your max range as range")
-    boolean automaticRange = true;
+    final boolean automaticRange = true;
     @Setting(name = "Range", description = "How far to attack entities", min = 1, max = 7, precision = 1)
-    double range = 5;
-
+    final double range = 5;
     @Setting(name = "Smooth look", description = "Smoothly looks at the target entity before attacking it\nHelps bypass anticheats")
-    boolean smoothLook = true;
-
+    final boolean smoothLook = true;
     @Setting(name = "Attack passive", description = "Attacks passive mobs")
-    boolean attackPassive = false;
-
+    final boolean attackPassive = false;
     @Setting(name = "Attack hostile", description = "Attacks hostile mobs")
-    boolean attackHostile = true;
-
+    final boolean attackHostile = true;
     @Setting(name = "Attack players", description = "Attacks players")
-    boolean attackPlayers = true;
-
+    final boolean attackPlayers = true;
     @Setting(name = "Attack all", description = "Attacks all remaining entities")
-    boolean attackAll = false;
-
-    //    @Setting(name="Aim random",description = "How much randomness to apply to aiming at the entity",min=-5,max=5,precision = 2)
-    //    RangeSetting.Range aimRandom = new RangeSetting.Range(-3, 3);
-    //
-    //    @VisibilitySpecifier("Aim random")
-    //    boolean shouldShowAimRandom() {
-    //        return smoothLook;
-    //    }
+    final boolean attackAll = false;
+    final Random r = new Random();
+    List<LivingEntity> targets = new ArrayList<>();
     int currentRandomDelay = 0;
-    Random r = new Random();
 
     public Killaura() {
         super("Killaura", "Automatically attacks all entities in range", ModuleType.COMBAT);

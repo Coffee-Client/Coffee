@@ -25,9 +25,9 @@ import org.lwjgl.glfw.GLFW;
 import java.awt.Color;
 
 public class RoundTextFieldWidget implements Element, Drawable, Selectable, DoesMSAA, HasSpecialCursor {
-    protected final String suggestion;
-    public Runnable changeListener = () -> {
+    public final Runnable changeListener = () -> {
     };
+    protected final String suggestion;
     protected String text = "";
     protected boolean focused;
     protected int cursor;

@@ -15,8 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ButtonGroupElement extends Element {
-    List<Element> els = new ArrayList<>();
-    LayoutDirection dir;
+    final List<Element> els = new ArrayList<>();
+    final LayoutDirection dir;
 
     public ButtonGroupElement(double x, double y, double width, double height, LayoutDirection direction, ButtonEntry... btns) {
         super(x, y, width, height);
@@ -135,10 +135,14 @@ public class ButtonGroupElement extends Element {
     }
 
     static class SingleButton extends Element {
-        String t;
-        Runnable r;
-        double r1, r2, r3, r4;
-        Color c, sel;
+        final String t;
+        final Runnable r;
+        final double r1;
+        final double r2;
+        final double r3;
+        final double r4;
+        final Color c;
+        final Color sel;
 
         public SingleButton(double x, double y, double width, double height, String text, Runnable r, double rad1, double rad2, double rad3, double rad4, Color c, Color sel) {
             super(x, y, width, height);

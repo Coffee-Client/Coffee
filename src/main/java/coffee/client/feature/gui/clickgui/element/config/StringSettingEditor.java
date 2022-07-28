@@ -11,8 +11,8 @@ import coffee.client.helper.font.adapter.FontAdapter;
 import net.minecraft.client.util.math.MatrixStack;
 
 public class StringSettingEditor extends SettingEditor<StringSetting> {
-    static FontAdapter fa = FontRenderers.getCustomSize(14);
-    TextFieldElement rtfw;
+    static final FontAdapter fa = FontRenderers.getCustomSize(14);
+    final TextFieldElement rtfw;
 
     public StringSettingEditor(double x, double y, double width, StringSetting confValue) {
         super(x, y, width, fa.getFontHeight() + 20, confValue);

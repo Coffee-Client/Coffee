@@ -55,22 +55,22 @@ public class AntiCrash extends Module {
             .get());
 
     @Getter
-    BooleanSetting disableBossbars = this.config.create(new BooleanSetting.Builder(true).name("Disable bossbars")
+    final BooleanSetting disableBossbars = this.config.create(new BooleanSetting.Builder(true).name("Disable bossbars")
             .description("Does not render bossbars")
             .get());
 
     @Getter
-    BooleanSetting disableObfText = this.config.create(new BooleanSetting.Builder(true).name("Disable obfuscation")
+    final BooleanSetting disableObfText = this.config.create(new BooleanSetting.Builder(true).name("Disable obfuscation")
             .description("Disables obfuscated text")
             .get());
 
     @Getter
-    BooleanSetting capAttributes = this.config.create(new BooleanSetting.Builder(true).name("Cap attributes")
+    final BooleanSetting capAttributes = this.config.create(new BooleanSetting.Builder(true).name("Cap attributes")
             .description("Caps the amount of attributes being rendered")
             .get());
 
     @Getter
-    DoubleSetting capAttributesAmount = this.config.create(new DoubleSetting.Builder(4).name("Cap attrib. max")
+    final DoubleSetting capAttributesAmount = this.config.create(new DoubleSetting.Builder(4).name("Cap attrib. max")
             .description("How many attributes should be allowed to render (per modifier equipment slot)")
             .min(0)
             .max(64)

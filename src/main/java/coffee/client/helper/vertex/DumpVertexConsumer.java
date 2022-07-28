@@ -12,7 +12,7 @@ import net.minecraft.util.math.Vec3f;
 import java.util.Stack;
 
 public class DumpVertexConsumer implements VertexConsumer {
-    Stack<VertexData> stack = new Stack<>();
+    final Stack<VertexData> stack = new Stack<>();
 
     public DumpVertexConsumer() {
         clear();

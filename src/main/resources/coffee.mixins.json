@@ -3,6 +3,7 @@
   "package": "coffee.client.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "AbstractFabricPlatformMixin",
     "ClientBrandRetrieverMixin",
     "ClientPlayerInteractionManagerMixin",
     "ClientWorldMixin",
@@ -69,6 +70,7 @@
     "screen.TitleScreenMixin"
   ],
   "client": [
+    "network.ClientPlayNetworkHandlerMixin"
   ],
   "server": [],
   "injectors": {

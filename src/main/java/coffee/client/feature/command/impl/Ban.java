@@ -29,14 +29,12 @@ public class Ban extends Command {
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
         if (index == 0) {
-            return new PossibleArgument(ArgumentType.PLAYER,
-                    Objects.requireNonNull(CoffeeMain.client.world)
-                            .getPlayers()
-                            .stream()
-                            .map(abstractClientPlayerEntity -> abstractClientPlayerEntity.getGameProfile().getName())
-                            .toList()
-                            .toArray(String[]::new)
-            );
+            return new PossibleArgument(ArgumentType.PLAYER, Objects.requireNonNull(CoffeeMain.client.world)
+                    .getPlayers()
+                    .stream()
+                    .map(abstractClientPlayerEntity -> abstractClientPlayerEntity.getGameProfile().getName())
+                    .toList()
+                    .toArray(String[]::new));
         }
         return super.getSuggestionsWithType(index, args);
     }
@@ -56,13 +54,13 @@ public class Ban extends Command {
         ItemStack ban = new ItemStack(Items.ARMOR_STAND, 1);
         message("Created Ban Stand for " + playerN.getGameProfile().getName());
         try {
-            ban.setNbt(StringNbtReader.parse("{EntityTag:{UUID:[I;" + playerUuid[0] + "," + playerUuid[1] + "," + playerUuid[2] + "," + playerUuid[3] + "],ArmorItems:[{},{},{},{id:\"minecraft:player_head\",Count:1b,tag:{SkullOwner:\"" + playerN.getGameProfile()
-                    .getName() + "\"}}]}}"));
+            ban.setNbt(StringNbtReader.parse(
+                    "{EntityTag:{UUID:[I;" + playerUuid[0] + "," + playerUuid[1] + "," + playerUuid[2] + "," + playerUuid[3] + "],ArmorItems:[{},{},{},{id:\"minecraft:player_head\",Count:1b,tag:{SkullOwner:\"" + playerN.getGameProfile()
+                            .getName() + "\"}}]}}"));
         } catch (Exception ignored) {
         }
         ban.setCustomName(Text.of(playerN.getGameProfile().getName()));
-        CoffeeMain.client.player.networkHandler.sendPacket(new CreativeInventoryActionC2SPacket(36 + CoffeeMain.client.player.getInventory().selectedSlot,
-                ban
-        ));
+        CoffeeMain.client.player.networkHandler.sendPacket(
+                new CreativeInventoryActionC2SPacket(36 + CoffeeMain.client.player.getInventory().selectedSlot, ban));
     }
 }

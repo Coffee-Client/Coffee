@@ -100,10 +100,7 @@ public class Socks4ServerDecoder extends ReplayingDecoder<Socks4ServerDecoder.St
         }
 
         Socks4CommandRequest m = new DefaultSocks4CommandRequest(type != null ? type : Socks4CommandType.CONNECT,
-                dstAddr != null ? dstAddr : "",
-                dstPort != 0 ? dstPort : 65535,
-                userId != null ? userId : ""
-        );
+                dstAddr != null ? dstAddr : "", dstPort != 0 ? dstPort : 65535, userId != null ? userId : "");
 
         m.setDecoderResult(DecoderResult.failure(cause1));
         out.add(m);

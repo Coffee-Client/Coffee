@@ -134,15 +134,8 @@ public class AChatScreenMixin extends Screen {
             probableWidth = Math.max(probableWidth, FontRenderers.getRenderer().getStringWidth(suggestion) + 1);
         }
         float xC = (float) (cmdXS);
-        Renderer.R2D.renderRoundedQuad(stack,
-                new Color(30, 30, 30, 255),
-                xC - padding(),
-                yC - padding(),
-                xC + probableWidth + padding(),
-                yC + probableHeight,
-                5,
-                20
-        );
+        Renderer.R2D.renderRoundedQuad(stack, new Color(30, 30, 30, 255), xC - padding(), yC - padding(), xC + probableWidth + padding(),
+                yC + probableHeight, 5, 20);
         for (String suggestion : suggestions) {
             FontRenderers.getRenderer().drawString(stack, suggestion, xC, yC, 0xFFFFFF, false);
             yC += FontRenderers.getRenderer().getMarginHeight();

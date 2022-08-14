@@ -47,7 +47,8 @@ public class ClientPlayNetworkHandlerMixin {
                         var sender = MinecraftClient.getInstance().world.getPlayerByUuid(entry.profileId());
                         if (sender != receiver) {
                             Utils.Logging.message(Formatting.AQUA + receiver.getName()
-                                    .getString() + Formatting.GREEN + " received a private message from " + Formatting.AQUA + sender.getName().getString());
+                                    .getString() + Formatting.GREEN + " received a private message from " + Formatting.AQUA + sender.getName()
+                                    .getString());
                         }
                     }
                 }

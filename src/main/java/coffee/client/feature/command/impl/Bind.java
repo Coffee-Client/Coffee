@@ -22,7 +22,8 @@ public class Bind extends Command {
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
         if (index == 0) {
-            return new PossibleArgument(ArgumentType.STRING, ModuleRegistry.getModules().stream().map(Module::getName).toList().toArray(String[]::new));
+            return new PossibleArgument(ArgumentType.STRING,
+                    ModuleRegistry.getModules().stream().map(Module::getName).toList().toArray(String[]::new));
         }
         return super.getSuggestionsWithType(index, args);
     }

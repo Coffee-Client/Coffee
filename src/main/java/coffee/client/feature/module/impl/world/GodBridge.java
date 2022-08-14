@@ -43,7 +43,8 @@ public class GodBridge extends Module {
         // Notification.create(5000, "GodBridge", "Look down, as you would normally while godbridging to start");
         if (!isReady()) {
             if (isReady == null) {
-                isReady = Notification.create(-1, "GodBridge", true, Notification.Type.INFO, "Look down, as you would normally while godbridging to start");
+                isReady = Notification.create(-1, "GodBridge", true, Notification.Type.INFO,
+                        "Look down, as you would normally while godbridging to start");
             }
         } else {
             if (isReady != null) {

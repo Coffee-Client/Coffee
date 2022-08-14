@@ -31,33 +31,22 @@ import java.util.Objects;
 
 public class AimAssist extends Module {
 
-    final BooleanSetting attackPlayers = this.config.create(new BooleanSetting.Builder(true).name("Attack players")
-            .description("Whether or not to aim at players")
-            .get());
-    final BooleanSetting attackHostile = this.config.create(new BooleanSetting.Builder(true).name("Attack hostile")
-            .description("Whether or not to aim at hostile entities")
-            .get());
-    final BooleanSetting attackNeutral = this.config.create(new BooleanSetting.Builder(true).name("Attack neutral")
-            .description("Whether or not to aim at neutral entities")
-            .get());
-    final BooleanSetting attackPassive = this.config.create(new BooleanSetting.Builder(true).name("Attack passive")
-            .description("Whether or nott o aim at passive entities")
-            .get());
-    final BooleanSetting attackEverything = this.config.create(new BooleanSetting.Builder(true).name("Attack everything")
-            .description("Whether or not to aim at everything else")
-            .get());
-    final BooleanSetting aimAtCombatPartner = this.config.create(new BooleanSetting.Builder(true).name("Aim at combat")
-            .description("Whether or not to only aim at the combat partner")
-            .get());
-    final EnumSetting<PriorityMode> priority = this.config.create(new EnumSetting.Builder<>(PriorityMode.Distance).name("Priority")
-            .description("What to prioritize when aiminig")
-            .get());
-    final DoubleSetting laziness = this.config.create(new DoubleSetting.Builder(1).name("Laziness")
-            .description("How lazy to get when aiming")
-            .min(0.1)
-            .max(5)
-            .precision(1)
-            .get());
+    final BooleanSetting attackPlayers = this.config.create(
+            new BooleanSetting.Builder(true).name("Attack players").description("Whether or not to aim at players").get());
+    final BooleanSetting attackHostile = this.config.create(
+            new BooleanSetting.Builder(true).name("Attack hostile").description("Whether or not to aim at hostile entities").get());
+    final BooleanSetting attackNeutral = this.config.create(
+            new BooleanSetting.Builder(true).name("Attack neutral").description("Whether or not to aim at neutral entities").get());
+    final BooleanSetting attackPassive = this.config.create(
+            new BooleanSetting.Builder(true).name("Attack passive").description("Whether or nott o aim at passive entities").get());
+    final BooleanSetting attackEverything = this.config.create(
+            new BooleanSetting.Builder(true).name("Attack everything").description("Whether or not to aim at everything else").get());
+    final BooleanSetting aimAtCombatPartner = this.config.create(
+            new BooleanSetting.Builder(true).name("Aim at combat").description("Whether or not to only aim at the combat partner").get());
+    final EnumSetting<PriorityMode> priority = this.config.create(
+            new EnumSetting.Builder<>(PriorityMode.Distance).name("Priority").description("What to prioritize when aiminig").get());
+    final DoubleSetting laziness = this.config.create(
+            new DoubleSetting.Builder(1).name("Laziness").description("How lazy to get when aiming").min(0.1).max(5).precision(1).get());
     final BooleanSetting aimInstant = this.config.create(new BooleanSetting.Builder(false).name("Aim instantly")
             .description("Whether or not to aim instantly instead of smoothly")
             .get());
@@ -91,8 +80,8 @@ public class AimAssist extends Module {
                 if (!entity.isAlive()) {
                     continue;
                 }
-                if (entity.getPos().distanceTo(CoffeeMain.client.player.getPos()) > Objects.requireNonNull(CoffeeMain.client.interactionManager)
-                        .getReachDistance()) {
+                if (entity.getPos().distanceTo(CoffeeMain.client.player.getPos()) > Objects.requireNonNull(
+                        CoffeeMain.client.interactionManager).getReachDistance()) {
                     continue;
                 }
                 boolean checked = false;
@@ -127,7 +116,8 @@ public class AimAssist extends Module {
         }
         if (priority.getValue() == PriorityMode.Distance) {
             le = attacks.stream()
-                    .sorted(Comparator.comparingDouble(value -> value.getPos().distanceTo(Objects.requireNonNull(CoffeeMain.client.player).getPos())))
+                    .sorted(Comparator.comparingDouble(
+                            value -> value.getPos().distanceTo(Objects.requireNonNull(CoffeeMain.client.player).getPos())))
                     .toList()
                     .get(0);
         } else {

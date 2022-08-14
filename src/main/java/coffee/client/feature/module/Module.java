@@ -54,9 +54,8 @@ public abstract class Module {
                 hasAnnotation = true;
             }
         }
-        this.toasts = this.config.create(new BooleanSetting.Builder(!hasAnnotation).name("Toasts")
-                .description("Whether to show enabled / disabled toasts")
-                .get());
+        this.toasts = this.config.create(
+                new BooleanSetting.Builder(!hasAnnotation).name("Toasts").description("Whether to show enabled / disabled toasts").get());
         Events.registerTransientEventHandlerClassEvents(this);
     }
 
@@ -116,7 +115,8 @@ public abstract class Module {
         }
         this.enabled = enabled;
         if (toasts.getValue()) {
-            Notification.create(1000, "Module toggle", Notification.Type.INFO, (this.enabled ? "§aEn" : "§cDis") + "abled §r" + this.getName());
+            Notification.create(1000, "Module toggle", Notification.Type.INFO,
+                    (this.enabled ? "§aEn" : "§cDis") + "abled §r" + this.getName());
         }
         if (this.enabled) {
             Events.registerEventHandlerClass(this);

@@ -25,16 +25,14 @@ import net.minecraft.network.packet.s2c.play.ParticleS2CPacket;
 
 public class AntiCrash extends Module {
     private static AntiCrash instance = null;
-    final BooleanSetting screenGui = this.config.create(new BooleanSetting.Builder(false).name("Cap Screens")
-            .description("Prevents too many screens from being opened")
-            .get());
+    final BooleanSetting screenGui = this.config.create(
+            new BooleanSetting.Builder(false).name("Cap Screens").description("Prevents too many screens from being opened").get());
     final BooleanSetting capVel = this.config.create(new BooleanSetting.Builder(true).name("Cap velocity")
             .description("Prevents an abnormally sized velocity packet from going through")
             .get());
     @Getter
-    final BooleanSetting capParticles = this.config.create(new BooleanSetting.Builder(true).name("Cap particles")
-            .description("Prevents too many particles from being rendered")
-            .get());
+    final BooleanSetting capParticles = this.config.create(
+            new BooleanSetting.Builder(true).name("Cap particles").description("Prevents too many particles from being rendered").get());
     @Getter
     final DoubleSetting particleMax = this.config.create(new DoubleSetting.Builder(1000).name("Particle max")
             .description("How many particles to allow at once")
@@ -43,9 +41,8 @@ public class AntiCrash extends Module {
             .precision(0)
             .get());
     @Getter
-    final BooleanSetting capNames = this.config.create(new BooleanSetting.Builder(true).name("Cap entity names")
-            .description("Cap the max size an entity name can be")
-            .get());
+    final BooleanSetting capNames = this.config.create(
+            new BooleanSetting.Builder(true).name("Cap entity names").description("Cap the max size an entity name can be").get());
     @Getter
     final DoubleSetting nameMax = this.config.create(new DoubleSetting.Builder(64).name("Name max")
             .description("How long a name should be allowed to be")
@@ -55,19 +52,16 @@ public class AntiCrash extends Module {
             .get());
 
     @Getter
-    final BooleanSetting disableBossbars = this.config.create(new BooleanSetting.Builder(true).name("Disable bossbars")
-            .description("Does not render bossbars")
-            .get());
+    final BooleanSetting disableBossbars = this.config.create(
+            new BooleanSetting.Builder(true).name("Disable bossbars").description("Does not render bossbars").get());
 
     @Getter
-    final BooleanSetting disableObfText = this.config.create(new BooleanSetting.Builder(true).name("Disable obfuscation")
-            .description("Disables obfuscated text")
-            .get());
+    final BooleanSetting disableObfText = this.config.create(
+            new BooleanSetting.Builder(true).name("Disable obfuscation").description("Disables obfuscated text").get());
 
     @Getter
-    final BooleanSetting capAttributes = this.config.create(new BooleanSetting.Builder(true).name("Cap attributes")
-            .description("Caps the amount of attributes being rendered")
-            .get());
+    final BooleanSetting capAttributes = this.config.create(
+            new BooleanSetting.Builder(true).name("Cap attributes").description("Caps the amount of attributes being rendered").get());
 
     @Getter
     final DoubleSetting capAttributesAmount = this.config.create(new DoubleSetting.Builder(4).name("Cap attrib. max")

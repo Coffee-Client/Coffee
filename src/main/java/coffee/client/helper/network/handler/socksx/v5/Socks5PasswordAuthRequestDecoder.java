@@ -42,10 +42,8 @@ public class Socks5PasswordAuthRequestDecoder extends ReplayingDecoder<Socks5Pas
                     final int totalLength = usernameLength + passwordLength + 3;
 
                     in.skipBytes(totalLength);
-                    out.add(new DefaultSocks5PasswordAuthRequest(
-                            in.toString(startOffset + 2, usernameLength, CharsetUtil.US_ASCII),
-                            in.toString(startOffset + 3 + usernameLength, passwordLength, CharsetUtil.US_ASCII)
-                    ));
+                    out.add(new DefaultSocks5PasswordAuthRequest(in.toString(startOffset + 2, usernameLength, CharsetUtil.US_ASCII),
+                            in.toString(startOffset + 3 + usernameLength, passwordLength, CharsetUtil.US_ASCII)));
 
                     checkpoint(State.SUCCESS);
                 }

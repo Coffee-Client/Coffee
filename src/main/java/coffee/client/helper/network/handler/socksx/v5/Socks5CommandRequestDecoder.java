@@ -41,7 +41,8 @@ public class Socks5CommandRequestDecoder extends ReplayingDecoder<Socks5CommandR
                 case INIT: {
                     final byte version = in.readByte();
                     if (version != SocksVersion.SOCKS5.byteValue()) {
-                        throw new DecoderException("unsupported version: " + version + " (expected: " + SocksVersion.SOCKS5.byteValue() + ')');
+                        throw new DecoderException(
+                                "unsupported version: " + version + " (expected: " + SocksVersion.SOCKS5.byteValue() + ')');
                     }
 
                     final Socks5CommandType type = Socks5CommandType.valueOf(in.readByte());

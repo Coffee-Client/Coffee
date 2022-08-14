@@ -86,7 +86,8 @@ public class DiscordRPC extends Module {
         offThreadExec.execute(() -> {
             boolean result = DiscordIPC.start(996048747060543558L, this::applyRpc);
             if (!result) {
-                Notification.create(5000, "Discord RPC", Notification.Type.ERROR, "Discord isn't open! Open discord and enable the module again.");
+                Notification.create(5000, "Discord RPC", Notification.Type.ERROR,
+                        "Discord isn't open! Open discord and enable the module again.");
                 setEnabled(false);
             }
         });

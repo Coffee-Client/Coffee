@@ -43,17 +43,17 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class Hud extends Module {
     public static double currentTps = 0;
-    public final BooleanSetting speed = this.config.create(new BooleanSetting.Builder(true).name("Speed").description("Show your current velocity").get());
+    public final BooleanSetting speed = this.config.create(
+            new BooleanSetting.Builder(true).name("Speed").description("Show your current velocity").get());
     final DateFormat minSec = new SimpleDateFormat("mm:ss");
     final BooleanSetting fps = this.config.create(new BooleanSetting.Builder(true).name("FPS").description("Whether to show FPS").get());
     final BooleanSetting tps = this.config.create(new BooleanSetting.Builder(true).name("TPS").description("Whether to show TPS").get());
-    final BooleanSetting coords = this.config.create(new BooleanSetting.Builder(true).name("Coordinates")
-            .description("Whether to show current coordinates")
-            .get());
-    final BooleanSetting ping = this.config.create(new BooleanSetting.Builder(true).name("Ping").description("Whether to show current ping").get());
-    final BooleanSetting modules = this.config.create(new BooleanSetting.Builder(true).name("Array list")
-            .description("Whether to show currently enabled modules")
-            .get());
+    final BooleanSetting coords = this.config.create(
+            new BooleanSetting.Builder(true).name("Coordinates").description("Whether to show current coordinates").get());
+    final BooleanSetting ping = this.config.create(
+            new BooleanSetting.Builder(true).name("Ping").description("Whether to show current ping").get());
+    final BooleanSetting modules = this.config.create(
+            new BooleanSetting.Builder(true).name("Array list").description("Whether to show currently enabled modules").get());
     //    final List<ModuleEntry> moduleList = new ArrayList<>();
     final Timer tpsUpdateTimer = new Timer();
     final List<Double> last5SecondTpsAverage = new ArrayList<>();
@@ -91,7 +91,8 @@ public class Hud extends Module {
             while (last5SecondTpsAverage.size() > maxLength) {
                 last5SecondTpsAverage.remove(0);
             }
-            currentTps = Utils.Math.roundToDecimal(last5SecondTpsAverage.stream().reduce(Double::sum).orElse(0d) / last5SecondTpsAverage.size(), 2);
+            currentTps = Utils.Math.roundToDecimal(
+                    last5SecondTpsAverage.stream().reduce(Double::sum).orElse(0d) / last5SecondTpsAverage.size(), 2);
 
         }
     }
@@ -140,14 +141,12 @@ public class Hud extends Module {
             }
         } else {
             if (serverNotResponding == null) {
-                serverNotResponding = Notification.create(-1,
-                        "",
-                        true,
-                        Notification.Type.INFO,
-                        "Server not responding! " + minSec.format(System.currentTimeMillis() - lastTimePacketReceived)
-                );
+                serverNotResponding = Notification.create(-1, "", true, Notification.Type.INFO,
+                        "Server not responding! " + minSec.format(System.currentTimeMillis() - lastTimePacketReceived));
             }
-            serverNotResponding.contents = new String[] { "Server not responding! " + minSec.format(System.currentTimeMillis() - lastTimePacketReceived) };
+            serverNotResponding.contents = new String[] {
+                    "Server not responding! " + minSec.format(System.currentTimeMillis() - lastTimePacketReceived)
+            };
         }
         if (!NotificationRenderer.topBarNotifications.contains(serverNotResponding)) {
             serverNotResponding = null;
@@ -210,8 +209,10 @@ public class Hud extends Module {
         double height = pad * 2 + Math.max(newHeight, FontRenderers.getRenderer().getFontHeight());
         Renderer.R2D.renderRoundedQuadWithShadow(ms, ThemeManager.getMainTheme().getConfig(), 0, 0, width, height, 5, 20);
         RenderSystem.setShaderTexture(0, GameTexture.TEXTURE_ICON.getWhere());
-        Renderer.R2D.renderTexture(ms, pad, height / 2d - newHeight / 2d, newWidth, newHeight, 0, 0, newWidth, newHeight, newWidth, newHeight);
-        FontRenderers.getRenderer().drawString(ms, desc, pad + newWidth + 5, height / 2d - FontRenderers.getRenderer().getMarginHeight() / 2d, 0xFFFFFF);
+        Renderer.R2D.renderTexture(ms, pad, height / 2d - newHeight / 2d, newWidth, newHeight, 0, 0, newWidth, newHeight, newWidth,
+                newHeight);
+        FontRenderers.getRenderer()
+                .drawString(ms, desc, pad + newWidth + 5, height / 2d - FontRenderers.getRenderer().getMarginHeight() / 2d, 0xFFFFFF);
     }
 
     void drawModuleList(MatrixStack ms) {
@@ -236,7 +237,8 @@ public class Hud extends Module {
             double nameW = FontRenderers.getRenderer().getStringWidth(moduleEntry.getKey().getName());
             FontRenderers.getRenderer().drawString(ms, moduleEntry.getKey().getName(), width - wid + 1, y + 1, 0xFFFFFF);
             if (moduleEntry.getKey().getContext() != null && !moduleEntry.getKey().getContext().isEmpty()) {
-                FontRenderers.getRenderer().drawString(ms, " " + moduleEntry.getKey().getContext(), width - wid + 1 + nameW, y + 1, 0xAAAAAA);
+                FontRenderers.getRenderer()
+                        .drawString(ms, " " + moduleEntry.getKey().getContext(), width - wid + 1 + nameW, y + 1, 0xAAAAAA);
             }
             ms.pop();
             y += hei * expandProg;
@@ -253,7 +255,8 @@ public class Hud extends Module {
             }
         }
         for (Map.Entry<Module, ModuleEntry> moduleModuleEntryEntry : entryList.entrySet()) {
-            if (!ModuleRegistry.getModules().contains(moduleModuleEntryEntry.getKey()) && moduleModuleEntryEntry.getValue().animationProgress == 0) {
+            if (!ModuleRegistry.getModules()
+                    .contains(moduleModuleEntryEntry.getKey()) && moduleModuleEntryEntry.getValue().animationProgress == 0) {
                 entryList.remove(moduleModuleEntryEntry.getKey());
             }
         }

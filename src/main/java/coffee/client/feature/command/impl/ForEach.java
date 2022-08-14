@@ -61,12 +61,8 @@ public class ForEach extends Command {
 
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
-        return StaticArgumentServer.serveFromStatic(
-                index,
-                new PossibleArgument(ArgumentType.STRING, "player", "tab"),
-                new PossibleArgument(ArgumentType.NUMBER, "(delay)"),
-                new PossibleArgument(ArgumentType.NUMBER, "(message)")
-        );
+        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.STRING, "player", "tab"),
+                new PossibleArgument(ArgumentType.NUMBER, "(delay)"), new PossibleArgument(ArgumentType.NUMBER, "(message)"));
     }
 
     @Override

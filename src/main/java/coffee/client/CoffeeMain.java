@@ -87,8 +87,7 @@ public class CoffeeMain implements ModInitializer {
         try {
             int fsize = 18 * 2;
             FontRenderers.setRenderer(new QuickFontAdapter(new FontRenderer(Font.createFont(Font.TRUETYPE_FONT,
-                            Objects.requireNonNull(CoffeeMain.class.getClassLoader().getResourceAsStream("Font.ttf"))
-                    )
+                            Objects.requireNonNull(CoffeeMain.class.getClassLoader().getResourceAsStream("Font.ttf")))
                     .deriveFont(Font.PLAIN, fsize), fsize)));
         } catch (FontFormatException | IOException e) {
             e.printStackTrace();

@@ -126,25 +126,22 @@ public class AddonManager {
             CoffeeMain.log(Level.ERROR, "Failed to load " + file.getName());
             e.printStackTrace();
             if (e instanceof NoClassDefFoundError noClassDefFoundError) {
-                CoffeeMain.log(
-                        Level.INFO,
-                        "This error is in releation to the class file being remapped for the wrong dev environment. If you're running this in a dev environment, this is on you. In this case, please ask the developer(s) for a \"dev\" jar, and use that instead. If not, please report this error to the addon developer(s)."
-                );
                 CoffeeMain.log(Level.INFO,
-                        "(Some additional information about the error: ERR:CLASS_MISSING, class " + noClassDefFoundError.getMessage() + " not found)"
-                );
+                        "This error is in releation to the class file being remapped for the wrong dev environment. If you're running this in a dev environment, this is on you. In this case, please ask the developer(s) for a \"dev\" jar, and use that instead. If not, please report this error to the addon developer(s).");
+                CoffeeMain.log(Level.INFO,
+                        "(Some additional information about the error: ERR:CLASS_MISSING, class " + noClassDefFoundError.getMessage() + " not found)");
             }
             if (e instanceof IncompatibleClassChangeError) {
-                CoffeeMain.log(
-                        Level.INFO,
-                        "This error either occurs because the addon is heavily obfuscated and the obfuscator is bad, or because the addon is built on an outdated coffee SDK. Please report this error to the addon developer(s)."
-                );
+                CoffeeMain.log(Level.INFO,
+                        "This error either occurs because the addon is heavily obfuscated and the obfuscator is bad, or because the addon is built on an outdated coffee SDK. Please report this error to the addon developer(s).");
             }
             if (e instanceof ClassCastException) {
-                CoffeeMain.log(Level.INFO, "This error probably occurs because of an outdated coffee SDK. Please report this error to the addon developer(s).");
+                CoffeeMain.log(Level.INFO,
+                        "This error probably occurs because of an outdated coffee SDK. Please report this error to the addon developer(s).");
             }
             if (e instanceof NoSuchFileException) {
-                CoffeeMain.log(Level.INFO, "This error means that the file was deleted when trying to load the addon, nothing to worry about.");
+                CoffeeMain.log(Level.INFO,
+                        "This error means that the file was deleted when trying to load the addon, nothing to worry about.");
                 HudNotification.create("Addon " + file.getName() + " was deleted, removing.", 5000, HudNotification.Type.ERROR);
             }
         }
@@ -280,12 +277,13 @@ public class AddonManager {
                     cSigP[i] = Byte.toUnsignedInt(cSig[i]);
                 }
                 if (!Arrays.equals(cSigP, EXPECTED_CLASS_SIGNATURE)) {
-                    throw new IllegalStateException("Invalid class file signature for " + jarEntry.getName() + ": expected 0x" + Arrays.stream(
-                                    EXPECTED_CLASS_SIGNATURE)
-                            .mapToObj(value -> Integer.toHexString(value).toUpperCase())
-                            .collect(Collectors.joining()) + ", got 0x" + Arrays.stream(cSigP)
-                            .mapToObj(value -> Integer.toHexString(value).toUpperCase())
-                            .collect(Collectors.joining()));
+                    throw new IllegalStateException(
+                            "Invalid class file signature for " + jarEntry.getName() + ": expected 0x" + Arrays.stream(
+                                            EXPECTED_CLASS_SIGNATURE)
+                                    .mapToObj(value -> Integer.toHexString(value).toUpperCase())
+                                    .collect(Collectors.joining()) + ", got 0x" + Arrays.stream(cSigP)
+                                    .mapToObj(value -> Integer.toHexString(value).toUpperCase())
+                                    .collect(Collectors.joining()));
                 }
                 Class<?> loadedClass = classLoader.defineAndGetClass(classBytes);
                 if (Addon.class.isAssignableFrom(loadedClass)) {
@@ -299,8 +297,7 @@ public class AddonManager {
                 }
             } else {
                 File cacheFile = new File(ADDON_RESOURCE_CACHE,
-                        Math.abs(location.getName().hashCode()) + "-" + Integer.toHexString((int) Math.floor(Math.random() * 0xFFFFFF))
-                );
+                        Math.abs(location.getName().hashCode()) + "-" + Integer.toHexString((int) Math.floor(Math.random() * 0xFFFFFF)));
                 FileUtils.writeByteArrayToFile(cacheFile, stream.readAllBytes());
                 classLoader.defineResource(jarEntry.getName(), cacheFile.toURI().toURL());
             }

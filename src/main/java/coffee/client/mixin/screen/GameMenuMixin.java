@@ -33,6 +33,7 @@ public class GameMenuMixin extends Screen {
             client.setScreen(new AddonManagerScreen());
         }));
         addDrawableChild(new RoundButton(RoundButton.STANDARD, 5, 30, 60, 20, "Edit HUD", () -> client.setScreen(new HudEditorScreen())));
-        addDrawableChild(new RoundButton(RoundButton.STANDARD, 5, 45, 60, 20, "Waypoints", () -> client.setScreen(new WaypointEditScreen())));
+        addDrawableChild(
+                new RoundButton(RoundButton.STANDARD, 5, 55, 60, 20, "Waypoints", () -> client.setScreen(new WaypointEditScreen())));
     }
 }

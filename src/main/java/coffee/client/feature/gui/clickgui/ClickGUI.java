@@ -204,20 +204,11 @@ public class ClickGUI extends AAScreen {
             double hei = pad + FontRenderers.getRenderer().getFontHeight() + pad;
             stack.translate(0, (hei + pad) * (1 - Transitions.easeOutExpo(searchAnim)), 0);
             double textWid = FontRenderers.getRenderer().getStringWidth(oldSearchTerm);
-            Renderer.R2D.renderRoundedQuad(stack,
-                    new Color(20, 20, 20),
-                    width - pad - pad - textWid - pad,
-                    height - pad - hei,
-                    width - pad,
-                    height - pad,
-                    5,
-                    2,
-                    2,
-                    2,
-                    10
-            );
+            Renderer.R2D.renderRoundedQuad(stack, new Color(20, 20, 20), width - pad - pad - textWid - pad, height - pad - hei, width - pad,
+                    height - pad, 5, 2, 2, 2, 10);
             FontRenderers.getRenderer()
-                    .drawString(stack, oldSearchTerm, width - pad - pad - textWid, height - pad - pad - FontRenderers.getRenderer().getFontHeight(), 0xFFFFFF);
+                    .drawString(stack, oldSearchTerm, width - pad - pad - textWid,
+                            height - pad - pad - FontRenderers.getRenderer().getFontHeight(), 0xFFFFFF);
             stack.pop();
         }
         if (tooltipContent != null) {
@@ -228,7 +219,8 @@ public class ClickGUI extends AAScreen {
                     .max(Comparator.comparingDouble(value -> value))
                     .orElse(0f) + 4f;
 
-            Renderer.R2D.renderRoundedQuadWithShadow(stack, new Color(30, 30, 30), tooltipX, tooltipY, tooltipX + width, tooltipY + height, 2, 6);
+            Renderer.R2D.renderRoundedQuadWithShadow(stack, new Color(30, 30, 30), tooltipX, tooltipY, tooltipX + width, tooltipY + height,
+                    2, 6);
             double y = 0;
             for (String s : split) {
                 FontRenderers.getRenderer().drawString(stack, s, tooltipX + 2, tooltipY + 1 + y, 0xFFFFFF);

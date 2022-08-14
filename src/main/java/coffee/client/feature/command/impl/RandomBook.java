@@ -27,10 +27,8 @@ public class RandomBook extends Command {
 
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
-        return StaticArgumentServer.serveFromStatic(index,
-                new PossibleArgument(ArgumentType.STRING, "ascii", "raw", "unicode"),
-                new PossibleArgument(ArgumentType.NUMBER, "(pages)")
-        );
+        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.STRING, "ascii", "raw", "unicode"),
+                new PossibleArgument(ArgumentType.NUMBER, "(pages)"));
     }
 
     @Override

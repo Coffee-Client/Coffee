@@ -150,24 +150,12 @@ public class ShowTntPrime extends Module {
         MatrixStack nothing = Renderer.R3D.getEmptyMatrixStack();
         Vec2f root = Renderer.R2D.renderTooltip(nothing, screenSpacePos.x, screenSpacePos.y, 30, 30, new Color(20, 20, 20), true);
         String txt = Utils.Math.roundToDecimal(entity.getFuse() / 20d, 1) + "";
-        FontRenderers.getRenderer().drawString(
-                nothing,
-                txt,
-                root.x + cWidth / 2d - (FontRenderers.getRenderer().getStringWidth(txt)) / 2d,
-                root.y + cHeight / 2d - FontRenderers.getRenderer().getMarginHeight() / 2d,
-                0xFFFFFF
-        );
+        FontRenderers.getRenderer()
+                .drawString(nothing, txt, root.x + cWidth / 2d - (FontRenderers.getRenderer().getStringWidth(txt)) / 2d,
+                        root.y + cHeight / 2d - FontRenderers.getRenderer().getMarginHeight() / 2d, 0xFFFFFF);
         //        semicircle(nothing,new Color(50,50,50),root.x+cWidth/2d,root.y+cHeight/2d,cWidth/2d-4,2,40,360);
-        semicircle(
-                nothing,
-                Renderer.Util.lerp(new Color(50, 255, 50), new Color(255, 50, 50), progress),
-                root.x + cWidth / 2d,
-                root.y + cHeight / 2d,
-                cWidth / 2d - 4,
-                2,
-                90,
-                360 * progress
-        );
+        semicircle(nothing, Renderer.Util.lerp(new Color(50, 255, 50), new Color(255, 50, 50), progress), root.x + cWidth / 2d,
+                root.y + cHeight / 2d, cWidth / 2d - 4, 2, 90, 360 * progress);
 
     }
 

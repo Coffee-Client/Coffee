@@ -32,8 +32,7 @@ public class DoubleSettingEditor extends SettingEditor<DoubleSetting> {
         double translated = x - (this.getPositionX());
         double perIn = MathHelper.clamp(translated / (width), 0, 1);
         configValue.setValue(Utils.Math.roundToDecimal(perIn * (configValue.getMax() - configValue.getMin()) + configValue.getMin(),
-                configValue.getPrecision()
-        ));
+                configValue.getPrecision()));
     }
 
     @Override
@@ -46,16 +45,10 @@ public class DoubleSettingEditor extends SettingEditor<DoubleSetting> {
         String t = configValue.getValue().toString();
         real.drawString(matrices, t, actualX + actualWidth - real.getStringWidth(t), getPositionY(), 0xFFFFFF);
         double remainingH = getPositionY() + real.getFontHeight() + 2;
-        Renderer.R2D.renderRoundedQuad(matrices, new Color(50, 50, 50), actualX, remainingH, actualX + actualWidth, remainingH + 1.5, 1.5 / 2, 5);
-        Renderer.R2D.renderRoundedQuad(matrices,
-                new Color(9, 162, 104),
-                actualX,
-                remainingH,
-                actualX + Math.max(actualWidth * getPer(), 1.5),
-                remainingH + 1.5,
-                1.5 / 2,
-                5
-        );
+        Renderer.R2D.renderRoundedQuad(matrices, new Color(50, 50, 50), actualX, remainingH, actualX + actualWidth, remainingH + 1.5,
+                1.5 / 2, 5);
+        Renderer.R2D.renderRoundedQuad(matrices, new Color(9, 162, 104), actualX, remainingH,
+                actualX + Math.max(actualWidth * getPer(), 1.5), remainingH + 1.5, 1.5 / 2, 5);
     }
 
     @Override

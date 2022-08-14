@@ -84,7 +84,8 @@ public class Rotations {
     public static void lookAtPositionSmoothServerSide(Vec3d target, double laziness) {
         double delX = target.x - Objects.requireNonNull(CoffeeMain.client.player).getX();
         double delZ = target.z - CoffeeMain.client.player.getZ();
-        double delY = target.y - (CoffeeMain.client.player.getY() + CoffeeMain.client.player.getEyeHeight(CoffeeMain.client.player.getPose()));
+        double delY = target.y - (CoffeeMain.client.player.getY() + CoffeeMain.client.player.getEyeHeight(
+                CoffeeMain.client.player.getPose()));
 
         double required = Math.toDegrees(Math.atan2(delZ, delX)) - 90, delta, add, speed;
         double sqrt1 = Math.sqrt(delX * delX + delZ * delZ);
@@ -115,7 +116,8 @@ public class Rotations {
     public static void lookAtPositionSmooth(Vec3d target, double laziness) {
         double delX = target.x - Objects.requireNonNull(CoffeeMain.client.player).getX();
         double delZ = target.z - CoffeeMain.client.player.getZ();
-        double delY = target.y - (CoffeeMain.client.player.getY() + CoffeeMain.client.player.getEyeHeight(CoffeeMain.client.player.getPose()));
+        double delY = target.y - (CoffeeMain.client.player.getY() + CoffeeMain.client.player.getEyeHeight(
+                CoffeeMain.client.player.getPose()));
 
         FreeLook fl = ModuleRegistry.getByClass(FreeLook.class);
         double required = Math.toDegrees(Math.atan2(delZ, delX)) - 90, delta, add, speed;

@@ -32,8 +32,7 @@ public class TitleLag extends Command {
                         .stream()
                         .map(abstractClientPlayerEntity -> abstractClientPlayerEntity.getGameProfile().getName())
                         .toList()
-                        .toArray(String[]::new)
-        ));
+                        .toArray(String[]::new)));
     }
 
     @Override
@@ -46,13 +45,13 @@ public class TitleLag extends Command {
         CoffeeMain.client.player.sendCommand("gamerule sendCommandFeedback true");
         ItemStack stack = new ItemStack(Items.COMMAND_BLOCK, 1);
         try {
-            stack.setNbt(StringNbtReader.parse("{BlockEntityTag:{Command:\"/title " + targetName + " title {\\\"text\\\":\\\"" + "l".repeat(32767) + "\\\",\\\"obfuscated\\\":true}\",powered:0b,auto:1b,conditionMet:1b}}"));
+            stack.setNbt(StringNbtReader.parse("{BlockEntityTag:{Command:\"/title " + targetName + " title {\\\"text\\\":\\\"" + "l".repeat(
+                    32767) + "\\\",\\\"obfuscated\\\":true}\",powered:0b,auto:1b,conditionMet:1b}}"));
         } catch (Exception e) {
             e.printStackTrace();
         }
-        CoffeeMain.client.player.networkHandler.sendPacket(new CreativeInventoryActionC2SPacket(36 + CoffeeMain.client.player.getInventory().selectedSlot,
-                stack
-        ));
+        CoffeeMain.client.player.networkHandler.sendPacket(
+                new CreativeInventoryActionC2SPacket(36 + CoffeeMain.client.player.getInventory().selectedSlot, stack));
         message("Place the command block to keep lagging the player");
     }
 }

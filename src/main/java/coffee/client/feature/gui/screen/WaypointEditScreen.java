@@ -54,7 +54,8 @@ public class WaypointEditScreen extends AAScreen {
         }
         els.add(adb);
         if (el == null || resized) {
-            el = new FlexLayoutElement(FlexLayoutElement.LayoutDirection.RIGHT, 5, 5, width - 10, height - 10, 5, els.toArray(Element[]::new));
+            el = new FlexLayoutElement(FlexLayoutElement.LayoutDirection.RIGHT, 5, 5, width - 10, height - 10, 5,
+                    els.toArray(Element[]::new));
         } else {
             el.setElements(els);
         }
@@ -116,7 +117,9 @@ public class WaypointEditScreen extends AAScreen {
                 }
             });
             ColorEditorElement ce = new ColorEditorElement(0, 0, 200, 100, wp.getColor());
-            FlexLayoutElement flexLayoutElement = new FlexLayoutElement(FlexLayoutElement.LayoutDirection.DOWN, 0, 0, 5, textFieldElement, position, ce, save);
+            ce.setOnChange(color -> wp.setColor(color));
+            FlexLayoutElement flexLayoutElement = new FlexLayoutElement(FlexLayoutElement.LayoutDirection.DOWN, 0, 0, 5, textFieldElement,
+                    position, ce, save);
             addChild(flexLayoutElement);
         }
     }
@@ -145,15 +148,8 @@ public class WaypointEditScreen extends AAScreen {
         public void render(MatrixStack stack, double mouseX, double mouseY) {
             mouseOver = inBounds(mouseX, mouseY);
             double expand = Transitions.easeOutExpo(this.expand);
-            Renderer.R2D.renderRoundedQuad(stack,
-                    new Color(20, 20, 20),
-                    getPositionX(),
-                    getPositionY(),
-                    getPositionX() + getWidth(),
-                    getPositionY() + getHeight(),
-                    5,
-                    20
-            );
+            Renderer.R2D.renderRoundedQuad(stack, new Color(20, 20, 20), getPositionX(), getPositionY(), getPositionX() + getWidth(),
+                    getPositionY() + getHeight(), 5, 20);
             renderPlusIcon(stack, getPositionX() + getWidth() / 2d, getPositionY() + getHeight() / 2d, 10 + 3 * expand);
         }
 
@@ -214,14 +210,8 @@ public class WaypointEditScreen extends AAScreen {
         public WaypointVis(double x, double y, Waypoints.Waypoint wayp) {
             super(x, y, 100, 60);
             this.wayp = wayp;
-            this.actions = new ButtonGroupElement(0,
-                    0,
-                    getWidth() - 10,
-                    20,
-                    ButtonGroupElement.LayoutDirection.RIGHT,
-                    new ButtonGroupElement.ButtonEntry("Edit", this::edit),
-                    new ButtonGroupElement.ButtonEntry("Delete", this::delete)
-            );
+            this.actions = new ButtonGroupElement(0, 0, getWidth() - 10, 20, ButtonGroupElement.LayoutDirection.RIGHT,
+                    new ButtonGroupElement.ButtonEntry("Edit", this::edit), new ButtonGroupElement.ButtonEntry("Delete", this::delete));
         }
 
         void edit() {
@@ -242,15 +232,8 @@ public class WaypointEditScreen extends AAScreen {
         public void render(MatrixStack stack, double mouseX, double mouseY) {
             this.actions.setPositionX(getPositionX() + 5);
             this.actions.setPositionY(getPositionY() + getHeight() - 20 - 5);
-            Renderer.R2D.renderRoundedQuad(stack,
-                    new Color(20, 20, 20),
-                    getPositionX(),
-                    getPositionY(),
-                    getPositionX() + getWidth(),
-                    getPositionY() + getHeight(),
-                    5,
-                    20
-            );
+            Renderer.R2D.renderRoundedQuad(stack, new Color(20, 20, 20), getPositionX(), getPositionY(), getPositionX() + getWidth(),
+                    getPositionY() + getHeight(), 5, 20);
             QuickFontAdapter customSize = FontRenderers.getCustomSize(20);
             String t = Utils.capAtLength(wayp.getName(), getWidth() - 10, customSize);
             customSize.drawString(stack, t, getPositionX() + 5, getPositionY() + 5, 0xFFFFFF);

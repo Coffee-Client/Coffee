@@ -34,21 +34,12 @@ import net.minecraft.util.math.Vec3d;
 import java.util.Objects;
 
 public class Boom extends Module {
-    final DoubleSetting speed = this.config.create(new DoubleSetting.Builder(2).name("Speed")
-            .description("How fast the fireball goes")
-            .min(1)
-            .max(10)
-            .precision(1)
-            .get());
-    final DoubleSetting power = this.config.create(new DoubleSetting.Builder(20).precision(0)
-            .name("Power")
-            .description("How big the fireball will be")
-            .min(0)
-            .max(127)
-            .get());
-    final EnumSetting<Mode> mode = this.config.create(new EnumSetting.Builder<>(Mode.FireballGhast).name("Mode")
-            .description("How to send the fireball off")
-            .get());
+    final DoubleSetting speed = this.config.create(
+            new DoubleSetting.Builder(2).name("Speed").description("How fast the fireball goes").min(1).max(10).precision(1).get());
+    final DoubleSetting power = this.config.create(
+            new DoubleSetting.Builder(20).precision(0).name("Power").description("How big the fireball will be").min(0).max(127).get());
+    final EnumSetting<Mode> mode = this.config.create(
+            new EnumSetting.Builder<>(Mode.FireballGhast).name("Mode").description("How to send the fireball off").get());
     long lastFired = 0L;
 
     public Boom() {
@@ -93,25 +84,17 @@ public class Boom extends Module {
         Vec3d n = hr.getPos();
         String nbt = String.format(
                 "{EntityTag:{id:\"minecraft:fireball\",ExplosionPower:%db,Motion:[%sd,%sd,%sd],Pos:[%s,%s,%s],Item:{id:\"minecraft:egg\",Count:1b}}}",
-                ((int) Math.floor(power.getValue())),
-                0,
-                -2,
-                0,
-                n.getX(),
-                n.getY(),
-                n.getZ()
-        );
+                ((int) Math.floor(power.getValue())), 0, -2, 0, n.getX(), n.getY(), n.getZ());
         ItemStack stack = Utils.generateItemStackWithMeta(nbt, Items.BAT_SPAWN_EGG);
         ItemStack air = CoffeeMain.client.player.getInventory().getMainHandStack().copy();
         Vec3d a = CoffeeMain.client.player.getEyePos();
         BlockHitResult bhr = new BlockHitResult(a, Direction.DOWN, new BlockPos(a), false);
-        CreativeInventoryActionC2SPacket u1 = new CreativeInventoryActionC2SPacket(Utils.Inventory.slotIndexToId(CoffeeMain.client.player.getInventory().selectedSlot),
-                stack
-        );
-        CreativeInventoryActionC2SPacket u2 = new CreativeInventoryActionC2SPacket(Utils.Inventory.slotIndexToId(CoffeeMain.client.player.getInventory().selectedSlot),
-                air
-        );
-        PlayerInteractBlockC2SPacket p1 = new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, bhr, Utils.increaseAndCloseUpdateManager(CoffeeMain.client.world));
+        CreativeInventoryActionC2SPacket u1 = new CreativeInventoryActionC2SPacket(
+                Utils.Inventory.slotIndexToId(CoffeeMain.client.player.getInventory().selectedSlot), stack);
+        CreativeInventoryActionC2SPacket u2 = new CreativeInventoryActionC2SPacket(
+                Utils.Inventory.slotIndexToId(CoffeeMain.client.player.getInventory().selectedSlot), air);
+        PlayerInteractBlockC2SPacket p1 = new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, bhr,
+                Utils.increaseAndCloseUpdateManager(CoffeeMain.client.world));
         Objects.requireNonNull(CoffeeMain.client.getNetworkHandler()).sendPacket(u1);
         CoffeeMain.client.getNetworkHandler().sendPacket(p1);
         CoffeeMain.client.getNetworkHandler().sendPacket(u2);
@@ -125,23 +108,19 @@ public class Boom extends Module {
         Vec3d v = Objects.requireNonNull(CoffeeMain.client.player).getRotationVector();
         v = v.multiply(speed.getValue() / 10d);
         // ((int) Math.floor(power.getValue()))
-        String nbt = String.format("{EntityTag:{id:\"minecraft:fireball\",ExplosionPower:%db,power:[%s,%s,%s],Item:{id:\"minecraft:egg\",Count:1b}}}",
-                ((int) Math.floor(power.getValue())),
-                v.x,
-                v.y,
-                v.z
-        );
+        String nbt = String.format(
+                "{EntityTag:{id:\"minecraft:fireball\",ExplosionPower:%db,power:[%s,%s,%s],Item:{id:\"minecraft:egg\",Count:1b}}}",
+                ((int) Math.floor(power.getValue())), v.x, v.y, v.z);
         ItemStack stack = Utils.generateItemStackWithMeta(nbt, Items.BAT_SPAWN_EGG);
         ItemStack air = CoffeeMain.client.player.getInventory().getMainHandStack().copy();
         Vec3d a = CoffeeMain.client.player.getEyePos();
         BlockHitResult bhr = new BlockHitResult(a, Direction.DOWN, new BlockPos(a), false);
-        CreativeInventoryActionC2SPacket u1 = new CreativeInventoryActionC2SPacket(Utils.Inventory.slotIndexToId(CoffeeMain.client.player.getInventory().selectedSlot),
-                stack
-        );
-        CreativeInventoryActionC2SPacket u2 = new CreativeInventoryActionC2SPacket(Utils.Inventory.slotIndexToId(CoffeeMain.client.player.getInventory().selectedSlot),
-                air
-        );
-        PlayerInteractBlockC2SPacket p1 = new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, bhr, Utils.increaseAndCloseUpdateManager(CoffeeMain.client.world));
+        CreativeInventoryActionC2SPacket u1 = new CreativeInventoryActionC2SPacket(
+                Utils.Inventory.slotIndexToId(CoffeeMain.client.player.getInventory().selectedSlot), stack);
+        CreativeInventoryActionC2SPacket u2 = new CreativeInventoryActionC2SPacket(
+                Utils.Inventory.slotIndexToId(CoffeeMain.client.player.getInventory().selectedSlot), air);
+        PlayerInteractBlockC2SPacket p1 = new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, bhr,
+                Utils.increaseAndCloseUpdateManager(CoffeeMain.client.world));
         Objects.requireNonNull(CoffeeMain.client.getNetworkHandler()).sendPacket(u1);
         CoffeeMain.client.getNetworkHandler().sendPacket(p1);
         CoffeeMain.client.getNetworkHandler().sendPacket(u2);

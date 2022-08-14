@@ -170,24 +170,18 @@ public class Utils {
 
         public static void drop(int index) {
             int translatedSlotId = slotIndexToId(index);
-            Objects.requireNonNull(CoffeeMain.client.interactionManager).clickSlot(Objects.requireNonNull(CoffeeMain.client.player).currentScreenHandler.syncId,
-                    translatedSlotId,
-                    1,
-                    SlotActionType.THROW,
-                    CoffeeMain.client.player
-            );
+            Objects.requireNonNull(CoffeeMain.client.interactionManager)
+                    .clickSlot(Objects.requireNonNull(CoffeeMain.client.player).currentScreenHandler.syncId, translatedSlotId, 1,
+                            SlotActionType.THROW, CoffeeMain.client.player);
         }
 
         public static void moveStackToOther(int slotIdFrom, int slotIdTo) {
             Objects.requireNonNull(CoffeeMain.client.interactionManager)
                     .clickSlot(0, slotIdFrom, 0, SlotActionType.PICKUP, CoffeeMain.client.player); // pick up item from stack
-            CoffeeMain.client.interactionManager.clickSlot(0, slotIdTo, 0, SlotActionType.PICKUP, CoffeeMain.client.player); // put item to target
-            CoffeeMain.client.interactionManager.clickSlot(0,
-                    slotIdFrom,
-                    0,
-                    SlotActionType.PICKUP,
-                    CoffeeMain.client.player
-            ); // (in case target slot had item) put item from target back to from
+            CoffeeMain.client.interactionManager.clickSlot(0, slotIdTo, 0, SlotActionType.PICKUP,
+                    CoffeeMain.client.player); // put item to target
+            CoffeeMain.client.interactionManager.clickSlot(0, slotIdFrom, 0, SlotActionType.PICKUP,
+                    CoffeeMain.client.player); // (in case target slot had item) put item from target back to from
         }
     }
 
@@ -245,8 +239,7 @@ public class Utils {
 
             var packet = new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND,
                     new BlockHitResult(new Vec3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5), Direction.UP, pos, false),
-                    pendingUpdateManager.getSequence()
-            );
+                    pendingUpdateManager.getSequence());
 
             pendingUpdateManager.close();
 
@@ -340,9 +333,9 @@ public class Utils {
         }
 
         public static void runOnNextRender(Runnable r) {
-            if (CoffeeMain.client.options.hudHidden) {
-                return;
-            }
+            //            if (CoffeeMain.client.options.hudHidden) {
+            //                return;
+            //            }
             nextTickRunners.add(r);
         }
 

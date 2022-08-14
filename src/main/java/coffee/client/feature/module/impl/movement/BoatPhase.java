@@ -25,7 +25,8 @@ public class BoatPhase extends Module {
 
     @Override
     public void enable() {
-        Utils.Logging.message("To use BoatPhase, go into a boat, move it all the way towards a wall and drop sand on the boat with you in it");
+        Utils.Logging.message(
+                "To use BoatPhase, go into a boat, move it all the way towards a wall and drop sand on the boat with you in it");
     }
 
     @Override

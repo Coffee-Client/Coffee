@@ -80,10 +80,8 @@ public class HologramManager {
             pos.add(NbtDouble.of(this.pos.y));
             pos.add(NbtDouble.of(this.pos.z));
             tag.put("CustomNameVisible", NbtByte.ONE);
-            tag.put(
-                    "CustomName",
-                    wrapName ? NbtString.of("{\"text\":\"" + this.text.replaceAll("&", "§") + "\"}") : NbtString.of(this.text.replaceAll("&", "§"))
-            );
+            tag.put("CustomName", wrapName ? NbtString.of("{\"text\":\"" + this.text.replaceAll("&", "§") + "\"}") : NbtString.of(
+                    this.text.replaceAll("&", "§")));
             tag.put("Invisible", NbtByte.of(!isVisible));
             tag.put("Invulnerable", NbtByte.ONE);
             tag.put("NoGravity", NbtByte.of(!hasGravity));

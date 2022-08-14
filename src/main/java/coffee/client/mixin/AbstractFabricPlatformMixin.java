@@ -13,7 +13,7 @@ import java.util.List;
 
 // https://github.com/ViaVersion/ViaFabric/commit/c21985cc24ca92c48ed168e050ab81a5320a01f5
 @Pseudo
-@Mixin(targets = "com.viaversion.fabric.common.provider.AbstractFabricPlatform",remap = false)
+@Mixin(targets = "com.viaversion.fabric.common.provider.AbstractFabricPlatform", remap = false)
 public class AbstractFabricPlatformMixin {
     private static final List<String> blacklistedNamesThatShouldntBeBlacklisted = List.of("guardian", "gaslight", "nochatreports");
 

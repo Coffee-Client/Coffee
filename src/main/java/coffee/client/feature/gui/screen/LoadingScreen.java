@@ -67,7 +67,10 @@ public class LoadingScreen extends AAScreen implements FastTickable {
     }
 
     GameTexture[] getTexturesForDownload() {
-        return Arrays.stream(GameTexture.values()).filter(gameTexture -> !gameTexture.isAlreadyInitialized()).toList().toArray(GameTexture[]::new);
+        return Arrays.stream(GameTexture.values())
+                .filter(gameTexture -> !gameTexture.isAlreadyInitialized())
+                .toList()
+                .toArray(GameTexture[]::new);
     }
 
     @Override

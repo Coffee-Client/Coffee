@@ -111,7 +111,8 @@ public class ParticleRenderer {
             Theme theme = ThemeManager.getMainTheme();
             stack.push();
             double radToUse = pk * circleRad;
-            Renderer.R2D.renderCircle(stack, Renderer.Util.lerp(theme.getAccent(), DYING, pk), x - radToUse / 2d, y - radToUse / 2d, radToUse, 30);
+            Renderer.R2D.renderCircle(stack, Renderer.Util.lerp(theme.getAccent(), DYING, pk), x - radToUse / 2d, y - radToUse / 2d,
+                    radToUse, 30);
             stack.pop();
         }
 

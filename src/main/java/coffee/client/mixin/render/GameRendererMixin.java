@@ -6,6 +6,7 @@ package coffee.client.mixin.render;
 
 import coffee.client.CoffeeMain;
 import coffee.client.feature.gui.DoesMSAA;
+import coffee.client.feature.gui.notifications.NotificationRenderer;
 import coffee.client.feature.gui.notifications.hudNotif.HudNotificationRenderer;
 import coffee.client.feature.gui.screen.base.ClientScreen;
 import coffee.client.feature.module.Module;
@@ -15,6 +16,7 @@ import coffee.client.feature.module.impl.render.Zoom;
 import coffee.client.helper.event.EventType;
 import coffee.client.helper.event.Events;
 import coffee.client.helper.event.events.WorldRenderEvent;
+import coffee.client.helper.event.events.base.NonCancellableEvent;
 import coffee.client.helper.render.MSAAFramebuffer;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.Rotations;
@@ -75,6 +77,22 @@ public class GameRendererMixin {
         }
     }
 
+    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiler/Profiler;pop()V", shift = At.Shift.BEFORE), method = "render")
+    void coffee_postHudRenderNoCheck(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
+        MSAAFramebuffer.use(MSAAFramebuffer.MAX_SAMPLES, () -> {
+            Utils.TickManager.render();
+            for (Module module : ModuleRegistry.getModules()) {
+                if (module.isEnabled()) {
+                    module.onHudRender();
+                }
+            }
+
+            NotificationRenderer.render();
+
+            Events.fireEvent(EventType.HUD_RENDER, new NonCancellableEvent());
+        });
+    }
+
     @Inject(at = @At("HEAD"), method = "renderWorld")
     private void coffee_preRenderWorld(float tickDelta, long limitTime, MatrixStack matrix, CallbackInfo ci) {
         dis = true;
@@ -96,13 +114,8 @@ public class GameRendererMixin {
             Vec3d vec3d = instance.getCameraPosVec(tickDelta);
             Vec3d vec3d2 = Utils.Math.getRotationVector(Rotations.getClientPitch(), Rotations.getClientYaw());
             Vec3d vec3d3 = vec3d.add(vec3d2.x * maxDistance, vec3d2.y * maxDistance, vec3d2.z * maxDistance);
-            return instance.world.raycast(new RaycastContext(
-                    vec3d,
-                    vec3d3,
-                    RaycastContext.ShapeType.OUTLINE,
-                    includeFluids ? RaycastContext.FluidHandling.ANY : RaycastContext.FluidHandling.NONE,
-                    instance
-            ));
+            return instance.world.raycast(new RaycastContext(vec3d, vec3d3, RaycastContext.ShapeType.OUTLINE,
+                    includeFluids ? RaycastContext.FluidHandling.ANY : RaycastContext.FluidHandling.NONE, instance));
         } else {
             return instance.raycast(maxDistance, tickDelta, includeFluids);
         }

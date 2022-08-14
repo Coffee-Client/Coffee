@@ -63,7 +63,8 @@ public final class ProxyConnectionEvent {
             return strVal;
         }
 
-        String buf = StringUtil.simpleClassName(this) + '(' + protocol + ", " + authScheme + ", " + proxyAddress + " => " + destinationAddress + ')';
+        String buf = StringUtil.simpleClassName(
+                this) + '(' + protocol + ", " + authScheme + ", " + proxyAddress + " => " + destinationAddress + ')';
 
         return strVal = buf;
     }

@@ -100,7 +100,8 @@ public class AutoTNT extends Module {
                         int sel = CoffeeMain.client.player.getInventory().selectedSlot;
                         CoffeeMain.client.player.getInventory().selectedSlot = finalTntSlot;
                         BlockHitResult bhr = new BlockHitResult(lmao, Direction.DOWN, best, false);
-                        Objects.requireNonNull(CoffeeMain.client.interactionManager).interactBlock(CoffeeMain.client.player, Hand.MAIN_HAND, bhr);
+                        Objects.requireNonNull(CoffeeMain.client.interactionManager)
+                                .interactBlock(CoffeeMain.client.player, Hand.MAIN_HAND, bhr);
                         CoffeeMain.client.player.getInventory().selectedSlot = sel;
                     });
                 }

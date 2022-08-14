@@ -48,9 +48,9 @@ public class FireballDeflector extends Module {
             }
             if (mode.getValue() == Mode.ReflectBack) {
                 Vec2f pitchYaw = Rotations.getPitchYawFromOtherEntity(fe.getPos().add(0, fe.getHeight() / 2, 0),
-                        owner.getPos().add(0, owner.getHeight() / 2, 0)
-                );
-                PlayerMoveC2SPacket p = new PlayerMoveC2SPacket.LookAndOnGround(pitchYaw.y, pitchYaw.x, CoffeeMain.client.player.isOnGround());
+                        owner.getPos().add(0, owner.getHeight() / 2, 0));
+                PlayerMoveC2SPacket p = new PlayerMoveC2SPacket.LookAndOnGround(pitchYaw.y, pitchYaw.x,
+                        CoffeeMain.client.player.isOnGround());
                 Objects.requireNonNull(CoffeeMain.client.getNetworkHandler()).sendPacket(p);
             }
         }
@@ -58,9 +58,8 @@ public class FireballDeflector extends Module {
     }
 
     boolean inHitRange(Entity attacker, Entity target) {
-        return attacker.getCameraPosVec(1f)
-                .distanceTo(target.getPos().add(0, target.getHeight() / 2, 0)) <= Objects.requireNonNull(CoffeeMain.client.interactionManager)
-                .getReachDistance();
+        return attacker.getCameraPosVec(1f).distanceTo(target.getPos().add(0, target.getHeight() / 2, 0)) <= Objects.requireNonNull(
+                CoffeeMain.client.interactionManager).getReachDistance();
     }
 
     @Override
@@ -68,9 +67,7 @@ public class FireballDeflector extends Module {
         for (Entity entity : Objects.requireNonNull(CoffeeMain.client.world).getEntities()) {
             if (entity instanceof FireballEntity fe) {
                 if (inHitRange(Objects.requireNonNull(CoffeeMain.client.player), fe) && isApproaching(CoffeeMain.client.player.getPos(),
-                        fe.getPos(),
-                        fe.getVelocity()
-                )) {
+                        fe.getPos(), fe.getVelocity())) {
                     hit(fe);
                 }
             }

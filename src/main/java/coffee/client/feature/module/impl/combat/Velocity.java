@@ -30,7 +30,8 @@ public class Velocity extends Module {
             .max(2.5)
             .precision(1)
             .get());
-    final EnumSetting<Mode> mode = this.config.create(new EnumSetting.Builder<>(Mode.Modify).name("Mode").description("How to modify velocity").get());
+    final EnumSetting<Mode> mode = this.config.create(
+            new EnumSetting.Builder<>(Mode.Modify).name("Mode").description("How to modify velocity").get());
 
     public Velocity() {
         super("Velocity", "Modifies all incoming velocity updates", ModuleType.COMBAT);

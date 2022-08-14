@@ -43,7 +43,8 @@ public class CategoryDisplay extends Element {
         for (Module module : modules) {
             displays.add(new ModuleDisplay(module, 0, 0, width - 4, this));
         }
-        layout = new FlexLayoutElement(FlexLayoutElement.LayoutDirection.DOWN, x + 2, y, width - 4, maxHeight, 2, displays.toArray(ModuleDisplay[]::new));
+        layout = new FlexLayoutElement(FlexLayoutElement.LayoutDirection.DOWN, x + 2, y, width - 4, maxHeight, 2,
+                displays.toArray(ModuleDisplay[]::new));
 
         double nh = Math.min(layout.getActualHeight(), maxHeight);
         if (nh != 0) {
@@ -74,29 +75,16 @@ public class CategoryDisplay extends Element {
         }
         setHeight(nh);
         layout.updateScroller();
-        Renderer.R2D.renderRoundedQuadWithShadow(stack,
-                new Color(20, 20, 20),
-                getPositionX(),
-                getPositionY(),
-                getPositionX() + getWidth(),
-                getPositionY() + getHeight(),
-                3,
-                10
-        );
+        Renderer.R2D.renderRoundedQuadWithShadow(stack, new Color(20, 20, 20), getPositionX(), getPositionY(), getPositionX() + getWidth(),
+                getPositionY() + getHeight(), 3, 10);
         double iconPad = 4;
         double iconDims = headerHeight() - iconPad * 2;
         RenderSystem.setShaderTexture(0, type.getTex());
 
-        Renderer.R2D.renderTexture(stack, getPositionX() + iconPad, getPositionY() + iconPad, iconDims, iconDims, 0, 0, iconDims, iconDims, iconDims, iconDims);
-        titleRenderer.drawString(stack,
-                type.getName(),
-                (float) (getPositionX() + iconDims + iconPad * 2),
-                (float) (getPositionY() + headerHeight() / 2d - Math.round(titleRenderer.getFontHeight()) / 2d),
-                1f,
-                1f,
-                1f,
-                1f
-        );
+        Renderer.R2D.renderTexture(stack, getPositionX() + iconPad, getPositionY() + iconPad, iconDims, iconDims, 0, 0, iconDims, iconDims,
+                iconDims, iconDims);
+        titleRenderer.drawString(stack, type.getName(), (float) (getPositionX() + iconDims + iconPad * 2),
+                (float) (getPositionY() + headerHeight() / 2d - Math.round(titleRenderer.getFontHeight()) / 2d), 1f, 1f, 1f, 1f);
         layout.setPositionX(getPositionX() + 2);
         layout.setPositionY(getPositionY() + headerHeight());
         layout.render(stack, mouseX, mouseY);

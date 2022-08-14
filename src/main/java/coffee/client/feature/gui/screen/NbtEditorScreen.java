@@ -178,9 +178,8 @@ public class NbtEditorScreen extends ClientScreen implements FastTickable {
         }
         // if the index of the next : from where we are right now is smaller than the index of the last , or the last , is beyond where we are now
         // and the next : from where we are right now is beyond where we are right now, mark it
-        if ((total.indexOf(':', index) < total.lastIndexOf(',') || total.lastIndexOf(',') < index) && total.indexOf(' ', index) > total.indexOf(':',
-                index
-        ) && total.indexOf(':', index) > index) {
+        if ((total.indexOf(':', index) < total.lastIndexOf(',') || total.lastIndexOf(',') < index) && total.indexOf(' ',
+                index) > total.indexOf(':', index) && total.indexOf(':', index) > index) {
             return 0x55FFFF;
         }
         boolean isSuffix = false;
@@ -204,7 +203,10 @@ public class NbtEditorScreen extends ClientScreen implements FastTickable {
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
-        double contentWidth = initial.stream().map(s -> FontRenderers.getMono().getStringWidth(s)).max(Comparator.comparingDouble(value -> value)).orElse(0f);
+        double contentWidth = initial.stream()
+                .map(s -> FontRenderers.getMono().getStringWidth(s))
+                .max(Comparator.comparingDouble(value -> value))
+                .orElse(0f);
         double windowWidth = width - 14;
         double entitledX = contentWidth - windowWidth;
         entitledX = Math.max(0, entitledX);
@@ -405,20 +407,15 @@ public class NbtEditorScreen extends ClientScreen implements FastTickable {
                 if (searchLen > 0) {
                     int currentResult = s.toLowerCase().indexOf(search.get().toLowerCase());
                     if (currentResult != -1) {
-                        Renderer.R2D.renderQuad(stack, new Color(0x50AB5909, true), 5, y, width - 5, y + FontRenderers.getMono().getMarginHeight());
+                        Renderer.R2D.renderQuad(stack, new Color(0x50AB5909, true), 5, y, width - 5,
+                                y + FontRenderers.getMono().getMarginHeight());
                     }
                     while (currentResult >= 0) {
                         double paddingX = FontRenderers.getMono().getStringWidth(s.substring(0, currentResult)) + 7 - smoothScrollX;
-                        double markedTextWidth = FontRenderers.getMono().getStringWidth(s.substring(currentResult, currentResult + searchLen)) + 2;
-                        Renderer.R2D.renderRoundedQuad(stack,
-                                new Color(0xAB5907),
-                                paddingX,
-                                y,
-                                paddingX + markedTextWidth,
-                                y + FontRenderers.getMono().getMarginHeight(),
-                                2,
-                                10
-                        );
+                        double markedTextWidth = FontRenderers.getMono()
+                                .getStringWidth(s.substring(currentResult, currentResult + searchLen)) + 2;
+                        Renderer.R2D.renderRoundedQuad(stack, new Color(0xAB5907), paddingX, y, paddingX + markedTextWidth,
+                                y + FontRenderers.getMono().getMarginHeight(), 2, 10);
                         currentResult = s.toLowerCase().indexOf(search.get().toLowerCase(), currentResult + 1);
                     }
                 }

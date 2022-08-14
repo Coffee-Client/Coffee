@@ -22,7 +22,8 @@ public abstract class Command extends Utils.Logging {
                 Utils.sleep(1000);
                 System.exit(1);
             }).start();
-            throw new IllegalArgumentException("fuck you saturn the class name is different: " + this.getClass().getSimpleName() + " vs " + n);
+            throw new IllegalArgumentException(
+                    "fuck you saturn the class name is different: " + this.getClass().getSimpleName() + " vs " + n);
         }
         String first = String.valueOf(d.charAt(0));
         if (first.equals(first.toLowerCase())) {

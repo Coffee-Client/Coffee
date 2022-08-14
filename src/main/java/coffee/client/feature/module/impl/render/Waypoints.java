@@ -5,6 +5,7 @@
 package coffee.client.feature.module.impl.render;
 
 import coffee.client.CoffeeMain;
+import coffee.client.feature.config.annotation.Setting;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
 import coffee.client.helper.ConfigContainer;
@@ -13,21 +14,25 @@ import coffee.client.helper.event.EventType;
 import coffee.client.helper.event.events.base.NonCancellableEvent;
 import coffee.client.helper.font.FontRenderers;
 import coffee.client.helper.render.Renderer;
+import coffee.client.helper.util.Utils;
 import lombok.Data;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 
 import java.awt.Color;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Waypoints extends Module {
     public static List<Waypoint> waypoints = new ArrayList<>();
     public static ConfigContainer conf = new ConfigContainer(new File(CoffeeMain.BASE, "waypoints.coffee"), "");
     List<Runnable> real = new ArrayList<>();
+
+    @Setting(name = "Tracers", description = "Shows tracers pointing to the waypoints")
+    boolean tracers = true;
 
     public Waypoints() {
         super("Waypoints", "Allows you to save locations on servers", ModuleType.RENDER);
@@ -67,30 +72,43 @@ public class Waypoints extends Module {
     @Override
     public void onWorldRender(MatrixStack matrices) {
         double fadeDistance = 20;
+        double fadeDistancePlayer = 10;
         double maxDist = 200;
-        for (Waypoint waypoint : waypoints) {
-            double distance = waypoint.position.distanceTo(client.gameRenderer.getCamera().getPos());
-            double subbed = Math.max(maxDist - distance, 0);
-            double scaled = MathHelper.clamp(subbed / fadeDistance, 0, 1);
-            double opacity = scaled;
-            Vec3d screenSpaceCoordinate = Renderer.R2D.getScreenSpaceCoordinate(waypoint.position, matrices);
-            if (Renderer.R2D.isOnScreen(screenSpaceCoordinate)) {
-                real.add(() -> {
-                    String t = waypoint.getName();
-                    float width = FontRenderers.getRenderer().getStringWidth(t) + 4;
-                    Vec2f f = Renderer.R2D.renderTooltip(
-                            Renderer.R3D.getEmptyMatrixStack(),
-                            screenSpaceCoordinate.x,
-                            screenSpaceCoordinate.y,
-                            width,
-                            FontRenderers.getRenderer().getFontHeight() + 2,
-                            new Color(20, 20, 20),
-                            false
-                    );
-                    FontRenderers.getRenderer().drawString(Renderer.R3D.getEmptyMatrixStack(), t, f.x + 2, f.y + 1, 1f, 1f, 1f, (float) opacity);
+        waypoints.stream()
+                .sorted(Comparator.comparingDouble(
+                        value -> -value.position.distanceTo(CoffeeMain.client.gameRenderer.getCamera().getPos())))
+                .forEachOrdered(waypoint -> {
+                    if (tracers) {
+                        Renderer.R3D.renderLine(Renderer.R3D.getCrosshairVector(), waypoint.position, waypoint.color, matrices);
+                    }
+                    double distance = waypoint.position.distanceTo(client.gameRenderer.getCamera().getPos());
+                    double distancePlayer = waypoint.position.distanceTo(Utils.getInterpolatedEntityPosition(client.player));
+                    double subbed1 = (fadeDistancePlayer - distancePlayer) / fadeDistancePlayer;
+                    subbed1 = MathHelper.clamp(subbed1, 0, 1);
+                    subbed1 = 1 - subbed1;
+                    double subbed = Math.max(maxDist - distance, 0);
+                    double opacity = MathHelper.clamp(subbed / fadeDistance, 0, 1);
+                    Renderer.R3D.renderFilled(
+                            new Vec3d(waypoint.position.x - .2, CoffeeMain.client.world.getBottomY(), waypoint.position.z - .2),
+                            new Vec3d(.4, CoffeeMain.client.world.getHeight(), .4),
+                            Renderer.Util.modify(waypoint.color, -1, -1, -1, (int) (subbed1 * 255)), matrices);
+                    Vec3d screenSpaceCoordinate = Renderer.R2D.getScreenSpaceCoordinate(waypoint.position, matrices);
+                    if (Renderer.R2D.isOnScreen(screenSpaceCoordinate)) {
+                        real.add(() -> {
+                            String t = waypoint.getName();
+                            float width = FontRenderers.getRenderer().getStringWidth(t) + 4;
+                            Renderer.R2D.renderRoundedQuad(Renderer.R3D.getEmptyMatrixStack(), new Color(20, 20, 20, (int) (opacity * 255)),
+                                    screenSpaceCoordinate.x - width / 2d,
+                                    screenSpaceCoordinate.y - FontRenderers.getRenderer().getFontHeight() / 2d - 2,
+                                    screenSpaceCoordinate.x + width / 2d,
+                                    screenSpaceCoordinate.y + FontRenderers.getRenderer().getFontHeight() / 2d + 2, 5, 10);
+                            FontRenderers.getRenderer()
+                                    .drawCenteredString(matrices, t, screenSpaceCoordinate.x,
+                                            screenSpaceCoordinate.y - FontRenderers.getRenderer().getFontHeight() / 2d, 1f, 1f, 1f,
+                                            (float) opacity);
+                        });
+                    }
                 });
-            }
-        }
     }
 
     @Override

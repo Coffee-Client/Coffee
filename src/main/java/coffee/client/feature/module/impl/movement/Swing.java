@@ -97,7 +97,8 @@ public class Swing extends Module {
         Vec3d cringe2 = new Vec3d(swinging.getX() + 0.5, swinging.getY() + 0.5, swinging.getZ() + 0.5);
         Vec3d eSource = Utils.getInterpolatedEntityPosition(CoffeeMain.client.player);
         //        Renderer.R3D.renderFilled(cringe, new Vec3d(1, 1, 1), new Color(150, 150, 150, 150), matrices)
-        Renderer.R3D.renderFilled(cringe.add(.5, .5, .5).subtract(.25, .25, .25), new Vec3d(.5, .5, .5), ThemeManager.getMainTheme().getInactive(), matrices);
+        Renderer.R3D.renderFilled(cringe.add(.5, .5, .5).subtract(.25, .25, .25), new Vec3d(.5, .5, .5),
+                ThemeManager.getMainTheme().getInactive(), matrices);
         Renderer.R3D.renderLine(eSource, cringe2, line, matrices);
     }
 

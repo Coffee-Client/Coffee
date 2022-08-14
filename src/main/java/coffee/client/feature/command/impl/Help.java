@@ -34,7 +34,8 @@ public class Help extends Command {
         for (Command command : CommandRegistry.getCommands()) {
             holyShitThisIsComplex.addAll(Arrays.asList(command.getAliases()));
         }
-        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.STRING, holyShitThisIsComplex.toArray(String[]::new)));
+        return StaticArgumentServer.serveFromStatic(index,
+                new PossibleArgument(ArgumentType.STRING, holyShitThisIsComplex.toArray(String[]::new)));
     }
 
     @Override

@@ -58,11 +58,8 @@ public class AddonManagerScreen extends ClientScreen implements FastTickable {
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
-        if (new Rectangle(width / 2d - WIDGET_WIDTH / 2d,
-                height / 2d - WIDGET_HEIGHT / 2d,
-                width / 2d + WIDGET_WIDTH / 2d,
-                height / 2d + WIDGET_HEIGHT / 2d
-        ).contains(mouseX, mouseY)) {
+        if (new Rectangle(width / 2d - WIDGET_WIDTH / 2d, height / 2d - WIDGET_HEIGHT / 2d, width / 2d + WIDGET_WIDTH / 2d,
+                height / 2d + WIDGET_HEIGHT / 2d).contains(mouseX, mouseY)) {
             double contentHeight = viewerList.stream().map(addonViewer -> addonViewer.getHeight() + 5).reduce(Double::sum).orElse(0d) + 5;
             double entitledScroll = Math.max(0, contentHeight - WIDGET_HEIGHT);
             scroller.setBounds(0, entitledScroll);
@@ -85,14 +82,8 @@ public class AddonManagerScreen extends ClientScreen implements FastTickable {
     @Override
     protected void init() {
         reInitViewers();
-        RoundButton openFolder = new RoundButton(RoundButton.STANDARD,
-                5,
-                5,
-                100,
-                20,
-                "Open folder",
-                () -> Util.getOperatingSystem().open(AddonManager.ADDON_DIRECTORY)
-        );
+        RoundButton openFolder = new RoundButton(RoundButton.STANDARD, 5, 5, 100, 20, "Open folder",
+                () -> Util.getOperatingSystem().open(AddonManager.ADDON_DIRECTORY));
         this.addDrawableChild(openFolder);
     }
 
@@ -106,22 +97,11 @@ public class AddonManagerScreen extends ClientScreen implements FastTickable {
     @Override
     public void renderInternal(MatrixStack stack, int mouseX, int mouseY, float delta) {
         renderBackground(stack);
-        Renderer.R2D.renderRoundedQuad(stack,
-                new Color(20, 20, 20),
-                width / 2d - WIDGET_WIDTH / 2d,
-                height / 2d - WIDGET_HEIGHT / 2d,
-                width / 2d + WIDGET_WIDTH / 2d,
-                height / 2d + WIDGET_HEIGHT / 2d,
-                5,
-                20
-        );
+        Renderer.R2D.renderRoundedQuad(stack, new Color(20, 20, 20), width / 2d - WIDGET_WIDTH / 2d, height / 2d - WIDGET_HEIGHT / 2d,
+                width / 2d + WIDGET_WIDTH / 2d, height / 2d + WIDGET_HEIGHT / 2d, 5, 20);
         ClipStack.globalInstance.addWindow(stack,
-                new Rectangle(width / 2d - WIDGET_WIDTH / 2d,
-                        height / 2d - WIDGET_HEIGHT / 2d,
-                        width / 2d + WIDGET_WIDTH / 2d,
-                        height / 2d + WIDGET_HEIGHT / 2d
-                )
-        );
+                new Rectangle(width / 2d - WIDGET_WIDTH / 2d, height / 2d - WIDGET_HEIGHT / 2d, width / 2d + WIDGET_WIDTH / 2d,
+                        height / 2d + WIDGET_HEIGHT / 2d));
         double yOffset = 0;
         double xRoot = width / 2d - WIDGET_WIDTH / 2d + 5;
         double yRoot = height / 2d - WIDGET_HEIGHT / 2d + 5;
@@ -189,18 +169,9 @@ public class AddonManagerScreen extends ClientScreen implements FastTickable {
             RenderSystem.clear(GL40C.GL_COLOR_BUFFER_BIT, false);
             RenderSystem.colorMask(true, true, true, true);
             RenderSystem.setShader(GameRenderer::getPositionColorShader);
-            Renderer.R2D.renderRoundedQuadInternal(stack.peek().getPositionMatrix(),
-                    background.getRed() / 255f,
-                    background.getGreen() / 255f,
-                    background.getBlue() / 255f,
-                    1,
-                    x + padding,
-                    y + padding,
-                    x + padding + iconDimensions,
-                    y + padding + iconDimensions,
-                    6,
-                    10
-            );
+            Renderer.R2D.renderRoundedQuadInternal(stack.peek().getPositionMatrix(), background.getRed() / 255f,
+                    background.getGreen() / 255f, background.getBlue() / 255f, 1, x + padding, y + padding, x + padding + iconDimensions,
+                    y + padding + iconDimensions, 6, 10);
 
             RenderSystem.blendFunc(GL40C.GL_DST_ALPHA, GL40C.GL_ONE_MINUS_DST_ALPHA);
             Identifier icon = addon.getIcon();
@@ -211,18 +182,8 @@ public class AddonManagerScreen extends ClientScreen implements FastTickable {
             if (!addon.isEnabled()) {
                 RenderSystem.setShaderColor(0.6f, 0.6f, 0.6f, 1f);
             }
-            Renderer.R2D.renderTexture(stack,
-                    x + padding,
-                    y + padding,
-                    iconDimensions,
-                    iconDimensions,
-                    0,
-                    0,
-                    iconDimensions,
-                    iconDimensions,
-                    iconDimensions,
-                    iconDimensions
-            );
+            Renderer.R2D.renderTexture(stack, x + padding, y + padding, iconDimensions, iconDimensions, 0, 0, iconDimensions,
+                    iconDimensions, iconDimensions, iconDimensions);
             RenderSystem.defaultBlendFunc();
             RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
 
@@ -230,41 +191,18 @@ public class AddonManagerScreen extends ClientScreen implements FastTickable {
             FontAdapter normal = FontRenderers.getRenderer();
             double entireHeight = title.getFontHeight() + normal.getFontHeight() * 2d;
             if (addon.isEnabled()) {
-                title.drawString(stack,
-                        addon.name,
-                        (float) (x + padding + iconDimensions + padding),
-                        (float) (y + getHeight() / 2d - entireHeight / 2d),
-                        0xFFFFFF
-                );
+                title.drawString(stack, addon.name, (float) (x + padding + iconDimensions + padding),
+                        (float) (y + getHeight() / 2d - entireHeight / 2d), 0xFFFFFF);
             } else {
-                title.drawString(stack,
-                        addon.name,
-                        (float) (x + padding + iconDimensions + padding),
-                        (float) (y + getHeight() / 2d - entireHeight / 2d),
-                        0.6f,
-                        0.6f,
-                        0.6f,
-                        1f
-                );
+                title.drawString(stack, addon.name, (float) (x + padding + iconDimensions + padding),
+                        (float) (y + getHeight() / 2d - entireHeight / 2d), 0.6f, 0.6f, 0.6f, 1f);
             }
-            normal.drawString(stack,
-                    addon.description,
+            normal.drawString(stack, addon.description, (float) (x + padding + iconDimensions + padding),
+                    (float) (y + getHeight() / 2d - entireHeight / 2d + title.getFontHeight()), 0.6f, 0.6f, 0.6f, 1f);
+            normal.drawString(stack, "Developer(s): " + String.join(", ", addon.developers),
                     (float) (x + padding + iconDimensions + padding),
-                    (float) (y + getHeight() / 2d - entireHeight / 2d + title.getFontHeight()),
-                    0.6f,
-                    0.6f,
-                    0.6f,
-                    1f
-            );
-            normal.drawString(stack,
-                    "Developer(s): " + String.join(", ", addon.developers),
-                    (float) (x + padding + iconDimensions + padding),
-                    (float) (y + getHeight() / 2d - entireHeight / 2d + title.getFontHeight() + normal.getFontHeight()),
-                    0.6f,
-                    0.6f,
-                    0.6f,
-                    1f
-            );
+                    (float) (y + getHeight() / 2d - entireHeight / 2d + title.getFontHeight() + normal.getFontHeight()), 0.6f, 0.6f, 0.6f,
+                    1f);
 
             double buttonRowHeight = disable.getHeight() + padding + reload.getHeight();
 

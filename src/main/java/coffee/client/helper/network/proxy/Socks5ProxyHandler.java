@@ -35,11 +35,11 @@ public final class Socks5ProxyHandler extends ProxyHandler {
     private static final String PROTOCOL = "socks5";
     private static final String AUTH_PASSWORD = "password";
 
-    private static final Socks5InitialRequest INIT_REQUEST_NO_AUTH = new DefaultSocks5InitialRequest(Collections.singletonList(Socks5AuthMethod.NO_AUTH));
+    private static final Socks5InitialRequest INIT_REQUEST_NO_AUTH = new DefaultSocks5InitialRequest(
+            Collections.singletonList(Socks5AuthMethod.NO_AUTH));
 
-    private static final Socks5InitialRequest INIT_REQUEST_PASSWORD = new DefaultSocks5InitialRequest(Arrays.asList(Socks5AuthMethod.NO_AUTH,
-            Socks5AuthMethod.PASSWORD
-    ));
+    private static final Socks5InitialRequest INIT_REQUEST_PASSWORD = new DefaultSocks5InitialRequest(
+            Arrays.asList(Socks5AuthMethod.NO_AUTH, Socks5AuthMethod.PASSWORD));
 
     private final String username;
     private final String password;

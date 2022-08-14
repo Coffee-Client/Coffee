@@ -164,6 +164,9 @@ public class HudRenderer {
     }
 
     public void render() {
+        if (CoffeeMain.client.options.hudHidden) {
+            return;
+        }
         for (HudElement element : elements) {
             element.render();
             if (isEditing) {

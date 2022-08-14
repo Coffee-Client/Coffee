@@ -21,10 +21,8 @@ public class MessageSpam extends Command {
 
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
-        return StaticArgumentServer.serveFromStatic(index,
-                new PossibleArgument(ArgumentType.NUMBER, "(amount)"),
-                new PossibleArgument(ArgumentType.STRING, "(message)")
-        );
+        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.NUMBER, "(amount)"),
+                new PossibleArgument(ArgumentType.STRING, "(message)"));
     }
 
     @Override

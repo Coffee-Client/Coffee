@@ -38,8 +38,10 @@ public class TargetHud extends Module {
     public static final int modalHeight = 42;
     static final Color GREEN = new Color(100, 255, 20);
     static final Color RED = new Color(255, 50, 20);
-    final BooleanSetting renderPing = this.config.create(new BooleanSetting.Builder(true).name("Render ping").description("Shows the ping of the enemy").get());
-    final BooleanSetting renderHP = this.config.create(new BooleanSetting.Builder(true).name("Render health").description("Shows the HP of the enemy").get());
+    final BooleanSetting renderPing = this.config.create(
+            new BooleanSetting.Builder(true).name("Render ping").description("Shows the ping of the enemy").get());
+    final BooleanSetting renderHP = this.config.create(
+            new BooleanSetting.Builder(true).name("Render health").description("Shows the HP of the enemy").get());
     double wX = 0;
     double renderWX1 = 0;
     Entity e = null;
@@ -78,9 +80,11 @@ public class TargetHud extends Module {
             e = AttackManager.getLastAttackInTimeRange();
             return;
         }
-        List<Entity> entitiesQueue = StreamSupport.stream(Objects.requireNonNull(CoffeeMain.client.world).getEntities().spliterator(), false)
+        List<Entity> entitiesQueue = StreamSupport.stream(Objects.requireNonNull(CoffeeMain.client.world).getEntities().spliterator(),
+                        false)
                 .filter(this::isApplicable)
-                .sorted(Comparator.comparingDouble(value -> value.getPos().distanceTo(Objects.requireNonNull(CoffeeMain.client.player).getPos())))
+                .sorted(Comparator.comparingDouble(
+                        value -> value.getPos().distanceTo(Objects.requireNonNull(CoffeeMain.client.player).getPos())))
                 .toList();
         if (entitiesQueue.size() > 0) {
             e = entitiesQueue.get(0);
@@ -185,18 +189,13 @@ public class TargetHud extends Module {
 
             Color MID_END = Renderer.Util.lerp(GREEN, RED, hPer);
             double pillHeight = 2;
-            Renderer.R2D.renderRoundedQuad(stack,
-                    new Color(0, 0, 0, 200),
-                    textLeftAlign,
-                    modalHeight - 5 - pillHeight,
-                    modalWidth - 5,
-                    modalHeight - 5,
-                    pillHeight / 2d,
-                    10
-            );
-            Renderer.R2D.renderRoundedQuad(stack, MID_END, textLeftAlign, modalHeight - 5 - pillHeight, renderToX, modalHeight - 5, pillHeight / 2d, 10);
+            Renderer.R2D.renderRoundedQuad(stack, new Color(0, 0, 0, 200), textLeftAlign, modalHeight - 5 - pillHeight, modalWidth - 5,
+                    modalHeight - 5, pillHeight / 2d, 10);
+            Renderer.R2D.renderRoundedQuad(stack, MID_END, textLeftAlign, modalHeight - 5 - pillHeight, renderToX, modalHeight - 5,
+                    pillHeight / 2d, 10);
             if (renderHP.getValue()) {
-                FontRenderers.getRenderer().drawString(stack, Utils.Math.roundToDecimal(trackedHp, 2) + " HP", textLeftAlign, yOffset, MID_END.getRGB());
+                FontRenderers.getRenderer()
+                        .drawString(stack, Utils.Math.roundToDecimal(trackedHp, 2) + " HP", textLeftAlign, yOffset, MID_END.getRGB());
             }
 
             stack.pop();

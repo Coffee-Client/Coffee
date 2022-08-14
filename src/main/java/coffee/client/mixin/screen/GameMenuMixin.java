@@ -7,6 +7,7 @@ package coffee.client.mixin.screen;
 import coffee.client.feature.command.impl.SelfDestruct;
 import coffee.client.feature.gui.screen.AddonManagerScreen;
 import coffee.client.feature.gui.screen.HudEditorScreen;
+import coffee.client.feature.gui.screen.WaypointEditScreen;
 import coffee.client.feature.gui.widget.RoundButton;
 import net.minecraft.client.gui.screen.GameMenuScreen;
 import net.minecraft.client.gui.screen.Screen;
@@ -32,5 +33,6 @@ public class GameMenuMixin extends Screen {
             client.setScreen(new AddonManagerScreen());
         }));
         addDrawableChild(new RoundButton(RoundButton.STANDARD, 5, 30, 60, 20, "Edit HUD", () -> client.setScreen(new HudEditorScreen())));
+        addDrawableChild(new RoundButton(RoundButton.STANDARD, 5, 45, 60, 20, "Waypoints", () -> client.setScreen(new WaypointEditScreen())));
     }
 }

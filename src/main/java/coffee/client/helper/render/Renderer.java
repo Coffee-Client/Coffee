@@ -788,6 +788,59 @@ public class Renderer {
             renderRoundedQuad(stack, c, x, y, x1, y1, rad, rad, rad, rad, samples);
         }
 
+        public static void renderRoundedOutlineInternal(Matrix4f matrix, float cr, float cg, float cb, float ca, double fromX, double fromY, double toX, double toY, double radC1, double radC2, double radC3, double radC4, double width, double samples) {
+            BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
+            bufferBuilder.begin(VertexFormat.DrawMode.TRIANGLE_STRIP, VertexFormats.POSITION_COLOR);
+
+            double[][] map = new double[][] { new double[] { toX - radC4, toY - radC4, radC4 }, new double[] { toX - radC2, fromY + radC2, radC2 },
+                    new double[] { fromX + radC1, fromY + radC1, radC1 }, new double[] { fromX + radC3, toY - radC3, radC3 } };
+            for (int i = 0; i < 4; i++) {
+                double[] current = map[i];
+                double rad = current[2];
+                for (double r = i * 90d; r < (360 / 4d + i * 90d); r += (90 / samples)) {
+                    float rad1 = (float) Math.toRadians(r);
+                    double sin1 = Math.sin(rad1);
+                    float sin = (float) (sin1 * rad);
+                    double cos1 = Math.cos(rad1);
+                    float cos = (float) (cos1 * rad);
+                    bufferBuilder.vertex(matrix, (float) current[0] + sin, (float) current[1] + cos, 0.0F).color(cr, cg, cb, ca).next();
+                    bufferBuilder.vertex(matrix, (float) (current[0] + sin + sin1 * width), (float) (current[1] + cos + cos1 * width), 0.0F)
+                            .color(cr, cg, cb, ca)
+                            .next();
+                }
+                float rad1 = (float) Math.toRadians((360 / 4d + i * 90d));
+                double sin1 = Math.sin(rad1);
+                float sin = (float) (sin1 * rad);
+                double cos1 = Math.cos(rad1);
+                float cos = (float) (cos1 * rad);
+                bufferBuilder.vertex(matrix, (float) current[0] + sin, (float) current[1] + cos, 0.0F).color(cr, cg, cb, ca).next();
+                bufferBuilder.vertex(matrix, (float) (current[0] + sin + sin1 * width), (float) (current[1] + cos + cos1 * width), 0.0F)
+                        .color(cr, cg, cb, ca)
+                        .next();
+            }
+            int i = 0;
+            double[] current = map[i];
+            double rad = current[2];
+            float cos = (float) (rad);
+            bufferBuilder.vertex(matrix, (float) current[0], (float) current[1] + cos, 0.0F).color(cr, cg, cb, ca).next();
+            bufferBuilder.vertex(matrix, (float) (current[0]), (float) (current[1] + cos + width), 0.0F).color(cr, cg, cb, ca).next();
+            BufferRenderer.drawWithShader(bufferBuilder.end());
+        }
+
+        public static void renderRoundedOutline(MatrixStack matrices, Color c, double fromX, double fromY, double toX, double toY, double rad1, double rad2, double rad3, double rad4, double width, double samples) {
+            int color = c.getRGB();
+            Matrix4f matrix = matrices.peek().getPositionMatrix();
+            float f = (float) (color >> 24 & 255) / 255.0F;
+            float g = (float) (color >> 16 & 255) / 255.0F;
+            float h = (float) (color >> 8 & 255) / 255.0F;
+            float k = (float) (color & 255) / 255.0F;
+            setupRender();
+            RenderSystem.setShader(GameRenderer::getPositionColorShader);
+
+            renderRoundedOutlineInternal(matrix, g, h, k, f, fromX, fromY, toX, toY, rad1, rad2, rad3, rad4, width, samples);
+            endRender();
+        }
+
         public static void renderLine(MatrixStack stack, Color c, double x, double y, double x1, double y1) {
             float g = c.getRed() / 255f;
             float h = c.getGreen() / 255f;

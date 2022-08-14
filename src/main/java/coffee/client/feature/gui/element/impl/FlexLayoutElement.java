@@ -13,17 +13,18 @@ import lombok.Setter;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Vec2f;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class FlexLayoutElement extends Element {
-    final List<Element> elements;
+    List<Element> elements;
     final LayoutDirection direction;
     final double padding;
-    final double viewportHeight;
-    final double viewportWidth;
+    double viewportHeight;
+    double viewportWidth;
     final Scroller scroller = new Scroller(0);
     @Getter
     @Setter
@@ -31,7 +32,7 @@ public class FlexLayoutElement extends Element {
 
     public FlexLayoutElement(FlexLayoutElement.LayoutDirection direction, double x, double y, double width, double height, double padding, Element... elements) {
         super(x, y, width, height);
-        this.elements = List.of(elements);
+        this.elements = new ArrayList<>(List.of(elements));
         this.direction = direction;
         this.padding = padding;
         this.viewportHeight = getActualHeight();
@@ -46,7 +47,7 @@ public class FlexLayoutElement extends Element {
 
     public FlexLayoutElement(LayoutDirection direction, double x, double y, double padding, Element... elements) {
         super(x, y, 0, 0);
-        this.elements = List.of(elements);
+        this.elements = new ArrayList<>(List.of(elements));
         this.direction = direction;
         this.padding = padding;
         this.viewportHeight = getActualHeight();
@@ -54,6 +55,15 @@ public class FlexLayoutElement extends Element {
         setWidth(getActualWidth());
         setHeight(getActualHeight());
     }
+
+    public void setElements(List<Element> elements) {
+        this.elements = elements;
+        this.viewportHeight = getActualHeight();
+        this.viewportWidth = getActualWidth();
+
+        updateScroller();
+    }
+
 
     public List<Element> getElements() {
         return elements.stream().filter(Element::isActive).collect(Collectors.toList());
@@ -63,7 +73,19 @@ public class FlexLayoutElement extends Element {
         if (direction == LayoutDirection.DOWN) {
             return getElements().stream().map(element -> element.getHeight() + padding).reduce(Double::sum).orElse(padding) - padding;
         } else {
-            return getElements().stream().map(Element::getHeight).max(Comparator.comparingDouble(value -> value)).orElse(0d);
+            double takenHeight = 0;
+            double highestInRow = 0;
+            double x = 0;
+            for (Element element : getElements()) {
+                highestInRow = Math.max(element.getHeight(), highestInRow);
+                if (x * direction.mulX + element.getWidth() > width) {
+                    x = 0;
+                    takenHeight += highestInRow + padding;
+                }
+                x += element.getWidth() + padding;
+            }
+            takenHeight += highestInRow;
+            return takenHeight;
         }
     }
 
@@ -86,12 +108,19 @@ public class FlexLayoutElement extends Element {
     @Override
     public void render(MatrixStack stack, double mouseX, double mouseY) {
         double posX = 0, posY = 0;
+        double actualOffsetY = 0;
+        double highestInRow = 0;
         ClipStack.globalInstance.addWindow(stack, getBounds().multiplyWidthHeight(heightMulMatrix));
         stack.push();
         stack.translate(0, scroller.getScroll(), 0);
         for (Element element : getElements()) {
+            highestInRow = Math.max(highestInRow, element.getHeight());
+            if (posX * direction.mulX + element.getWidth() > width && direction == LayoutDirection.RIGHT) {
+                posX = 0;
+                actualOffsetY += highestInRow + padding;
+            }
             element.setPositionX(getPositionX() + posX * direction.mulX);
-            element.setPositionY(getPositionY() + posY * direction.mulY);
+            element.setPositionY(getPositionY() + posY * direction.mulY + actualOffsetY);
             if (element.getPositionY() + scroller.getScroll() <= getPositionY() + getHeight() && element.getPositionY() + element.getHeight() + scroller.getScroll() >= getPositionY() && element.getPositionX() >= getPositionX() && element.getPositionX() <= getPositionX() + getWidth()) {
                 element.render(stack, mouseX, mouseY - scroller.getScroll());
             }

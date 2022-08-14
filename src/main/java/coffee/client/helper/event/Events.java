@@ -48,9 +48,47 @@ public class Events {
 
     public static void unregisterEventHandlerClass(Object instance) {
         for (ListenerEntry entry : new ArrayList<>(entries)) {
-            if (entry.owner.equals(instance.getClass())) {
+            if (entry.owner.equals(instance.getClass()) && !entry.type.isShouldStayRegisteredForModules()) {
                 CoffeeMain.log(Level.INFO, "Unregistering " + entry.type + ":" + entry.id);
                 entries.remove(entry);
+            }
+        }
+    }
+
+    public static void registerTransientEventHandlerClassEvents(Object instance) {
+        for (Method declaredMethod : instance.getClass().getDeclaredMethods()) {
+            for (Annotation declaredAnnotation : declaredMethod.getDeclaredAnnotations()) {
+                if (declaredAnnotation.annotationType() == EventListener.class) {
+                    EventListener ev = (EventListener) declaredAnnotation;
+                    if (!ev.value().isShouldStayRegisteredForModules()) {
+                        continue;
+                    }
+                    Class<?>[] params = declaredMethod.getParameterTypes();
+                    if (params.length != 1 || !params[0].isAssignableFrom(ev.value().getExpectedType())) {
+                        throw new IllegalArgumentException(String.format(
+                                "Invalid signature: Expected %s.%s(%s) -> void, got %s.%s(%s) -> %s. Listener: %s",
+                                instance.getClass().getSimpleName(),
+                                declaredMethod.getName(),
+                                ev.value().getExpectedType().getSimpleName(),
+                                instance.getClass().getSimpleName(),
+                                declaredMethod.getName(),
+                                Arrays.stream(params).map(Class::getSimpleName).collect(Collectors.joining(", ")),
+                                declaredMethod.getReturnType().getName(),
+                                ev.value().name()
+                        ));
+                    } else {
+                        declaredMethod.setAccessible(true);
+
+                        ListenerEntry l = registerEventHandler((instance.getClass().getName() + declaredMethod.getName()).hashCode(), ev.value(), event -> {
+                            try {
+                                declaredMethod.invoke(instance, event);
+                            } catch (IllegalAccessException | InvocationTargetException e) {
+                                e.printStackTrace();
+                            }
+                        }, instance.getClass());
+                        CoffeeMain.log(Level.INFO, "Registered event handler " + declaredMethod + " with id " + l.id);
+                    }
+                }
             }
         }
     }

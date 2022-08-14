@@ -94,6 +94,7 @@ import coffee.client.feature.module.impl.render.TabGui;
 import coffee.client.feature.module.impl.render.TargetHud;
 import coffee.client.feature.module.impl.render.Tracers;
 import coffee.client.feature.module.impl.render.Trail;
+import coffee.client.feature.module.impl.render.Waypoints;
 import coffee.client.feature.module.impl.render.Zoom;
 import coffee.client.feature.module.impl.world.AirPlace;
 import coffee.client.feature.module.impl.world.Annihilator;
@@ -313,6 +314,7 @@ public class ModuleRegistry {
         registerModule(BoingBoing.class);
         registerModule(Slippy.class);
         registerModule(Girlboss.class);
+        registerModule(Waypoints.class);
 
         rebuildSharedModuleList();
 

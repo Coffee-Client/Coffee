@@ -122,6 +122,19 @@ public class Utils {
         return splits.toArray(new String[0]);
     }
 
+    public static String capAtLength(String input, double maxWidth, FontAdapter rendererUsed) {
+        String suffix = "...";
+        StringBuilder constructed = new StringBuilder();
+        for (char c : input.toCharArray()) {
+            constructed.append(c);
+            if (rendererUsed.getStringWidth(constructed + suffix) >= maxWidth) {
+                constructed.deleteCharAt(constructed.length() - 1);
+                return constructed + suffix;
+            }
+        }
+        return input;
+    }
+
     public static ItemStack generateItemStackWithMeta(String nbt, Item item) {
         try {
             ItemStack stack = new ItemStack(item);

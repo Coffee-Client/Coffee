@@ -16,28 +16,28 @@ import coffee.client.helper.event.events.PlayerNoClipQueryEvent;
 import coffee.client.helper.event.events.WorldRenderEvent;
 import coffee.client.helper.event.events.base.Event;
 import coffee.client.helper.event.events.base.NonCancellableEvent;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum EventType {
-    PACKET_SEND(PacketEvent.class),
-    PACKET_RECEIVE(PacketEvent.class),
-    ENTITY_RENDER(EntityRenderEvent.class),
-    BLOCK_ENTITY_RENDER(BlockEntityRenderEvent.class),
-    BLOCK_RENDER(BlockRenderEvent.class),
-    MOUSE_EVENT(MouseEvent.class),
-    LORE_QUERY(LoreQueryEvent.class),
-    CONFIG_SAVE(NonCancellableEvent.class),
-    NOCLIP_QUERY(PlayerNoClipQueryEvent.class),
-    KEYBOARD(KeyboardEvent.class),
-    POST_INIT(NonCancellableEvent.class),
-    HUD_RENDER(NonCancellableEvent.class),
-    GAME_EXIT(NonCancellableEvent.class),
-    SHOULD_RENDER_CHUNK(ChunkRenderQueryEvent.class),
-    WORLD_RENDER(WorldRenderEvent.class);
+    PACKET_SEND(PacketEvent.class, false),
+    PACKET_RECEIVE(PacketEvent.class, false),
+    ENTITY_RENDER(EntityRenderEvent.class, false),
+    BLOCK_ENTITY_RENDER(BlockEntityRenderEvent.class, false),
+    BLOCK_RENDER(BlockRenderEvent.class, false),
+    MOUSE_EVENT(MouseEvent.class, false),
+    LORE_QUERY(LoreQueryEvent.class, false),
+    CONFIG_SAVE(NonCancellableEvent.class, true),
+    NOCLIP_QUERY(PlayerNoClipQueryEvent.class, false),
+    KEYBOARD(KeyboardEvent.class, false),
+    POST_INIT(NonCancellableEvent.class, true),
+    HUD_RENDER(NonCancellableEvent.class, false),
+    GAME_EXIT(NonCancellableEvent.class, true),
+    SHOULD_RENDER_CHUNK(ChunkRenderQueryEvent.class, false),
+    WORLD_RENDER(WorldRenderEvent.class, false);
+    @Getter
     private final Class<? extends Event> expectedType;
-
-    public Class<? extends Event> getExpectedType() {
-        return expectedType;
-    }
+    @Getter
+    private final boolean shouldStayRegisteredForModules;
 }

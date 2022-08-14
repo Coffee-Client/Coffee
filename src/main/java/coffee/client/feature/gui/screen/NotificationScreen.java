@@ -38,8 +38,7 @@ public class NotificationScreen extends AAScreen {
     }
 
     @Override
-    protected void init() {
-        //        System.out.println("init");
+    protected void initInternal() {
         closing = false;
         anim = 0;
         this.ok = new ButtonElement(ButtonElement.STANDARD, 0, 0, 0, 20, "Close", this::close);

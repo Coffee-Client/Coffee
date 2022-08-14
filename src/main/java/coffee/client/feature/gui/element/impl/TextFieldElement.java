@@ -12,6 +12,7 @@ import coffee.client.helper.render.ClipStack;
 import coffee.client.helper.render.Cursor;
 import coffee.client.helper.render.Rectangle;
 import coffee.client.helper.render.Renderer;
+import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.math.MatrixStack;
@@ -20,18 +21,25 @@ import org.apache.commons.lang3.SystemUtils;
 import org.lwjgl.glfw.GLFW;
 
 import java.awt.Color;
+import java.util.function.Function;
 
 public class TextFieldElement extends Element implements HasSpecialCursor {
     protected final String suggestion;
     @Setter
     public Runnable changeListener = () -> {
     };
+
+    @Setter
+    public Function<String, Boolean> contentFilter = (newText) -> true;
     protected String text = "";
     protected boolean focused;
     protected int cursor;
     protected double textStart;
     protected int selectionStart, selectionEnd;
     boolean mouseOver = false;
+    @Setter
+    @Getter
+    boolean invalid = false;
 
     public TextFieldElement(double x, double y, double width, double height, String text) {
         super(x, y, width, height);
@@ -313,7 +321,11 @@ public class TextFieldElement extends Element implements HasSpecialCursor {
 
         clearSelection();
 
-        text = text.substring(0, cursor) + c + text.substring(cursor);
+        String newText = text.substring(0, cursor) + c + text.substring(cursor);
+        if (!contentFilter.apply(newText)) {
+            return true;
+        }
+        text = newText;
 
         cursor++;
         resetSelection();
@@ -331,6 +343,22 @@ public class TextFieldElement extends Element implements HasSpecialCursor {
         double centerY = getPositionY() + height / 2d - innerHeight / 2d;
 
         Renderer.R2D.renderRoundedQuad(stack, new Color(40, 40, 40), getPositionX(), getPositionY(), getPositionX() + width, getPositionY() + height, 5, 20);
+        if (isInvalid()) {
+            Renderer.R2D.renderRoundedOutline(stack,
+                    Color.RED,
+                    getPositionX() + .5,
+                    getPositionY() + .5,
+                    getPositionX() + width - .5,
+                    getPositionY() + height - .5,
+                    5,
+                    5,
+                    5,
+                    5,
+                    .5,
+                    20
+            );
+        }
+
         ClipStack.globalInstance.addWindow(stack, new Rectangle(getPositionX() + pad, getPositionY(), getPositionX() + width - pad, getPositionY() + height));
         // Text content
         if (!text.isEmpty()) {

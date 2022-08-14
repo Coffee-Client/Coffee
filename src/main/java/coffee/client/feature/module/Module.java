@@ -57,6 +57,7 @@ public abstract class Module {
         this.toasts = this.config.create(new BooleanSetting.Builder(!hasAnnotation).name("Toasts")
                 .description("Whether to show enabled / disabled toasts")
                 .get());
+        Events.registerTransientEventHandlerClassEvents(this);
     }
 
     public final void postModuleInit() {

@@ -6,6 +6,7 @@ package coffee.client.helper;
 
 import coffee.client.helper.event.EventType;
 import coffee.client.helper.event.Events;
+import coffee.client.helper.gson.GsonSupplier;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -17,7 +18,7 @@ import java.nio.charset.StandardCharsets;
 
 @SuppressWarnings("unused")
 public class ConfigContainer {
-    static final Gson gson = new Gson();
+    static final Gson gson = GsonSupplier.getGson();
     final File path;
     final String key;
     @Getter

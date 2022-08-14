@@ -70,7 +70,8 @@
     "screen.TitleScreenMixin"
   ],
   "client": [
-    "network.ClientPlayNetworkHandlerMixin"
+    "network.ClientPlayNetworkHandlerMixin",
+    "render.IFramebufferMixin"
   ],
   "server": [],
   "injectors": {

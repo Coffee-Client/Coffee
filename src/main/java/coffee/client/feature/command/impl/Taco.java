@@ -11,6 +11,7 @@ import coffee.client.feature.command.coloring.PossibleArgument;
 import coffee.client.feature.command.exception.CommandException;
 import coffee.client.helper.event.EventType;
 import coffee.client.helper.event.Events;
+import coffee.client.helper.gson.GsonSupplier;
 import coffee.client.helper.render.Texture;
 import coffee.client.helper.util.Utils;
 import com.google.gson.Gson;
@@ -84,7 +85,7 @@ public class Taco extends Command {
                 return;
             }
             String a = FileUtils.readFileToString(storage, StandardCharsets.UTF_8);
-            Gson gson = new Gson();
+            Gson gson = GsonSupplier.getGson();
             config = gson.fromJson(a, TacoConfig.class);
             if (config == null) {
                 config = new TacoConfig();
@@ -142,7 +143,7 @@ public class Taco extends Command {
     }
 
     static void saveConfig() {
-        Gson gson = new Gson();
+        Gson gson = GsonSupplier.getGson();
         String json = gson.toJson(config);
         try {
             FileUtils.writeStringToFile(storage, json, StandardCharsets.UTF_8);

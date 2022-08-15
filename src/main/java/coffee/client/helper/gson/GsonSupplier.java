@@ -10,6 +10,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializer;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.Vec3d;
@@ -30,24 +31,34 @@ public class GsonSupplier {
 
     private static void registerAdapters(GsonBuilder builder) {
         JsonDeserializer<Color> colorDeser = (jsonElement, type, jsonDeserializationContext) -> {
-            JsonObject asJsonObject = jsonElement.getAsJsonObject();
-            int r = getAsIntOrDefault(asJsonObject.get("r"), 255);
-            int g = getAsIntOrDefault(asJsonObject.get("g"), 255);
-            int b = getAsIntOrDefault(asJsonObject.get("b"), 255);
-            int a = getAsIntOrDefault(asJsonObject.get("a"), 255);
-            Preconditions.checkArgument(r >= 0 && r <= 255);
-            Preconditions.checkArgument(g >= 0 && g <= 255);
-            Preconditions.checkArgument(b >= 0 && b <= 255);
-            Preconditions.checkArgument(a >= 0 && a <= 255);
-            return new Color(r, g, b, a);
+            if (jsonElement.isJsonObject()) {
+                JsonObject asJsonObject = jsonElement.getAsJsonObject();
+                int r = getAsIntOrDefault(asJsonObject.get("r"), 255);
+                int g = getAsIntOrDefault(asJsonObject.get("g"), 255);
+                int b = getAsIntOrDefault(asJsonObject.get("b"), 255);
+                int a = getAsIntOrDefault(asJsonObject.get("a"), 255);
+                Preconditions.checkArgument(r >= 0 && r <= 255);
+                Preconditions.checkArgument(g >= 0 && g <= 255);
+                Preconditions.checkArgument(b >= 0 && b <= 255);
+                Preconditions.checkArgument(a >= 0 && a <= 255);
+                return new Color(r, g, b, a);
+            } else {
+                // 0xAARRGGBB
+                int asInt = jsonElement.getAsInt();
+                int a = asInt >> (8 * 3) & 0xFF;
+                int r = asInt >> (8 * 2) & 0xFF;
+                int g = asInt >> (8) & 0xFF;
+                int b = asInt & 0xFF;
+                return new Color(r, g, b, a);
+            }
         };
         JsonSerializer<Color> colorSer = (color, type, jsonSerializationContext) -> {
-            JsonObject jval = new JsonObject();
-            jval.addProperty("r", color.getRed());
-            jval.addProperty("g", color.getGreen());
-            jval.addProperty("b", color.getBlue());
-            jval.addProperty("a", color.getAlpha());
-            return jval;
+            int red = color.getRed();
+            int green = color.getGreen();
+            int blue = color.getBlue();
+            int alpha = color.getAlpha();
+            int val = alpha << (8 * 3) | red << (8 * 2) | green << (8) | blue;
+            return new JsonPrimitive(val);
         };
         builder.registerTypeAdapter(Color.class, colorDeser);
         builder.registerTypeAdapter(Color.class, colorSer);

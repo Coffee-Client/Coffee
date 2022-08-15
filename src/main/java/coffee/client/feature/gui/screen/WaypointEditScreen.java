@@ -150,7 +150,7 @@ public class WaypointEditScreen extends AAScreen {
             double expand = Transitions.easeOutExpo(this.expand);
             Renderer.R2D.renderRoundedQuad(stack, new Color(20, 20, 20), getPositionX(), getPositionY(), getPositionX() + getWidth(),
                     getPositionY() + getHeight(), 5, 20);
-            renderPlusIcon(stack, getPositionX() + getWidth() / 2d, getPositionY() + getHeight() / 2d, 10 + 3 * expand);
+            renderPlusIcon(stack, getPositionX() + getWidth() / 2d, getPositionY() + getHeight() / 2d, 10 + 2 * expand);
         }
 
         @Override

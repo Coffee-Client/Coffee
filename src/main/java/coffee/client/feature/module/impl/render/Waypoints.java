@@ -71,9 +71,7 @@ public class Waypoints extends Module {
 
     @Override
     public void onWorldRender(MatrixStack matrices) {
-        double fadeDistance = 20;
         double fadeDistancePlayer = 10;
-        double maxDist = 200;
         waypoints.stream()
                 .sorted(Comparator.comparingDouble(
                         value -> -value.position.distanceTo(CoffeeMain.client.gameRenderer.getCamera().getPos())))
@@ -81,13 +79,10 @@ public class Waypoints extends Module {
                     if (tracers) {
                         Renderer.R3D.renderLine(Renderer.R3D.getCrosshairVector(), waypoint.position, waypoint.color, matrices);
                     }
-                    double distance = waypoint.position.distanceTo(client.gameRenderer.getCamera().getPos());
                     double distancePlayer = waypoint.position.distanceTo(Utils.getInterpolatedEntityPosition(client.player));
                     double subbed1 = (fadeDistancePlayer - distancePlayer) / fadeDistancePlayer;
                     subbed1 = MathHelper.clamp(subbed1, 0, 1);
                     subbed1 = 1 - subbed1;
-                    double subbed = Math.max(maxDist - distance, 0);
-                    double opacity = MathHelper.clamp(subbed / fadeDistance, 0, 1);
                     Renderer.R3D.renderFilled(
                             new Vec3d(waypoint.position.x - .2, CoffeeMain.client.world.getBottomY(), waypoint.position.z - .2),
                             new Vec3d(.4, CoffeeMain.client.world.getHeight(), .4),
@@ -97,7 +92,7 @@ public class Waypoints extends Module {
                         real.add(() -> {
                             String t = waypoint.getName();
                             float width = FontRenderers.getRenderer().getStringWidth(t) + 4;
-                            Renderer.R2D.renderRoundedQuad(Renderer.R3D.getEmptyMatrixStack(), new Color(20, 20, 20, (int) (opacity * 255)),
+                            Renderer.R2D.renderRoundedQuad(Renderer.R3D.getEmptyMatrixStack(), new Color(20, 20, 20, 255),
                                     screenSpaceCoordinate.x - width / 2d,
                                     screenSpaceCoordinate.y - FontRenderers.getRenderer().getFontHeight() / 2d - 2,
                                     screenSpaceCoordinate.x + width / 2d,
@@ -105,7 +100,7 @@ public class Waypoints extends Module {
                             FontRenderers.getRenderer()
                                     .drawCenteredString(matrices, t, screenSpaceCoordinate.x,
                                             screenSpaceCoordinate.y - FontRenderers.getRenderer().getFontHeight() / 2d, 1f, 1f, 1f,
-                                            (float) opacity);
+                                            1f);
                         });
                     }
                 });

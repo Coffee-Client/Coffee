@@ -40,13 +40,11 @@ public class Backtrack extends Module {
     }
 
     boolean shouldBacktrack() {
-        return InputUtil.isKeyPressed(CoffeeMain.client.getWindow().getHandle(),
-                GLFW.GLFW_KEY_LEFT_ALT) && CoffeeMain.client.currentScreen == null;
+        return InputUtil.isKeyPressed(CoffeeMain.client.getWindow().getHandle(), GLFW.GLFW_KEY_LEFT_ALT) && CoffeeMain.client.currentScreen == null;
     }
 
     void shouldCommit() {
-        boolean a = !committed && InputUtil.isKeyPressed(CoffeeMain.client.getWindow().getHandle(),
-                GLFW.GLFW_KEY_ENTER) && CoffeeMain.client.currentScreen == null;
+        boolean a = !committed && InputUtil.isKeyPressed(CoffeeMain.client.getWindow().getHandle(), GLFW.GLFW_KEY_ENTER) && CoffeeMain.client.currentScreen == null;
         if (a) {
             committed = true;
         }
@@ -88,9 +86,8 @@ public class Backtrack extends Module {
         shouldCommit();
 
         if (!shouldBacktrack() && !committed) {
-            entries.add(
-                    new PositionEntry(Utils.getInterpolatedEntityPosition(CoffeeMain.client.player), CoffeeMain.client.player.getVelocity(),
-                            CoffeeMain.client.player.getPitch(), CoffeeMain.client.player.getYaw()));
+            entries.add(new PositionEntry(Utils.getInterpolatedEntityPosition(CoffeeMain.client.player), CoffeeMain.client.player.getVelocity(), CoffeeMain.client.player.getPitch(),
+                    CoffeeMain.client.player.getYaw()));
         } else if (committed) {
             CoffeeMain.client.player.setNoGravity(true);
             moveTo(entries.get(0));
@@ -110,7 +107,7 @@ public class Backtrack extends Module {
     @Override
     public void onWorldRender(MatrixStack matrices) {
         for (int i = Math.max(1, entries.size() - 30); i < entries.size(); i++) {
-            Renderer.R3D.renderLine(entries.get(i - 1).pos(), entries.get(i).pos(), Color.RED, matrices);
+            Renderer.R3D.renderLine(matrices, Color.RED, entries.get(i - 1).pos(), entries.get(i).pos());
         }
     }
 

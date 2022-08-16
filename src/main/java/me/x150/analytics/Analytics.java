@@ -67,8 +67,7 @@ public class Analytics {
 
     static final String version = Util.make(() -> {
         try {
-            return IOUtils.toString(Objects.requireNonNull(HomeScreen.class.getClassLoader().getResourceAsStream("version.txt")),
-                    StandardCharsets.UTF_8);
+            return IOUtils.toString(Objects.requireNonNull(HomeScreen.class.getClassLoader().getResourceAsStream("version.txt")), StandardCharsets.UTF_8);
         } catch (Exception ignored) {
             return "unknown";
         }

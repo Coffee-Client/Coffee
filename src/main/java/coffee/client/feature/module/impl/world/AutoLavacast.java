@@ -28,9 +28,8 @@ import java.awt.Color;
 public class AutoLavacast extends Module {
 
     static boolean moveForwards = false;
-    final EnumSetting<Mode> mode = this.config.create(new EnumSetting.Builder<>(Mode.Bypass).name("Mode")
-            .description("How to place and move. Bypass is slow but looks legit, fast is VERY speedy")
-            .get());
+    final EnumSetting<Mode> mode = this.config.create(
+            new EnumSetting.Builder<>(Mode.Bypass).name("Mode").description("How to place and move. Bypass is slow but looks legit, fast is VERY speedy").get());
     final Timer timer = new Timer();
     Input original;
     Vec3i incr;
@@ -131,9 +130,9 @@ public class AutoLavacast extends Module {
     @Override
     public void onWorldRender(MatrixStack matrices) {
         BlockPos next = getNextPosition();
-        Renderer.R3D.renderOutline(Vec3d.of(start), new Vec3d(1, 0.01, 1), Color.RED, matrices);
+        Renderer.R3D.renderOutline(matrices, Color.RED, Vec3d.of(start), new Vec3d(1, 0.01, 1));
         if (next != null) {
-            Renderer.R3D.renderOutline(Vec3d.of(next), new Vec3d(1, 1, 1), Color.BLUE, matrices);
+            Renderer.R3D.renderOutline(matrices, Color.BLUE, Vec3d.of(next), new Vec3d(1, 1, 1));
         }
     }
 

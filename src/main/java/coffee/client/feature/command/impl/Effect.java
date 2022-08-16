@@ -30,9 +30,9 @@ public class Effect extends Command {
             return new PossibleArgument(ArgumentType.STRING, "give", "clear");
         } else if (args[0].equalsIgnoreCase("give")) {
             return switch (index) {
-                case 1 -> new PossibleArgument(ArgumentType.NUMBER, "(effect id)");
-                case 2 -> new PossibleArgument(ArgumentType.NUMBER, "(duration)");
-                case 3 -> new PossibleArgument(ArgumentType.NUMBER, "(strength)");
+                case 1 -> new PossibleArgument(ArgumentType.NUMBER, "<effect id>");
+                case 2 -> new PossibleArgument(ArgumentType.NUMBER, "<duration>");
+                case 3 -> new PossibleArgument(ArgumentType.NUMBER, "<strength>");
                 default -> super.getSuggestionsWithType(index, args);
             };
         }

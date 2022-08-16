@@ -33,8 +33,7 @@ public class Socks5InitialResponseDecoder extends ReplayingDecoder<Socks5Initial
                 case INIT: {
                     final byte version = in.readByte();
                     if (version != SocksVersion.SOCKS5.byteValue()) {
-                        throw new DecoderException(
-                                "unsupported version: " + version + " (expected: " + SocksVersion.SOCKS5.byteValue() + ')');
+                        throw new DecoderException("unsupported version: " + version + " (expected: " + SocksVersion.SOCKS5.byteValue() + ')');
                     }
 
                     final Socks5AuthMethod authMethod = Socks5AuthMethod.valueOf(in.readByte());

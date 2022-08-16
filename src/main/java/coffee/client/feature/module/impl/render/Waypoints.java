@@ -72,38 +72,28 @@ public class Waypoints extends Module {
     @Override
     public void onWorldRender(MatrixStack matrices) {
         double fadeDistancePlayer = 10;
-        waypoints.stream()
-                .sorted(Comparator.comparingDouble(
-                        value -> -value.position.distanceTo(CoffeeMain.client.gameRenderer.getCamera().getPos())))
-                .forEachOrdered(waypoint -> {
-                    if (tracers) {
-                        Renderer.R3D.renderLine(Renderer.R3D.getCrosshairVector(), waypoint.position, waypoint.color, matrices);
-                    }
-                    double distancePlayer = waypoint.position.distanceTo(Utils.getInterpolatedEntityPosition(client.player));
-                    double subbed1 = (fadeDistancePlayer - distancePlayer) / fadeDistancePlayer;
-                    subbed1 = MathHelper.clamp(subbed1, 0, 1);
-                    subbed1 = 1 - subbed1;
-                    Renderer.R3D.renderFilled(
-                            new Vec3d(waypoint.position.x - .2, CoffeeMain.client.world.getBottomY(), waypoint.position.z - .2),
-                            new Vec3d(.4, CoffeeMain.client.world.getHeight(), .4),
-                            Renderer.Util.modify(waypoint.color, -1, -1, -1, (int) (subbed1 * 255)), matrices);
-                    Vec3d screenSpaceCoordinate = Renderer.R2D.getScreenSpaceCoordinate(waypoint.position, matrices);
-                    if (Renderer.R2D.isOnScreen(screenSpaceCoordinate)) {
-                        real.add(() -> {
-                            String t = waypoint.getName();
-                            float width = FontRenderers.getRenderer().getStringWidth(t) + 4;
-                            Renderer.R2D.renderRoundedQuad(Renderer.R3D.getEmptyMatrixStack(), new Color(20, 20, 20, 255),
-                                    screenSpaceCoordinate.x - width / 2d,
-                                    screenSpaceCoordinate.y - FontRenderers.getRenderer().getFontHeight() / 2d - 2,
-                                    screenSpaceCoordinate.x + width / 2d,
-                                    screenSpaceCoordinate.y + FontRenderers.getRenderer().getFontHeight() / 2d + 2, 5, 10);
-                            FontRenderers.getRenderer()
-                                    .drawCenteredString(matrices, t, screenSpaceCoordinate.x,
-                                            screenSpaceCoordinate.y - FontRenderers.getRenderer().getFontHeight() / 2d, 1f, 1f, 1f,
-                                            1f);
-                        });
-                    }
+        waypoints.stream().sorted(Comparator.comparingDouble(value -> -value.position.distanceTo(CoffeeMain.client.gameRenderer.getCamera().getPos()))).forEachOrdered(waypoint -> {
+            if (tracers) {
+                Renderer.R3D.renderLine(matrices, waypoint.color, Renderer.R3D.getCrosshairVector(), waypoint.position);
+            }
+            double distancePlayer = waypoint.position.distanceTo(Utils.getInterpolatedEntityPosition(client.player));
+            double subbed1 = (fadeDistancePlayer - distancePlayer) / fadeDistancePlayer;
+            subbed1 = MathHelper.clamp(subbed1, 0, 1);
+            subbed1 = 1 - subbed1;
+            Renderer.R3D.renderFilled(matrices, Renderer.Util.modify(waypoint.color, -1, -1, -1, (int) (subbed1 * 255)),
+                    new Vec3d(waypoint.position.x - .2, CoffeeMain.client.world.getBottomY(), waypoint.position.z - .2), new Vec3d(.4, CoffeeMain.client.world.getHeight(), .4));
+            Vec3d screenSpaceCoordinate = Renderer.R2D.getScreenSpaceCoordinate(waypoint.position, matrices);
+            if (Renderer.R2D.isOnScreen(screenSpaceCoordinate)) {
+                real.add(() -> {
+                    String t = waypoint.getName();
+                    float width = FontRenderers.getRenderer().getStringWidth(t) + 4;
+                    Renderer.R2D.renderRoundedQuad(Renderer.R3D.getEmptyMatrixStack(), new Color(20, 20, 20, 255), screenSpaceCoordinate.x - width / 2d,
+                            screenSpaceCoordinate.y - FontRenderers.getRenderer().getFontHeight() / 2d - 2, screenSpaceCoordinate.x + width / 2d,
+                            screenSpaceCoordinate.y + FontRenderers.getRenderer().getFontHeight() / 2d + 2, 5, 10);
+                    FontRenderers.getRenderer().drawCenteredString(Renderer.R3D.getEmptyMatrixStack(), t, screenSpaceCoordinate.x, screenSpaceCoordinate.y - FontRenderers.getRenderer().getFontHeight() / 2d, 1f, 1f, 1f, 1f);
                 });
+            }
+        });
     }
 
     @Override

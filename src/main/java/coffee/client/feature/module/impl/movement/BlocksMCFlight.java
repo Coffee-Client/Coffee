@@ -62,7 +62,7 @@ public class BlocksMCFlight extends Module {
 
         Vec3d ppos = Utils.getInterpolatedEntityPosition(CoffeeMain.client.player);
         Vec3d renderPos = new Vec3d(ppos.x, yStart, ppos.z);
-        Renderer.R3D.renderOutline(renderPos.subtract(1, 0, 1), new Vec3d(2, 0, 2), Color.RED, matrices);
+        Renderer.R3D.renderOutline(matrices, Color.RED, renderPos.subtract(1, 0, 1), new Vec3d(2, 0, 2));
         circles.removeIf(animatedCircle -> animatedCircle.animProg > 1);
         for (AnimatedCircle circle : circles) {
             circle.render(matrices);

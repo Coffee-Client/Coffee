@@ -22,8 +22,7 @@ public class SpeedHud extends HudElement {
     final Timer update = new Timer();
 
     public SpeedHud() {
-        super("Speed", CoffeeMain.client.getWindow().getScaledWidth() / 2d - 160 / 2d,
-                CoffeeMain.client.getWindow().getScaledHeight() - 40 - 64, 160, 64);
+        super("Speed", CoffeeMain.client.getWindow().getScaledWidth() / 2d - 160 / 2d, CoffeeMain.client.getWindow().getScaledHeight() - 40 - 64, 160, 64);
     }
 
     @Override
@@ -47,16 +46,13 @@ public class SpeedHud extends HudElement {
                 previous = 0;
             }
             for (int i = 1; i < speeds.size(); i++) {
-                double ppr = Math.sin(
-                        Math.toRadians(((double) i / speeds.size() + (System.currentTimeMillis() % 3000) / -3000d) * 360 * 3)) + 1;
+                double ppr = Math.sin(Math.toRadians(((double) i / speeds.size() + (System.currentTimeMillis() % 3000) / -3000d) * 360 * 3)) + 1;
                 ppr /= 2d;
                 double aDouble = speeds.get(i);
                 double prog = ((aDouble - min) / max);
                 double y = height - prog * height;
 
-                Renderer.R2D.renderLine(stack,
-                        Renderer.Util.lerp(ThemeManager.getMainTheme().getActive(), ThemeManager.getMainTheme().getAccent(), ppr),
-                        x - incrX, previous, x, y);
+                Renderer.R2D.renderLine(stack, Renderer.Util.lerp(ThemeManager.getMainTheme().getActive(), ThemeManager.getMainTheme().getAccent(), ppr), x - incrX, previous, x, y);
 
                 x += incrX;
                 previous = y;

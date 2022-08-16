@@ -31,12 +31,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class AutoTNT extends Module {
-    final DoubleSetting placeDistance = this.config.create(new DoubleSetting.Builder(4).name("Place distance")
-            .description("How far to place the blocks apart")
-            .min(1)
-            .max(4)
-            .precision(0)
-            .get());
+    final DoubleSetting placeDistance = this.config.create(new DoubleSetting.Builder(4).name("Place distance").description("How far to place the blocks apart").min(1).max(4).precision(0).get());
     boolean missingTntAck = false;
 
     public AutoTNT() {
@@ -78,9 +73,7 @@ public class AutoTNT extends Module {
                     }
                 }
                 airs = airs.stream()
-                        .filter(blockPosDoubleEntry -> CoffeeMain.client.world.getBlockState(blockPosDoubleEntry.getKey().down())
-                                .getMaterial()
-                                .blocksMovement())
+                        .filter(blockPosDoubleEntry -> CoffeeMain.client.world.getBlockState(blockPosDoubleEntry.getKey().down()).getMaterial().blocksMovement())
                         .collect(Collectors.toList());
                 Map.Entry<BlockPos, Double> best1 = airs.stream().min(Comparator.comparingDouble(Map.Entry::getValue)).orElse(null);
                 if (best1 == null) {
@@ -100,8 +93,7 @@ public class AutoTNT extends Module {
                         int sel = CoffeeMain.client.player.getInventory().selectedSlot;
                         CoffeeMain.client.player.getInventory().selectedSlot = finalTntSlot;
                         BlockHitResult bhr = new BlockHitResult(lmao, Direction.DOWN, best, false);
-                        Objects.requireNonNull(CoffeeMain.client.interactionManager)
-                                .interactBlock(CoffeeMain.client.player, Hand.MAIN_HAND, bhr);
+                        Objects.requireNonNull(CoffeeMain.client.interactionManager).interactBlock(CoffeeMain.client.player, Hand.MAIN_HAND, bhr);
                         CoffeeMain.client.player.getInventory().selectedSlot = sel;
                     });
                 }
@@ -145,9 +137,7 @@ public class AutoTNT extends Module {
                     }
                 }
                 airs = airs.stream()
-                        .filter(blockPosDoubleEntry -> CoffeeMain.client.world.getBlockState(blockPosDoubleEntry.getKey().down())
-                                .getMaterial()
-                                .blocksMovement())
+                        .filter(blockPosDoubleEntry -> CoffeeMain.client.world.getBlockState(blockPosDoubleEntry.getKey().down()).getMaterial().blocksMovement())
                         .collect(Collectors.toList());
                 Map.Entry<BlockPos, Double> best1 = airs.stream().min(Comparator.comparingDouble(Map.Entry::getValue)).orElse(null);
                 if (best1 == null) {
@@ -159,7 +149,7 @@ public class AutoTNT extends Module {
                 }
                 Vec3d lmao = Vec3d.of(best);
                 if (shouldPlace(best)) {
-                    Renderer.R3D.renderOutline(lmao, new Vec3d(1, 1, 1), Color.RED, matrices);
+                    Renderer.R3D.renderOutline(matrices, Color.RED, lmao, new Vec3d(1, 1, 1));
                 }
             }
         }

@@ -49,8 +49,7 @@ public class ElytraFly extends Module {
             if (CoffeeMain.client.player.isFallFlying()) {
 
                 float angle = (float) Math.toRadians(CoffeeMain.client.player.getYaw());
-                Vec3d acceleration = new Vec3d(-MathHelper.sin(angle) * (this.acceleration.getValue() / 100), 0,
-                        MathHelper.cos(angle) * (this.acceleration.getValue() / 100));
+                Vec3d acceleration = new Vec3d(-MathHelper.sin(angle) * (this.acceleration.getValue() / 100), 0, MathHelper.cos(angle) * (this.acceleration.getValue() / 100));
 
                 Vec3d vec = CoffeeMain.client.player.getVelocity();
 
@@ -63,11 +62,9 @@ public class ElytraFly extends Module {
                 Vec3d verticalSpeed = CoffeeMain.client.player.getVelocity();
 
                 if (CoffeeMain.client.options.jumpKey.isPressed()) {
-                    CoffeeMain.client.player.setVelocity(verticalSpeed.x, verticalSpeed.y + (this.verticalSpeed.getValue() / 40),
-                            verticalSpeed.z);
+                    CoffeeMain.client.player.setVelocity(verticalSpeed.x, verticalSpeed.y + (this.verticalSpeed.getValue() / 40), verticalSpeed.z);
                 } else if (CoffeeMain.client.options.sneakKey.isPressed()) {
-                    CoffeeMain.client.player.setVelocity(verticalSpeed.x, verticalSpeed.y - (this.verticalSpeed.getValue() / 40),
-                            verticalSpeed.z);
+                    CoffeeMain.client.player.setVelocity(verticalSpeed.x, verticalSpeed.y - (this.verticalSpeed.getValue() / 40), verticalSpeed.z);
                 }
             }
         }

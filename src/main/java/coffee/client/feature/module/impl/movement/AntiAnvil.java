@@ -29,15 +29,13 @@ public class AntiAnvil extends Module {
     public void tick() {
         BlockPos currentPos = Objects.requireNonNull(CoffeeMain.client.player).getBlockPos();
         Vec3d ppos = CoffeeMain.client.player.getPos();
-        List<Entity> anvils = StreamSupport.stream(Objects.requireNonNull(CoffeeMain.client.world).getEntities().spliterator(), false)
-                .filter(entity -> {
-                    if (entity instanceof FallingBlockEntity e) {
-                        Block bs = e.getBlockState().getBlock();
-                        return bs == Blocks.ANVIL || bs == Blocks.CHIPPED_ANVIL || bs == Blocks.DAMAGED_ANVIL;
-                    }
-                    return false;
-                })
-                .toList();
+        List<Entity> anvils = StreamSupport.stream(Objects.requireNonNull(CoffeeMain.client.world).getEntities().spliterator(), false).filter(entity -> {
+            if (entity instanceof FallingBlockEntity e) {
+                Block bs = e.getBlockState().getBlock();
+                return bs == Blocks.ANVIL || bs == Blocks.CHIPPED_ANVIL || bs == Blocks.DAMAGED_ANVIL;
+            }
+            return false;
+        }).toList();
         for (Entity anvil : anvils) {
             Vec3d anvilPos = anvil.getPos();
             BlockPos anvilBp = anvil.getBlockPos();

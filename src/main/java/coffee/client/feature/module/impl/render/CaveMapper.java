@@ -46,39 +46,22 @@ public class CaveMapper extends Module {
     final List<BlockPos> ores = new ArrayList<>();
     final List<BlockPos> toScan = new ArrayList<>();
     final List<Map.Entry<BlockPos, List<Vec3d>>> circ = new ArrayList<>();
-    final BooleanSetting coal = this.config.create(
-            new BooleanSetting.Builder(false).name("Coal").description("Whether to show coal").get());
-    final BooleanSetting iron = this.config.create(
-            new BooleanSetting.Builder(false).name("Iron").description("Whether to show iron").get());
-    final BooleanSetting gold = this.config.create(
-            new BooleanSetting.Builder(false).name("Gold").description("Whether to show gold").get());
-    final BooleanSetting redstone = this.config.create(
-            new BooleanSetting.Builder(false).name("Redstone").description("Whether to show redstone ore").get());
-    final BooleanSetting diamond = this.config.create(
-            new BooleanSetting.Builder(true).name("Diamond").description("Whether to show diamonds").get());
-    final BooleanSetting lapis = this.config.create(
-            new BooleanSetting.Builder(false).name("Lapis").description("Whether to show lapis").get());
-    final BooleanSetting copper = this.config.create(
-            new BooleanSetting.Builder(false).name("Copper").description("Whether to show copper").get());
-    final BooleanSetting emerald = this.config.create(
-            new BooleanSetting.Builder(false).name("Emerald").description("Whether to show emeralds").get());
-    final BooleanSetting quartz = this.config.create(
-            new BooleanSetting.Builder(false).name("Quartz").description("Whether to show quartz").get());
-    final BooleanSetting debris = this.config.create(
-            new BooleanSetting.Builder(true).name("Ancient debris").description("Whether to show ancient debris").get());
-    final BooleanSetting showScanned = this.config.create(
-            new BooleanSetting.Builder(true).name("Show scanned").description("Whether to show the scanned area").get());
-    final BooleanSetting showEntire = this.config.create(new BooleanSetting.Builder(false).name("Show entire area")
-            .description("Whether to show the entire scanned area (VERY performance intensive)")
-            .get());
-    final DoubleSetting cacheSize = this.config.create(new DoubleSetting.Builder(10000).precision(0)
-            .name("Cache size")
-            .description("How big the cache should be (bigger = more time + more memory)")
-            .min(5000)
-            .max(30000)
-            .get());
-    final BooleanSetting includeTranslucent = this.config.create(
-            new BooleanSetting.Builder(true).name("Scan transparent").description("Scan through transparent blocks as well").get());
+    final BooleanSetting coal = this.config.create(new BooleanSetting.Builder(false).name("Coal").description("Whether to show coal").get());
+    final BooleanSetting iron = this.config.create(new BooleanSetting.Builder(false).name("Iron").description("Whether to show iron").get());
+    final BooleanSetting gold = this.config.create(new BooleanSetting.Builder(false).name("Gold").description("Whether to show gold").get());
+    final BooleanSetting redstone = this.config.create(new BooleanSetting.Builder(false).name("Redstone").description("Whether to show redstone ore").get());
+    final BooleanSetting diamond = this.config.create(new BooleanSetting.Builder(true).name("Diamond").description("Whether to show diamonds").get());
+    final BooleanSetting lapis = this.config.create(new BooleanSetting.Builder(false).name("Lapis").description("Whether to show lapis").get());
+    final BooleanSetting copper = this.config.create(new BooleanSetting.Builder(false).name("Copper").description("Whether to show copper").get());
+    final BooleanSetting emerald = this.config.create(new BooleanSetting.Builder(false).name("Emerald").description("Whether to show emeralds").get());
+    final BooleanSetting quartz = this.config.create(new BooleanSetting.Builder(false).name("Quartz").description("Whether to show quartz").get());
+    final BooleanSetting debris = this.config.create(new BooleanSetting.Builder(true).name("Ancient debris").description("Whether to show ancient debris").get());
+    final BooleanSetting showScanned = this.config.create(new BooleanSetting.Builder(true).name("Show scanned").description("Whether to show the scanned area").get());
+    final BooleanSetting showEntire = this.config.create(
+            new BooleanSetting.Builder(false).name("Show entire area").description("Whether to show the entire scanned area (VERY performance intensive)").get());
+    final DoubleSetting cacheSize = this.config.create(
+            new DoubleSetting.Builder(10000).precision(0).name("Cache size").description("How big the cache should be (bigger = more time + more memory)").min(5000).max(30000).get());
+    final BooleanSetting includeTranslucent = this.config.create(new BooleanSetting.Builder(true).name("Scan transparent").description("Scan through transparent blocks as well").get());
     BlockPos start = null;
     boolean scanned = false;
 
@@ -141,8 +124,7 @@ public class CaveMapper extends Module {
                         toScan.add(pos);
                         scannedBlocks.add(pos);
                     }
-                } else if (bs(pos).isFullCube(CoffeeMain.client.world, pos) && circ.stream()
-                        .noneMatch(blockPosListEntry -> blockPosListEntry.getKey().equals(pos))) {
+                } else if (bs(pos).isFullCube(CoffeeMain.client.world, pos) && circ.stream().noneMatch(blockPosListEntry -> blockPosListEntry.getKey().equals(pos))) {
                     Vec3d renderR = new Vec3d(pos.getX(), pos.getY(), pos.getZ());
                     Vec3d end = renderR.add(new Vec3d(1, 1, 1));
                     float x1 = (float) renderR.x;
@@ -296,7 +278,7 @@ public class CaveMapper extends Module {
             if (hit == null) {
                 continue;
             }
-            Renderer.R3D.renderOutline(new Vec3d(hit.getX(), hit.getY(), hit.getZ()), new Vec3d(1, 1, 1), Color.WHITE, matrices);
+            Renderer.R3D.renderOutline(matrices, Color.WHITE, new Vec3d(hit.getX(), hit.getY(), hit.getZ()), new Vec3d(1, 1, 1));
         }
         List<Map.Entry<BlockPos, List<Vec3d>>> real = new ArrayList<>(circ);
 
@@ -320,8 +302,7 @@ public class CaveMapper extends Module {
                 if (ores.contains(entry.getKey())) {
                     continue;
                 }
-                double dist = new Vec3d(entry.getKey().getX(), entry.getKey().getY(), entry.getKey().getZ()).distanceTo(
-                        Objects.requireNonNull(CoffeeMain.client.player).getPos());
+                double dist = new Vec3d(entry.getKey().getX(), entry.getKey().getY(), entry.getKey().getZ()).distanceTo(Objects.requireNonNull(CoffeeMain.client.player).getPos());
                 dist = (1 - MathHelper.clamp(dist, 0, 15) / 15d) * 3d;
                 dist = Math.round(dist);
                 dist /= 3;
@@ -363,9 +344,9 @@ public class CaveMapper extends Module {
             Vec3d p = new Vec3d(ore.getX(), ore.getY(), ore.getZ());
             double dist = p.distanceTo(Objects.requireNonNull(CoffeeMain.client.player).getPos());
             dist = MathHelper.clamp(dist, 0, 30);
-            Renderer.R3D.renderFilled(p, new Vec3d(1, 1, 1), Renderer.Util.modify(oreColors.containsKey(t) ? oreColors.get(t) : new Color(
-                            CoffeeMain.client.world.getBlockState(ore).getMapColor(CoffeeMain.client.world, ore).color), -1, -1, -1,
-                    (int) ((dist / 30d) * 200)), matrices);
+            Renderer.R3D.renderFilled(matrices,
+                    Renderer.Util.modify(oreColors.containsKey(t) ? oreColors.get(t) : new Color(CoffeeMain.client.world.getBlockState(ore).getMapColor(CoffeeMain.client.world, ore).color), -1, -1,
+                            -1, (int) ((dist / 30d) * 200)), p, new Vec3d(1, 1, 1));
         }
     }
 

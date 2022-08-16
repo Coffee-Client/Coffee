@@ -130,15 +130,11 @@ public class Killaura extends Module {
     }
 
     List<LivingEntity> selectTargets() {
-        List<LivingEntity> entities = new ArrayList<>(StreamSupport.stream(client.world.getEntities().spliterator(), false)
-                .filter(entity -> !entity.equals(client.player)) // filter our player out
-                .filter(Entity::isAlive)
-                .filter(Entity::isAttackable) // filter all entities we can't attack out
+        List<LivingEntity> entities = new ArrayList<>(StreamSupport.stream(client.world.getEntities().spliterator(), false).filter(entity -> !entity.equals(client.player)) // filter our player out
+                .filter(Entity::isAlive).filter(Entity::isAttackable) // filter all entities we can't attack out
                 .filter(entity -> entity instanceof LivingEntity) // filter all "entities" that aren't actual entities out
                 .map(entity -> (LivingEntity) entity) // cast all entities to actual entities
-                .filter(this::isEntityApplicable)
-                .filter(entity -> entity.getPos()
-                        .distanceTo(client.player.getEyePos()) <= getRange()) // filter all entities that are outside our range out
+                .filter(this::isEntityApplicable).filter(entity -> entity.getPos().distanceTo(client.player.getEyePos()) <= getRange()) // filter all entities that are outside our range out
                 .toList());
         switch (selectMode) {
             case Distance -> entities.sort(Comparator.comparingDouble(value -> value.distanceTo(client.player))); // low distance first
@@ -179,8 +175,8 @@ public class Killaura extends Module {
             LivingEntity target = targets.get(0);
             Vec3d ranged = Rotations.getRotationVector(Rotations.getClientPitch(), Rotations.getClientYaw()).multiply(getRange());
             Box allowed = client.player.getBoundingBox().stretch(ranged).expand(1, 1, 1);
-            EntityHitResult ehr = ProjectileUtil.raycast(CoffeeMain.client.player, CoffeeMain.client.player.getCameraPosVec(0),
-                    CoffeeMain.client.player.getCameraPosVec(0).add(ranged), allowed, Entity::isAttackable, getRange() * getRange());
+            EntityHitResult ehr = ProjectileUtil.raycast(CoffeeMain.client.player, CoffeeMain.client.player.getCameraPosVec(0), CoffeeMain.client.player.getCameraPosVec(0).add(ranged), allowed,
+                    Entity::isAttackable, getRange() * getRange());
             if (ehr != null && ehr.getEntity().equals(target)) {
                 attack(target);
                 pickNextRandomDelay();

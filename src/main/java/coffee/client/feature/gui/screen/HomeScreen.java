@@ -65,9 +65,7 @@ public class HomeScreen extends ClientScreen {
     void load() {
         loaded = true;
         try {
-            HomeScreen.changelog = IOUtils.toString(
-                    Objects.requireNonNull(HomeScreen.class.getClassLoader().getResourceAsStream("changelogLatest.txt")),
-                    StandardCharsets.UTF_8);
+            HomeScreen.changelog = IOUtils.toString(Objects.requireNonNull(HomeScreen.class.getClassLoader().getResourceAsStream("changelogLatest.txt")), StandardCharsets.UTF_8);
             updateCurrentAccount(() -> {
 
             });
@@ -92,16 +90,14 @@ public class HomeScreen extends ClientScreen {
         buttonsMap.add(new AbstractMap.SimpleEntry<>("Multiplayer", () -> CoffeeMain.client.setScreen(new MultiplayerScreen(this))));
         buttonsMap.add(new AbstractMap.SimpleEntry<>("Realms", () -> CoffeeMain.client.setScreen(new RealmsMainScreen(this))));
         buttonsMap.add(new AbstractMap.SimpleEntry<>("Alts", () -> CoffeeMain.client.setScreen(AltManagerScreen.instance())));
-        buttonsMap.add(new AbstractMap.SimpleEntry<>("Settings",
-                () -> CoffeeMain.client.setScreen(new OptionsScreen(this, CoffeeMain.client.options))));
+        buttonsMap.add(new AbstractMap.SimpleEntry<>("Settings", () -> CoffeeMain.client.setScreen(new OptionsScreen(this, CoffeeMain.client.options))));
         buttonsMap.add(new AbstractMap.SimpleEntry<>("Quit", CoffeeMain.client::scheduleStop));
         double w = 60;
         double rootX = padding * 2 + 20 + padding;
         double rootY = this.height - padding * 2 - 20;
 
         for (Map.Entry<String, Runnable> stringRunnableEntry : buttonsMap) {
-            RoundButton rb = new RoundButton(RoundButton.STANDARD, rootX, rootY, w, 20, stringRunnableEntry.getKey(),
-                    stringRunnableEntry.getValue());
+            RoundButton rb = new RoundButton(RoundButton.STANDARD, rootX, rootY, w, 20, stringRunnableEntry.getKey(), stringRunnableEntry.getValue());
             addDrawableChild(rb);
             rootX += w + 5;
         }
@@ -112,8 +108,7 @@ public class HomeScreen extends ClientScreen {
         super.init();
         if (CompatHelper.wereAnyFound() && !showedCompatWarn && client.currentScreen == this) {
             showedCompatWarn = true;
-            client.setScreen(new NotificationScreen(Notification.Type.WARNING, "Compatability",
-                    "Compatibility issues found, some features might not be available", this));
+            client.setScreen(new NotificationScreen(Notification.Type.WARNING, "Compatability", "Compatibility issues found, some features might not be available", this));
         }
         initWidgets();
         if (loaded) {
@@ -161,8 +156,7 @@ public class HomeScreen extends ClientScreen {
         double newH = 20;
         double per = newH / origH;
         double newW = origW * per;
-        Renderer.R2D.renderRoundedQuadWithShadow(stack, new Color(0, 0, 10, 200), padding, height - padding - padding - 20 - padding,
-                width - padding, height - padding, 10, 20);
+        Renderer.R2D.renderRoundedQuadWithShadow(stack, new Color(0, 0, 10, 200), padding, height - padding - padding - 20 - padding, width - padding, height - padding, 10, 20);
         RenderSystem.setShaderTexture(0, GameTexture.TEXTURE_ICON.getWhere());
         Renderer.R2D.renderTexture(stack, padding * 2, height - padding * 2 - newH, newW, newH, 0, 0, newW, newH, newW, newH);
         super.renderInternal(stack, mouseX, mouseY, delta); // render bottom row widgets
@@ -174,8 +168,7 @@ public class HomeScreen extends ClientScreen {
         RenderSystem.clear(GL40C.GL_COLOR_BUFFER_BIT, false);
         RenderSystem.colorMask(true, true, true, true);
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
-        Renderer.R2D.renderRoundedQuadInternal(stack.peek().getPositionMatrix(), 0, 0, 0, 1, width - padding - texDim, padding,
-                width - padding, padding + texDim, 3, 10);
+        Renderer.R2D.renderRoundedQuadInternal(stack.peek().getPositionMatrix(), 0, 0, 0, 1, width - padding - texDim, padding, width - padding, padding + texDim, 3, 10);
 
         RenderSystem.blendFunc(GL40C.GL_DST_ALPHA, GL40C.GL_ONE_MINUS_DST_ALPHA);
         RenderSystem.setShaderTexture(0, currentAccountTextureLoaded ? currentAccountTexture : DefaultSkinHelper.getTexture());
@@ -188,8 +181,7 @@ public class HomeScreen extends ClientScreen {
         RenderSystem.defaultBlendFunc();
         String uname = CoffeeMain.client.getSession().getUsername();
         double unameWidth = fa.getStringWidth(uname);
-        fa.drawString(stack, uname, width - padding - texDim - padding - unameWidth, padding + texDim / 2d - fa.getFontHeight() / 2d,
-                0xFFFFFF);
+        fa.drawString(stack, uname, width - padding - texDim - padding - unameWidth, padding + texDim / 2d - fa.getFontHeight() / 2d, 0xFFFFFF);
     }
 
 }

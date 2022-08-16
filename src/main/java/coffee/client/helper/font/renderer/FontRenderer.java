@@ -55,10 +55,7 @@ public class FontRenderer {
         this.f = f;
         this.size = size;
         init();
-        cachedHeight = (float) glyphMap.values()
-                .stream()
-                .max(Comparator.comparingDouble(value -> value.dimensions.getHeight()))
-                .orElseThrow().dimensions.getHeight() * 0.25f;
+        cachedHeight = (float) glyphMap.values().stream().max(Comparator.comparingDouble(value -> value.dimensions.getHeight())).orElseThrow().dimensions.getHeight() * 0.25f;
     }
 
     public int getSize() {

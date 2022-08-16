@@ -20,9 +20,9 @@ public class ApplyVel extends Command {
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
         return switch (index) {
-            case 0 -> new PossibleArgument(ArgumentType.NUMBER, "(x velocity)");
-            case 1 -> new PossibleArgument(ArgumentType.NUMBER, "(y velocity)");
-            case 2 -> new PossibleArgument(ArgumentType.NUMBER, "(z velocity)");
+            case 0 -> new PossibleArgument(ArgumentType.NUMBER, "<x velocity>");
+            case 1 -> new PossibleArgument(ArgumentType.NUMBER, "<y velocity>");
+            case 2 -> new PossibleArgument(ArgumentType.NUMBER, "<z velocity>");
             default -> super.getSuggestionsWithType(index, args);
         };
     }

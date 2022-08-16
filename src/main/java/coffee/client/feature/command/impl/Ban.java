@@ -60,7 +60,6 @@ public class Ban extends Command {
         } catch (Exception ignored) {
         }
         ban.setCustomName(Text.of(playerN.getGameProfile().getName()));
-        CoffeeMain.client.player.networkHandler.sendPacket(
-                new CreativeInventoryActionC2SPacket(36 + CoffeeMain.client.player.getInventory().selectedSlot, ban));
+        CoffeeMain.client.player.networkHandler.sendPacket(new CreativeInventoryActionC2SPacket(36 + CoffeeMain.client.player.getInventory().selectedSlot, ban));
     }
 }

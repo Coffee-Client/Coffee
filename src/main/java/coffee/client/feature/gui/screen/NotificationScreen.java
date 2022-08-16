@@ -98,21 +98,16 @@ public class NotificationScreen extends AAScreen {
         RenderSystem.setShaderTexture(0, icon.getI());
         Color c = icon.getC();
         RenderSystem.setShaderColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, 1f);
-        Renderer.R2D.renderTexture(stack, startX + pad, startY + pad + (headheight) / 2d - texDims / 2d, texDims, texDims, 0, 0, texDims,
-                texDims, texDims, texDims);
+        Renderer.R2D.renderTexture(stack, startX + pad, startY + pad + (headheight) / 2d - texDims / 2d, texDims, texDims, 0, 0, texDims, texDims, texDims, texDims);
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
-        FontRenderers.getRenderer()
-                .drawString(stack, title, startX + pad + texDims + pad,
-                        startY + pad + (headheight) / 2d - FontRenderers.getRenderer().getFontHeight() / 2d, 0xCCCCCC);
+        FontRenderers.getRenderer().drawString(stack, title, startX + pad + texDims + pad, startY + pad + (headheight) / 2d - FontRenderers.getRenderer().getFontHeight() / 2d, 0xCCCCCC);
         double yOffset = 0;
         for (String s : contentSplit) {
-            FontRenderers.getRenderer()
-                    .drawString(stack, s, startX + pad, startY + FontRenderers.getRenderer().getFontHeight() + pad * 2 + yOffset, 0xFFFFFF);
+            FontRenderers.getRenderer().drawString(stack, s, startX + pad, startY + FontRenderers.getRenderer().getFontHeight() + pad * 2 + yOffset, 0xFFFFFF);
             yOffset += FontRenderers.getRenderer().getFontHeight();
         }
         this.ok.setPositionX(startX + pad);
-        this.ok.setPositionY(startY + FontRenderers.getRenderer().getFontHeight() + pad * 2 + FontRenderers.getRenderer()
-                .getFontHeight() * contentSplit.length + pad);
+        this.ok.setPositionY(startY + FontRenderers.getRenderer().getFontHeight() + pad * 2 + FontRenderers.getRenderer().getFontHeight() * contentSplit.length + pad);
         this.ok.setWidth(width - pad * 2);
 
         super.renderInternal(stack, mouseX, mouseY, delta);

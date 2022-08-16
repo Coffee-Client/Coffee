@@ -59,12 +59,7 @@ public class Swing extends Module {
         if (swinging == null) {
             return;
         }
-        Vec3d diff = Vec3d.of(swinging)
-                .add(0.5, 0.5, 0.5)
-                .subtract(Utils.getInterpolatedEntityPosition(CoffeeMain.client.player))
-                .normalize()
-                .multiply(0.4)
-                .add(0, 0.03999999910593033 * 2, 0);
+        Vec3d diff = Vec3d.of(swinging).add(0.5, 0.5, 0.5).subtract(Utils.getInterpolatedEntityPosition(CoffeeMain.client.player)).normalize().multiply(0.4).add(0, 0.03999999910593033 * 2, 0);
 
         CoffeeMain.client.player.addVelocity(diff.x, diff.y, diff.z);
         if (CoffeeMain.client.options.sneakKey.isPressed()) {
@@ -97,9 +92,8 @@ public class Swing extends Module {
         Vec3d cringe2 = new Vec3d(swinging.getX() + 0.5, swinging.getY() + 0.5, swinging.getZ() + 0.5);
         Vec3d eSource = Utils.getInterpolatedEntityPosition(CoffeeMain.client.player);
         //        Renderer.R3D.renderFilled(cringe, new Vec3d(1, 1, 1), new Color(150, 150, 150, 150), matrices)
-        Renderer.R3D.renderFilled(cringe.add(.5, .5, .5).subtract(.25, .25, .25), new Vec3d(.5, .5, .5),
-                ThemeManager.getMainTheme().getInactive(), matrices);
-        Renderer.R3D.renderLine(eSource, cringe2, line, matrices);
+        Renderer.R3D.renderFilled(matrices, ThemeManager.getMainTheme().getInactive(), cringe.add(.5, .5, .5).subtract(.25, .25, .25), new Vec3d(.5, .5, .5));
+        Renderer.R3D.renderLine(matrices, line, eSource, cringe2);
     }
 
     @Override

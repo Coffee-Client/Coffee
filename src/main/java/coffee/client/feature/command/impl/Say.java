@@ -21,7 +21,7 @@ public class Say extends Command {
 
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
-        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.STRING, "(message)"));
+        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.STRING, "<message>"));
     }
 
     @Override

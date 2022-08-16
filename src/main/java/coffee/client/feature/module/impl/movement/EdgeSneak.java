@@ -43,8 +43,7 @@ public class EdgeSneak extends Module {
                 }
             }
         }
-        boolean previousState = InputUtil.isKeyPressed(CoffeeMain.client.getWindow().getHandle(),
-                client.options.sneakKey.getDefaultKey().getCode());
+        boolean previousState = InputUtil.isKeyPressed(CoffeeMain.client.getWindow().getHandle(), client.options.sneakKey.getDefaultKey().getCode());
         if (Objects.requireNonNull(client.player).isOnGround()) {
             client.options.sneakKey.setPressed(sneak || previousState);
         }

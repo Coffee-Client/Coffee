@@ -18,10 +18,7 @@ public class DumpVertexProvider implements VertexConsumerProvider {
     static final Map<RenderLayer, VertexConsumer> dumps = new HashMap<>();
 
     public List<DumpVertexConsumer> getBuffers() {
-        return new ArrayList<>(dumps.values()).stream()
-                .filter(vertexConsumer -> vertexConsumer instanceof DumpVertexConsumer)
-                .map(vertexConsumer -> (DumpVertexConsumer) vertexConsumer)
-                .toList();
+        return new ArrayList<>(dumps.values()).stream().filter(vertexConsumer -> vertexConsumer instanceof DumpVertexConsumer).map(vertexConsumer -> (DumpVertexConsumer) vertexConsumer).toList();
     }
 
     @Override

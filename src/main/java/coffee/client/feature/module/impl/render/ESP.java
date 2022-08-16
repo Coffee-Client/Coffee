@@ -38,17 +38,12 @@ import java.util.List;
 public class ESP extends Module {
     //static DumpVertexConsumer consumer = new DumpVertexConsumer();
     static DumpVertexProvider provider;
-    public final EnumSetting<Mode> outlineMode = this.config.create(
-            new EnumSetting.Builder<>(Mode.Shader).name("Outline mode").description("How to render the outline").get());
-    public final EnumSetting<ShaderMode> shaderMode = this.config.create(
-            new EnumSetting.Builder<>(ShaderMode.Simple).name("Shader mode").description("How to render the shader esp").get());
-    public final BooleanSetting entities = this.config.create(
-            new BooleanSetting.Builder(true).name("Show entities").description("Render entities").get());
-    public final BooleanSetting players = this.config.create(
-            new BooleanSetting.Builder(true).name("Show players").description("Render players").get());
+    public final EnumSetting<Mode> outlineMode = this.config.create(new EnumSetting.Builder<>(Mode.Shader).name("Outline mode").description("How to render the outline").get());
+    public final EnumSetting<ShaderMode> shaderMode = this.config.create(new EnumSetting.Builder<>(ShaderMode.Simple).name("Shader mode").description("How to render the shader esp").get());
+    public final BooleanSetting entities = this.config.create(new BooleanSetting.Builder(true).name("Show entities").description("Render entities").get());
+    public final BooleanSetting players = this.config.create(new BooleanSetting.Builder(true).name("Show players").description("Render players").get());
     public final List<double[]> vertexDumps = new ArrayList<>();
-    final DoubleSetting range = this.config.create(
-            new DoubleSetting.Builder(64).name("Range").description("How far to render the entities").min(32).max(128).precision(1).get());
+    final DoubleSetting range = this.config.create(new DoubleSetting.Builder(64).name("Range").description("How far to render the entities").min(32).max(128).precision(1).get());
     public boolean recording = false;
 
     public ESP() {
@@ -139,15 +134,11 @@ public class ESP extends Module {
                 Color c = Utils.getCurrentRGB();
                 Vec3d eSource = Utils.getInterpolatedEntityPosition(entity);
                 switch (outlineMode.getValue()) {
-                    case Filled ->
-                            Renderer.R3D.renderFilled(eSource.subtract(new Vec3d(entity.getWidth(), 0, entity.getWidth()).multiply(0.5)),
-                                    new Vec3d(entity.getWidth(), entity.getHeight(), entity.getWidth()),
-                                    Renderer.Util.modify(c, -1, -1, -1, 130), matrices);
+                    case Filled -> Renderer.R3D.renderFilled(matrices, Renderer.Util.modify(c, -1, -1, -1, 130), eSource.subtract(new Vec3d(entity.getWidth(), 0, entity.getWidth()).multiply(0.5)),
+                            new Vec3d(entity.getWidth(), entity.getHeight(), entity.getWidth()));
                     case Rect -> renderOutline(entity, c, matrices);
-                    case Outline ->
-                            Renderer.R3D.renderOutline(eSource.subtract(new Vec3d(entity.getWidth(), 0, entity.getWidth()).multiply(0.5)),
-                                    new Vec3d(entity.getWidth(), entity.getHeight(), entity.getWidth()),
-                                    Renderer.Util.modify(c, -1, -1, -1, 130), matrices);
+                    case Outline -> Renderer.R3D.renderOutline(matrices, Renderer.Util.modify(c, -1, -1, -1, 130), eSource.subtract(new Vec3d(entity.getWidth(), 0, entity.getWidth()).multiply(0.5)),
+                            new Vec3d(entity.getWidth(), entity.getHeight(), entity.getWidth()));
                     case Shader -> renderShaderOutline(entity, matrices);
                 }
             }
@@ -179,11 +170,9 @@ public class ESP extends Module {
 
             Vec3d o = origin.subtract(w / 2d, 0, w / 2d);
 
-            boxPoints.addAll(List.of(new Vec3d(o.x + 0, o.y, o.z + 0), new Vec3d(o.x + w, o.y, o.z + 0), new Vec3d(o.x + 0, o.y, o.z + w),
-                    new Vec3d(o.x + w, o.y, o.z + w),
+            boxPoints.addAll(List.of(new Vec3d(o.x + 0, o.y, o.z + 0), new Vec3d(o.x + w, o.y, o.z + 0), new Vec3d(o.x + 0, o.y, o.z + w), new Vec3d(o.x + w, o.y, o.z + w),
 
-                    new Vec3d(o.x + 0, o.y + h, o.z + 0), new Vec3d(o.x + w, o.y + h, o.z + 0), new Vec3d(o.x + 0, o.y + h, o.z + w),
-                    new Vec3d(o.x + w, o.y + h, o.z + w)));
+                    new Vec3d(o.x + 0, o.y + h, o.z + 0), new Vec3d(o.x + w, o.y + h, o.z + 0), new Vec3d(o.x + 0, o.y + h, o.z + w), new Vec3d(o.x + w, o.y + h, o.z + w)));
         }
 
         Vec3d[] screenSpace = boxPoints.stream().map(ee -> Renderer.R2D.getScreenSpaceCoordinate(ee, stack)).toList().toArray(Vec3d[]::new);
@@ -276,8 +265,7 @@ public class ESP extends Module {
     }
 
     void renderOutline(Entity e, Color color, MatrixStack stack) {
-        Vec3d eSource = new Vec3d(MathHelper.lerp(CoffeeMain.client.getTickDelta(), e.prevX, e.getX()),
-                MathHelper.lerp(CoffeeMain.client.getTickDelta(), e.prevY, e.getY()),
+        Vec3d eSource = new Vec3d(MathHelper.lerp(CoffeeMain.client.getTickDelta(), e.prevX, e.getX()), MathHelper.lerp(CoffeeMain.client.getTickDelta(), e.prevY, e.getY()),
                 MathHelper.lerp(CoffeeMain.client.getTickDelta(), e.prevZ, e.getZ()));
         float red = color.getRed() / 255f;
         float green = color.getGreen() / 255f;

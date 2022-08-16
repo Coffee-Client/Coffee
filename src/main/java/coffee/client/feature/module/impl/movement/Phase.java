@@ -33,8 +33,7 @@ public class Phase extends Module {
                 p = p.expand(0, 1, 0);
             }
             p = p.offset(CoffeeMain.client.player.getPos());
-            if (pe.getPacket() instanceof PlayerMoveC2SPacket && !Objects.requireNonNull(CoffeeMain.client.world)
-                    .isSpaceEmpty(CoffeeMain.client.player, p)) {
+            if (pe.getPacket() instanceof PlayerMoveC2SPacket && !Objects.requireNonNull(CoffeeMain.client.world).isSpaceEmpty(CoffeeMain.client.player, p)) {
                 event.setCancelled(true);
             }
         });

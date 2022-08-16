@@ -351,13 +351,7 @@ public abstract class ProxyHandler extends ChannelDuplexHandler {
             s = "";
         }
 
-        StringBuilder buf = new StringBuilder(128 + s.length()).append(protocol())
-                .append(", ")
-                .append(authScheme())
-                .append(", ")
-                .append(proxyAddress)
-                .append(" => ")
-                .append(destinationAddress);
+        StringBuilder buf = new StringBuilder(128 + s.length()).append(protocol()).append(", ").append(authScheme()).append(", ").append(proxyAddress).append(" => ").append(destinationAddress);
         if (!s.isEmpty()) {
             buf.append(", ").append(s);
         }

@@ -105,9 +105,7 @@ public class AChatScreenMixin extends Screen {
             }
         }
         String[] finalArgs = args;
-        return finalArgs.length > 0 ? a.stream()
-                .filter(s -> s.toLowerCase().startsWith(finalArgs[finalArgs.length - 1].toLowerCase()))
-                .collect(Collectors.toList()) : a;
+        return finalArgs.length > 0 ? a.stream().filter(s -> s.startsWith("<") || s.toLowerCase().startsWith(finalArgs[finalArgs.length - 1].toLowerCase())).collect(Collectors.toList()) : a;
     }
 
     double padding() {
@@ -134,8 +132,7 @@ public class AChatScreenMixin extends Screen {
             probableWidth = Math.max(probableWidth, FontRenderers.getRenderer().getStringWidth(suggestion) + 1);
         }
         float xC = (float) (cmdXS);
-        Renderer.R2D.renderRoundedQuad(stack, new Color(30, 30, 30, 255), xC - padding(), yC - padding(), xC + probableWidth + padding(),
-                yC + probableHeight, 5, 20);
+        Renderer.R2D.renderRoundedQuad(stack, new Color(30, 30, 30, 255), xC - padding(), yC - padding(), xC + probableWidth + padding(), yC + probableHeight, 5, 20);
         for (String suggestion : suggestions) {
             FontRenderers.getRenderer().drawString(stack, suggestion, xC, yC, 0xFFFFFF, false);
             yC += FontRenderers.getRenderer().getMarginHeight();
@@ -148,7 +145,9 @@ public class AChatScreenMixin extends Screen {
         if (cmd.isEmpty()) {
             return;
         }
-        List<String> suggestions = getSuggestions(cmd);
+        List<String> suggestions = getSuggestions(cmd).stream().map(s -> s.split("<")[0]) // strip everything after the first <
+                .filter(s -> !s.isEmpty()) // filter empty suggestions
+                .toList();
         if (suggestions.isEmpty()) {
             return;
         }

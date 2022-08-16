@@ -29,8 +29,7 @@ public class FakeItem extends Command {
 
     @Override
     public ExamplesEntry getExampleArguments() {
-        return new ExamplesEntry("Notch hand", "Herobrine custom:compass",
-                "Player123 custom:bat_spawn_egg {EntityTag:{id: \"minecraft: cow\"}}");
+        return new ExamplesEntry("Notch hand", "Herobrine custom:compass", "Player123 custom:bat_spawn_egg {EntityTag:{id: \"minecraft: cow\"}}");
     }
 
     @Override
@@ -42,10 +41,10 @@ public class FakeItem extends Command {
                     .map(abstractClientPlayerEntity -> abstractClientPlayerEntity.getGameProfile().getName())
                     .toList()
                     .toArray(String[]::new));
-            case 1 -> new PossibleArgument(ArgumentType.STRING, "hand", "custom:(item id) [item nbt]");
+            case 1 -> new PossibleArgument(ArgumentType.STRING, "hand", "custom:<item id>");
             case 2 -> {
                 if (args[1].toLowerCase().startsWith("custom:")) {
-                    yield new PossibleArgument(ArgumentType.STRING, "(item nbt)");
+                    yield new PossibleArgument(ArgumentType.STRING, "<item nbt>");
                 }
                 yield super.getSuggestionsWithType(index, args);
             }

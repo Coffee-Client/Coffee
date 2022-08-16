@@ -42,8 +42,7 @@ public class NbtFormatter implements NbtElementVisitor {
         map.put("{}.data.[].{}", Lists.newArrayList("pos", "state", "nbt"));
         map.put("{}.entities.[].{}", Lists.newArrayList("blockPos", "pos"));
     });
-    private static final Set<String> IGNORED_PATHS = Sets.newHashSet("{}.size.[]", "{}.data.[].{}", "{}.palette.[].{}",
-            "{}.entities.[].{}");
+    private static final Set<String> IGNORED_PATHS = Sets.newHashSet("{}.size.[]", "{}.data.[].{}", "{}.palette.[].{}", "{}.entities.[].{}");
     private static final Pattern SIMPLE_NAME = Pattern.compile("[A-Za-z\\d._+-]+");
     private static final String KEY_VALUE_SEPARATOR = String.valueOf(':');
     private static final String ENTRY_SEPARATOR = String.valueOf(',');
@@ -199,8 +198,7 @@ public class NbtFormatter implements NbtElementVisitor {
                         .append(escapeName(string2), NAME_COLOR)
                         .append(KEY_VALUE_SEPARATOR)
                         .append(" ")
-                        .append((new NbtFormatter(string, this.indentationLevel + 1, this.pathParts)).apply(
-                                Objects.requireNonNull(nbtElement)));
+                        .append((new NbtFormatter(string, this.indentationLevel + 1, this.pathParts)).apply(Objects.requireNonNull(nbtElement)));
                 this.popPathPart();
                 if (iterator.hasNext()) {
                     stringBuilder.append(ENTRY_SEPARATOR).append(string.isEmpty() ? " " : "\n");

@@ -27,8 +27,7 @@ public abstract class SettingEditor<C extends SettingBase<?>> extends Element {
 
     @Override
     public void render(MatrixStack stack, double mouseX, double mouseY) {
-        if (new Rectangle(getPositionX(), getPositionY(), getPositionX() + getWidth(), getPositionY() + getHeight()).contains(mouseX,
-                mouseY)) {
+        if (new Rectangle(getPositionX(), getPositionY(), getPositionX() + getWidth(), getPositionY() + getHeight()).contains(mouseX, mouseY)) {
             ClickGUI.instance().setTooltip(configValue.description);
         }
     }

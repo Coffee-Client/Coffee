@@ -52,8 +52,7 @@ public class HudNotification {
         double c1 = 1.70158;
         double c2 = c1 * 1.525;
 
-        return x < 0.5 ? (Math.pow(2 * x, 2) * ((c2 + 1) * 2 * x - c2)) / 2 : (Math.pow(2 * x - 2,
-                2) * ((c2 + 1) * (x * 2 - 2) + c2) + 2) / 2;
+        return x < 0.5 ? (Math.pow(2 * x, 2) * ((c2 + 1) * 2 * x - c2)) / 2 : (Math.pow(2 * x - 2, 2) * ((c2 + 1) * (x * 2 - 2) + c2) + 2) / 2;
 
     }
 
@@ -77,8 +76,7 @@ public class HudNotification {
         double notifHeight = getHeight();
         double rootX = x - notifWidth;
         double rootY = MathHelper.lerp(moveAnim, -notifHeight, y);
-        Renderer.R2D.renderRoundedQuadWithShadow(stack, new Color(10, 10, 20), rootX, rootY, rootX + notifWidth, rootY + notifHeight, 3,
-                20);
+        Renderer.R2D.renderRoundedQuadWithShadow(stack, new Color(10, 10, 20), rootX, rootY, rootX + notifWidth, rootY + notifHeight, 3, 20);
         RenderSystem.setShaderTexture(0, type.i);
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
         stack.push();
@@ -86,8 +84,7 @@ public class HudNotification {
         stack.multiply(new Quaternion(0f, 0f, (float) (expandAnim * 360f), true));
         Renderer.R2D.renderTexture(stack, -texDim / 2d, -texDim / 2d, texDim, texDim, 0, 0, texDim, texDim, texDim, texDim);
         stack.pop();
-        ClipStack.globalInstance.addWindow(stack,
-                new Rectangle(rootX + pad, rootY, rootX + notifWidth - pad - texDim - pad, rootY + notifHeight));
+        ClipStack.globalInstance.addWindow(stack, new Rectangle(rootX + pad, rootY, rootX + notifWidth - pad - texDim - pad, rootY + notifHeight));
         fa.drawString(stack, content, rootX + pad, rootY + notifHeight / 2d - fa.getFontHeight() / 2d, 0xFFFFFF);
         ClipStack.globalInstance.popWindow();
     }

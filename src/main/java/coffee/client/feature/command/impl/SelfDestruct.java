@@ -44,7 +44,7 @@ public class SelfDestruct extends Command {
 
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
-        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.STRING, "(reset phrase)"));
+        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.STRING, "<reset phrase>"));
     }
 
     @Override

@@ -25,7 +25,7 @@ public class Rename extends Command {
 
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
-        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.STRING, "(new name)"));
+        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.STRING, "<new name>"));
     }
 
     @Override
@@ -41,9 +41,7 @@ public class Rename extends Command {
         if (!CoffeeMain.client.interactionManager.hasCreativeInventory()) {
             warn("You dont have creative mode; the item will only be renamed client side");
         } else {
-            CoffeeMain.client.getNetworkHandler()
-                    .sendPacket(new CreativeInventoryActionC2SPacket(
-                            Utils.Inventory.slotIndexToId(CoffeeMain.client.player.getInventory().selectedSlot), iStack));
+            CoffeeMain.client.getNetworkHandler().sendPacket(new CreativeInventoryActionC2SPacket(Utils.Inventory.slotIndexToId(CoffeeMain.client.player.getInventory().selectedSlot), iStack));
         }
     }
 }

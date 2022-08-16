@@ -59,8 +59,7 @@ public class TabGui extends Module {
                         if (module.getModuleType() != value) {
                             continue;
                         }
-                        GuiEntry ge1 = new GuiEntry(module.getName(), module::isEnabled, module::toggle, tabStack::pop,
-                                FontRenderers.getRenderer().getStringWidth(module.getName()),
+                        GuiEntry ge1 = new GuiEntry(module.getName(), module::isEnabled, module::toggle, tabStack::pop, FontRenderers.getRenderer().getStringWidth(module.getName()),
                                 FontRenderers.getRenderer().getMarginHeight());
                         modules.entries.add(ge1);
                     }
@@ -122,8 +121,8 @@ public class TabGui extends Module {
 
             double width = padOuter + scrollerWidth + 2 + Math.ceil(widest.width + 1) + 3;
             Renderer.R2D.renderRoundedQuadWithShadow(stack, ThemeManager.getMainTheme().getConfig(), 0, 0, width, height, 3, 20);
-            Renderer.R2D.renderRoundedQuad(stack, ThemeManager.getMainTheme().getAccent(), padOuter, yOffset + scrollerYOffset,
-                    padOuter + scrollerWidth, yOffset + scrollerYEnd, scrollerWidth / 2d, 20);
+            Renderer.R2D.renderRoundedQuad(stack, ThemeManager.getMainTheme().getAccent(), padOuter, yOffset + scrollerYOffset, padOuter + scrollerWidth, yOffset + scrollerYEnd, scrollerWidth / 2d,
+                    20);
 
             double lastEnabledStackHeight = 0;
             double lastEnabledStackY = 0;
@@ -136,8 +135,8 @@ public class TabGui extends Module {
                     lastEnabledStackHeight += oneHeight;
                 } else {
                     if (lastEnabledStackHeight != 0) {
-                        Renderer.R2D.renderRoundedQuad(stack, new Color(40, 40, 40, 200), scrollerWidth + padOuter + 1, lastEnabledStackY,
-                                width - 2, lastEnabledStackY + lastEnabledStackHeight, 3, 20);
+                        Renderer.R2D.renderRoundedQuad(stack, new Color(40, 40, 40, 200), scrollerWidth + padOuter + 1, lastEnabledStackY, width - 2, lastEnabledStackY + lastEnabledStackHeight, 3,
+                                20);
                     }
                     lastEnabledStackHeight = 0;
                     lastEnabledStackY = 0;
@@ -146,9 +145,7 @@ public class TabGui extends Module {
             }
 
             for (GuiEntry entry : tabPane.entries) {
-                FontRenderers.getRenderer()
-                        .drawString(stack, entry.text, scrollerWidth + padOuter + 2, yOffset,
-                                entry.isEnabled.getAsBoolean() ? 0xFFFFFF : 0xBBBBBB);
+                FontRenderers.getRenderer().drawString(stack, entry.text, scrollerWidth + padOuter + 2, yOffset, entry.isEnabled.getAsBoolean() ? 0xFFFFFF : 0xBBBBBB);
                 yOffset += oneHeight;
             }
             stack.translate(width + 5, 0, 0); // x offset

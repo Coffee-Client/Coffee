@@ -78,22 +78,18 @@ public class ModuleDisplay extends Element {
                 }
                 if (render) { // should we render our tooltip and selection?
                     if (!module.isDisabled()) {
-                        Renderer.R2D.renderRoundedQuad(stack, new Color(255, 255, 255, 30), getPositionX(), getPositionY(),
-                                getPositionX() + getWidth(), getPositionY() + bruhHeight, 2, 10);
+                        Renderer.R2D.renderRoundedQuad(stack, new Color(255, 255, 255, 30), getPositionX(), getPositionY(), getPositionX() + getWidth(), getPositionY() + bruhHeight, 2, 10);
                         ClickGUI.instance().setTooltip(module.getDescription());
                     } else {
-                        ClickGUI.instance()
-                                .setTooltip(module.getDescription() + "\nThis module is disabled: " + module.getDisabledReason());
+                        ClickGUI.instance().setTooltip(module.getDescription() + "\nThis module is disabled: " + module.getDisabledReason());
                     }
                 }
             }
         }
         if (leftAnim != 0) {
             double a = Transitions.easeOutExpo(leftAnim);
-            ClipStack.globalInstance.addWindow(stack,
-                    new Rectangle(getPositionX() + 2, getPositionY(), getPositionX() + 2 + 1.5, getPositionY() + 2 + (bruhHeight - 4) * a));
-            Renderer.R2D.renderRoundedQuad(stack, new Color(9, 162, 104), getPositionX() + 2, getPositionY() + 2, getPositionX() + 2 + 1.5,
-                    getPositionY() + 2 + (bruhHeight - 4), 1.5 / 2, 6);
+            ClipStack.globalInstance.addWindow(stack, new Rectangle(getPositionX() + 2, getPositionY(), getPositionX() + 2 + 1.5, getPositionY() + 2 + (bruhHeight - 4) * a));
+            Renderer.R2D.renderRoundedQuad(stack, new Color(9, 162, 104), getPositionX() + 2, getPositionY() + 2, getPositionX() + 2 + 1.5, getPositionY() + 2 + (bruhHeight - 4), 1.5 / 2, 6);
             ClipStack.globalInstance.popWindow();
         }
         if (cfd.progress != 0) {
@@ -116,8 +112,7 @@ public class ModuleDisplay extends Element {
             stack.pop();
         }
         FontRenderers.getRenderer()
-                .drawString(stack, module.getName(), (float) getPositionX() + 6,
-                        (float) (getPositionY() + bruhHeight / 2d - FontRenderers.getRenderer().getFontHeight() / 2d), 1f, 1f, 1f,
+                .drawString(stack, module.getName(), (float) getPositionX() + 6, (float) (getPositionY() + bruhHeight / 2d - FontRenderers.getRenderer().getFontHeight() / 2d), 1f, 1f, 1f,
                         module.isDisabled() ? 0.4f : 1f);
         this.cfd.setPositionX(getPositionX());
         this.cfd.setPositionY(getPositionY() + actualHeight + margin);

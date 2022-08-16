@@ -24,17 +24,14 @@ public enum SettingType {
     STRING(String.class, (setting, inputField, defaultValue) -> new StringSetting.Builder((String) inputField.get(defaultValue))),
     DOUBLE(double.class, (setting, inputField, defaultValue) -> {
         Utils.throwIfAnyEquals("Min, max and precision need to be defined", -1, setting.min(), setting.max(), setting.precision());
-        return new DoubleSetting.Builder(inputField.getDouble(defaultValue)).min(setting.min())
-                .max(setting.max())
-                .precision(setting.precision());
+        return new DoubleSetting.Builder(inputField.getDouble(defaultValue)).min(setting.min()).max(setting.max()).precision(setting.precision());
     }),
     INT(int.class, (setting, inputField, defaultValue) -> {
         Utils.throwIfAnyEquals("Min and max need to be defined", -1, setting.min(), setting.max());
         return new DoubleSetting.Builder(inputField.getDouble(defaultValue)).min(setting.min()).max(setting.max()).precision(0);
     }),
     BOOLEAN(boolean.class, (setting, inputField, defaultValue) -> new BooleanSetting.Builder(inputField.getBoolean(defaultValue))),
-    @SuppressWarnings("rawtypes") ENUM(Enum.class,
-            (setting, inputField, defaultValue) -> new EnumSetting.Builder((Enum<?>) inputField.get(defaultValue))),
+    @SuppressWarnings("rawtypes") ENUM(Enum.class, (setting, inputField, defaultValue) -> new EnumSetting.Builder((Enum<?>) inputField.get(defaultValue))),
     COLOR(Color.class, (setting, inputField, declaringClass) -> new ColorSetting.Builder((Color) inputField.get(declaringClass))),
     RANGE(RangeSetting.Range.class, (setting, inputField, declaringClass) -> {
         Utils.throwIfAnyEquals("Min, max and precision need to be defined", -1, setting.min(), setting.max(), setting.precision());
@@ -48,11 +45,7 @@ public enum SettingType {
         if (maxB == -1) {
             maxB = maxA;
         }
-        return new RangeSetting.Builder((RangeSetting.Range) inputField.get(declaringClass)).lowerMin(minA)
-                .lowerMax(maxA)
-                .upperMin(minB)
-                .upperMax(maxB)
-                .precision(setting.precision());
+        return new RangeSetting.Builder((RangeSetting.Range) inputField.get(declaringClass)).lowerMin(minA).lowerMax(maxA).upperMin(minB).upperMax(maxB).precision(setting.precision());
     });
     @Getter
     final Class<?> acceptedType;

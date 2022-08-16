@@ -20,7 +20,7 @@ public class Author extends Command {
 
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
-        return new PossibleArgument(ArgumentType.STRING, "(new author)");
+        return new PossibleArgument(ArgumentType.STRING, "<new author>");
     }
 
     @Override

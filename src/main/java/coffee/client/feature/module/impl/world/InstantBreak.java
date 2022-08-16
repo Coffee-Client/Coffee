@@ -27,8 +27,7 @@ public class InstantBreak extends Module {
 
     final List<Vec3d> positions = new ArrayList<>();
     final List<PlayerActionC2SPacket> whitelist = new ArrayList<>();
-    final EnumSetting<Priority> prio = this.config.create(
-            new EnumSetting.Builder<>(Priority.Speed).name("Priority").description("What to do with the blocks being broken").get());
+    final EnumSetting<Priority> prio = this.config.create(new EnumSetting.Builder<>(Priority.Speed).name("Priority").description("What to do with the blocks being broken").get());
 
     public InstantBreak() {
         super("InstantBreak", "Breaks a block a lot faster", ModuleType.WORLD);
@@ -59,8 +58,7 @@ public class InstantBreak extends Module {
                     positions.add(p);
                 }
             } else {
-                Objects.requireNonNull(client.getNetworkHandler())
-                        .sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.STOP_DESTROY_BLOCK, last, Direction.DOWN));
+                Objects.requireNonNull(client.getNetworkHandler()).sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.STOP_DESTROY_BLOCK, last, Direction.DOWN));
                 positions.clear();
             }
         }
@@ -81,8 +79,7 @@ public class InstantBreak extends Module {
         PlayerActionC2SPacket pstart = new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.START_DESTROY_BLOCK, bp, Direction.DOWN);
         whitelist.add(pstart);
         Objects.requireNonNull(client.getNetworkHandler()).sendPacket(pstart);
-        client.getNetworkHandler()
-                .sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.STOP_DESTROY_BLOCK, bp, Direction.DOWN));
+        client.getNetworkHandler().sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.STOP_DESTROY_BLOCK, bp, Direction.DOWN));
     }
 
     @Override
@@ -103,7 +100,7 @@ public class InstantBreak extends Module {
     @Override
     public void onWorldRender(MatrixStack matrices) {
         for (Vec3d position : new ArrayList<>(positions)) {
-            Renderer.R3D.renderOutline(position, new Vec3d(1, 1, 1), Utils.getCurrentRGB(), matrices);
+            Renderer.R3D.renderOutline(matrices, Utils.getCurrentRGB(), position, new Vec3d(1, 1, 1));
             //Renderer.renderFilled(position,new Vec3d(1,1,1),new Color(0,0,0,150),matrices);
         }
     }

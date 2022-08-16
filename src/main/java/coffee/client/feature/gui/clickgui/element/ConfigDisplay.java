@@ -37,14 +37,13 @@ import java.util.Map;
 
 public class ConfigDisplay extends Element {
     @SuppressWarnings("rawtypes")
-    static final Map<Class<? extends SettingBase>, Class<? extends Element>> settingTypeMappings = Util.make(new HashMap<>(),
-            classClassHashMap -> {
-                classClassHashMap.put(BooleanSetting.class, BooleanSettingEditor.class);
-                classClassHashMap.put(EnumSetting.class, EnumSettingEditor.class);
-                classClassHashMap.put(DoubleSetting.class, DoubleSettingEditor.class);
-                classClassHashMap.put(StringSetting.class, StringSettingEditor.class);
-                classClassHashMap.put(RangeSetting.class, RangeSettingEditor.class);
-            });
+    static final Map<Class<? extends SettingBase>, Class<? extends Element>> settingTypeMappings = Util.make(new HashMap<>(), classClassHashMap -> {
+        classClassHashMap.put(BooleanSetting.class, BooleanSettingEditor.class);
+        classClassHashMap.put(EnumSetting.class, EnumSettingEditor.class);
+        classClassHashMap.put(DoubleSetting.class, DoubleSettingEditor.class);
+        classClassHashMap.put(StringSetting.class, StringSettingEditor.class);
+        classClassHashMap.put(RangeSetting.class, RangeSettingEditor.class);
+    });
     final double leftPadding = 6;
     boolean expanded = false;
     double progress = 0;
@@ -72,13 +71,11 @@ public class ConfigDisplay extends Element {
             }
         }
         FontAdapter fnt = FontRenderers.getCustomSize(14);
-        TextElement nothing = new TextElement(fnt, "Nothing to see here", new Color(0.7f, 0.7f, 0.7f), true, getPositionX(), getPositionY(),
-                getWidth(), fnt.getFontHeight() + 2);
+        TextElement nothing = new TextElement(fnt, "Nothing to see here", new Color(0.7f, 0.7f, 0.7f), true, getPositionX(), getPositionY(), getWidth(), fnt.getFontHeight() + 2);
         if (daConfigs.isEmpty()) {
             daConfigs.add(nothing);
         }
-        fle = new FlexLayoutElement(FlexLayoutElement.LayoutDirection.DOWN, x + leftPadding, y, width - leftPadding, -1, 5,
-                daConfigs.toArray(Element[]::new));
+        fle = new FlexLayoutElement(FlexLayoutElement.LayoutDirection.DOWN, x + leftPadding, y, width - leftPadding, -1, 5, daConfigs.toArray(Element[]::new));
         this.setHeight(fle.getHeight());
     }
 
@@ -100,8 +97,7 @@ public class ConfigDisplay extends Element {
         setHeight(fle.getActualHeight());
         double height1 = getHeight();
         if (height1 > 1.5) {
-            Renderer.R2D.renderRoundedQuad(stack, new Color(9, 162, 104), getPositionX() + 2, getPositionY(), getPositionX() + 3.5,
-                    getPositionY() + height1, 1.5 / 2d, 2);
+            Renderer.R2D.renderRoundedQuad(stack, new Color(9, 162, 104), getPositionX() + 2, getPositionY(), getPositionX() + 3.5, getPositionY() + height1, 1.5 / 2d, 2);
         }
         fle.setPositionX(getPositionX() + leftPadding);
         fle.setPositionY(getPositionY());

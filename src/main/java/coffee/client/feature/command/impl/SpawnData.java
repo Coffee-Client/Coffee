@@ -34,9 +34,9 @@ public class SpawnData extends Command {
         String s = args[0];
         if (s.equalsIgnoreCase("position") || s.equalsIgnoreCase("velocity")) {
             return switch (index) {
-                case 1 -> new PossibleArgument(ArgumentType.NUMBER, "x");
-                case 2 -> new PossibleArgument(ArgumentType.NUMBER, "y");
-                case 3 -> new PossibleArgument(ArgumentType.NUMBER, "z");
+                case 1 -> new PossibleArgument(ArgumentType.NUMBER, "<x>");
+                case 2 -> new PossibleArgument(ArgumentType.NUMBER, "<y>");
+                case 3 -> new PossibleArgument(ArgumentType.NUMBER, "<z>");
                 default -> super.getSuggestionsWithType(index, args);
             };
         }
@@ -45,8 +45,7 @@ public class SpawnData extends Command {
 
     @Override
     public ExamplesEntry getExampleArguments() {
-        return new ExamplesEntry("position 0 69 420  (sets the spawn position to 0 69 420)",
-                "velocity 0 2 0  (sets initial velocity to 2y)", "cursor  (sets spawn position to where you're looking)");
+        return new ExamplesEntry("position 0 69 420  (sets the spawn position to 0 69 420)", "velocity 0 2 0  (sets initial velocity to 2y)", "cursor  (sets spawn position to where you're looking)");
     }
 
     @Override
@@ -61,13 +60,11 @@ public class SpawnData extends Command {
                     stack.setNbt(new NbtCompound());
                 }
 
-                NbtGroup ng = new NbtGroup(new NbtObject("EntityTag",
-                        new NbtList("Pos", new NbtProperty(parser.consumeDouble()), new NbtProperty(parser.consumeDouble()),
-                                new NbtProperty(parser.consumeDouble()))));
+                NbtGroup ng = new NbtGroup(
+                        new NbtObject("EntityTag", new NbtList("Pos", new NbtProperty(parser.consumeDouble()), new NbtProperty(parser.consumeDouble()), new NbtProperty(parser.consumeDouble()))));
                 NbtCompound tag = ng.toCompound();
                 stack.getOrCreateNbt().copyFrom(tag);
-                CoffeeMain.client.player.networkHandler.sendPacket(
-                        new CreativeInventoryActionC2SPacket(36 + CoffeeMain.client.player.getInventory().selectedSlot, stack));
+                CoffeeMain.client.player.networkHandler.sendPacket(new CreativeInventoryActionC2SPacket(36 + CoffeeMain.client.player.getInventory().selectedSlot, stack));
                 message("Changed Spawning Position");
             }
             case "velocity" -> {
@@ -76,13 +73,11 @@ public class SpawnData extends Command {
                 if (!stack.hasNbt()) {
                     stack.setNbt(new NbtCompound());
                 }
-                NbtGroup ng = new NbtGroup(new NbtObject("EntityTag",
-                        new NbtList("Motion", new NbtProperty(parser.consumeDouble()), new NbtProperty(parser.consumeDouble()),
-                                new NbtProperty(parser.consumeDouble()))));
+                NbtGroup ng = new NbtGroup(
+                        new NbtObject("EntityTag", new NbtList("Motion", new NbtProperty(parser.consumeDouble()), new NbtProperty(parser.consumeDouble()), new NbtProperty(parser.consumeDouble()))));
                 NbtCompound tag = ng.toCompound();
                 stack.getOrCreateNbt().copyFrom(tag);
-                CoffeeMain.client.player.networkHandler.sendPacket(
-                        new CreativeInventoryActionC2SPacket(36 + CoffeeMain.client.player.getInventory().selectedSlot, stack));
+                CoffeeMain.client.player.networkHandler.sendPacket(new CreativeInventoryActionC2SPacket(36 + CoffeeMain.client.player.getInventory().selectedSlot, stack));
                 message("Changed Velocity");
             }
             case "cursor" -> {
@@ -91,12 +86,10 @@ public class SpawnData extends Command {
                     stack.setNbt(new NbtCompound());
                 }
                 Vec3d se = Objects.requireNonNull(CoffeeMain.client.player).raycast(255, CoffeeMain.client.getTickDelta(), true).getPos();
-                NbtGroup ng = new NbtGroup(new NbtObject("EntityTag",
-                        new NbtList("Pos", new NbtProperty(se.x), new NbtProperty(se.y), new NbtProperty(se.z))));
+                NbtGroup ng = new NbtGroup(new NbtObject("EntityTag", new NbtList("Pos", new NbtProperty(se.x), new NbtProperty(se.y), new NbtProperty(se.z))));
                 NbtCompound tag = ng.toCompound();
                 stack.getOrCreateNbt().copyFrom(tag);
-                CoffeeMain.client.player.networkHandler.sendPacket(
-                        new CreativeInventoryActionC2SPacket(36 + CoffeeMain.client.player.getInventory().selectedSlot, stack));
+                CoffeeMain.client.player.networkHandler.sendPacket(new CreativeInventoryActionC2SPacket(36 + CoffeeMain.client.player.getInventory().selectedSlot, stack));
                 message("Changed Spawning Position");
             }
             default -> error("Please use the format >prespawn <position/velocity/cursor> <x> <y> <z>");

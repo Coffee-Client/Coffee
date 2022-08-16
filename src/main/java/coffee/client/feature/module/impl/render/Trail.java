@@ -72,7 +72,7 @@ public class Trail extends Module {
             if (before == null) {
                 before = vec3d;
             }
-            Renderer.R3D.renderLine(before, vec3d, Color.getHSBColor(progress, 0.6f, 1f), matrices);
+            Renderer.R3D.renderLine(matrices, Color.getHSBColor(progress, 0.6f, 1f), before, vec3d);
         }
 
     }

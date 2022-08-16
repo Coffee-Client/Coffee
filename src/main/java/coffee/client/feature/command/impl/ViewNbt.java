@@ -34,7 +34,7 @@ public class ViewNbt extends Command {
 
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
-        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.STRING, "(flags)"));
+        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.STRING, "<flags>"));
     }
 
     @Override

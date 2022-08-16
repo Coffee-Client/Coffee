@@ -39,10 +39,10 @@ import java.util.List;
 
 public class SpotlightScreen extends ClientScreen implements FastTickable {
     static final List<StaticEntry> staticEntries = List.of(
-            new StaticEntry("Gamemode change", "Switch to creative", GameTexture.ACTION_RUNCOMMAND.getWhere(),
-                    () -> CoffeeMain.client.player.sendCommand("gamemode creative"), "gmc", "creative", "gmcreative"),
-            new StaticEntry("Gamemode change", "Switch to survival", GameTexture.ACTION_RUNCOMMAND.getWhere(),
-                    () -> CoffeeMain.client.player.sendCommand("gamemode survival"), "gms", "survival", "gmsurvival"));
+            new StaticEntry("Gamemode change", "Switch to creative", GameTexture.ACTION_RUNCOMMAND.getWhere(), () -> CoffeeMain.client.player.sendCommand("gamemode creative"), "gmc", "creative",
+                    "gmcreative"),
+            new StaticEntry("Gamemode change", "Switch to survival", GameTexture.ACTION_RUNCOMMAND.getWhere(), () -> CoffeeMain.client.player.sendCommand("gamemode survival"), "gms", "survival",
+                    "gmsurvival"));
     CommandTextField command;
     List<SuggestionsEntry> entries = new ArrayList<>();
     double anim = 0;
@@ -63,10 +63,7 @@ public class SpotlightScreen extends ClientScreen implements FastTickable {
             String firstPart = cmdArgs[0].toLowerCase();
             for (StaticEntry staticEntry : staticEntries) {
                 if (Arrays.stream(staticEntry.triggers()).anyMatch(s -> (s).startsWith(firstPart))) {
-                    String matchingEntry = Arrays.stream(staticEntry.triggers())
-                            .filter(s -> (s).startsWith(firstPart))
-                            .findFirst()
-                            .orElseThrow();
+                    String matchingEntry = Arrays.stream(staticEntry.triggers()).filter(s -> (s).startsWith(firstPart)).findFirst().orElseThrow();
                     entries.add(new SuggestionsEntry(staticEntry.desc(), staticEntry.texture(), staticEntry.type(), () -> {
                         staticEntry.onRun().run();
                         close();
@@ -87,14 +84,14 @@ public class SpotlightScreen extends ClientScreen implements FastTickable {
             for (Command command1 : CommandRegistry.getCommands()) {
                 for (String alias : command1.getAliases()) {
                     if ((alias).toLowerCase().startsWith(firstPart)) {
-                        entries.add(new SuggestionsEntry(alias + " " + String.join(" ", Arrays.copyOfRange(cmdArgs, 1, cmdArgs.length)),
-                                GameTexture.ACTION_RUNCOMMAND.getWhere(), "Run command", () -> {
-                            CommandRegistry.execute(alias + " " + String.join(" ", Arrays.copyOfRange(cmdArgs, 1, cmdArgs.length)));
-                            close();
-                        }, 0, 0, 0, () -> {
-                            command.set(alias + " " + String.join(" ", Arrays.copyOfRange(cmdArgs, 1, cmdArgs.length)));
-                            command.setCursorMax();
-                        }));
+                        entries.add(
+                                new SuggestionsEntry(alias + " " + String.join(" ", Arrays.copyOfRange(cmdArgs, 1, cmdArgs.length)), GameTexture.ACTION_RUNCOMMAND.getWhere(), "Run command", () -> {
+                                    CommandRegistry.execute(alias + " " + String.join(" ", Arrays.copyOfRange(cmdArgs, 1, cmdArgs.length)));
+                                    close();
+                                }, 0, 0, 0, () -> {
+                                    command.set(alias + " " + String.join(" ", Arrays.copyOfRange(cmdArgs, 1, cmdArgs.length)));
+                                    command.setCursorMax();
+                                }));
                     }
                 }
             }
@@ -107,8 +104,7 @@ public class SpotlightScreen extends ClientScreen implements FastTickable {
         closing = false;
         double thingWidth = 400;
         int thingFontHeight = 30;
-        command = new CommandTextField(FontRenderers.getCustomSize(thingFontHeight), (width - thingWidth) / 2d, 100, thingWidth,
-                thingFontHeight + 5, "Enter command");
+        command = new CommandTextField(FontRenderers.getCustomSize(thingFontHeight), (width - thingWidth) / 2d, 100, thingWidth, thingFontHeight + 5, "Enter command");
         addDrawableChild(command);
         command.setFocused(true);
         setInitialFocus(command);
@@ -148,15 +144,12 @@ public class SpotlightScreen extends ClientScreen implements FastTickable {
         double pad = 2;
         if (suggestionsHeight > 0) {
             totalHeight += suggestionsHeight + pad;
-            this.suggestionsField = new Rectangle(command.x, command.y + command.height + pad, command.x + command.width,
-                    command.y + command.height + pad + suggestionsHeight);
+            this.suggestionsField = new Rectangle(command.x, command.y + command.height + pad, command.x + command.width, command.y + command.height + pad + suggestionsHeight);
         } else {
             this.suggestionsField = new Rectangle(0, 0, 0, 0);
         }
-        Renderer.R2D.renderRoundedQuad(stack, new Color(20, 20, 20), command.x, command.y, command.x + command.width,
-                command.y + totalHeight, 5, 20);
-        Renderer.R2D.renderRoundedQuad(stack, new Color(30, 30, 30), command.x, command.y, command.x + command.width,
-                command.y + command.height, 5, 20);
+        Renderer.R2D.renderRoundedQuad(stack, new Color(20, 20, 20), command.x, command.y, command.x + command.width, command.y + totalHeight, 5, 20);
+        Renderer.R2D.renderRoundedQuad(stack, new Color(30, 30, 30), command.x, command.y, command.x + command.width, command.y + command.height, 5, 20);
 
         double yOffset = 0;
         stack.push();
@@ -393,8 +386,7 @@ public class SpotlightScreen extends ClientScreen implements FastTickable {
                 if (cursor > 0 && cursor == selectionStart && cursor == selectionEnd) {
                     String preText = text;
 
-                    int count = (mods == isCtrlPressed) ? cursor : (mods == (SystemUtils.IS_OS_WINDOWS ? GLFW.GLFW_MOD_CONTROL : GLFW.GLFW_MOD_ALT)) ? countToNextSpace(
-                            true) : 1;
+                    int count = (mods == isCtrlPressed) ? cursor : (mods == (SystemUtils.IS_OS_WINDOWS ? GLFW.GLFW_MOD_CONTROL : GLFW.GLFW_MOD_ALT)) ? countToNextSpace(true) : 1;
 
                     text = text.substring(0, cursor - count) + text.substring(cursor);
                     cursor -= count;
@@ -415,8 +407,7 @@ public class SpotlightScreen extends ClientScreen implements FastTickable {
                         if (cursor == selectionStart && cursor == selectionEnd) {
                             String preText = text;
 
-                            int count = ctrl ? text.length() - cursor : (mods == (SystemUtils.IS_OS_WINDOWS ? GLFW.GLFW_MOD_CONTROL : GLFW.GLFW_MOD_ALT)) ? countToNextSpace(
-                                    false) : 1;
+                            int count = ctrl ? text.length() - cursor : (mods == (SystemUtils.IS_OS_WINDOWS ? GLFW.GLFW_MOD_CONTROL : GLFW.GLFW_MOD_ALT)) ? countToNextSpace(false) : 1;
 
                             text = text.substring(0, cursor) + text.substring(cursor + count);
 
@@ -618,14 +609,13 @@ public class SpotlightScreen extends ClientScreen implements FastTickable {
             if (focused && (cursor != selectionStart || cursor != selectionEnd)) {
                 double selStart = x + pad + getTextWidth(selectionStart) - overflowWidth;
                 double selEnd = x + pad + getTextWidth(selectionEnd) - overflowWidth;
-                Renderer.R2D.renderQuad(stack, new Color(50, 50, 255, (int) (100 * opacity)), selStart, centerY, selEnd,
-                        centerY + fa.getMarginHeight());
+                Renderer.R2D.renderQuad(stack, new Color(50, 50, 255, (int) (100 * opacity)), selStart, centerY, selEnd, centerY + fa.getMarginHeight());
             }
             ClipStack.globalInstance.popWindow();
             boolean renderCursor = (System.currentTimeMillis() % 1000) / 500d > 1;
             if (focused && renderCursor) {
-                Renderer.R2D.renderQuad(stack, new Color(1f, 1f, 1f, opacity), x + pad + getTextWidth(cursor) - overflowWidth, centerY,
-                        x + pad + getTextWidth(cursor) - overflowWidth + 1, centerY + fa.getMarginHeight());
+                Renderer.R2D.renderQuad(stack, new Color(1f, 1f, 1f, opacity), x + pad + getTextWidth(cursor) - overflowWidth, centerY, x + pad + getTextWidth(cursor) - overflowWidth + 1,
+                        centerY + fa.getMarginHeight());
             }
 
         }
@@ -812,13 +802,9 @@ public class SpotlightScreen extends ClientScreen implements FastTickable {
                 Renderer.R2D.renderRoundedQuad(stack, new Color(40, 40, 40), x, y, x + wid, y + height(), 5, 20);
             }
             RenderSystem.setShaderTexture(0, icon);
-            Renderer.R2D.renderTexture(stack, x + padUpDown, yCenter - contentSize / 2d, contentSize, contentSize, 0, 0, contentSize,
-                    contentSize, contentSize, contentSize);
-            FontRenderers.getRenderer()
-                    .drawString(stack, title, x + padUpDown + contentSize + padUpDown, yCenter - contentSize / 2d, 0xAAAAAA);
-            FontRenderers.getRenderer()
-                    .drawString(stack, text, x + padUpDown + contentSize + padUpDown,
-                            yCenter - contentSize / 2d + FontRenderers.getRenderer().getMarginHeight(), 0xFFFFFF);
+            Renderer.R2D.renderTexture(stack, x + padUpDown, yCenter - contentSize / 2d, contentSize, contentSize, 0, 0, contentSize, contentSize, contentSize, contentSize);
+            FontRenderers.getRenderer().drawString(stack, title, x + padUpDown + contentSize + padUpDown, yCenter - contentSize / 2d, 0xAAAAAA);
+            FontRenderers.getRenderer().drawString(stack, text, x + padUpDown + contentSize + padUpDown, yCenter - contentSize / 2d + FontRenderers.getRenderer().getMarginHeight(), 0xFFFFFF);
         }
 
         public double height() {

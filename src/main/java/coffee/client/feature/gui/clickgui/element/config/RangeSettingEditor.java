@@ -38,14 +38,12 @@ public class RangeSettingEditor extends SettingEditor<RangeSetting> {
         String t = configValue.getValue().getMin() + " - " + configValue.getValue().getMax();
         real.drawString(matrices, t, actualX + actualWidth - real.getStringWidth(t), getPositionY(), 0xFFFFFF);
         double remainingH = getPositionY() + real.getFontHeight() + 2;
-        Renderer.R2D.renderRoundedQuad(matrices, new Color(50, 50, 50), actualX, remainingH, actualX + actualWidth, remainingH + 1.5,
-                1.5 / 2, 5);
+        Renderer.R2D.renderRoundedQuad(matrices, new Color(50, 50, 50), actualX, remainingH, actualX + actualWidth, remainingH + 1.5, 1.5 / 2, 5);
         double xA = getPerA() * actualWidth;
         double xB = getPerB() * actualWidth;
         double barWidth = xB - xA;
         barWidth = Math.max(barWidth, 1.5);
-        Renderer.R2D.renderRoundedQuad(matrices, new Color(9, 162, 104), actualX + xA, remainingH, actualX + xA + barWidth,
-                remainingH + 1.5, 1.5 / 2, 5);
+        Renderer.R2D.renderRoundedQuad(matrices, new Color(9, 162, 104), actualX + xA, remainingH, actualX + xA + barWidth, remainingH + 1.5, 1.5 / 2, 5);
     }
 
     void handleClickA(double translated) {

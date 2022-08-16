@@ -24,12 +24,7 @@ import java.util.Objects;
 
 public class AutoTrap extends Module {
     static final double[][] buildOffsetsSmall = new double[][] {
-            new double[] { 0, 2, 0 },
-            new double[] { 1, 1, 0 },
-            new double[] { 0, 1, 1 },
-            new double[] { -1, 1, 0 },
-            new double[] { 0, 1, -1 },
-            new double[] { 0, -1, 0 }
+            new double[] { 0, 2, 0 }, new double[] { 1, 1, 0 }, new double[] { 0, 1, 1 }, new double[] { -1, 1, 0 }, new double[] { 0, 1, -1 }, new double[] { 0, -1, 0 }
     };
     static final double[][] buildOffsetsBig = new double[][] {
             // begin bottom
@@ -94,8 +89,7 @@ public class AutoTrap extends Module {
     }
 
     boolean inHitRange(Entity attacker, Vec3d pos) {
-        return attacker.getCameraPosVec(1f).distanceTo(pos) <= Objects.requireNonNull(CoffeeMain.client.interactionManager)
-                .getReachDistance() + .5;
+        return attacker.getCameraPosVec(1f).distanceTo(pos) <= Objects.requireNonNull(CoffeeMain.client.interactionManager).getReachDistance() + .5;
     }
 
     @Override
@@ -127,9 +121,8 @@ public class AutoTrap extends Module {
             int slot = -1;
             for (int i = 0; i < 9; i++) {
                 ItemStack real = CoffeeMain.client.player.getInventory().getStack(i);
-                if (real.getItem() instanceof BlockItem bi && Block.isShapeFullCube(bi.getBlock()
-                        .getDefaultState()
-                        .getOutlineShape(CoffeeMain.client.world, new BlockPos(0, 0, 0), ShapeContext.absent()))) {
+                if (real.getItem() instanceof BlockItem bi && Block.isShapeFullCube(
+                        bi.getBlock().getDefaultState().getOutlineShape(CoffeeMain.client.world, new BlockPos(0, 0, 0), ShapeContext.absent()))) {
                     slot = i;
                 }
             }

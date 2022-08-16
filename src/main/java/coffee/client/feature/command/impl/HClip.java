@@ -21,7 +21,7 @@ public class HClip extends Command {
 
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
-        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.NUMBER, "(amount)"));
+        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.NUMBER, "<amount>"));
     }
 
     @Override
@@ -32,8 +32,7 @@ public class HClip extends Command {
         Vec3d forward = Vec3d.fromPolar(0, CoffeeMain.client.player.getYaw()).normalize();
 
         if (CoffeeMain.client.player.getAbilities().creativeMode) {
-            CoffeeMain.client.player.updatePosition(CoffeeMain.client.player.getX() + forward.x * brik, CoffeeMain.client.player.getY(),
-                    CoffeeMain.client.player.getZ() + forward.z * brik);
+            CoffeeMain.client.player.updatePosition(CoffeeMain.client.player.getX() + forward.x * brik, CoffeeMain.client.player.getY(), CoffeeMain.client.player.getZ() + forward.z * brik);
         } else {
             clip(brik);
         }

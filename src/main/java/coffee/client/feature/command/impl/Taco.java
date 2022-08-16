@@ -193,8 +193,8 @@ public class Taco extends Command {
         String a = args[0];
         if (index == 1) {
             return switch (a.toLowerCase()) {
-                case "fps" -> new PossibleArgument(ArgumentType.NUMBER, "(new fps)");
-                case "play" -> new PossibleArgument(ArgumentType.STRING, "(path to gif file)");
+                case "fps" -> new PossibleArgument(ArgumentType.NUMBER, "<new fps>");
+                case "play" -> new PossibleArgument(ArgumentType.STRING, "<path to gif file>");
                 default -> super.getSuggestionsWithType(index, args);
             };
         }

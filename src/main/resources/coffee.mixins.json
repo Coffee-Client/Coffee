@@ -71,6 +71,7 @@
   ],
   "client": [
     "network.ClientPlayNetworkHandlerMixin",
+    "render.BufferVertexConsumerMixin",
     "render.IFramebufferMixin"
   ],
   "server": [],

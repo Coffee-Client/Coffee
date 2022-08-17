@@ -13,11 +13,15 @@ import coffee.client.helper.event.EventListener;
 import coffee.client.helper.event.EventType;
 import coffee.client.helper.event.events.base.NonCancellableEvent;
 import coffee.client.helper.font.FontRenderers;
+import coffee.client.helper.font.adapter.FontAdapter;
 import coffee.client.helper.render.Renderer;
+import coffee.client.helper.util.Rotations;
 import coffee.client.helper.util.Utils;
 import lombok.Data;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 
 import java.awt.Color;
@@ -25,6 +29,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Waypoints extends Module {
     public static List<Waypoint> waypoints = new ArrayList<>();
@@ -33,6 +38,13 @@ public class Waypoints extends Module {
 
     @Setting(name = "Tracers", description = "Shows tracers pointing to the waypoints")
     boolean tracers = true;
+
+    static final List<Sightpoint> staticSightpoints = Util.make(new ArrayList<>(), (e) -> {
+        e.add(new Sightpoint("0°", 0, Color.WHITE, true));
+        e.add(new Sightpoint("90°", 90, Color.WHITE, true));
+        e.add(new Sightpoint("180°", 180, Color.WHITE, true));
+        e.add(new Sightpoint("270°", 270, Color.WHITE, true));
+    });
 
     public Waypoints() {
         super("Waypoints", "Allows you to save locations on servers", ModuleType.RENDER);
@@ -95,6 +107,17 @@ public class Waypoints extends Module {
             }
         });
     }
+    @Setting(name = "Show compass", description = "Shows a compass-like navigator on the top of the screen")
+    boolean showCompass = true;
+
+    public static List<Sightpoint> getSightpoints() {
+        CopyOnWriteArrayList<Sightpoint> sightpoints = new CopyOnWriteArrayList<>(staticSightpoints);
+        for (Waypoint waypoint : waypoints) {
+            Vec2f pitchYaw = Rotations.getPitchYawFromOtherEntity(client.gameRenderer.getCamera().getPos(), waypoint.position);
+            sightpoints.add(new Sightpoint(waypoint.name, pitchYaw.y, waypoint.color, false));
+        }
+        return sightpoints;
+    }
 
     @Override
     public void onHudRender() {
@@ -102,6 +125,41 @@ public class Waypoints extends Module {
             runnable.run();
         }
         real.clear();
+        if (showCompass) {
+            double center = client.getWindow().getScaledWidth() / 2d;
+            double width = 160;
+            double offset = width / 2d;
+            MatrixStack stack = new MatrixStack();
+            for (Sightpoint sightpoint : getSightpoints()) {
+                stack.push();
+                double x = calculatePosOffset(sightpoint.yawTarget, width);
+                double focus = calculateInterest(sightpoint.yawTarget);
+                stack.translate(center + x - offset, 5 + (sightpoint.major ? 5 : 15), 0);
+                stack.scale((float) focus, (float) focus, 1);
+
+                //                FontRenderers.getRenderer().drawCenteredString(Renderer.R3D.getEmptyMatrixStack(),focus+"",center,5,1f,1f,1f,1f);
+                FontAdapter fa = sightpoint.major ? FontRenderers.getCustomSize(22) : FontRenderers.getCustomSize(16);
+                fa.drawCenteredString(stack, sightpoint.label, 0, -fa.getFontHeight() / 2d, sightpoint.color.getRGB());
+                //                Renderer.R2D.renderQuad(stack,sightpoint.color,-1,-5,1,5);
+                stack.pop();
+            }
+        }
+    }
+
+    double calculatePosOffset(float targetYaw, double width) {
+        float yaw = MathHelper.wrapDegrees(client.gameRenderer.getCamera().getYaw() - targetYaw) + 180;
+        return (1 - yaw / 360) * width;
+    }
+
+    double calculateInterest(float targetYaw) {
+        float yaw = MathHelper.wrapDegrees(client.gameRenderer.getCamera().getYaw() - targetYaw) + 180;
+        double i = (.5 - Math.abs((yaw) / 360 - .5)) * 2; // 0-1
+        i = i * 1.5; // 0-1.5
+        i -= 0.5; // -.5-1
+        return MathHelper.clamp(i, 0, 1); // [-0.5]-0-1
+    }
+
+    record Sightpoint(String label, float yawTarget, Color color, boolean major) {
     }
 
     @Data

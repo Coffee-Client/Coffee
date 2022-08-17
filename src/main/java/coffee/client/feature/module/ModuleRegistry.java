@@ -160,6 +160,7 @@ public class ModuleRegistry {
     }
 
     private static void rebuildSharedModuleList() {
+        awaitLockOpen();
         reloadInProgress.set(true);
         sharedModuleList.clear();
         cachedModuleClassMap.clear();

@@ -10,6 +10,7 @@ import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
 import coffee.client.helper.font.FontRenderers;
 import coffee.client.helper.manager.AttackManager;
+import coffee.client.helper.render.AlphaOverride;
 import coffee.client.helper.render.PlayerHeadResolver;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.render.Texture;
@@ -146,10 +147,11 @@ public class TargetHud extends Module {
             double renderWX = renderWX1 / 100d;
             stack.push();
             double rwxI = Math.abs(1 - renderWX);
-            double x = rwxI * (modalWidth / 2d);
-            double y = rwxI * (modalHeight / 2d);
+            AlphaOverride.pushAlphaMul((float) renderWX);
+            double x = MathHelper.lerp(rwxI, 0, 0.4) * (modalWidth / 2d);
+            double y = MathHelper.lerp(rwxI, 0, 0.4) * (modalHeight / 2d);
             stack.translate(x, y, 0);
-            stack.scale((float) renderWX, (float) renderWX, 1);
+            stack.scale((float) MathHelper.lerp(renderWX, 0.6, 1), (float) MathHelper.lerp(renderWX, 0.6, 1), 1);
             double textLeftAlign = 32 + 10;
             Renderer.R2D.renderRoundedQuad(stack, new Color(20, 20, 20, 200), 0, 0, modalWidth, modalHeight, 5, 10);
 
@@ -192,6 +194,7 @@ public class TargetHud extends Module {
             }
 
             stack.pop();
+            AlphaOverride.popAlphaMul();
         }
     }
 

@@ -12,6 +12,7 @@ public class NoMessageIndicators extends Module {
     public NoMessageIndicators() {
         super("NoMessageIndicators", "Shut the fuck up mojang\n(removes the colored bar at the left of each chat message)", ModuleType.RENDER);
     }
+
     @Override
     public void tick() {
 

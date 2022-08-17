@@ -54,7 +54,7 @@ public class Socks5ServerEncoder extends MessageToByteEncoder<Socks5Message> {
     }
 
     @Override
-    protected void encode(ChannelHandlerContext ctx, Socks5Message msg, ByteBuf out) throws Exception {
+    protected void encode(ChannelHandlerContext ctx, Socks5Message msg, ByteBuf out) {
         if (msg instanceof Socks5InitialResponse) {
             encodeAuthMethodResponse((Socks5InitialResponse) msg, out);
         } else if (msg instanceof Socks5PasswordAuthResponse) {

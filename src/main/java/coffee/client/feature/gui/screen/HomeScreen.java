@@ -69,10 +69,8 @@ public class HomeScreen extends ClientScreen {
             updateCurrentAccount(() -> {
 
             });
-            complete();
         } catch (Exception e) {
             e.printStackTrace();
-            complete();
         }
     }
 
@@ -117,9 +115,6 @@ public class HomeScreen extends ClientScreen {
         } else {
             load();
         }
-    }
-
-    void complete() {
     }
 
     void updateCurrentAccount(Runnable callback) {

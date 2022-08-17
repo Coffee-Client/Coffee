@@ -328,9 +328,6 @@ public class Utils {
         }
 
         public static void runOnNextRender(Runnable r) {
-            //            if (CoffeeMain.client.options.hudHidden) {
-            //                return;
-            //            }
             nextTickRunners.add(r);
         }
 

@@ -19,8 +19,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(ChatHudLine.Visible.class)
 public class ChatHudLineMixin {
     private static final Module noChatIndicators = ModuleRegistry.getByClass(NoMessageIndicators.class);
-    @Inject(method="indicator",at=@At("HEAD"),cancellable = true)
+
+    @Inject(method = "indicator", at = @At("HEAD"), cancellable = true)
     void coffee_shutTheFuckUpMojang(CallbackInfoReturnable<MessageIndicator> cir) {
-        if (noChatIndicators.isEnabled()) cir.setReturnValue(null);
+        if (noChatIndicators.isEnabled()) {
+            cir.setReturnValue(null);
+        }
     }
 }

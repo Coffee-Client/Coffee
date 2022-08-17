@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 public class Killaura extends Module {
-    Timer attackCooldown = new Timer();
+    final Timer attackCooldown = new Timer();
     @Setting(name = "Attack mode", description = "How to attack the selected entities")
     AttackMode attackMode = AttackMode.Single;
     @Setting(name = "Amount", description = "Amount of entities to attack at once (in multi mode)", min = 1, max = 10, precision = 0)
@@ -65,7 +65,7 @@ public class Killaura extends Module {
     boolean attackPlayers = true;
     @Setting(name = "Attack all", description = "Attacks all remaining entities")
     boolean attackAll = false;
-    Random r = new Random();
+    final Random r = new Random();
     List<LivingEntity> targets = new ArrayList<>();
     int currentRandomDelay = 0;
 

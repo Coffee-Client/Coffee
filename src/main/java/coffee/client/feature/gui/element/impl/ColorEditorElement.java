@@ -22,8 +22,8 @@ import java.awt.Color;
 import java.util.function.Consumer;
 
 public class ColorEditorElement extends Element {
-    HueSlider slider;
-    Color color;
+    final HueSlider slider;
+    final Color color;
     double x, y;
     boolean clicked = false;
     @Setter

@@ -122,7 +122,7 @@ public abstract class ProxyHandler extends ChannelDuplexHandler {
     }
 
     @Override
-    public final void handlerAdded(ChannelHandlerContext ctx) throws Exception {
+    public final void handlerAdded(ChannelHandlerContext ctx) {
         this.ctx = ctx;
         addCodec(ctx);
 
@@ -164,7 +164,7 @@ public abstract class ProxyHandler extends ChannelDuplexHandler {
     }
 
     @Override
-    public final void channelActive(@NotNull ChannelHandlerContext ctx) throws Exception {
+    public final void channelActive(@NotNull ChannelHandlerContext ctx) {
         sendInitialMessage(ctx);
         ctx.fireChannelActive();
     }

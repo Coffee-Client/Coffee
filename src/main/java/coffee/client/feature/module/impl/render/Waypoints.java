@@ -32,25 +32,34 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Waypoints extends Module {
-    public static List<Waypoint> waypoints = new ArrayList<>();
-    public static ConfigContainer conf = new ConfigContainer(new File(CoffeeMain.BASE, "waypoints.coffee"), "");
-    List<Runnable> real = new ArrayList<>();
-
-    @Setting(name = "Tracers", description = "Shows tracers pointing to the waypoints")
-    boolean tracers = true;
-
     static final List<Sightpoint> staticSightpoints = Util.make(new ArrayList<>(), (e) -> {
         e.add(new Sightpoint("0°", 0, Color.WHITE, true));
         e.add(new Sightpoint("90°", 90, Color.WHITE, true));
         e.add(new Sightpoint("180°", 180, Color.WHITE, true));
         e.add(new Sightpoint("270°", 270, Color.WHITE, true));
     });
+    public static List<Waypoint> waypoints = new ArrayList<>();
+    public static ConfigContainer conf = new ConfigContainer(new File(CoffeeMain.BASE, "waypoints.coffee"), "");
+    List<Runnable> real = new ArrayList<>();
+    @Setting(name = "Tracers", description = "Shows tracers pointing to the waypoints")
+    boolean tracers = true;
+    @Setting(name = "Show compass", description = "Shows a compass-like navigator on the top of the screen")
+    boolean showCompass = true;
 
     public Waypoints() {
         super("Waypoints", "Allows you to save locations on servers", ModuleType.RENDER);
         conf.reload();
         Config config1 = conf.get(Config.class);
         waypoints = (config1 == null || config1.getWaypoints() == null) ? new ArrayList<>() : new ArrayList<>(config1.getWaypoints());
+    }
+
+    public static List<Sightpoint> getSightpoints() {
+        CopyOnWriteArrayList<Sightpoint> sightpoints = new CopyOnWriteArrayList<>(staticSightpoints);
+        for (Waypoint waypoint : waypoints) {
+            Vec2f pitchYaw = Rotations.getPitchYawFromOtherEntity(client.gameRenderer.getCamera().getPos(), waypoint.position);
+            sightpoints.add(new Sightpoint(waypoint.name, pitchYaw.y, waypoint.color, false));
+        }
+        return sightpoints;
     }
 
     @EventListener(EventType.CONFIG_SAVE)
@@ -102,21 +111,12 @@ public class Waypoints extends Module {
                     Renderer.R2D.renderRoundedQuad(Renderer.R3D.getEmptyMatrixStack(), new Color(20, 20, 20, 255), screenSpaceCoordinate.x - width / 2d,
                             screenSpaceCoordinate.y - FontRenderers.getRenderer().getFontHeight() / 2d - 2, screenSpaceCoordinate.x + width / 2d,
                             screenSpaceCoordinate.y + FontRenderers.getRenderer().getFontHeight() / 2d + 2, 5, 10);
-                    FontRenderers.getRenderer().drawCenteredString(Renderer.R3D.getEmptyMatrixStack(), t, screenSpaceCoordinate.x, screenSpaceCoordinate.y - FontRenderers.getRenderer().getFontHeight() / 2d, 1f, 1f, 1f, 1f);
+                    FontRenderers.getRenderer()
+                            .drawCenteredString(Renderer.R3D.getEmptyMatrixStack(), t, screenSpaceCoordinate.x, screenSpaceCoordinate.y - FontRenderers.getRenderer().getFontHeight() / 2d, 1f, 1f, 1f,
+                                    1f);
                 });
             }
         });
-    }
-    @Setting(name = "Show compass", description = "Shows a compass-like navigator on the top of the screen")
-    boolean showCompass = true;
-
-    public static List<Sightpoint> getSightpoints() {
-        CopyOnWriteArrayList<Sightpoint> sightpoints = new CopyOnWriteArrayList<>(staticSightpoints);
-        for (Waypoint waypoint : waypoints) {
-            Vec2f pitchYaw = Rotations.getPitchYawFromOtherEntity(client.gameRenderer.getCamera().getPos(), waypoint.position);
-            sightpoints.add(new Sightpoint(waypoint.name, pitchYaw.y, waypoint.color, false));
-        }
-        return sightpoints;
     }
 
     @Override

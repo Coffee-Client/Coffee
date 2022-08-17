@@ -77,8 +77,8 @@ public class Decimator extends Module {
     public void onWorldRender(MatrixStack matrices) {
         if (latest != null) {
             Renderer.R3D.renderFilled(matrices, Utils.getCurrentRGB(), new Vec3d(latest.x - 2, Objects.requireNonNull(CoffeeMain.client.world).getBottomY(), latest.z - 2), new Vec3d(5, 0.001, 5));
-            Renderer.R3D.renderLine(matrices, Color.RED,
-                    new Vec3d(latest.x + .5, CoffeeMain.client.world.getBottomY(), latest.z + .5), new Vec3d(latest.x + .5, CoffeeMain.client.world.getTopY(), latest.z + .5));
+            Renderer.R3D.renderLine(matrices, Color.RED, new Vec3d(latest.x + .5, CoffeeMain.client.world.getBottomY(), latest.z + .5),
+                    new Vec3d(latest.x + .5, CoffeeMain.client.world.getTopY(), latest.z + .5));
         }
     }
 

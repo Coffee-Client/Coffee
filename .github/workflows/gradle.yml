@@ -34,7 +34,8 @@ jobs:
     - name: Execute Gradle build
       run: ./gradlew build
       
-    - uses: actions/download-artifact@v3
+    - name: Upload build
+      uses: actions/upload-artifact@v2
       with:
-        name: coffee-1.0.0
-        path: build/libs
+        name: latest
+        path: build/libs/

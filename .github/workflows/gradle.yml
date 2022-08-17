@@ -33,3 +33,8 @@ jobs:
     
     - name: Execute Gradle build
       run: ./gradlew build
+      
+    - uses: actions/download-artifact@v3
+      with:
+        name: coffee-1.0.0
+        path: build/libs

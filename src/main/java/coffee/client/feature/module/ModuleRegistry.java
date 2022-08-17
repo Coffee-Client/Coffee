@@ -86,6 +86,7 @@ import coffee.client.feature.module.impl.render.ItemByteSize;
 import coffee.client.feature.module.impl.render.MouseEars;
 import coffee.client.feature.module.impl.render.NameTags;
 import coffee.client.feature.module.impl.render.NoLiquidFog;
+import coffee.client.feature.module.impl.render.NoMessageIndicators;
 import coffee.client.feature.module.impl.render.Radar;
 import coffee.client.feature.module.impl.render.ShowTntPrime;
 import coffee.client.feature.module.impl.render.Spotlight;
@@ -316,6 +317,7 @@ public class ModuleRegistry {
         registerModule(Slippy.class);
         registerModule(Girlboss.class);
         registerModule(Waypoints.class);
+        registerModule(NoMessageIndicators.class);
 
         rebuildSharedModuleList();
 

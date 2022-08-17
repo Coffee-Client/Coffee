@@ -72,6 +72,7 @@
   "client": [
     "network.ClientPlayNetworkHandlerMixin",
     "render.BufferVertexConsumerMixin",
+    "render.ChatHudLineMixin",
     "render.IFramebufferMixin"
   ],
   "server": [],

@@ -1,6 +1,3 @@
-Honestly so much shit i dont even remember what i did
-Changed formatting to be not ass
-Completed waypoints
-Fixed stupid texture bug
-Fixed memory leak in hud rendering
-some other shit
+Major texture upgrade behind the scenes
+Fixed memory shit
+config editor

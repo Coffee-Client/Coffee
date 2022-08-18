@@ -27,7 +27,6 @@ public class Zoom extends Module {
 
     public Zoom() {
         super("Zoom", "Imitates the spyglass with more options", ModuleType.RENDER);
-        //        finalFov = (SliderValue) this.config.create("Fov", 30, 1, 180, 0).description("The FOV to zoom into");
     }
 
     static double easeOutBounce(double x) {

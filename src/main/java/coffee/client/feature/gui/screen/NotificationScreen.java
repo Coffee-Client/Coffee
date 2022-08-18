@@ -10,6 +10,7 @@ import coffee.client.feature.gui.screen.base.AAScreen;
 import coffee.client.helper.font.FontRenderers;
 import coffee.client.helper.manager.ShaderManager;
 import coffee.client.helper.render.Renderer;
+import coffee.client.helper.render.textures.Texture;
 import coffee.client.helper.util.Transitions;
 import coffee.client.helper.util.Utils;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -82,7 +83,6 @@ public class NotificationScreen extends AAScreen {
 
     @Override
     public void renderInternal(MatrixStack stack, int mouseX, int mouseY, float delta) {
-        //        double anim = Transitions.easeOutExpo(this.anim);
         double width = 0;
         double headheight = FontRenderers.getRenderer().getFontHeight();
         double height = pad + headheight + pad + FontRenderers.getRenderer().getFontHeight() * contentSplit.length + pad + 20 + pad;
@@ -90,15 +90,13 @@ public class NotificationScreen extends AAScreen {
             width = Math.max(FontRenderers.getRenderer().getStringWidth(s), width);
         }
         width += pad * 2;
-        //        width = Math.max(width, 100);
         double startX = this.width / 2d - width / 2d;
         double startY = this.height / 2d - height / 2d;
         Renderer.R2D.renderRoundedQuadWithShadow(stack, new Color(20, 20, 20), startX, startY, startX + width, startY + height, 5, 10);
         double texDims = 12;
-        RenderSystem.setShaderTexture(0, icon.getI());
         Color c = icon.getC();
         RenderSystem.setShaderColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, 1f);
-        Renderer.R2D.renderTexture(stack, startX + pad, startY + pad + (headheight) / 2d - texDims / 2d, texDims, texDims, 0, 0, texDims, texDims, texDims, texDims);
+        Texture.NOTIFICATION_TYPES.bindAndDraw(stack, startX + pad, startY + pad + (headheight) / 2d - texDims / 2d, texDims, texDims, icon.getSpriteName());
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
         FontRenderers.getRenderer().drawString(stack, title, startX + pad + texDims + pad, startY + pad + (headheight) / 2d - FontRenderers.getRenderer().getFontHeight() / 2d, 0xCCCCCC);
         double yOffset = 0;

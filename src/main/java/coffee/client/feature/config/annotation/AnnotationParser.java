@@ -59,7 +59,6 @@ public class AnnotationParser {
                 }
             }).get();
             for (Method declaredMethod : inst.getClass().getDeclaredMethods()) {
-                //                System.out.println(declaredMethod.toString());
                 for (Annotation declaredAnnotation : declaredMethod.getDeclaredAnnotations()) {
                     if (declaredAnnotation instanceof VisibilitySpecifier visSpec) {
                         if (declaredMethod.getParameterCount() != 0 || declaredMethod.getReturnType() != boolean.class) {

@@ -49,7 +49,6 @@ public class AnyPlacer extends Module {
             if (CoffeeMain.client.currentScreen != null) {
                 return;
             }
-            //            PacketEvent pe = (PacketEvent) event;
             MouseEvent me = (MouseEvent) event;
             if ((me.getAction() == 1 || me.getAction() == 2) && me.getButton() == 1) {
                 ItemStack sex = CoffeeMain.client.player.getMainHandStack();
@@ -67,7 +66,6 @@ public class AnyPlacer extends Module {
                         spawnPos = hr.getPos();
                     }
                     spawnPos = spawnPos.add(0, heightOffset, 0);
-                    //                    Vec3d spawnPos = hr.getPos();
                     NbtCompound entityTag = sex.getOrCreateSubNbt("EntityTag");
                     NbtList nl = new NbtList();
                     nl.add(NbtDouble.of(spawnPos.x));

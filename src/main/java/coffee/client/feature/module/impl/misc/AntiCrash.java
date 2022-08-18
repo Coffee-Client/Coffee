@@ -96,9 +96,7 @@ public class AntiCrash extends Module {
                 int space = (int) Math.floor(particleMax.getValue() - partTotal);
                 if (space > 0) {
                     ((IParticleS2CPacketMixin) p).setCount(Math.min(space, p.getCount())); // decrease count to fit just below particle max
-                    //                    showCrashPreventionNotification("Decreased particle packet: " + oldCount + " -> " + p.getCount());
                 } else {
-                    //                    showCrashPreventionNotification("Blocked particle packet: S=" + p.getCount() + " T=" + partTotal);
                     e.setCancelled(true);
                 }
             }

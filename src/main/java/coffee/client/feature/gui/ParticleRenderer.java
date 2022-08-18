@@ -38,7 +38,6 @@ public class ParticleRenderer {
         Particle n = new Particle();
         n.x = CoffeeMain.client.getWindow().getScaledWidth() * Math.random();
         n.y = CoffeeMain.client.getWindow().getScaledHeight() * Math.random();
-        //        n.velY = (Math.random() - .5) / 4;
         n.velX = (Math.random() - .5) / 4;
         n.circleRad = Math.random() * 2;
         particles.add(n);
@@ -105,8 +104,6 @@ public class ParticleRenderer {
             long endDelta = Math.min(life, fadeTime);
             long deltaOverall = Math.min(startDelta, endDelta);
             double pk = (deltaOverall / (double) fadeTime);
-
-            //            ShadowMain.client.textRenderer.draw(stack,pk+"",(float)x,(float)y,0xFFFFFF);
             pk = Transitions.easeOutExpo(pk);
             Theme theme = ThemeManager.getMainTheme();
             stack.push();

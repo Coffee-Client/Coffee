@@ -30,7 +30,6 @@ public class ClickTP extends Module {
 
     public ClickTP() {
         super("ClickTP", "Teleport somewhere you clicked to", ModuleType.MOVEMENT);
-        //        Events.registerEventHandlerClass(this);
     }
 
     private static int lengthTo(BlockPos p) {

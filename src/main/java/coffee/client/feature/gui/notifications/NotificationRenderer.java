@@ -11,6 +11,7 @@ import coffee.client.helper.font.adapter.FontAdapter;
 import coffee.client.helper.render.ClipStack;
 import coffee.client.helper.render.Rectangle;
 import coffee.client.helper.render.Renderer;
+import coffee.client.helper.render.textures.Texture;
 import coffee.client.helper.util.Transitions;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.util.math.MatrixStack;
@@ -160,12 +161,11 @@ public class NotificationRenderer {
             double interpolatedAnimProgress = Transitions.easeOutExpo(notification.animationProgress);
             Renderer.R2D.renderRoundedQuad(ms, new Color(20, 20, 20, (int) Math.min(255, 255 * interpolatedAnimProgress)), notificationX, notificationY, notificationX + notificationWidth,
                     notificationY + notificationHeight, 5, 20);
-            RenderSystem.setShaderTexture(0, notification.type.getI());
-            Color notifTheme = notification.type.getC();
             Renderer.setupRender();
+            Color notifTheme = notification.type.getC();
             RenderSystem.setShaderColor(notifTheme.getRed() / 255f, notifTheme.getGreen() / 255f, notifTheme.getBlue() / 255f, (float) interpolatedAnimProgress);
-            Renderer.R2D.renderTexture(ms, notificationX + texPadding, notificationY + notificationHeight / 2d - iconDimensions / 2d, iconDimensions, iconDimensions, 0, 0, iconDimensions,
-                    iconDimensions, iconDimensions, iconDimensions);
+            Texture.NOTIFICATION_TYPES.bindAndDraw(ms, notificationX + texPadding, notificationY + notificationHeight / 2d - iconDimensions / 2d, iconDimensions, iconDimensions,
+                    notification.type.getSpriteName());
             RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
             Renderer.endRender();
 

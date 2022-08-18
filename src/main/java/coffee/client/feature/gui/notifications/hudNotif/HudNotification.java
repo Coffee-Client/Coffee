@@ -7,10 +7,9 @@ package coffee.client.feature.gui.notifications.hudNotif;
 import coffee.client.helper.font.FontRenderers;
 import coffee.client.helper.font.adapter.FontAdapter;
 import coffee.client.helper.render.ClipStack;
-import coffee.client.helper.render.GameTexture;
 import coffee.client.helper.render.Rectangle;
 import coffee.client.helper.render.Renderer;
-import coffee.client.helper.render.Texture;
+import coffee.client.helper.render.textures.Texture;
 import com.mojang.blaze3d.systems.RenderSystem;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -77,12 +76,11 @@ public class HudNotification {
         double rootX = x - notifWidth;
         double rootY = MathHelper.lerp(moveAnim, -notifHeight, y);
         Renderer.R2D.renderRoundedQuadWithShadow(stack, new Color(10, 10, 20), rootX, rootY, rootX + notifWidth, rootY + notifHeight, 3, 20);
-        RenderSystem.setShaderTexture(0, type.i);
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
         stack.push();
         stack.translate(rootX + notifWidth - pad - texDim + texDim / 2d, rootY + pad + texDim / 2d, 0);
         stack.multiply(new Quaternion(0f, 0f, (float) (expandAnim * 360f), true));
-        Renderer.R2D.renderTexture(stack, -texDim / 2d, -texDim / 2d, texDim, texDim, 0, 0, texDim, texDim, texDim, texDim);
+        Texture.NOTIFICATION_TYPES.bindAndDraw(stack, -texDim / 2d, -texDim / 2d, texDim, texDim, type.i);
         stack.pop();
         ClipStack.globalInstance.addWindow(stack, new Rectangle(rootX + pad, rootY, rootX + notifWidth - pad - texDim - pad, rootY + notifHeight));
         fa.drawString(stack, content, rootX + pad, rootY + notifHeight / 2d - fa.getFontHeight() / 2d, 0xFFFFFF);
@@ -90,19 +88,16 @@ public class HudNotification {
     }
 
     public enum Type {
-        SUCCESS(GameTexture.NOTIF_SUCCESS.getWhere(), new Color(58, 223, 118)),
-        INFO(GameTexture.NOTIF_INFO.getWhere(), new Color(39, 186, 253)),
-        WARNING(GameTexture.NOTIF_WARNING.getWhere(), new Color(255, 189, 17)),
-        ERROR(GameTexture.NOTIF_ERROR.getWhere(), new Color(254, 92, 92));
+        SUCCESS("success.png", new Color(58, 223, 118)), INFO("info.png", new Color(39, 186, 253)), WARNING("warning.png", new Color(255, 189, 17)), ERROR("error.png", new Color(254, 92, 92));
         final Color c;
-        final Texture i;
+        final String i;
 
-        Type(Texture icon, Color color) {
+        Type(String icon, Color color) {
             this.i = icon;
             this.c = color;
         }
 
-        public Texture getI() {
+        public String getI() {
             return i;
         }
 

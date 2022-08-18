@@ -5,38 +5,36 @@
 package coffee.client.feature.gui.element.impl;
 
 import coffee.client.feature.gui.element.Element;
-import coffee.client.helper.render.GameTexture;
 import coffee.client.helper.render.Rectangle;
 import coffee.client.helper.render.Renderer;
-import com.mojang.blaze3d.systems.RenderSystem;
+import coffee.client.helper.render.textures.Texture;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Identifier;
 
 public class ImageViewerElement extends Element {
-    final Identifier tex;
+    final Texture tex;
 
-    public ImageViewerElement(double x, double y, GameTexture texture) {
-        super(x, y, texture.getDimensions().getWidth(), texture.getDimensions().getHeight());
-        this.tex = texture.getWhere();
+    public ImageViewerElement(double x, double y, Texture texture) {
+        super(x, y, texture.getBounds().getWidth(), texture.getBounds().getHeight());
+        this.tex = texture;
     }
 
-    public ImageViewerElement(double x, double y, GameTexture texture, double width) {
-        super(x, y, texture.getDimensions().getWidth(), texture.getDimensions().getHeight());
-        Rectangle scaled = getScaledDimensions(texture.getDimensions(), width);
+    public ImageViewerElement(double x, double y, Texture texture, double width) {
+        super(x, y, texture.getBounds().getWidth(), texture.getBounds().getHeight());
+        Rectangle scaled = getScaledDimensions(texture.getBounds(), width);
         setWidth(scaled.getWidth());
         setHeight(scaled.getHeight());
-        this.tex = texture.getWhere();
+        this.tex = texture;
     }
 
-    public ImageViewerElement(double x, double y, double height, GameTexture texture) {
-        super(x, y, texture.getDimensions().getWidth(), texture.getDimensions().getHeight());
-        Rectangle scaled = getScaledDimensionsWithHeight(texture.getDimensions(), height);
+    public ImageViewerElement(double x, double y, double height, Texture texture) {
+        super(x, y, texture.getBounds().getWidth(), texture.getBounds().getHeight());
+        Rectangle scaled = getScaledDimensionsWithHeight(texture.getBounds(), height);
         setWidth(scaled.getWidth());
         setHeight(scaled.getHeight());
-        this.tex = texture.getWhere();
+        this.tex = texture;
     }
 
-    public ImageViewerElement(double x, double y, Identifier texture, double width, double height) {
+    public ImageViewerElement(double x, double y, Texture texture, double width, double height) {
         super(x, y, width, height);
         this.tex = texture;
     }
@@ -60,7 +58,7 @@ public class ImageViewerElement extends Element {
 
     @Override
     public void render(MatrixStack stack, double mouseX, double mouseY) {
-        RenderSystem.setShaderTexture(0, tex);
+        tex.bind();
         Renderer.R2D.renderTexture(stack, getPositionX(), getPositionY(), getWidth(), getHeight(), 0, 0, getWidth(), getHeight(), getWidth(), getHeight());
     }
 

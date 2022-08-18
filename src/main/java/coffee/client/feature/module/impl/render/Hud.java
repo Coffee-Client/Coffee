@@ -17,7 +17,6 @@ import coffee.client.helper.event.EventType;
 import coffee.client.helper.event.Events;
 import coffee.client.helper.event.events.PacketEvent;
 import coffee.client.helper.font.FontRenderers;
-import coffee.client.helper.render.GameTexture;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.AccurateFrameRateCounter;
 import coffee.client.helper.util.Timer;
@@ -25,7 +24,6 @@ import coffee.client.helper.util.Transitions;
 import coffee.client.helper.util.Utils;
 import coffee.client.mixin.render.IInGameHudMixin;
 import coffee.client.mixin.screen.IDebugHudMixin;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket;
@@ -50,7 +48,6 @@ public class Hud extends Module {
     final BooleanSetting coords = this.config.create(new BooleanSetting.Builder(true).name("Coordinates").description("Whether to show current coordinates").get());
     final BooleanSetting ping = this.config.create(new BooleanSetting.Builder(true).name("Ping").description("Whether to show current ping").get());
     final BooleanSetting modules = this.config.create(new BooleanSetting.Builder(true).name("Array list").description("Whether to show currently enabled modules").get());
-    //    final List<ModuleEntry> moduleList = new ArrayList<>();
     final Timer tpsUpdateTimer = new Timer();
     final List<Double> last5SecondTpsAverage = new ArrayList<>();
     final Map<Module, ModuleEntry> entryList = new ConcurrentHashMap<>();
@@ -201,7 +198,7 @@ public class Hud extends Module {
         double width = pad + newWidth + 5 + FontRenderers.getRenderer().getStringWidth(desc) + pad;
         double height = pad * 2 + Math.max(newHeight, FontRenderers.getRenderer().getFontHeight());
         Renderer.R2D.renderRoundedQuadWithShadow(ms, ThemeManager.getMainTheme().getConfig(), 0, 0, width, height, 5, 20);
-        RenderSystem.setShaderTexture(0, GameTexture.TEXTURE_ICON.getWhere());
+        coffee.client.helper.render.textures.Texture.ICON.bind();
         Renderer.R2D.renderTexture(ms, pad, height / 2d - newHeight / 2d, newWidth, newHeight, 0, 0, newWidth, newHeight, newWidth, newHeight);
         FontRenderers.getRenderer().drawString(ms, desc, pad + newWidth + 5, height / 2d - FontRenderers.getRenderer().getMarginHeight() / 2d, 0xFFFFFF);
     }

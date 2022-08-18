@@ -21,8 +21,6 @@ import net.minecraft.util.math.Vec3d;
 import java.util.Objects;
 
 public class Freecam extends Module {
-
-    //    final SliderValue speed = (SliderValue) this.config.create("Speed", 1, 0, 10, 1).description("The speed to fly with");
     final DoubleSetting speed = this.config.create(new DoubleSetting.Builder(2).name("Speed").description("The speed to fly with").min(0).max(10).precision(1).get());
     Vec3d startloc;
     float pitch = 0f;

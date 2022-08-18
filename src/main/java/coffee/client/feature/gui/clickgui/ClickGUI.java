@@ -5,6 +5,7 @@
 package coffee.client.feature.gui.clickgui;
 
 import coffee.client.feature.gui.clickgui.element.CategoryDisplay;
+import coffee.client.feature.gui.clickgui.element.ConfigsDisplay;
 import coffee.client.feature.gui.element.Element;
 import coffee.client.feature.gui.screen.base.AAScreen;
 import coffee.client.feature.module.ModuleType;
@@ -98,6 +99,11 @@ public class ClickGUI extends AAScreen {
             lineY = Math.max(lineY, gd.getHeight());
             addChild(gd);
         }
+        if (x + 100 > width) {
+            x = 5;
+            y += lineY + 5;
+        }
+        addChild(new ConfigsDisplay(x, y, 100));
     }
 
     @Override
@@ -192,7 +198,6 @@ public class ClickGUI extends AAScreen {
 
     @Override
     public void renderInternal(MatrixStack stack, int mouseX, int mouseY, float delta) {
-        //        super.renderInternal(stack, mouseX, mouseY, delta);
         List<Element> elcpy = new ArrayList<>(getElements());
         Collections.reverse(elcpy);
         for (Element element : elcpy) {

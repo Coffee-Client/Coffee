@@ -14,10 +14,10 @@ import coffee.client.helper.font.FontRenderers;
 import coffee.client.helper.font.adapter.FontAdapter;
 import coffee.client.helper.font.adapter.impl.QuickFontAdapter;
 import coffee.client.helper.render.ClipStack;
-import coffee.client.helper.render.GameTexture;
 import coffee.client.helper.render.Rectangle;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.render.Scroller;
+import coffee.client.helper.render.textures.Texture;
 import coffee.client.helper.util.Timer;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.render.GameRenderer;
@@ -169,15 +169,16 @@ public class AddonManagerScreen extends ClientScreen implements FastTickable {
                     x + padding + iconDimensions, y + padding + iconDimensions, 6, 10);
 
             RenderSystem.blendFunc(GL40C.GL_DST_ALPHA, GL40C.GL_ONE_MINUS_DST_ALPHA);
-            Identifier icon = addon.getIcon();
-            if (icon == null) {
-                icon = GameTexture.ICONS_ADDON_PROVIDED.getWhere();
-            }
-            RenderSystem.setShaderTexture(0, icon);
             if (!addon.isEnabled()) {
                 RenderSystem.setShaderColor(0.6f, 0.6f, 0.6f, 1f);
             }
-            Renderer.R2D.renderTexture(stack, x + padding, y + padding, iconDimensions, iconDimensions, 0, 0, iconDimensions, iconDimensions, iconDimensions, iconDimensions);
+            Identifier icon = addon.getIcon();
+            if (icon == null) {
+                Texture.MODULE_TYPES.bindAndDraw(stack, x + padding, y + padding, iconDimensions, iconDimensions, "addons.png");
+            } else {
+                RenderSystem.setShaderTexture(0, icon);
+                Renderer.R2D.renderTexture(stack, x + padding, y + padding, iconDimensions, iconDimensions, 0, 0, iconDimensions, iconDimensions, iconDimensions, iconDimensions);
+            }
             RenderSystem.defaultBlendFunc();
             RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
 

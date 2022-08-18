@@ -4,23 +4,20 @@
 
 package coffee.client.feature.module;
 
-import coffee.client.helper.render.GameTexture;
-import coffee.client.helper.render.Texture;
-
 public enum ModuleType {
-    RENDER("Render", GameTexture.ICONS_RENDER.getWhere()),
-    MOVEMENT("Movement", GameTexture.ICONS_MOVE.getWhere()),
-    MISC("Miscellaneous", GameTexture.ICONS_MISC.getWhere()),
-    WORLD("World", GameTexture.ICONS_WORLD.getWhere()),
-    EXPLOIT("Exploit", GameTexture.ICONS_EXPLOIT.getWhere()),
-    ADDON_PROVIDED("Addons", GameTexture.ICONS_ADDON_PROVIDED.getWhere()),
-    COMBAT("Combat", GameTexture.ICONS_COMBAT.getWhere());
+    RENDER("Render", "render.png"),
+    MOVEMENT("Movement", "movement.png"),
+    MISC("Miscellaneous", "misc.png"),
+    WORLD("World", "world.png"),
+    EXPLOIT("Exploit", "exploit.png"),
+    ADDON_PROVIDED("Addons", "addons.png"),
+    COMBAT("Combat", "combat.png");
 
 
     final String name;
-    final Texture tex;
+    final String tex;
 
-    ModuleType(String n, Texture tex) {
+    ModuleType(String n, String tex) {
         this.name = n;
         this.tex = tex;
     }
@@ -29,7 +26,7 @@ public enum ModuleType {
         return name;
     }
 
-    public Texture getTex() {
+    public String getTex() {
         return tex;
     }
 }

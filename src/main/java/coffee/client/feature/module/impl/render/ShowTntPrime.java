@@ -54,7 +54,6 @@ public class ShowTntPrime extends Module {
                     if (p.getTrackedValues() == null || p.getTrackedValues().size() == 0) {
                         return;
                     }
-                    //                    System.out.println(p.getTrackedValues().get(0).get());
                     if (!i2iamp.containsKey(p.id())) {
                         i2iamp.put(p.id(), Integer.parseInt(p.getTrackedValues().get(0).get() + ""));
                     }
@@ -67,7 +66,6 @@ public class ShowTntPrime extends Module {
         double toRad1 = MathHelper.clamp(toRad, 0, 360);
         stack.push();
         stack.translate(x, y, 0);
-        //        stack.multiply(new Quaternion(0, 0, (System.currentTimeMillis() % 2000) / 2000f * 360f, true));
         double segments1 = MathHelper.clamp(segments, 2, 90);
         RenderSystem.setShaderColor(1, 1, 1, 1);
         int color = c.getRGB();
@@ -78,7 +76,6 @@ public class ShowTntPrime extends Module {
         float h = (float) (color >> 8 & 255) / 255.0F;
         float k = (float) (color & 255) / 255.0F;
         BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
-        //            RenderSystem.defaultBlendFunc();
         RenderSystem.enableBlend();
         RenderSystem.disableTexture();
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
@@ -101,7 +98,6 @@ public class ShowTntPrime extends Module {
 
     @Override
     public void tick() {
-        //        System.out.println(i2iamp);
     }
 
     @Override
@@ -121,7 +117,6 @@ public class ShowTntPrime extends Module {
 
     @Override
     public void onWorldRender(MatrixStack matrices) {
-        //        System.out.println(i2iamp.keySet().size());
         for (Integer integer : i2iamp.keySet()) {
             Entity e = CoffeeMain.client.world.getEntityById(integer);
             if (e == null) {
@@ -130,13 +125,10 @@ public class ShowTntPrime extends Module {
                 int fuseStart = i2iamp.get((int) integer);
                 int fuseNow = ((TntEntity) e).getFuse();
                 double prog = (double) fuseNow / fuseStart;
-                //                System.out.println(prog);
                 Vec3d ePos = Utils.getInterpolatedEntityPosition(e).add(0, e.getHeight(), 0);
                 Vec3d screenSpace = Renderer.R2D.getScreenSpaceCoordinate(ePos, matrices);
                 if (Renderer.R2D.isOnScreen(screenSpace)) {
                     Utils.TickManager.runOnNextRender(() -> {
-                        //                        Renderer.R2D.renderQuad(Renderer.Util.lerp(Color.RED,Color.GREEN,prog),screenSpace.x,screenSpace.y,screenSpace.x+30,screenSpace.y+30);
-
                         drawSingleEntity(screenSpace, (TntEntity) e, prog);
                     });
                 }
@@ -153,7 +145,6 @@ public class ShowTntPrime extends Module {
         FontRenderers.getRenderer()
                 .drawString(nothing, txt, root.x + cWidth / 2d - (FontRenderers.getRenderer().getStringWidth(txt)) / 2d, root.y + cHeight / 2d - FontRenderers.getRenderer().getMarginHeight() / 2d,
                         0xFFFFFF);
-        //        semicircle(nothing,new Color(50,50,50),root.x+cWidth/2d,root.y+cHeight/2d,cWidth/2d-4,2,40,360);
         semicircle(nothing, Renderer.Util.lerp(new Color(50, 255, 50), new Color(255, 50, 50), progress), root.x + cWidth / 2d, root.y + cHeight / 2d, cWidth / 2d - 4, 2, 90, 360 * progress);
 
     }

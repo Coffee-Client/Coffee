@@ -100,7 +100,6 @@ public class Boom extends Module {
         }
         Vec3d v = Objects.requireNonNull(CoffeeMain.client.player).getRotationVector();
         v = v.multiply(speed.getValue() / 10d);
-        // ((int) Math.floor(power.getValue()))
         String nbt = String.format("{EntityTag:{id:\"minecraft:fireball\",ExplosionPower:%db,power:[%s,%s,%s],Item:{id:\"minecraft:egg\",Count:1b}}}", ((int) Math.floor(power.getValue())), v.x, v.y,
                 v.z);
         ItemStack stack = Utils.generateItemStackWithMeta(nbt, Items.BAT_SPAWN_EGG);

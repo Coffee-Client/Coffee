@@ -98,7 +98,6 @@ public class Rotations {
             add = delta;
         }
         setClientYaw(clientYaw + (float) add);
-        //        CoffeeMain.client.player.setYaw(CoffeeMain.client.player.getYaw() + (float) add);
 
         // setting pitch
         required = degTan;
@@ -109,7 +108,6 @@ public class Rotations {
             add = delta;
         }
         setClientPitch(clientPitch + (float) add);
-        //        CoffeeMain.client.player.setPitch(CoffeeMain.client.player.getPitch() + (float) add);
     }
 
     public static void lookAtPositionSmooth(Vec3d target, double laziness) {

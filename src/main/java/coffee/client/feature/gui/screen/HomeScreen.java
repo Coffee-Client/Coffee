@@ -12,7 +12,6 @@ import coffee.client.feature.gui.widget.RoundButton;
 import coffee.client.helper.CompatHelper;
 import coffee.client.helper.font.FontRenderers;
 import coffee.client.helper.font.adapter.FontAdapter;
-import coffee.client.helper.render.GameTexture;
 import coffee.client.helper.render.MSAAFramebuffer;
 import coffee.client.helper.render.PlayerHeadResolver;
 import coffee.client.helper.render.Renderer;
@@ -40,7 +39,6 @@ import java.util.UUID;
 
 public class HomeScreen extends ClientScreen {
     static final double padding = 6;
-    static final Texture background = GameTexture.TEXTURE_BACKGROUND.getWhere();
     static String changelog = "";
     private static HomeScreen instance;
     final ParticleRenderer prend = new ParticleRenderer(600);
@@ -125,7 +123,6 @@ public class HomeScreen extends ClientScreen {
         }
         previousChecked = uid;
         this.currentAccountTexture = PlayerHeadResolver.resolve(uid);
-        //        PlayerHeadResolver.resolve(uid, this.currentAccountTexture);
         currentAccountTextureLoaded = true;
         callback.run();
     }
@@ -135,7 +132,7 @@ public class HomeScreen extends ClientScreen {
 
         Renderer.R2D.renderQuad(stack, new Color(20, 20, 20), 0, 0, width, height);
 
-        RenderSystem.setShaderTexture(0, background);
+        coffee.client.helper.render.textures.Texture.BACKGROUND.bind();
         Renderer.R2D.renderTexture(stack, 0, 0, width, height, 0, 0, width, height, width, height);
         RenderSystem.defaultBlendFunc();
         prend.render(stack);
@@ -152,7 +149,7 @@ public class HomeScreen extends ClientScreen {
         double per = newH / origH;
         double newW = origW * per;
         Renderer.R2D.renderRoundedQuadWithShadow(stack, new Color(0, 0, 10, 200), padding, height - padding - padding - 20 - padding, width - padding, height - padding, 10, 20);
-        RenderSystem.setShaderTexture(0, GameTexture.TEXTURE_ICON.getWhere());
+        coffee.client.helper.render.textures.Texture.ICON.bind();
         Renderer.R2D.renderTexture(stack, padding * 2, height - padding * 2 - newH, newW, newH, 0, 0, newW, newH, newW, newH);
         super.renderInternal(stack, mouseX, mouseY, delta); // render bottom row widgets
 

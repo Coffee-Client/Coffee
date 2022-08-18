@@ -137,10 +137,8 @@ public class Waypoints extends Module {
                 stack.translate(center + x - offset, 5 + (sightpoint.major ? 5 : 15), 0);
                 stack.scale((float) focus, (float) focus, 1);
 
-                //                FontRenderers.getRenderer().drawCenteredString(Renderer.R3D.getEmptyMatrixStack(),focus+"",center,5,1f,1f,1f,1f);
                 FontAdapter fa = sightpoint.major ? FontRenderers.getCustomSize(22) : FontRenderers.getCustomSize(16);
                 fa.drawCenteredString(stack, sightpoint.label, 0, -fa.getFontHeight() / 2d, sightpoint.color.getRGB());
-                //                Renderer.R2D.renderQuad(stack,sightpoint.color,-1,-5,1,5);
                 stack.pop();
             }
         }

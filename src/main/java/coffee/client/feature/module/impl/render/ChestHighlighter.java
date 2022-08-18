@@ -25,7 +25,6 @@ public class ChestHighlighter extends Module {
 
     public ChestHighlighter() {
         super("ChestHighlighter", "Shows all chests in the area", ModuleType.RENDER);
-        //        Events.registerEventHandlerClass(this);
     }
 
     void addIfNotExisting(BlockPos p) {

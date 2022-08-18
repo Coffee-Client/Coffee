@@ -4,12 +4,13 @@
 
 package coffee.client.feature.gui.clickgui.element;
 
+import coffee.client.feature.command.impl.ConfigUtils;
 import coffee.client.feature.gui.clickgui.ClickGUI;
 import coffee.client.feature.gui.element.Element;
+import coffee.client.feature.gui.element.impl.ButtonElement;
 import coffee.client.feature.gui.element.impl.FlexLayoutElement;
-import coffee.client.feature.module.Module;
-import coffee.client.feature.module.ModuleRegistry;
-import coffee.client.feature.module.ModuleType;
+import coffee.client.feature.gui.element.impl.TextFieldElement;
+import coffee.client.feature.gui.notifications.hudNotif.HudNotification;
 import coffee.client.helper.font.FontRenderers;
 import coffee.client.helper.font.adapter.FontAdapter;
 import coffee.client.helper.render.Rectangle;
@@ -18,38 +19,62 @@ import coffee.client.helper.render.textures.Texture;
 import net.minecraft.client.util.math.MatrixStack;
 
 import java.awt.Color;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-public class CategoryDisplay extends Element {
+public class ConfigsDisplay extends Element {
     static final double maxHeight = 300;
-    final ModuleType type;
-    final List<Module> modules = new ArrayList<>();
+    private static final char[] ILLEGAL_CHARACTERS = { '/', '\n', '\r', '\t', '\0', '\f', '`', '?', '*', '\\', '<', '>', '|', '\"', ':' };
+    public static ConfigsDisplay instance;
     final FlexLayoutElement layout;
     final FontAdapter titleRenderer = FontRenderers.getRenderer();
-
-
     boolean held = false;
 
-    public CategoryDisplay(ModuleType type, double x, double y, double width) {
+    public ConfigsDisplay(double x, double y, double width) {
         super(x, y, width, 0);
-        this.type = type;
-        for (Module module : ModuleRegistry.getModules()) {
-            if (module.getModuleType() == type) {
-                this.modules.add(module);
-            }
-        }
-        List<ModuleDisplay> displays = new ArrayList<>();
-        for (Module module : modules) {
-            displays.add(new ModuleDisplay(module, 0, 0, width - 4, this));
-        }
-        layout = new FlexLayoutElement(FlexLayoutElement.LayoutDirection.DOWN, x + 2, y, width - 4, maxHeight, 2, displays.toArray(ModuleDisplay[]::new));
-
+        layout = new FlexLayoutElement(FlexLayoutElement.LayoutDirection.DOWN, x + 2, y, width - 4, maxHeight, 2);
+        reinit();
         double nh = Math.min(layout.getActualHeight(), maxHeight);
         if (nh != 0) {
             nh += 2;
         }
         setHeight(nh);
+        instance = this;
+    }
+
+    public void reinit() {
+        List<Element> the = new ArrayList<>();
+        TextFieldElement el = new TextFieldElement(0, 0, width - 4 - 16 - 2, 16, "Name", 2);
+        el.setContentFilter(s -> {
+            for (char c : s.toCharArray()) {
+                for (char illegalCharacter : ILLEGAL_CHARACTERS) {
+                    if (illegalCharacter == c) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        });
+        ButtonElement buttonElement = new ButtonElement(ButtonElement.STANDARD, 0, 0, 16, 16, "+", () -> {
+            try {
+                ConfigUtils.save(new File(ConfigUtils.CONFIG_STORAGE, el.get()));
+                reinit();
+            } catch (Exception e) {
+                HudNotification.create("Failed to load config. Check logs for more info", 5000, HudNotification.Type.ERROR);
+                e.printStackTrace();
+            }
+        }, 2);
+        buttonElement.setEnabled(false);
+        el.setChangeListener(() -> buttonElement.setEnabled(!el.get().isEmpty()));
+        FlexLayoutElement fe = new FlexLayoutElement(FlexLayoutElement.LayoutDirection.RIGHT, 0, 0, 2, el, buttonElement);
+        the.add(fe);
+        for (File file : Objects.requireNonNull(ConfigUtils.CONFIG_STORAGE.listFiles())) {
+            SavedConfigDisplay scd = new SavedConfigDisplay(getPositionX(), getPositionY(), width - 4, file, this);
+            the.add(scd);
+        }
+        layout.setElements(the);
     }
 
     @Override
@@ -77,10 +102,10 @@ public class CategoryDisplay extends Element {
         Renderer.R2D.renderRoundedQuadWithShadow(stack, new Color(20, 20, 20), getPositionX(), getPositionY(), getPositionX() + getWidth(), getPositionY() + getHeight(), 3, 10);
         double iconPad = 4;
         double iconDims = headerHeight() - iconPad * 2;
-        Texture.MODULE_TYPES.bindAndDraw(stack, getPositionX() + iconPad, getPositionY() + iconPad, iconDims, iconDims, type.getTex());
+        Texture.MODULE_TYPES.bindAndDraw(stack, getPositionX() + iconPad, getPositionY() + iconPad, iconDims, iconDims, "configs.png");
 
-        titleRenderer.drawString(stack, type.getName(), (float) (getPositionX() + iconDims + iconPad * 2),
-                (float) (getPositionY() + headerHeight() / 2d - Math.round(titleRenderer.getFontHeight()) / 2d), 1f, 1f, 1f, 1f);
+        titleRenderer.drawString(stack, "Configs", (float) (getPositionX() + iconDims + iconPad * 2), (float) (getPositionY() + headerHeight() / 2d - Math.round(titleRenderer.getFontHeight()) / 2d),
+                1f, 1f, 1f, 1f);
         layout.setPositionX(getPositionX() + 2);
         layout.setPositionY(getPositionY() + headerHeight());
         layout.render(stack, mouseX, mouseY);

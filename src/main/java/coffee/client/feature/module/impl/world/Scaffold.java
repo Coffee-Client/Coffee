@@ -27,8 +27,6 @@ import net.minecraft.util.math.Vec3d;
 import java.util.Objects;
 
 public class Scaffold extends Module {
-
-    //    final SliderValue extend = this.config.create("Extend", 3, 0, 5, 1);
     final DoubleSetting extend = this.config.create(new DoubleSetting.Builder(3).name("Extend").description("How many blocks to extend outwards").min(0).max(5).precision(1).get());
 
     public Scaffold() {

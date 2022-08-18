@@ -10,6 +10,8 @@ import coffee.client.helper.render.Texture;
 import coffee.client.mixin.ClientWorldMixin;
 import coffee.client.mixin.IMinecraftClientMixin;
 import coffee.client.mixin.IRenderTickCounterMixin;
+import lombok.Cleanup;
+import lombok.SneakyThrows;
 import net.minecraft.client.network.PendingUpdateManager;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.texture.NativeImageBackedTexture;
@@ -38,6 +40,7 @@ import javax.imageio.ImageIO;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -56,6 +59,13 @@ public class Utils {
                 throw new IllegalArgumentException(message);
             }
         }
+    }
+
+    @SneakyThrows
+    public static String loadFromResources(String resourceName) {
+        @Cleanup InputStream resourceAsStream = Objects.requireNonNull(Utils.class.getClassLoader().getResourceAsStream("assets/coffee/" + resourceName));
+        byte[] bytes = resourceAsStream.readAllBytes();
+        return new String(bytes);
     }
 
     public static void sleep(long ms) {

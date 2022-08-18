@@ -37,11 +37,18 @@ public class ButtonElement extends Element implements HasSpecialCursor {
     @Getter
     boolean visible = true;
 
+    double radius = 5;
+
     public ButtonElement(Color color, double x, double y, double w, double h, String t, Runnable a) {
         super(x, y, w, h);
         this.onPress = a;
         this.text = t;
         this.textColor = color;
+    }
+
+    public ButtonElement(Color color, double x, double y, double w, double h, String t, Runnable a, double raidus) {
+        this(color, x, y, w, h, t, a);
+        this.radius = raidus;
     }
 
     @Override
@@ -67,7 +74,7 @@ public class ButtonElement extends Element implements HasSpecialCursor {
         matrices.scale(MathHelper.lerp(animProgress, 1f, 1.01f), MathHelper.lerp(animProgress, 1f, 1.01f), 1f);
         double originX = -width / 2d;
         double originY = -height / 2d;
-        Renderer.R2D.renderRoundedQuad(matrices, new Color(30, 30, 30), originX, originY, width / 2d, height / 2d, Math.min(height / 2d, 5), 20);
+        Renderer.R2D.renderRoundedQuad(matrices, new Color(30, 30, 30), originX, originY, width / 2d, height / 2d, Math.min(height / 2d, radius), 10);
         if (animProgress != 0) {
             Renderer.R2D.renderRoundedShadow(matrices, new Color(10, 10, 10, 100), originX, originY, width / 2d, height / 2d, Math.min(height / 2d, 5), 20, animProgress * 3);
         }

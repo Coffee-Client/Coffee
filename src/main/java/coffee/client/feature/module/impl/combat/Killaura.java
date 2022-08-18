@@ -39,6 +39,7 @@ import java.util.stream.StreamSupport;
 
 public class Killaura extends Module {
     final Timer attackCooldown = new Timer();
+    final Random r = new Random();
     @Setting(name = "Attack mode", description = "How to attack the selected entities")
     AttackMode attackMode = AttackMode.Single;
     @Setting(name = "Amount", description = "Amount of entities to attack at once (in multi mode)", min = 1, max = 10, precision = 0)
@@ -65,7 +66,6 @@ public class Killaura extends Module {
     boolean attackPlayers = true;
     @Setting(name = "Attack all", description = "Attacks all remaining entities")
     boolean attackAll = false;
-    final Random r = new Random();
     List<LivingEntity> targets = new ArrayList<>();
     int currentRandomDelay = 0;
 
@@ -107,7 +107,6 @@ public class Killaura extends Module {
             if (hand == null) {
                 return 10;
             }
-            //            hand.getTooltip(CoffeeMain.client.player, TooltipContext.Default.ADVANCED);
             AtomicDouble speed = new AtomicDouble(CoffeeMain.client.player.getAttributeBaseValue(EntityAttributes.GENERIC_ATTACK_SPEED));
             hand.getAttributeModifiers(EquipmentSlot.MAINHAND).forEach((entityAttribute, entityAttributeModifier) -> {
                 if (entityAttribute == EntityAttributes.GENERIC_ATTACK_SPEED) {

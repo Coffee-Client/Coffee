@@ -72,7 +72,6 @@ public class RadarElement extends HudElement {
                     c = Color.GREEN;
                 }
                 Renderer.R2D.renderCircle(stack, c, deltaX, deltaZ, 1, 10);
-                //                Renderer.R2D.renderQuad(stack,Color.WHITE,deltaX,deltaZ,deltaX+1,deltaZ+1);
             }
             stack.pop();
             ClipStack.globalInstance.popWindow();

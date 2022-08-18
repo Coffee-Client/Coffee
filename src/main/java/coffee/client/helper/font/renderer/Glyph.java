@@ -58,7 +58,6 @@ public class Glyph {
         g.drawString(String.valueOf(c), offsetX, offsetY + fontMetrics.getAscent());
 
         Utils.registerBufferedImageTexture(imageTex, bufferedImage);
-        //        System.out.println("Generated character mapping for " + this.c + ": texture is " + bufferedImage.getWidth() + "x" + bufferedImage.getHeight());
     }
 
     public Texture getImageTex() {

@@ -53,7 +53,6 @@ public class Annihilator extends Module {
         int endY = MathHelper.clamp(r(pos.getY() + range.getValue()), CoffeeMain.client.world.getBottomY(), CoffeeMain.client.world.getTopY());
         String cmd = "fill " + r(pos.getX() - range.getValue()) + " " + startY + " " + r(pos.getZ() - range.getValue()) + " " + r(pos.getX() + range.getValue()) + " " + endY + " " + r(
                 pos.getZ() + range.getValue()) + " " + "minecraft:" + block.getValue();
-        //        System.out.println(cmd);
         client.player.sendCommand(cmd);
     }
 

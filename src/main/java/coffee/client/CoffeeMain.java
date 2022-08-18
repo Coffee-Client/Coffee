@@ -18,7 +18,6 @@ import coffee.client.helper.font.FontRenderers;
 import coffee.client.helper.font.adapter.impl.QuickFontAdapter;
 import coffee.client.helper.font.renderer.FontRenderer;
 import coffee.client.helper.manager.ConfigManager;
-import coffee.client.helper.render.GameTexture;
 import coffee.client.helper.util.Rotations;
 import coffee.client.helper.util.Utils;
 import me.x150.analytics.Analytics;
@@ -159,13 +158,11 @@ public class CoffeeMain implements ModInitializer {
         MODULE_FTTICKER.start();
         FAST_TICKER.start();
         CommandRegistry.init();
-        //        coffee.client.helper.font.renderer.nfont.Font.initialize();
         log(Level.INFO, "Sending post window init");
         Events.fireEvent(EventType.POST_INIT, new NonCancellableEvent());
         for (Module module : new ArrayList<>(ModuleRegistry.getModules())) {
             module.postInit();
         }
-        GameTexture.postInit();
     }
 
 }

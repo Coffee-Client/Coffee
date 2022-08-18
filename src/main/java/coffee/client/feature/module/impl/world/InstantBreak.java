@@ -101,7 +101,6 @@ public class InstantBreak extends Module {
     public void onWorldRender(MatrixStack matrices) {
         for (Vec3d position : new ArrayList<>(positions)) {
             Renderer.R3D.renderOutline(matrices, Utils.getCurrentRGB(), position, new Vec3d(1, 1, 1));
-            //Renderer.renderFilled(position,new Vec3d(1,1,1),new Color(0,0,0,150),matrices);
         }
     }
 
@@ -110,7 +109,6 @@ public class InstantBreak extends Module {
 
     }
 
-    //    final MultiValue                  prio      = (MultiValue) this.config.create("Priority", "Speed", "Order", "Speed").description("What to prioritize when breaking blocks");
     public enum Priority {
         Speed, Order
     }

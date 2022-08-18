@@ -18,7 +18,6 @@ import java.time.Instant;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-// TODO: 05.05.22 change icon
 public class DiscordRPC extends Module {
     static final ExecutorService offThreadExec = Executors.newFixedThreadPool(1);
     long updateRequested = 0;

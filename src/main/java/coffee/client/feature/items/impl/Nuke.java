@@ -22,7 +22,6 @@ public class Nuke extends Item {
 
     @Override
     public ItemStack generate() {
-        // {BlockEntityTag:{SpawnData:{entity:{id:"minecraft:tnt",HasVisualFire:1b,Fuse:40}},SpawnPotentials:[{weight:1,data:{entity:{id:"minecraft:tnt",HasVisualFire:1b,Fuse:40}}}]}}
         ItemStack spawn = new ItemStack(Items.SPAWNER);
         NbtGroup blt = new NbtGroup(
                 new NbtObject("BlockEntityTag", new NbtProperty("MinSpawnDelay", 1), new NbtProperty("MaxSpawnDelay", 1), new NbtProperty("SpawnRange", 100), new NbtProperty("SpawnCount", 50),

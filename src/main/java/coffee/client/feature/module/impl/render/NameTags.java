@@ -110,7 +110,6 @@ public class NameTags extends Module {
                 .sorted(Comparator.comparingDouble(value -> -value.getPos().distanceTo(client.gameRenderer.getCamera().getPos())))
                 .filter(abstractClientPlayerEntity -> !abstractClientPlayerEntity.equals(client.player))
                 .toList()) {
-            //            String t = player.getEntityName();
             render(matrices, player, player.getName());
         }
     }

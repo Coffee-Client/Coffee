@@ -8,9 +8,9 @@ import coffee.client.CoffeeMain;
 import coffee.client.feature.command.Command;
 import coffee.client.feature.command.coloring.ArgumentType;
 import coffee.client.feature.command.coloring.PossibleArgument;
-import coffee.client.feature.command.coloring.StaticArgumentServer;
 import coffee.client.feature.command.exception.CommandException;
 import coffee.client.feature.config.SettingBase;
+import coffee.client.feature.gui.clickgui.element.ConfigsDisplay;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleRegistry;
 import com.google.common.base.Charsets;
@@ -26,13 +26,14 @@ import net.minecraft.text.Text;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 public class ConfigUtils extends Command {
-    static final File CONFIG_STORAGE = new File(CoffeeMain.BASE, "configs");
+    public static final File CONFIG_STORAGE = new File(CoffeeMain.BASE, "configs");
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public ConfigUtils() {
@@ -42,6 +43,83 @@ public class ConfigUtils extends Command {
         }
     }
 
+    public static void load(File f) throws IOException {
+        for (Module module : ModuleRegistry.getModules()) {
+            for (SettingBase<?> dynamicValue : module.config.getSettings()) {
+                dynamicValue.reset();
+            }
+        }
+        String config = FileUtils.readFileToString(f, Charsets.UTF_8);
+        JsonObject root = JsonParser.parseString(config).getAsJsonObject();
+        for (JsonElement jsonElement : root.get("config").getAsJsonArray()) {
+            JsonObject current = jsonElement.getAsJsonObject();
+            String moduleName = current.get("name").getAsString();
+            Module m = ModuleRegistry.getByName(moduleName);
+            if (m == null) {
+                //                warn("Config includes invalid module name \"" + moduleName + "\"");
+                continue;
+            }
+            for (JsonElement pairs : current.get("pairs").getAsJsonArray()) {
+                JsonObject c = pairs.getAsJsonObject();
+                String cname = c.get("key").getAsString();
+                String value = c.get("value").getAsString();
+                SettingBase<?> val = m.config.get(cname);
+                if (val != null) {
+                    val.accept(value);
+                }
+            }
+        }
+        List<Module> shouldBeEnabled = new ArrayList<>();
+        for (JsonElement enabled : root.get("enabled").getAsJsonArray()) {
+            String n = enabled.getAsString();
+            Module m = ModuleRegistry.getByName(n);
+            if (m == null) {
+                //                warn("Config includes invalid module name \"" + n + "\"");
+                continue;
+            }
+            shouldBeEnabled.add(m);
+            if (!m.isEnabled()) {
+                m.setEnabled(true);
+            }
+        }
+        for (Module module : ModuleRegistry.getModules()) {
+            if (!shouldBeEnabled.contains(module) && module.isEnabled()) {
+                module.setEnabled(false);
+            }
+        }
+    }
+
+    public static void save(File out) throws IOException {
+        JsonObject base = new JsonObject();
+        JsonArray enabled = new JsonArray();
+        JsonArray config = new JsonArray();
+        for (Module module : ModuleRegistry.getModules()) {
+            if (module.isEnabled()) {
+                enabled.add(module.getName());
+            }
+            JsonObject currentConfig = new JsonObject();
+            currentConfig.addProperty("name", module.getName());
+            JsonArray pairs = new JsonArray();
+            for (SettingBase<?> dynamicValue : module.config.getSettings()) {
+                if (dynamicValue.getValue().equals(dynamicValue.getDefaultValue())) {
+                    continue; // no need to save that
+                }
+                JsonObject jesus = new JsonObject();
+                jesus.addProperty("key", dynamicValue.getName());
+                jesus.addProperty("value", dynamicValue.getConfigSave());
+                pairs.add(jesus);
+            }
+            if (pairs.size() == 0) {
+                continue;
+            }
+            currentConfig.add("pairs", pairs);
+            config.add(currentConfig);
+        }
+        base.add("enabled", enabled);
+        base.add("config", config);
+        FileUtils.writeStringToFile(out, base.toString(), Charsets.UTF_8, false);
+    }
+
     @Override
     public ExamplesEntry getExampleArguments() {
         return new ExamplesEntry("load abc", "save abc");
@@ -49,8 +127,15 @@ public class ConfigUtils extends Command {
 
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
-        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.STRING, "load", "save"),
-                new PossibleArgument(ArgumentType.STRING, Arrays.stream(Objects.requireNonNull(CONFIG_STORAGE.listFiles())).map(File::getName).toList().toArray(String[]::new)));
+        if (index == 0) {
+            return new PossibleArgument(ArgumentType.STRING, "load", "save");
+        }
+        if (args[0].equals("load") && index == 1) {
+            return new PossibleArgument(ArgumentType.STRING, Arrays.stream(Objects.requireNonNull(CONFIG_STORAGE.listFiles())).map(File::getName).toList().toArray(String[]::new));
+        } else if (args[0].equals("save") && index >= 1) {
+            return new PossibleArgument(ArgumentType.STRING, "<file name>");
+        }
+        return new PossibleArgument(ArgumentType.STRING);
     }
 
     @Override
@@ -68,48 +153,9 @@ public class ConfigUtils extends Command {
                     return;
                 }
                 try {
-                    for (Module module : ModuleRegistry.getModules()) {
-                        for (SettingBase<?> dynamicValue : module.config.getSettings()) {
-                            dynamicValue.reset();
-                        }
-                    }
-                    String config = FileUtils.readFileToString(f, Charsets.UTF_8);
-                    JsonObject root = JsonParser.parseString(config).getAsJsonObject();
-                    for (JsonElement jsonElement : root.get("config").getAsJsonArray()) {
-                        JsonObject current = jsonElement.getAsJsonObject();
-                        String moduleName = current.get("name").getAsString();
-                        Module m = ModuleRegistry.getByName(moduleName);
-                        if (m == null) {
-                            warn("Config includes invalid module name \"" + moduleName + "\"");
-                            continue;
-                        }
-                        for (JsonElement pairs : current.get("pairs").getAsJsonArray()) {
-                            JsonObject c = pairs.getAsJsonObject();
-                            String cname = c.get("key").getAsString();
-                            String value = c.get("value").getAsString();
-                            SettingBase<?> val = m.config.get(cname);
-                            if (val != null) {
-                                val.accept(value);
-                            }
-                        }
-                    }
-                    List<Module> shouldBeEnabled = new ArrayList<>();
-                    for (JsonElement enabled : root.get("enabled").getAsJsonArray()) {
-                        String n = enabled.getAsString();
-                        Module m = ModuleRegistry.getByName(n);
-                        if (m == null) {
-                            warn("Config includes invalid module name \"" + n + "\"");
-                            continue;
-                        }
-                        shouldBeEnabled.add(m);
-                        if (!m.isEnabled()) {
-                            m.setEnabled(true);
-                        }
-                    }
-                    for (Module module : ModuleRegistry.getModules()) {
-                        if (!shouldBeEnabled.contains(module) && module.isEnabled()) {
-                            module.setEnabled(false);
-                        }
+                    load(f);
+                    if (ConfigsDisplay.instance != null) {
+                        ConfigsDisplay.instance.reinit();
                     }
                     success("Loaded config file!");
                 } catch (Exception e) {
@@ -126,38 +172,11 @@ public class ConfigUtils extends Command {
                     }
                 }
                 try {
-                    JsonObject base = new JsonObject();
-                    JsonArray enabled = new JsonArray();
-                    JsonArray config = new JsonArray();
-                    for (Module module : ModuleRegistry.getModules()) {
-                        if (module.getName().equalsIgnoreCase("Alts")) {
-                            continue; // we do NOT want to include this
-                        }
-                        if (module.isEnabled()) {
-                            enabled.add(module.getName());
-                        }
-                        JsonObject currentConfig = new JsonObject();
-                        currentConfig.addProperty("name", module.getName());
-                        JsonArray pairs = new JsonArray();
-                        for (SettingBase<?> dynamicValue : module.config.getSettings()) {
-                            if (dynamicValue.getValue().equals(dynamicValue.getDefaultValue())) {
-                                continue; // no need to save that
-                            }
-                            JsonObject jesus = new JsonObject();
-                            jesus.addProperty("key", dynamicValue.getName());
-                            jesus.addProperty("value", dynamicValue.getConfigSave());
-                            pairs.add(jesus);
-                        }
-                        if (pairs.size() == 0) {
-                            continue;
-                        }
-                        currentConfig.add("pairs", pairs);
-                        config.add(currentConfig);
+                    save(out);
+                    if (ConfigsDisplay.instance != null) {
+                        ConfigsDisplay.instance.reinit();
                     }
-                    base.add("enabled", enabled);
-                    base.add("config", config);
-                    FileUtils.writeStringToFile(out, base.toString(), Charsets.UTF_8, false);
-                    MutableText t = Text.literal("[§9A§r] Saved config! Click to open");
+                    MutableText t = Text.literal("Saved config! Click to open");
                     Style s = Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.of("Click to open")))
                             .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, out.getAbsolutePath()));
                     t.setStyle(s);

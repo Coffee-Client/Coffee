@@ -16,12 +16,10 @@ import coffee.client.helper.font.FontRenderers;
 import coffee.client.helper.font.adapter.FontAdapter;
 import coffee.client.helper.manager.ShaderManager;
 import coffee.client.helper.render.ClipStack;
-import coffee.client.helper.render.GameTexture;
 import coffee.client.helper.render.Rectangle;
 import coffee.client.helper.render.Renderer;
-import coffee.client.helper.render.Texture;
+import coffee.client.helper.render.textures.Texture;
 import coffee.client.helper.util.Transitions;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
@@ -39,10 +37,8 @@ import java.util.List;
 
 public class SpotlightScreen extends ClientScreen implements FastTickable {
     static final List<StaticEntry> staticEntries = List.of(
-            new StaticEntry("Gamemode change", "Switch to creative", GameTexture.ACTION_RUNCOMMAND.getWhere(), () -> CoffeeMain.client.player.sendCommand("gamemode creative"), "gmc", "creative",
-                    "gmcreative"),
-            new StaticEntry("Gamemode change", "Switch to survival", GameTexture.ACTION_RUNCOMMAND.getWhere(), () -> CoffeeMain.client.player.sendCommand("gamemode survival"), "gms", "survival",
-                    "gmsurvival"));
+            new StaticEntry("Gamemode change", "Switch to creative", "command.png", () -> CoffeeMain.client.player.sendCommand("gamemode creative"), "gmc", "creative", "gmcreative"),
+            new StaticEntry("Gamemode change", "Switch to survival", "command.png", () -> CoffeeMain.client.player.sendCommand("gamemode survival"), "gms", "survival", "gmsurvival"));
     CommandTextField command;
     List<SuggestionsEntry> entries = new ArrayList<>();
     double anim = 0;
@@ -72,7 +68,7 @@ public class SpotlightScreen extends ClientScreen implements FastTickable {
             }
             for (Module module : ModuleRegistry.getModules()) {
                 if (module.getName().toLowerCase().startsWith(firstPart)) {
-                    entries.add(new SuggestionsEntry(module.getName(), GameTexture.ACTION_TOGGLEMODULE.getWhere(), "Toggle module", () -> {
+                    entries.add(new SuggestionsEntry(module.getName(), "toggle.png", "Toggle module", () -> {
                         module.toggle();
                         close();
                     }, 0, 0, 0, () -> {
@@ -84,14 +80,13 @@ public class SpotlightScreen extends ClientScreen implements FastTickable {
             for (Command command1 : CommandRegistry.getCommands()) {
                 for (String alias : command1.getAliases()) {
                     if ((alias).toLowerCase().startsWith(firstPart)) {
-                        entries.add(
-                                new SuggestionsEntry(alias + " " + String.join(" ", Arrays.copyOfRange(cmdArgs, 1, cmdArgs.length)), GameTexture.ACTION_RUNCOMMAND.getWhere(), "Run command", () -> {
-                                    CommandRegistry.execute(alias + " " + String.join(" ", Arrays.copyOfRange(cmdArgs, 1, cmdArgs.length)));
-                                    close();
-                                }, 0, 0, 0, () -> {
-                                    command.set(alias + " " + String.join(" ", Arrays.copyOfRange(cmdArgs, 1, cmdArgs.length)));
-                                    command.setCursorMax();
-                                }));
+                        entries.add(new SuggestionsEntry(alias + " " + String.join(" ", Arrays.copyOfRange(cmdArgs, 1, cmdArgs.length)), "command.png", "Run command", () -> {
+                            CommandRegistry.execute(alias + " " + String.join(" ", Arrays.copyOfRange(cmdArgs, 1, cmdArgs.length)));
+                            close();
+                        }, 0, 0, 0, () -> {
+                            command.set(alias + " " + String.join(" ", Arrays.copyOfRange(cmdArgs, 1, cmdArgs.length)));
+                            command.setCursorMax();
+                        }));
                     }
                 }
             }
@@ -268,7 +263,7 @@ public class SpotlightScreen extends ClientScreen implements FastTickable {
         closing = true;
     }
 
-    record StaticEntry(String type, String desc, Texture texture, Runnable onRun, String... triggers) {
+    record StaticEntry(String type, String desc, String texture, Runnable onRun, String... triggers) {
 
     }
 
@@ -777,14 +772,14 @@ public class SpotlightScreen extends ClientScreen implements FastTickable {
     static class SuggestionsEntry {
         final String text;
         final String title;
-        final Texture icon;
+        final String icon;
         final Runnable onCl;
         final Runnable tabcomplete;
         final double padUpDown = 3;
         public boolean selected = false;
         double x, y, wid;
 
-        public SuggestionsEntry(String text, Texture icon, String title, Runnable onClick, double x, double y, double width, Runnable onTab) {
+        public SuggestionsEntry(String text, String icon, String title, Runnable onClick, double x, double y, double width, Runnable onTab) {
             this.text = text;
             this.title = title;
             this.icon = icon;
@@ -801,8 +796,7 @@ public class SpotlightScreen extends ClientScreen implements FastTickable {
             if (selected) {
                 Renderer.R2D.renderRoundedQuad(stack, new Color(40, 40, 40), x, y, x + wid, y + height(), 5, 20);
             }
-            RenderSystem.setShaderTexture(0, icon);
-            Renderer.R2D.renderTexture(stack, x + padUpDown, yCenter - contentSize / 2d, contentSize, contentSize, 0, 0, contentSize, contentSize, contentSize, contentSize);
+            Texture.ACTION_TYPES.bindAndDraw(stack, x + padUpDown, yCenter - contentSize / 2d, contentSize, contentSize, icon);
             FontRenderers.getRenderer().drawString(stack, title, x + padUpDown + contentSize + padUpDown, yCenter - contentSize / 2d, 0xAAAAAA);
             FontRenderers.getRenderer().drawString(stack, text, x + padUpDown + contentSize + padUpDown, yCenter - contentSize / 2d + FontRenderers.getRenderer().getMarginHeight(), 0xFFFFFF);
         }

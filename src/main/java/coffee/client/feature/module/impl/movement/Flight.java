@@ -244,7 +244,7 @@ public class Flight extends Module {
 
     }
 
-    public enum FlightMode { //  = (MultiValue) this.config.create("Mode", "Static", "Vanilla", "Static", "3D", "Jetpack")
+    public enum FlightMode {
         Vanilla, Static, ThreeD, Jetpack, Walk
     }
 }

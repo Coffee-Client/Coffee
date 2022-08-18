@@ -41,9 +41,16 @@ public class TextFieldElement extends Element implements HasSpecialCursor {
     @Getter
     boolean invalid = false;
 
+    double radius = 5;
+
     public TextFieldElement(double x, double y, double width, double height, String text) {
         super(x, y, width, height);
         this.suggestion = text;
+    }
+
+    public TextFieldElement(double x, double y, double width, double height, String suggestion, double rad) {
+        this(x, y, width, height, suggestion);
+        this.radius = rad;
     }
 
     @Override
@@ -340,7 +347,7 @@ public class TextFieldElement extends Element implements HasSpecialCursor {
         double innerHeight = FontRenderers.getRenderer().getFontHeight();
         double centerY = getPositionY() + height / 2d - innerHeight / 2d;
 
-        Renderer.R2D.renderRoundedQuad(stack, new Color(40, 40, 40), getPositionX(), getPositionY(), getPositionX() + width, getPositionY() + height, 5, 20);
+        Renderer.R2D.renderRoundedQuad(stack, new Color(40, 40, 40), getPositionX(), getPositionY(), getPositionX() + width, getPositionY() + height, radius, 10);
         if (isInvalid()) {
             Renderer.R2D.renderRoundedOutline(stack, Color.RED, getPositionX() + .5, getPositionY() + .5, getPositionX() + width - .5, getPositionY() + height - .5, 5, 5, 5, 5, .5, 20);
         }

@@ -51,7 +51,6 @@ public class RangeSettingEditor extends SettingEditor<RangeSetting> {
         double cumMax = Math.max(configValue.getMax(), configValue.getMax1());
         double perIn = MathHelper.clamp(translated / (getWidth()), 0, 1);
         double v = MathHelper.lerp(perIn, cumMin, cumMax);
-        //        v = Math.min(v, configValue.getValue().getMax()); // don't allow going past max
         double b = configValue.getValue().getMax();
         double p = Utils.Math.roundToDecimal(v, configValue.getPrecision());
 
@@ -67,7 +66,6 @@ public class RangeSettingEditor extends SettingEditor<RangeSetting> {
         double cumMax = Math.max(configValue.getMax(), configValue.getMax1());
         double perIn = MathHelper.clamp(translated / (getWidth()), 0, 1);
         double v = MathHelper.lerp(perIn, cumMin, cumMax);
-        //        v = Math.max(v, configValue.getValue().getMin()); // don't allow going past min
         double a = configValue.getValue().getMin();
         double p = Utils.Math.roundToDecimal(v, configValue.getPrecision());
         if (p < a) {

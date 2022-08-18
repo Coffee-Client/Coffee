@@ -5,8 +5,6 @@
 package coffee.client.feature.gui.notifications;
 
 import coffee.client.helper.font.FontRenderers;
-import coffee.client.helper.render.GameTexture;
-import coffee.client.helper.render.Texture;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -80,19 +78,16 @@ public class Notification {
     }
 
     public enum Type {
-        SUCCESS(GameTexture.NOTIF_SUCCESS.getWhere(), new Color(58, 223, 118)),
-        INFO(GameTexture.NOTIF_INFO.getWhere(), new Color(39, 186, 253)),
-        WARNING(GameTexture.NOTIF_WARNING.getWhere(), new Color(255, 189, 17)),
-        ERROR(GameTexture.NOTIF_ERROR.getWhere(), new Color(254, 92, 92));
+        SUCCESS("success.png", new Color(58, 223, 118)), INFO("info.png", new Color(39, 186, 253)), WARNING("warning.png", new Color(255, 189, 17)), ERROR("error.png", new Color(254, 92, 92));
         final Color c;
-        final Texture i;
+        final String i;
 
-        Type(Texture icon, Color color) {
+        Type(String icon, Color color) {
             this.i = icon;
             this.c = color;
         }
 
-        public Texture getI() {
+        public String getSpriteName() {
             return i;
         }
 

@@ -12,7 +12,7 @@ class SpritesheetJsonRepr {
 
     @Data
     static class SpritesheetJsonEntry {
-        String filename;
+        String name;
         Bounds frame;
 
         @Data

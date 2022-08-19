@@ -9,7 +9,7 @@ import coffee.client.helper.util.Utils;
 
 public interface Texture {
     SpritesheetTextureSet MODULE_TYPES = SpritesheetTextureSet.fromJson("https://raw.githubusercontent.com/Coffee-Client/Resources/master/ss_module_types.png",
-            Utils.loadFromResources("sprite/module_type_icons.json"));
+            Utils.loadFromResources("sprite/module_types.json"));
     SpritesheetTextureSet NOTIFICATION_TYPES = SpritesheetTextureSet.fromJson("https://raw.githubusercontent.com/Coffee-Client/Resources/master/ss_notifications.png",
             Utils.loadFromResources("sprite/notifications.json"));
     SpritesheetTextureSet ACTION_TYPES = SpritesheetTextureSet.fromJson("https://raw.githubusercontent.com/Coffee-Client/Resources/master/ss_actions.png",

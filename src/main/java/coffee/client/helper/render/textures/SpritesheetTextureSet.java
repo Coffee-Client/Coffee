@@ -50,7 +50,7 @@ public class SpritesheetTextureSet implements Texture {
         SpritesheetJsonRepr spritesheetJsonRepr = GsonSupplier.getGson().fromJson(json, SpritesheetJsonRepr.class);
         List<TextureEntry> entries = new ArrayList<>();
         for (SpritesheetJsonRepr.SpritesheetJsonEntry frame : spritesheetJsonRepr.frames) {
-            TextureEntry e = new TextureEntry(frame.filename, frame.frame.x, frame.frame.y, frame.frame.w, frame.frame.h);
+            TextureEntry e = new TextureEntry(frame.name, frame.frame.x, frame.frame.y, frame.frame.w, frame.frame.h);
             entries.add(e);
         }
         return new SpritesheetTextureSet(url, entries.toArray(TextureEntry[]::new));

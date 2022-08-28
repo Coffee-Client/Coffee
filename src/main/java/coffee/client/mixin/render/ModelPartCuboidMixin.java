@@ -18,7 +18,7 @@ public class ModelPartCuboidMixin {
     void coffee_renderCuboid(VertexConsumer instance, float x, float y, float z, float red, float green, float blue, float alpha, float u, float v, int overlay, int light, float normalX, float normalY, float normalZ) {
         instance.vertex(x, y, z, red, green, blue, alpha, u, v, overlay, light, normalX, normalY, normalZ);
         if (ModuleRegistry.getByClass(ESP.class).recording) {
-            ModuleRegistry.getByClass(ESP.class).vertexDumps.add(new double[]{x, y, z});
+            ModuleRegistry.getByClass(ESP.class).vertexDumps.add(new double[] { x, y, z });
         }
     }
 

@@ -23,26 +23,29 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public class AutoTrap extends Module {
-    static final double[][] buildOffsetsSmall = new double[][]{new double[]{0, 2, 0}, new double[]{1, 1, 0}, new double[]{0, 1, 1}, new double[]{-1, 1, 0}, new double[]{0, 1, -1}, new double[]{0, -1, 0}};
-    static final double[][] buildOffsetsBig = new double[][]{
+    static final double[][] buildOffsetsSmall = new double[][] { new double[] { 0, 2, 0 }, new double[] { 1, 1, 0 },
+        new double[] { 0, 1, 1 }, new double[] { -1, 1, 0 }, new double[] { 0, 1, -1 }, new double[] { 0, -1, 0 } };
+    static final double[][] buildOffsetsBig = new double[][] {
         // begin bottom
-        new double[]{-.5, -1, -.5}, new double[]{-.5, -1, .5}, new double[]{.5, -1, .5}, new double[]{.5, -1, -.5},
+        new double[] { -.5, -1, -.5 }, new double[] { -.5, -1, .5 }, new double[] { .5, -1, .5 },
+        new double[] { .5, -1, -.5 },
 
         // begin sides
         // -x
-        new double[]{-1.5, 1, -.5}, new double[]{-1.5, 1, .5},
+        new double[] { -1.5, 1, -.5 }, new double[] { -1.5, 1, .5 },
 
         // +x
-        new double[]{1.5, 1, -.5}, new double[]{1.5, 1, .5},
+        new double[] { 1.5, 1, -.5 }, new double[] { 1.5, 1, .5 },
 
         // -z
-        new double[]{-.5, 1, -1.5}, new double[]{.5, 1, -1.5},
+        new double[] { -.5, 1, -1.5 }, new double[] { .5, 1, -1.5 },
 
         // +z
-        new double[]{-.5, 1, 1.5}, new double[]{.5, 1, 1.5},
+        new double[] { -.5, 1, 1.5 }, new double[] { .5, 1, 1.5 },
 
         // begin top
-        new double[]{-.5, 2, -.5}, new double[]{-.5, 2, .5}, new double[]{.5, 2, .5}, new double[]{.5, 2, -.5},
+        new double[] { -.5, 2, -.5 }, new double[] { -.5, 2, .5 }, new double[] { .5, 2, .5 },
+        new double[] { .5, 2, -.5 },
 
     };
 
@@ -62,7 +65,9 @@ public class AutoTrap extends Module {
         if (smallMatches) {
             return true;
         }
-        double[][] possibleOffsetsHome = new double[][]{new double[]{1, 0, 1}, new double[]{1, 0, 0}, new double[]{1, 0, -1}, new double[]{0, 0, -1}, new double[]{-1, 0, -1}, new double[]{-1, 0, 0}, new double[]{-1, 0, 1}, new double[]{0, 0, 1}, new double[]{0, 0, 0}};
+        double[][] possibleOffsetsHome = new double[][] { new double[] { 1, 0, 1 }, new double[] { 1, 0, 0 },
+            new double[] { 1, 0, -1 }, new double[] { 0, 0, -1 }, new double[] { -1, 0, -1 }, new double[] { -1, 0, 0 },
+            new double[] { -1, 0, 1 }, new double[] { 0, 0, 1 }, new double[] { 0, 0, 0 } };
         for (double[] ints : possibleOffsetsHome) {
             Vec3d potentialHome = entityPos.add(ints[0], ints[1], ints[2]);
             boolean matches = Arrays.stream(buildOffsetsBig).allMatch(ints1 -> {

@@ -389,7 +389,10 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
             } else {
                 mail = "No email bound";
             }
-            AltContainer.PropEntry[] props = new AltContainer.PropEntry[]{new AltContainer.PropEntry(this.selectedAlt.storage.type == AddScreenOverlay.AccountType.CRACKED ? this.selectedAlt.storage.email : this.selectedAlt.storage.cachedName, FontRenderers.getCustomSize(22), this.selectedAlt.storage.valid ? 0xFFFFFF : 0xFF3333), new AltContainer.PropEntry(mail, FontRenderers.getRenderer(), 0xAAAAAA), new AltContainer.PropEntry("Type: " + this.selectedAlt.storage.type.s, FontRenderers.getRenderer(), 0xAAAAAA)};
+            AltContainer.PropEntry[] props = new AltContainer.PropEntry[] {
+                new AltContainer.PropEntry(this.selectedAlt.storage.type == AddScreenOverlay.AccountType.CRACKED ? this.selectedAlt.storage.email : this.selectedAlt.storage.cachedName, FontRenderers.getCustomSize(22), this.selectedAlt.storage.valid ? 0xFFFFFF : 0xFF3333),
+                new AltContainer.PropEntry(mail, FontRenderers.getRenderer(), 0xAAAAAA),
+                new AltContainer.PropEntry("Type: " + this.selectedAlt.storage.type.s, FontRenderers.getRenderer(), 0xAAAAAA) };
 
             float propsOffset = (float) (fromY + padding);
             for (AltContainer.PropEntry prop : props) {
@@ -429,7 +432,9 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
             uuid = FontRenderers.getRenderer().trimStringToWidth(uuid, maxWid - 1 - threeDotWidth);
             uuid += "...";
         }
-        AltContainer.PropEntry[] props = new AltContainer.PropEntry[]{new AltContainer.PropEntry(CoffeeMain.client.getSession().getUsername(), FontRenderers.getCustomSize(22), 0xFFFFFF), new AltContainer.PropEntry(uuid, FontRenderers.getRenderer(), 0xAAAAAA)};
+        AltContainer.PropEntry[] props = new AltContainer.PropEntry[] {
+            new AltContainer.PropEntry(CoffeeMain.client.getSession().getUsername(), FontRenderers.getCustomSize(22), 0xFFFFFF),
+            new AltContainer.PropEntry(uuid, FontRenderers.getRenderer(), 0xAAAAAA) };
         float propsOffset = (float) (fromY + padding);
         for (AltContainer.PropEntry prop : props) {
             prop.cfr.drawString(stack, prop.name, (float) (fromX + padding + texDim + padding), propsOffset, prop.color, false);
@@ -952,8 +957,10 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
             } else {
                 mail = "No email bound";
             }
-            PropEntry[] props = new PropEntry[]{new PropEntry(this.storage.type == AddScreenOverlay.AccountType.CRACKED ? this.storage.email : this.storage.cachedName, FontRenderers.getCustomSize(22), storage.valid ? 0xFFFFFF : 0xFF3333), new PropEntry("Email: " + mail, FontRenderers.getRenderer(), 0xAAAAAA)
-                /*, new PropEntry("Type: " + this.storage.type.s, FontRenderers.getRenderer(), 0xAAAAAA)*/};
+            PropEntry[] props = new PropEntry[] {
+                new PropEntry(this.storage.type == AddScreenOverlay.AccountType.CRACKED ? this.storage.email : this.storage.cachedName, FontRenderers.getCustomSize(22), storage.valid ? 0xFFFFFF : 0xFF3333),
+                new PropEntry("Email: " + mail, FontRenderers.getRenderer(), 0xAAAAAA)
+                /*, new PropEntry("Type: " + this.storage.type.s, FontRenderers.getRenderer(), 0xAAAAAA)*/ };
             float propsOffset = (float) (getHeight() - (texHeight)) / 2f;
             for (PropEntry prop : props) {
                 prop.cfr.drawString(stack, prop.name, (float) (originX + padding + texWidth + padding), (float) (originY + propsOffset), prop.color, false);

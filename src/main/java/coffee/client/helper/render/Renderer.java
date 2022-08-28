@@ -76,7 +76,7 @@ public class Renderer {
         }
 
         static float[] getColor(Color c) {
-            return new float[]{c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, c.getAlpha() / 255f};
+            return new float[] { c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, c.getAlpha() / 255f };
         }
 
         private static void useBuffer(VertexFormat.DrawMode mode, VertexFormat format, Supplier<Shader> shader, Consumer<BufferBuilder> runner) {
@@ -433,7 +433,8 @@ public class Renderer {
             double toY1 = toY - rad;
             double fromX1 = fromX + rad;
             double fromY1 = fromY + rad;
-            double[][] map = new double[][]{new double[]{toX1, toY1}, new double[]{toX1, fromY1}, new double[]{fromX1, fromY1}, new double[]{fromX1, toY1}};
+            double[][] map = new double[][] { new double[] { toX1, toY1 }, new double[] { toX1, fromY1 },
+                new double[] { fromX1, fromY1 }, new double[] { fromX1, toY1 } };
             for (int i = 0; i < map.length; i++) {
                 double[] current = map[i];
                 for (double r = i * 90d; r < (360 / 4d + i * 90d); r += (90 / samples)) {
@@ -655,7 +656,10 @@ public class Renderer {
             BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
             bufferBuilder.begin(VertexFormat.DrawMode.TRIANGLE_FAN, VertexFormats.POSITION_COLOR);
 
-            double[][] map = new double[][]{new double[]{toX - radC4, toY - radC4, radC4}, new double[]{toX - radC2, fromY + radC2, radC2}, new double[]{fromX + radC1, fromY + radC1, radC1}, new double[]{fromX + radC3, toY - radC3, radC3}};
+            double[][] map = new double[][] { new double[] { toX - radC4, toY - radC4, radC4 },
+                new double[] { toX - radC2, fromY + radC2, radC2 },
+                new double[] { fromX + radC1, fromY + radC1, radC1 },
+                new double[] { fromX + radC3, toY - radC3, radC3 } };
             for (int i = 0; i < 4; i++) {
                 double[] current = map[i];
                 double rad = current[2];
@@ -711,7 +715,10 @@ public class Renderer {
             BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
             bufferBuilder.begin(VertexFormat.DrawMode.TRIANGLE_STRIP, VertexFormats.POSITION_COLOR);
 
-            double[][] map = new double[][]{new double[]{toX - radC4, toY - radC4, radC4}, new double[]{toX - radC2, fromY + radC2, radC2}, new double[]{fromX + radC1, fromY + radC1, radC1}, new double[]{fromX + radC3, toY - radC3, radC3}};
+            double[][] map = new double[][] { new double[] { toX - radC4, toY - radC4, radC4 },
+                new double[] { toX - radC2, fromY + radC2, radC2 },
+                new double[] { fromX + radC1, fromY + radC1, radC1 },
+                new double[] { fromX + radC3, toY - radC3, radC3 } };
             for (int i = 0; i < 4; i++) {
                 double[] current = map[i];
                 double rad = current[2];

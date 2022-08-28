@@ -79,7 +79,10 @@ public class Notification {
     }
 
     public enum Type {
-        SUCCESS("success.png", new Color(58, 223, 118)), INFO("info.png", new Color(39, 186, 253)), WARNING("warning.png", new Color(255, 189, 17)), ERROR("error.png", new Color(254, 92, 92));
+        SUCCESS("success.png", new Color(58, 223, 118)),
+        INFO("info.png", new Color(39, 186, 253)),
+        WARNING("warning.png", new Color(255, 189, 17)),
+        ERROR("error.png", new Color(254, 92, 92));
         final Color c;
         final String i;
 

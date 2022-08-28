@@ -266,7 +266,7 @@ public class Utils {
         public static int[] decodeUUID(UUID uuid) {
             long sigLeast = uuid.getLeastSignificantBits();
             long sigMost = uuid.getMostSignificantBits();
-            return new int[]{(int) (sigMost >> 32), (int) sigMost, (int) (sigLeast >> 32), (int) sigLeast};
+            return new int[] { (int) (sigMost >> 32), (int) sigMost, (int) (sigLeast >> 32), (int) sigLeast };
         }
     }
 

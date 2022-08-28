@@ -34,8 +34,8 @@ import java.util.List;
 public class NbtEditorScreen extends ClientScreen implements FastTickable {
     final ItemStack stack;
     final List<String> initial = new ArrayList<>();
-    final char[] suffixes = {'b', 's', 'L', 'f', 'd'};
-    final char[][] appendPairs = {{'"', '"'}, {'{', '}'}, {'\'', '\''}, {'[', ']'}};
+    final char[] suffixes = { 'b', 's', 'L', 'f', 'd' };
+    final char[][] appendPairs = { { '"', '"' }, { '{', '}' }, { '\'', '\'' }, { '[', ']' } };
     int editorX = 0;
     int editorY = 0;
     double scrollX = 0;
@@ -327,7 +327,7 @@ public class NbtEditorScreen extends ClientScreen implements FastTickable {
                         editorY++;
                         initial.add(editorY, " ".repeat(indent) + overtake);
                     } else {
-                        char[] control = {'{', '[', ',', '.'};
+                        char[] control = { '{', '[', ',', '.' };
                         boolean isControl = false;
                         for (char c : control) {
                             if (c == previous.charAt(previous.length() - 1)) {

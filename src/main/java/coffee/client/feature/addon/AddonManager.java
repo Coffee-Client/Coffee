@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 public class AddonManager {
     public static final File ADDON_DIRECTORY = new File(CoffeeMain.BASE, "addons");
     public static final File ADDON_RESOURCE_CACHE = new File(ADDON_DIRECTORY, ".res_cache");
-    private static final int[] EXPECTED_CLASS_SIGNATURE = new int[]{0xCA, 0xFE, 0xBA, 0xBE};
+    private static final int[] EXPECTED_CLASS_SIGNATURE = new int[] { 0xCA, 0xFE, 0xBA, 0xBE };
     public static AddonManager INSTANCE;
     private final List<AddonEntry> loadedAddons = new ArrayList<>();
 

@@ -23,7 +23,7 @@ public class HudNotificationRenderer {
     public void render(MatrixStack stack) {
         notifs.removeIf(HudNotification::isDead);
         double x = CoffeeMain.client.getWindow().getScaledWidth() - 5;
-        final double[] y = {5};
+        final double[] y = { 5 };
         MSAAFramebuffer.use(MSAAFramebuffer.MAX_SAMPLES, () -> {
             for (HudNotification notif : notifs) {
                 notif.render(stack, x, y[0]);

@@ -29,7 +29,8 @@ import java.util.List;
 
 public class ConfigsDisplay extends Element {
     static final double maxHeight = 300;
-    private static final char[] ILLEGAL_CHARACTERS = {'/', '\n', '\r', '\t', '\0', '\f', '`', '?', '*', '\\', '<', '>', '|', '\"', ':'};
+    private static final char[] ILLEGAL_CHARACTERS = { '/', '\n', '\r', '\t', '\0', '\f', '`', '?', '*', '\\', '<', '>',
+        '|', '\"', ':' };
     public static ConfigsDisplay instance;
     final FlexLayoutElement layout;
     final FontAdapter titleRenderer = FontRenderers.getRenderer();

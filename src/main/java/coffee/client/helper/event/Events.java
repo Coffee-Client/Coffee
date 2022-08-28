@@ -108,7 +108,7 @@ public class Events {
         }
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public static boolean fireEvent(EventType event, Event argument) {
         if (SelfDestruct.shouldSelfDestruct()) {
             return false; // dont fire any events when self destruct is active

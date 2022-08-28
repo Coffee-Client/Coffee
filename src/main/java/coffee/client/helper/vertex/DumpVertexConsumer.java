@@ -36,25 +36,25 @@ public class DumpVertexConsumer implements VertexConsumer {
 
     @Override
     public VertexConsumer color(float red, float green, float blue, float alpha) {
-        stack.peek().setColor(new float[]{red, green, blue, alpha});
+        stack.peek().setColor(new float[] { red, green, blue, alpha });
         return this;
     }
 
     @Override
     public VertexConsumer texture(float u, float v) {
-        stack.peek().setTexture(new float[]{u, v});
+        stack.peek().setTexture(new float[] { u, v });
         return this;
     }
 
     @Override
     public VertexConsumer overlay(int u, int v) {
-        stack.peek().setOverlay(new int[]{u, v});
+        stack.peek().setOverlay(new int[] { u, v });
         return this;
     }
 
     @Override
     public VertexConsumer light(int u, int v) {
-        stack.peek().setLightUv(new int[]{u, v});
+        stack.peek().setLightUv(new int[] { u, v });
         return this;
     }
 

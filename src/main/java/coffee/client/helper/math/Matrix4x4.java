@@ -203,7 +203,8 @@ public class Matrix4x4 {
         float nm31 = Math.fma(a01, matrix4x4.a30, Math.fma(a11, matrix4x4.a31, Math.fma(a21, matrix4x4.a32, a31 * matrix4x4.a33)));
         float nm32 = Math.fma(a02, matrix4x4.a30, Math.fma(a12, matrix4x4.a31, Math.fma(a22, matrix4x4.a32, a32 * matrix4x4.a33)));
         float nm33 = Math.fma(a03, matrix4x4.a30, Math.fma(a13, matrix4x4.a31, Math.fma(a23, matrix4x4.a32, a33 * matrix4x4.a33)));
-        return new Matrix4x4(new float[]{nm00, nm01, nm02, nm03, nm10, nm11, nm12, nm13, nm20, nm21, nm22, nm23, nm30, nm31, nm32, nm33});
+        return new Matrix4x4(new float[] { nm00, nm01, nm02, nm03, nm10, nm11, nm12, nm13, nm20, nm21, nm22, nm23, nm30,
+            nm31, nm32, nm33 });
     }
 
     public Matrix4x4 set(Matrix4x4 matrix4x4) {

@@ -238,7 +238,9 @@ public class ESP extends Module {
         3----2
         */
         //matrix.multiply(new Quaternion(0,0,(float) rotation,true));
-        float[][] verts = new float[][]{new float[]{0, 0}, new float[]{0, height}, new float[]{-width, height}, new float[]{-width, -width}, new float[]{topWidth, -width}, new float[]{topWidth, 0}, new float[]{0, 0}};
+        float[][] verts = new float[][] { new float[] { 0, 0 }, new float[] { 0, height },
+            new float[] { -width, height }, new float[] { -width, -width }, new float[] { topWidth, -width },
+            new float[] { topWidth, 0 }, new float[] { 0, 0 } };
         for (float[] vert : verts) {
             bb.vertex(x + vert[0] * xMul, y + vert[1] * yMul, 0f).color(r, g, b, a).next();
         }

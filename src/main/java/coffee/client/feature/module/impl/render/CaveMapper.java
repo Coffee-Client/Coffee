@@ -95,7 +95,7 @@ public class CaveMapper extends Module {
             BlockPos bw = blockPos.add(0, 0, -1);
             BlockPos up = blockPos.add(0, 1, 0);
             BlockPos down = blockPos.add(0, -1, 0);
-            for (BlockPos pos : new BlockPos[]{right, left, fw, bw, up, down}) {
+            for (BlockPos pos : new BlockPos[] { right, left, fw, bw, up, down }) {
                 boolean hadObstacle = false;
                 int y = pos.getY();
                 while (!Objects.requireNonNull(CoffeeMain.client.world).isOutOfHeightLimit(y)) {

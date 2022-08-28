@@ -27,7 +27,9 @@ import java.util.stream.Collectors;
 public class SurvivalNuker extends Module {
 
     final List<BlockPos> renders = new ArrayList<>();
-    final Block[] WOOD = new Block[]{Blocks.ACACIA_LOG, Blocks.BIRCH_LOG, Blocks.DARK_OAK_LOG, Blocks.JUNGLE_LOG, Blocks.OAK_LOG, Blocks.SPRUCE_LOG, Blocks.STRIPPED_ACACIA_LOG, Blocks.STRIPPED_BIRCH_LOG, Blocks.STRIPPED_DARK_OAK_LOG, Blocks.STRIPPED_JUNGLE_LOG, Blocks.STRIPPED_OAK_LOG, Blocks.STRIPPED_SPRUCE_LOG};
+    final Block[] WOOD = new Block[] { Blocks.ACACIA_LOG, Blocks.BIRCH_LOG, Blocks.DARK_OAK_LOG, Blocks.JUNGLE_LOG,
+        Blocks.OAK_LOG, Blocks.SPRUCE_LOG, Blocks.STRIPPED_ACACIA_LOG, Blocks.STRIPPED_BIRCH_LOG,
+        Blocks.STRIPPED_DARK_OAK_LOG, Blocks.STRIPPED_JUNGLE_LOG, Blocks.STRIPPED_OAK_LOG, Blocks.STRIPPED_SPRUCE_LOG };
 
     final DoubleSetting range = this.config.create(new DoubleSetting.Builder(4).name("Range").description("How far to break blocks").min(0).max(4).precision(1).get());
     final DoubleSetting blocksPerTick = this.config.create(new DoubleSetting.Builder(1).name("Blocks per tick").description("How many blocks to break per tick").min(1).max(20).precision(0).get());

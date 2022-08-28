@@ -49,6 +49,6 @@ public class AutoSign extends Module {
     }
 
     public String[] getText() {
-        return new String[]{ss1.getValue(), ss2.getValue(), ss3.getValue(), ss4.getValue()};
+        return new String[] { ss1.getValue(), ss2.getValue(), ss3.getValue(), ss4.getValue() };
     }
 }

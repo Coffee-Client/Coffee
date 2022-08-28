@@ -135,7 +135,7 @@ public class SuperheroFX extends Module {
             if (e == null) {
                 return;
             }
-            boolean[] isAttack = {false};
+            boolean[] isAttack = { false };
             packet.handle(new PlayerInteractEntityC2SPacket.Handler() {
                 @Override
                 public void interact(Hand hand) {

@@ -4,18 +4,8 @@
 
 package coffee.client.feature.gui.clickgui.element;
 
-import coffee.client.feature.config.BooleanSetting;
-import coffee.client.feature.config.DoubleSetting;
-import coffee.client.feature.config.EnumSetting;
-import coffee.client.feature.config.ModuleConfig;
-import coffee.client.feature.config.RangeSetting;
-import coffee.client.feature.config.SettingBase;
-import coffee.client.feature.config.StringSetting;
-import coffee.client.feature.gui.clickgui.element.config.BooleanSettingEditor;
-import coffee.client.feature.gui.clickgui.element.config.DoubleSettingEditor;
-import coffee.client.feature.gui.clickgui.element.config.EnumSettingEditor;
-import coffee.client.feature.gui.clickgui.element.config.RangeSettingEditor;
-import coffee.client.feature.gui.clickgui.element.config.StringSettingEditor;
+import coffee.client.feature.config.*;
+import coffee.client.feature.gui.clickgui.element.config.*;
 import coffee.client.feature.gui.element.Element;
 import coffee.client.feature.gui.element.impl.FlexLayoutElement;
 import coffee.client.feature.gui.element.impl.TextElement;
@@ -62,8 +52,8 @@ public class ConfigDisplay extends Element {
             }
             try {
                 Constructor<? extends Element> constructor = elementToCreate.getConstructor(
-                        // double x, double y, double width, ? extends SettingBase<?> confValue
-                        double.class, double.class, double.class, setting.getClass());
+                    // double x, double y, double width, ? extends SettingBase<?> confValue
+                    double.class, double.class, double.class, setting.getClass());
                 Element e = constructor.newInstance(0, 0, width - leftPadding, setting);
                 daConfigs.add(e);
             } catch (Exception e) {

@@ -369,8 +369,7 @@ public class TextFieldElement extends Element implements HasSpecialCursor {
         ClipStack.globalInstance.popWindow();
         boolean renderCursor = (System.currentTimeMillis() % 1000) / 500d > 1;
         if (focused && renderCursor) {
-            Renderer.R2D.renderQuad(stack, Color.WHITE, getPositionX() + pad + getTextWidth(cursor) - overflowWidth, centerY, getPositionX() + pad + getTextWidth(cursor) - overflowWidth + 1,
-                    centerY + FontRenderers.getRenderer().getMarginHeight());
+            Renderer.R2D.renderQuad(stack, Color.WHITE, getPositionX() + pad + getTextWidth(cursor) - overflowWidth, centerY, getPositionX() + pad + getTextWidth(cursor) - overflowWidth + 1, centerY + FontRenderers.getRenderer().getMarginHeight());
         }
 
     }

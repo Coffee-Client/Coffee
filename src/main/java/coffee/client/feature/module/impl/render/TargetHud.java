@@ -79,10 +79,7 @@ public class TargetHud extends Module {
             e = AttackManager.getLastAttackInTimeRange();
             return;
         }
-        List<Entity> entitiesQueue = StreamSupport.stream(Objects.requireNonNull(CoffeeMain.client.world).getEntities().spliterator(), false)
-                .filter(this::isApplicable)
-                .sorted(Comparator.comparingDouble(value -> value.getPos().distanceTo(Objects.requireNonNull(CoffeeMain.client.player).getPos())))
-                .toList();
+        List<Entity> entitiesQueue = StreamSupport.stream(Objects.requireNonNull(CoffeeMain.client.world).getEntities().spliterator(), false).filter(this::isApplicable).sorted(Comparator.comparingDouble(value -> value.getPos().distanceTo(Objects.requireNonNull(CoffeeMain.client.player).getPos()))).toList();
         if (entitiesQueue.size() > 0) {
             e = entitiesQueue.get(0);
         } else {

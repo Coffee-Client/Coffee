@@ -22,12 +22,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 
 import java.awt.Color;
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class AutoTNT extends Module {
@@ -72,9 +67,7 @@ public class AutoTNT extends Module {
                         airs.add(new AbstractMap.SimpleEntry<>(bp, dist));
                     }
                 }
-                airs = airs.stream()
-                        .filter(blockPosDoubleEntry -> CoffeeMain.client.world.getBlockState(blockPosDoubleEntry.getKey().down()).getMaterial().blocksMovement())
-                        .collect(Collectors.toList());
+                airs = airs.stream().filter(blockPosDoubleEntry -> CoffeeMain.client.world.getBlockState(blockPosDoubleEntry.getKey().down()).getMaterial().blocksMovement()).collect(Collectors.toList());
                 Map.Entry<BlockPos, Double> best1 = airs.stream().min(Comparator.comparingDouble(Map.Entry::getValue)).orElse(null);
                 if (best1 == null) {
                     continue; // just void here, cancel
@@ -136,9 +129,7 @@ public class AutoTNT extends Module {
                         airs.add(new AbstractMap.SimpleEntry<>(bp, dist));
                     }
                 }
-                airs = airs.stream()
-                        .filter(blockPosDoubleEntry -> CoffeeMain.client.world.getBlockState(blockPosDoubleEntry.getKey().down()).getMaterial().blocksMovement())
-                        .collect(Collectors.toList());
+                airs = airs.stream().filter(blockPosDoubleEntry -> CoffeeMain.client.world.getBlockState(blockPosDoubleEntry.getKey().down()).getMaterial().blocksMovement()).collect(Collectors.toList());
                 Map.Entry<BlockPos, Double> best1 = airs.stream().min(Comparator.comparingDouble(Map.Entry::getValue)).orElse(null);
                 if (best1 == null) {
                     continue; // just void here, cancel

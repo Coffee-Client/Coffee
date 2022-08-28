@@ -19,11 +19,11 @@ public class ElytraFly extends Module {
 
     final DoubleSetting acceleration = this.config
 
-            .create(new DoubleSetting.Builder(5).name("Acceleration").description("How fast you accelerate").min(1).max(10).get());
+        .create(new DoubleSetting.Builder(5).name("Acceleration").description("How fast you accelerate").min(1).max(10).get());
 
     final DoubleSetting verticalSpeed = this.config
 
-            .create(new DoubleSetting.Builder(5).name("Vertical Speed").description("How fast you move vertically").min(1).max(10).get());
+        .create(new DoubleSetting.Builder(5).name("Vertical Speed").description("How fast you move vertically").min(1).max(10).get());
 
     public ElytraFly() {
 

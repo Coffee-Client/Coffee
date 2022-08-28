@@ -10,6 +10,7 @@ public class Transitions {
      * @param value The current value
      * @param goal  The value to transition to
      * @param speed The speed of the operation (BIGGER = SLOWER!)
+     *
      * @return The new value
      */
     public static double transition(double value, double goal, double speed) {

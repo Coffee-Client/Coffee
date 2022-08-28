@@ -28,8 +28,7 @@ import java.awt.Color;
 public class AutoLavacast extends Module {
 
     static boolean moveForwards = false;
-    final EnumSetting<Mode> mode = this.config.create(
-            new EnumSetting.Builder<>(Mode.Bypass).name("Mode").description("How to place and move. Bypass is slow but looks legit, fast is VERY speedy").get());
+    final EnumSetting<Mode> mode = this.config.create(new EnumSetting.Builder<>(Mode.Bypass).name("Mode").description("How to place and move. Bypass is slow but looks legit, fast is VERY speedy").get());
     final Timer timer = new Timer();
     Input original;
     Vec3i incr;
@@ -67,8 +66,7 @@ public class AutoLavacast extends Module {
         Vec3d placeCenter = Vec3d.of(next).add(.5, .5, .5);
         if (mode.getValue() == Mode.Bypass) {
             Rotations.lookAtPositionSmooth(placeCenter, 6);
-            if (((CoffeeMain.client.player.horizontalCollision && moveForwards) || CoffeeMain.client.player.getBoundingBox()
-                    .intersects(Vec3d.of(next), Vec3d.of(next).add(1, 1, 1))) && CoffeeMain.client.player.isOnGround()) {
+            if (((CoffeeMain.client.player.horizontalCollision && moveForwards) || CoffeeMain.client.player.getBoundingBox().intersects(Vec3d.of(next), Vec3d.of(next).add(1, 1, 1))) && CoffeeMain.client.player.isOnGround()) {
                 CoffeeMain.client.player.jump();
                 CoffeeMain.client.player.setOnGround(false);
             }

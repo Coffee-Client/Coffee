@@ -8,31 +8,11 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import net.minecraft.nbt.NbtByte;
-import net.minecraft.nbt.NbtByteArray;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtDouble;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtEnd;
-import net.minecraft.nbt.NbtFloat;
-import net.minecraft.nbt.NbtInt;
-import net.minecraft.nbt.NbtIntArray;
-import net.minecraft.nbt.NbtList;
-import net.minecraft.nbt.NbtLong;
-import net.minecraft.nbt.NbtLongArray;
-import net.minecraft.nbt.NbtShort;
-import net.minecraft.nbt.NbtString;
+import net.minecraft.nbt.*;
 import net.minecraft.nbt.visitor.NbtElementVisitor;
 import net.minecraft.util.Util;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
@@ -194,11 +174,7 @@ public class NbtFormatter implements NbtElementVisitor {
                 String string2 = iterator.next();
                 NbtElement nbtElement = compound.get(string2);
                 this.pushPathPart(string2);
-                stringBuilder.append(Strings.repeat(string, this.indentationLevel + 1))
-                        .append(escapeName(string2), NAME_COLOR)
-                        .append(KEY_VALUE_SEPARATOR)
-                        .append(" ")
-                        .append((new NbtFormatter(string, this.indentationLevel + 1, this.pathParts)).apply(Objects.requireNonNull(nbtElement)));
+                stringBuilder.append(Strings.repeat(string, this.indentationLevel + 1)).append(escapeName(string2), NAME_COLOR).append(KEY_VALUE_SEPARATOR).append(" ").append((new NbtFormatter(string, this.indentationLevel + 1, this.pathParts)).apply(Objects.requireNonNull(nbtElement)));
                 this.popPathPart();
                 if (iterator.hasNext()) {
                     stringBuilder.append(ENTRY_SEPARATOR).append(string.isEmpty() ? " " : "\n");

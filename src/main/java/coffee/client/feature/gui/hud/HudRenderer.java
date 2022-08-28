@@ -5,12 +5,7 @@
 package coffee.client.feature.gui.hud;
 
 import coffee.client.CoffeeMain;
-import coffee.client.feature.gui.hud.element.HudElement;
-import coffee.client.feature.gui.hud.element.RadarElement;
-import coffee.client.feature.gui.hud.element.SpeedHud;
-import coffee.client.feature.gui.hud.element.TabGui;
-import coffee.client.feature.gui.hud.element.Taco;
-import coffee.client.feature.gui.hud.element.TargetHUD;
+import coffee.client.feature.gui.hud.element.*;
 import coffee.client.feature.gui.screen.HudEditorScreen;
 import coffee.client.helper.event.EventType;
 import coffee.client.helper.event.Events;

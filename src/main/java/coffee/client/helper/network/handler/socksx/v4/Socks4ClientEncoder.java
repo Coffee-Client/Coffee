@@ -22,7 +22,7 @@ public final class Socks4ClientEncoder extends MessageToByteEncoder<Socks4Comman
      */
     public static final Socks4ClientEncoder INSTANCE = new Socks4ClientEncoder();
 
-    private static final byte[] IPv4_DOMAIN_MARKER = { 0x00, 0x00, 0x00, 0x01 };
+    private static final byte[] IPv4_DOMAIN_MARKER = {0x00, 0x00, 0x00, 0x01};
 
     private Socks4ClientEncoder() {
     }

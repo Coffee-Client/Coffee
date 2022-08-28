@@ -4,6 +4,10 @@
 
 package coffee.client.feature.config;
 
+import lombok.SneakyThrows;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -14,6 +18,18 @@ public class BooleanSetting extends SettingBase<Boolean> {
 
     public BooleanSetting(Boolean defaultValue, String name, String description, List<Consumer<Boolean>> onChanged) {
         super(defaultValue, name, description, onChanged);
+    }
+
+    @Override
+    @SneakyThrows
+    public void serialize(DataOutputStream stream) {
+        stream.writeBoolean(getValue());
+    }
+
+    @Override
+    @SneakyThrows
+    public void deserialize(DataInputStream stream) {
+        this.setValue(stream.readBoolean());
     }
 
     @Override

@@ -60,8 +60,7 @@ public class SpawnData extends Command {
                     stack.setNbt(new NbtCompound());
                 }
 
-                NbtGroup ng = new NbtGroup(
-                        new NbtObject("EntityTag", new NbtList("Pos", new NbtProperty(parser.consumeDouble()), new NbtProperty(parser.consumeDouble()), new NbtProperty(parser.consumeDouble()))));
+                NbtGroup ng = new NbtGroup(new NbtObject("EntityTag", new NbtList("Pos", new NbtProperty(parser.consumeDouble()), new NbtProperty(parser.consumeDouble()), new NbtProperty(parser.consumeDouble()))));
                 NbtCompound tag = ng.toCompound();
                 stack.getOrCreateNbt().copyFrom(tag);
                 CoffeeMain.client.player.networkHandler.sendPacket(new CreativeInventoryActionC2SPacket(36 + CoffeeMain.client.player.getInventory().selectedSlot, stack));
@@ -73,8 +72,7 @@ public class SpawnData extends Command {
                 if (!stack.hasNbt()) {
                     stack.setNbt(new NbtCompound());
                 }
-                NbtGroup ng = new NbtGroup(
-                        new NbtObject("EntityTag", new NbtList("Motion", new NbtProperty(parser.consumeDouble()), new NbtProperty(parser.consumeDouble()), new NbtProperty(parser.consumeDouble()))));
+                NbtGroup ng = new NbtGroup(new NbtObject("EntityTag", new NbtList("Motion", new NbtProperty(parser.consumeDouble()), new NbtProperty(parser.consumeDouble()), new NbtProperty(parser.consumeDouble()))));
                 NbtCompound tag = ng.toCompound();
                 stack.getOrCreateNbt().copyFrom(tag);
                 CoffeeMain.client.player.networkHandler.sendPacket(new CreativeInventoryActionC2SPacket(36 + CoffeeMain.client.player.getInventory().selectedSlot, stack));

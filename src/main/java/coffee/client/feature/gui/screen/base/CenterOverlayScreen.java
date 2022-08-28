@@ -85,8 +85,7 @@ public class CenterOverlayScreen extends AAScreen {
         FontAdapter normal = FontRenderers.getRenderer();
         fa.drawString(stack, title, 5, 5, 0xFFFFFF);
         normal.drawString(stack, description, 5, 5 + fa.getFontHeight(), 0xBBBBBB);
-        Renderer.R2D.renderRoundedQuadWithShadow(stack, new Color(20, 20, 20), centerX - elementWidth / 2d - padding, centerY - elementHeight / 2d - padding, centerX + elementWidth / 2d + padding,
-                centerY + elementHeight / 2d + padding, 5, 20);
+        Renderer.R2D.renderRoundedQuadWithShadow(stack, new Color(20, 20, 20), centerX - elementWidth / 2d - padding, centerY - elementHeight / 2d - padding, centerX + elementWidth / 2d + padding, centerY + elementHeight / 2d + padding, 5, 20);
         super.renderInternal(stack, mouseX, mouseY, delta);
     }
 }

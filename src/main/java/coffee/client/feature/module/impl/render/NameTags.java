@@ -81,8 +81,7 @@ public class NameTags extends Module {
         if (ping != -1) {
             infoDrawer.drawString(stack1, pingStr, actual.x - width / 2d + 2, actual.y + 2 + nameDrawer.getFontHeight(), 0xAAAAAA);
         }
-        Renderer.R2D.renderRoundedQuad(stack1, new Color(60, 60, 60, 255), actual.x - width / 2d + 2, actual.y + labelHeight - 2 - healthHeight, actual.x + width / 2d - 2, actual.y + labelHeight - 2,
-                healthHeight / 2d, 10);
+        Renderer.R2D.renderRoundedQuad(stack1, new Color(60, 60, 60, 255), actual.x - width / 2d + 2, actual.y + labelHeight - 2 - healthHeight, actual.x + width / 2d - 2, actual.y + labelHeight - 2, healthHeight / 2d, 10);
         float health = entity.getHealth();
         float maxHealth = entity.getMaxHealth();
         float healthPer = health / maxHealth;
@@ -105,11 +104,7 @@ public class NameTags extends Module {
     @Override
     public void onWorldRender(MatrixStack matrices) {
         // sort the entire thing based on the most distant to the least distant because thats how rendering works
-        for (AbstractClientPlayerEntity player : client.world.getPlayers()
-                .stream()
-                .sorted(Comparator.comparingDouble(value -> -value.getPos().distanceTo(client.gameRenderer.getCamera().getPos())))
-                .filter(abstractClientPlayerEntity -> !abstractClientPlayerEntity.equals(client.player))
-                .toList()) {
+        for (AbstractClientPlayerEntity player : client.world.getPlayers().stream().sorted(Comparator.comparingDouble(value -> -value.getPos().distanceTo(client.gameRenderer.getCamera().getPos()))).filter(abstractClientPlayerEntity -> !abstractClientPlayerEntity.equals(client.player)).toList()) {
             render(matrices, player, player.getName());
         }
     }

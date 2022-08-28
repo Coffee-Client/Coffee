@@ -13,12 +13,7 @@ import coffee.client.helper.render.Rectangle;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.Transitions;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.render.BufferBuilder;
-import net.minecraft.client.render.BufferRenderer;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.VertexFormat;
-import net.minecraft.client.render.VertexFormats;
+import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Matrix4f;
@@ -111,9 +106,7 @@ public class ModuleDisplay extends Element {
             Renderer.endRender();
             stack.pop();
         }
-        FontRenderers.getRenderer()
-                .drawString(stack, module.getName(), (float) getPositionX() + 6, (float) (getPositionY() + bruhHeight / 2d - FontRenderers.getRenderer().getFontHeight() / 2d), 1f, 1f, 1f,
-                        module.isDisabled() ? 0.4f : 1f);
+        FontRenderers.getRenderer().drawString(stack, module.getName(), (float) getPositionX() + 6, (float) (getPositionY() + bruhHeight / 2d - FontRenderers.getRenderer().getFontHeight() / 2d), 1f, 1f, 1f, module.isDisabled() ? 0.4f : 1f);
         this.cfd.setPositionX(getPositionX());
         this.cfd.setPositionY(getPositionY() + actualHeight + margin);
         if (this.cfd.progress != 0) {

@@ -42,12 +42,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Queue;
-import java.util.UUID;
+import java.util.*;
 
 public class Utils {
 
@@ -180,8 +175,7 @@ public class Utils {
 
         public static void drop(int index) {
             int translatedSlotId = slotIndexToId(index);
-            Objects.requireNonNull(CoffeeMain.client.interactionManager)
-                    .clickSlot(Objects.requireNonNull(CoffeeMain.client.player).currentScreenHandler.syncId, translatedSlotId, 1, SlotActionType.THROW, CoffeeMain.client.player);
+            Objects.requireNonNull(CoffeeMain.client.interactionManager).clickSlot(Objects.requireNonNull(CoffeeMain.client.player).currentScreenHandler.syncId, translatedSlotId, 1, SlotActionType.THROW, CoffeeMain.client.player);
         }
 
         public static void moveStackToOther(int slotIdFrom, int slotIdTo) {
@@ -243,8 +237,7 @@ public class Utils {
         public static PlayerInteractBlockC2SPacket generatePlace(BlockPos pos) {
             PendingUpdateManager pendingUpdateManager = getUpdateManager(CoffeeMain.client.world).incrementSequence();
 
-            var packet = new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, new BlockHitResult(new Vec3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5), Direction.UP, pos, false),
-                    pendingUpdateManager.getSequence());
+            var packet = new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, new BlockHitResult(new Vec3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5), Direction.UP, pos, false), pendingUpdateManager.getSequence());
 
             pendingUpdateManager.close();
 
@@ -273,7 +266,7 @@ public class Utils {
         public static int[] decodeUUID(UUID uuid) {
             long sigLeast = uuid.getLeastSignificantBits();
             long sigMost = uuid.getMostSignificantBits();
-            return new int[] { (int) (sigMost >> 32), (int) sigMost, (int) (sigLeast >> 32), (int) sigLeast };
+            return new int[]{(int) (sigMost >> 32), (int) sigMost, (int) (sigLeast >> 32), (int) sigLeast};
         }
     }
 

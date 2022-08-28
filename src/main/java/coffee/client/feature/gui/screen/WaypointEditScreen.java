@@ -7,11 +7,7 @@ package coffee.client.feature.gui.screen;
 import coffee.client.CoffeeMain;
 import coffee.client.feature.gui.HasSpecialCursor;
 import coffee.client.feature.gui.element.Element;
-import coffee.client.feature.gui.element.impl.ButtonElement;
-import coffee.client.feature.gui.element.impl.ButtonGroupElement;
-import coffee.client.feature.gui.element.impl.ColorEditorElement;
-import coffee.client.feature.gui.element.impl.FlexLayoutElement;
-import coffee.client.feature.gui.element.impl.TextFieldElement;
+import coffee.client.feature.gui.element.impl.*;
 import coffee.client.feature.gui.screen.base.AAScreen;
 import coffee.client.feature.gui.screen.base.CenterOverlayScreen;
 import coffee.client.feature.module.impl.render.Waypoints;
@@ -207,8 +203,7 @@ public class WaypointEditScreen extends AAScreen {
         public WaypointVis(double x, double y, Waypoints.Waypoint wayp) {
             super(x, y, 100, 60);
             this.wayp = wayp;
-            this.actions = new ButtonGroupElement(0, 0, getWidth() - 10, 20, ButtonGroupElement.LayoutDirection.RIGHT, new ButtonGroupElement.ButtonEntry("Edit", this::edit),
-                    new ButtonGroupElement.ButtonEntry("Delete", this::delete));
+            this.actions = new ButtonGroupElement(0, 0, getWidth() - 10, 20, ButtonGroupElement.LayoutDirection.RIGHT, new ButtonGroupElement.ButtonEntry("Edit", this::edit), new ButtonGroupElement.ButtonEntry("Delete", this::delete));
         }
 
         void edit() {

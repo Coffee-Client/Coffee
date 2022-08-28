@@ -19,6 +19,7 @@ public class TexturedButtonElement extends Element {
     Runnable onPress;
     IconRenderer renderer;
     Color textColor;
+
     public TexturedButtonElement(Color color, double x, double y, double w, double h, Runnable a, IconRenderer renderer) {
         super(x, y, w, h);
         this.onPress = a;

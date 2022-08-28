@@ -45,6 +45,7 @@ public class Notification {
      * @param topBar   Whether to show this notification at the top of the screen instead of the right
      * @param type     The type of notification
      * @param contents What the contents of the notification is
+     *
      * @return The newly created notification
      */
     public static Notification create(long duration, String title, boolean topBar, Type type, String... contents) {

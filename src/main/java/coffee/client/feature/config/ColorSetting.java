@@ -4,7 +4,11 @@
 
 package coffee.client.feature.config;
 
+import lombok.SneakyThrows;
+
 import java.awt.Color;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -33,6 +37,18 @@ public class ColorSetting extends SettingBase<Color> {
             e.printStackTrace();
         }
         return getDefaultValue();
+    }
+
+    @Override
+    @SneakyThrows
+    public void serialize(DataOutputStream stream) {
+        stream.writeInt(this.value.getRGB());
+    }
+
+    @Override
+    @SneakyThrows
+    public void deserialize(DataInputStream stream) {
+        this.setValue(new Color(stream.readInt()));
     }
 
     public static class Builder extends SettingBase.Builder<coffee.client.feature.config.ColorSetting.Builder, Color, ColorSetting> {

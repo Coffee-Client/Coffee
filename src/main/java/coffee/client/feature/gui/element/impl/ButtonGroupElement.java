@@ -48,8 +48,7 @@ public class ButtonGroupElement extends Element {
                 rad3 = 0;
                 rad4 = 0;
             }
-            SingleButton btn = new SingleButton(0, 0, dir == LayoutDirection.RIGHT ? widthForOneButton : width, dir == LayoutDirection.RIGHT ? height : heightForOneButton, be.content, be.onClicked,
-                    rad1 * 5, rad2 * 5, rad3 * 5, rad4 * 5, new Color(30, 30, 30), new Color(50, 50, 50));
+            SingleButton btn = new SingleButton(0, 0, dir == LayoutDirection.RIGHT ? widthForOneButton : width, dir == LayoutDirection.RIGHT ? height : heightForOneButton, be.content, be.onClicked, rad1 * 5, rad2 * 5, rad3 * 5, rad4 * 5, new Color(30, 30, 30), new Color(50, 50, 50));
             els.add(btn);
         }
     }
@@ -159,8 +158,7 @@ public class ButtonGroupElement extends Element {
             } else {
                 Renderer.R2D.renderQuad(stack, c, getPositionX(), getPositionY(), getPositionX() + getWidth(), getPositionY() + getHeight());
             }
-            FontRenderers.getRenderer()
-                    .drawCenteredString(stack, t, getPositionX() + getWidth() / 2d, getPositionY() + getHeight() / 2d - FontRenderers.getRenderer().getFontHeight() / 2d, 1f, 1f, 1f, 1f);
+            FontRenderers.getRenderer().drawCenteredString(stack, t, getPositionX() + getWidth() / 2d, getPositionY() + getHeight() / 2d - FontRenderers.getRenderer().getFontHeight() / 2d, 1f, 1f, 1f, 1f);
         }
 
         @Override

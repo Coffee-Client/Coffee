@@ -6,8 +6,11 @@ package coffee.client.feature.config;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.SneakyThrows;
 import lombok.ToString;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -26,6 +29,19 @@ public class RangeSetting extends SettingBase<RangeSetting.Range> {
         this.max = max;
         this.min1 = min1;
         this.max1 = max1;
+    }
+
+    @Override
+    @SneakyThrows
+    public void serialize(DataOutputStream stream) {
+        stream.writeDouble(this.getValue().min);
+        stream.writeDouble(this.getValue().max);
+    }
+
+    @Override
+    @SneakyThrows
+    public void deserialize(DataInputStream stream) {
+        this.setValue(new Range(stream.readDouble(), stream.readDouble()));
     }
 
     @Override

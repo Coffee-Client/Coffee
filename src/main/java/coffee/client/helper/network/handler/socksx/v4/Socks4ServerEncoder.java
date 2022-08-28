@@ -18,7 +18,7 @@ public final class Socks4ServerEncoder extends MessageToByteEncoder<Socks4Comman
 
     public static final Socks4ServerEncoder INSTANCE = new Socks4ServerEncoder();
 
-    private static final byte[] IPv4_HOSTNAME_ZEROED = { 0x00, 0x00, 0x00, 0x00 };
+    private static final byte[] IPv4_HOSTNAME_ZEROED = {0x00, 0x00, 0x00, 0x00};
 
     private Socks4ServerEncoder() {
     }

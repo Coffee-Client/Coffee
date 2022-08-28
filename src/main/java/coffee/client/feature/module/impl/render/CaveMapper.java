@@ -17,13 +17,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.client.render.BufferBuilder;
-import net.minecraft.client.render.BufferRenderer;
-import net.minecraft.client.render.Camera;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.VertexFormat;
-import net.minecraft.client.render.VertexFormats;
+import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -32,12 +26,7 @@ import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.Color;
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class CaveMapper extends Module {
 
@@ -57,10 +46,8 @@ public class CaveMapper extends Module {
     final BooleanSetting quartz = this.config.create(new BooleanSetting.Builder(false).name("Quartz").description("Whether to show quartz").get());
     final BooleanSetting debris = this.config.create(new BooleanSetting.Builder(true).name("Ancient debris").description("Whether to show ancient debris").get());
     final BooleanSetting showScanned = this.config.create(new BooleanSetting.Builder(true).name("Show scanned").description("Whether to show the scanned area").get());
-    final BooleanSetting showEntire = this.config.create(
-            new BooleanSetting.Builder(false).name("Show entire area").description("Whether to show the entire scanned area (VERY performance intensive)").get());
-    final DoubleSetting cacheSize = this.config.create(
-            new DoubleSetting.Builder(10000).precision(0).name("Cache size").description("How big the cache should be (bigger = more time + more memory)").min(5000).max(30000).get());
+    final BooleanSetting showEntire = this.config.create(new BooleanSetting.Builder(false).name("Show entire area").description("Whether to show the entire scanned area (VERY performance intensive)").get());
+    final DoubleSetting cacheSize = this.config.create(new DoubleSetting.Builder(10000).precision(0).name("Cache size").description("How big the cache should be (bigger = more time + more memory)").min(5000).max(30000).get());
     final BooleanSetting includeTranslucent = this.config.create(new BooleanSetting.Builder(true).name("Scan transparent").description("Scan through transparent blocks as well").get());
     BlockPos start = null;
     boolean scanned = false;
@@ -108,7 +95,7 @@ public class CaveMapper extends Module {
             BlockPos bw = blockPos.add(0, 0, -1);
             BlockPos up = blockPos.add(0, 1, 0);
             BlockPos down = blockPos.add(0, -1, 0);
-            for (BlockPos pos : new BlockPos[] { right, left, fw, bw, up, down }) {
+            for (BlockPos pos : new BlockPos[]{right, left, fw, bw, up, down}) {
                 boolean hadObstacle = false;
                 int y = pos.getY();
                 while (!Objects.requireNonNull(CoffeeMain.client.world).isOutOfHeightLimit(y)) {
@@ -261,11 +248,7 @@ public class CaveMapper extends Module {
 
     @Override
     public String getContext() {
-        return scannedBlocks.size() + "S|" + new ArrayList<>(this.ores).stream()
-                .filter(blockPos -> shouldRenderOre(Objects.requireNonNull(CoffeeMain.client.world).getBlockState(blockPos).getBlock()))
-                .count() + "F|" + Utils.Math.roundToDecimal((double) new ArrayList<>(this.ores).stream()
-                .filter(blockPos -> shouldRenderOre(Objects.requireNonNull(CoffeeMain.client.world).getBlockState(blockPos).getBlock()))
-                .count() / scannedBlocks.size() * 100, 2) + "%D";
+        return scannedBlocks.size() + "S|" + new ArrayList<>(this.ores).stream().filter(blockPos -> shouldRenderOre(Objects.requireNonNull(CoffeeMain.client.world).getBlockState(blockPos).getBlock())).count() + "F|" + Utils.Math.roundToDecimal((double) new ArrayList<>(this.ores).stream().filter(blockPos -> shouldRenderOre(Objects.requireNonNull(CoffeeMain.client.world).getBlockState(blockPos).getBlock())).count() / scannedBlocks.size() * 100, 2) + "%D";
     }
 
     @Override
@@ -344,9 +327,7 @@ public class CaveMapper extends Module {
             Vec3d p = new Vec3d(ore.getX(), ore.getY(), ore.getZ());
             double dist = p.distanceTo(Objects.requireNonNull(CoffeeMain.client.player).getPos());
             dist = MathHelper.clamp(dist, 0, 30);
-            Renderer.R3D.renderFilled(matrices,
-                    Renderer.Util.modify(oreColors.containsKey(t) ? oreColors.get(t) : new Color(CoffeeMain.client.world.getBlockState(ore).getMapColor(CoffeeMain.client.world, ore).color), -1, -1,
-                            -1, (int) ((dist / 30d) * 200)), p, new Vec3d(1, 1, 1));
+            Renderer.R3D.renderFilled(matrices, Renderer.Util.modify(oreColors.containsKey(t) ? oreColors.get(t) : new Color(CoffeeMain.client.world.getBlockState(ore).getMapColor(CoffeeMain.client.world, ore).color), -1, -1, -1, (int) ((dist / 30d) * 200)), p, new Vec3d(1, 1, 1));
         }
     }
 

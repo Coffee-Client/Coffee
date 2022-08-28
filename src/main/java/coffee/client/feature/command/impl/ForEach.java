@@ -61,8 +61,7 @@ public class ForEach extends Command {
 
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
-        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.STRING, "player", "tab"), new PossibleArgument(ArgumentType.NUMBER, "<delay>"),
-                new PossibleArgument(ArgumentType.NUMBER, "<message>"));
+        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.STRING, "player", "tab"), new PossibleArgument(ArgumentType.NUMBER, "<delay>"), new PossibleArgument(ArgumentType.NUMBER, "<message>"));
     }
 
     @Override
@@ -72,9 +71,7 @@ public class ForEach extends Command {
         switch (args[0]) {
             case "player" -> {
                 for (PlayerListEntry playerListEntry : Objects.requireNonNull(CoffeeMain.client.getNetworkHandler()).getPlayerList()) {
-                    if (Utils.Players.isPlayerNameValid(playerListEntry.getProfile().getName()) && !playerListEntry.getProfile()
-                            .getId()
-                            .equals(Objects.requireNonNull(CoffeeMain.client.player).getUuid())) {
+                    if (Utils.Players.isPlayerNameValid(playerListEntry.getProfile().getName()) && !playerListEntry.getProfile().getId().equals(Objects.requireNonNull(CoffeeMain.client.player).getUuid())) {
                         runner.execute(() -> {
                             try {
                                 CoffeeMain.client.player.sendChatMessage(String.join(" ", Arrays.copyOfRange(args, 2, args.length)).replaceAll("%s", playerListEntry.getProfile().getName()), null);

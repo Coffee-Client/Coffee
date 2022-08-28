@@ -36,9 +36,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class SpotlightScreen extends ClientScreen implements FastTickable {
-    static final List<StaticEntry> staticEntries = List.of(
-            new StaticEntry("Gamemode change", "Switch to creative", "command.png", () -> CoffeeMain.client.player.sendCommand("gamemode creative"), "gmc", "creative", "gmcreative"),
-            new StaticEntry("Gamemode change", "Switch to survival", "command.png", () -> CoffeeMain.client.player.sendCommand("gamemode survival"), "gms", "survival", "gmsurvival"));
+    static final List<StaticEntry> staticEntries = List.of(new StaticEntry("Gamemode change", "Switch to creative", "command.png", () -> CoffeeMain.client.player.sendCommand("gamemode creative"), "gmc", "creative", "gmcreative"), new StaticEntry("Gamemode change", "Switch to survival", "command.png", () -> CoffeeMain.client.player.sendCommand("gamemode survival"), "gms", "survival", "gmsurvival"));
     CommandTextField command;
     List<SuggestionsEntry> entries = new ArrayList<>();
     double anim = 0;
@@ -609,8 +607,7 @@ public class SpotlightScreen extends ClientScreen implements FastTickable {
             ClipStack.globalInstance.popWindow();
             boolean renderCursor = (System.currentTimeMillis() % 1000) / 500d > 1;
             if (focused && renderCursor) {
-                Renderer.R2D.renderQuad(stack, new Color(1f, 1f, 1f, opacity), x + pad + getTextWidth(cursor) - overflowWidth, centerY, x + pad + getTextWidth(cursor) - overflowWidth + 1,
-                        centerY + fa.getMarginHeight());
+                Renderer.R2D.renderQuad(stack, new Color(1f, 1f, 1f, opacity), x + pad + getTextWidth(cursor) - overflowWidth, centerY, x + pad + getTextWidth(cursor) - overflowWidth + 1, centerY + fa.getMarginHeight());
             }
 
         }

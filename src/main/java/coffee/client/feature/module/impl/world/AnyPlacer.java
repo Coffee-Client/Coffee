@@ -55,9 +55,7 @@ public class AnyPlacer extends Module {
                 if (sex.getItem() instanceof SpawnEggItem) {
                     event.setCancelled(true);
                     Vec3d rotationVector = Rotations.getRotationVector(Rotations.getClientPitch(), Rotations.getClientYaw());
-                    EntityHitResult raycast = ProjectileUtil.raycast(client.player, CoffeeMain.client.player.getCameraPosVec(0),
-                            CoffeeMain.client.player.getCameraPosVec(0).add(rotationVector.multiply(500)), client.player.getBoundingBox().stretch(rotationVector.multiply(500)).expand(1, 1, 1),
-                            Entity::isAttackable, 500 * 500);
+                    EntityHitResult raycast = ProjectileUtil.raycast(client.player, CoffeeMain.client.player.getCameraPosVec(0), CoffeeMain.client.player.getCameraPosVec(0).add(rotationVector.multiply(500)), client.player.getBoundingBox().stretch(rotationVector.multiply(500)).expand(1, 1, 1), Entity::isAttackable, 500 * 500);
                     Vec3d spawnPos;
                     if (raycast != null && raycast.getEntity() != null) {
                         spawnPos = raycast.getPos();

@@ -8,12 +8,7 @@ import coffee.client.feature.gui.element.Element;
 import coffee.client.helper.render.Renderer;
 import com.mojang.blaze3d.systems.RenderSystem;
 import lombok.Setter;
-import net.minecraft.client.render.BufferBuilder;
-import net.minecraft.client.render.BufferRenderer;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.VertexFormat;
-import net.minecraft.client.render.VertexFormats;
+import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Matrix4f;
@@ -172,12 +167,9 @@ public class ColorEditorElement extends Element {
         public void render(MatrixStack stack, double mouseX, double mouseY) {
             double actualX = getPositionX();
             double actualWidth = getWidth();
-            Renderer.R2D.renderRoundedQuad(stack, new Color(50, 50, 50), actualX, getPositionY() + getHeight() / 2d - 1.5 / 2d, actualX + actualWidth, getPositionY() + getHeight() / 2d + 1.5 / 2d,
-                    1.5 / 2, 5);
-            Renderer.R2D.renderRoundedQuad(stack, Color.getHSBColor((float) value, 1f, 1f), actualX, getPositionY() + getHeight() / 2d - 1.5 / 2d, actualX + Math.max(actualWidth * value, 1.5),
-                    getPositionY() + getHeight() / 2d + 1.5 / 2d, 1.5 / 2, 5);
-            Renderer.R2D.renderRoundedQuad(stack, Color.WHITE, actualX + Math.max(actualWidth * value, 1.5) - 1.5 / 2, getPositionY(), actualX + Math.max(actualWidth * value, 1.5) + 1.5 / 2,
-                    getPositionY() + getHeight(), 1.5 / 2, 5);
+            Renderer.R2D.renderRoundedQuad(stack, new Color(50, 50, 50), actualX, getPositionY() + getHeight() / 2d - 1.5 / 2d, actualX + actualWidth, getPositionY() + getHeight() / 2d + 1.5 / 2d, 1.5 / 2, 5);
+            Renderer.R2D.renderRoundedQuad(stack, Color.getHSBColor((float) value, 1f, 1f), actualX, getPositionY() + getHeight() / 2d - 1.5 / 2d, actualX + Math.max(actualWidth * value, 1.5), getPositionY() + getHeight() / 2d + 1.5 / 2d, 1.5 / 2, 5);
+            Renderer.R2D.renderRoundedQuad(stack, Color.WHITE, actualX + Math.max(actualWidth * value, 1.5) - 1.5 / 2, getPositionY(), actualX + Math.max(actualWidth * value, 1.5) + 1.5 / 2, getPositionY() + getHeight(), 1.5 / 2, 5);
         }
 
         void handleClick(double x) {

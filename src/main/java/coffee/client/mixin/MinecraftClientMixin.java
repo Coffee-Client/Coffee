@@ -39,10 +39,7 @@ public abstract class MinecraftClientMixin {
     @Inject(method = "printCrashReport", at = @At("HEAD"))
     private static void coffee_printCrash(CrashReport report, CallbackInfo ci) {
         List<String> strings = ModuleRegistry.getModules().stream().filter(Module::isEnabled).map(Module::getName).toList();
-        report.addElement("Coffee client")
-                .add("Enabled modules", strings.isEmpty() ? "None" : String.join(", ", strings.toArray(String[]::new)))
-                .add("Dev environment", Analytics.isInDevEnvironment())
-                .add("Analytics enabled", !Analytics.shouldDisableAnalytics());
+        report.addElement("Coffee client").add("Enabled modules", strings.isEmpty() ? "None" : String.join(", ", strings.toArray(String[]::new))).add("Dev environment", Analytics.isInDevEnvironment()).add("Analytics enabled", !Analytics.shouldDisableAnalytics());
     }
 
     @Inject(method = "stop", at = @At("HEAD"))

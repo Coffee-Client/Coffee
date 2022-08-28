@@ -18,11 +18,9 @@ import java.net.IDN;
  */
 public final class SocksCmdResponse extends SocksResponse {
     // All arrays are initialized on construction time to 0/false/null remove array Initialization
-    private static final byte[] DOMAIN_ZEROED = { 0x00 };
-    private static final byte[] IPv4_HOSTNAME_ZEROED = { 0x00, 0x00, 0x00, 0x00 };
-    private static final byte[] IPv6_HOSTNAME_ZEROED = {
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-    };
+    private static final byte[] DOMAIN_ZEROED = {0x00};
+    private static final byte[] IPv4_HOSTNAME_ZEROED = {0x00, 0x00, 0x00, 0x00};
+    private static final byte[] IPv6_HOSTNAME_ZEROED = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
     private final SocksCmdStatus cmdStatus;
     private final SocksAddressType addressType;
     private final String host;
@@ -41,6 +39,7 @@ public final class SocksCmdResponse extends SocksResponse {
      *                    When null a value of 4/8 0x00 octets will be used for IPv4/IPv6 and a single 0x00 byte will be
      *                    used for domain addressType. Value is converted to ASCII using {@link IDN#toASCII(String)}.
      * @param port        port (BND.PORT field) that the server assigned to connect to the target host
+     *
      * @throws NullPointerException     in case cmdStatus or addressType are missing
      * @throws IllegalArgumentException in case host or port cannot be validated
      * @see IDN#toASCII(String)

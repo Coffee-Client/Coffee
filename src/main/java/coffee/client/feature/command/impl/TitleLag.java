@@ -26,12 +26,7 @@ public class TitleLag extends Command {
 
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
-        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.PLAYER, () -> Objects.requireNonNull(CoffeeMain.client.world)
-                .getPlayers()
-                .stream()
-                .map(abstractClientPlayerEntity -> abstractClientPlayerEntity.getGameProfile().getName())
-                .toList()
-                .toArray(String[]::new)));
+        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.PLAYER, () -> Objects.requireNonNull(CoffeeMain.client.world).getPlayers().stream().map(abstractClientPlayerEntity -> abstractClientPlayerEntity.getGameProfile().getName()).toList().toArray(String[]::new)));
     }
 
     @Override
@@ -44,8 +39,7 @@ public class TitleLag extends Command {
         CoffeeMain.client.player.sendCommand("gamerule sendCommandFeedback true");
         ItemStack stack = new ItemStack(Items.COMMAND_BLOCK, 1);
         try {
-            stack.setNbt(StringNbtReader.parse(
-                    "{BlockEntityTag:{Command:\"/title " + targetName + " title {\\\"text\\\":\\\"" + "l".repeat(32767) + "\\\",\\\"obfuscated\\\":true}\",powered:0b,auto:1b,conditionMet:1b}}"));
+            stack.setNbt(StringNbtReader.parse("{BlockEntityTag:{Command:\"/title " + targetName + " title {\\\"text\\\":\\\"" + "l".repeat(32767) + "\\\",\\\"obfuscated\\\":true}\",powered:0b,auto:1b,conditionMet:1b}}"));
         } catch (Exception e) {
             e.printStackTrace();
         }

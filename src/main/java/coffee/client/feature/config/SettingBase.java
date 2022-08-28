@@ -4,6 +4,10 @@
 
 package coffee.client.feature.config;
 
+import lombok.SneakyThrows;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BooleanSupplier;
@@ -60,6 +64,7 @@ public abstract class SettingBase<V> {
      * Parses a string to its value, not implemented in the base class
      *
      * @param value The value we want to parse
+     *
      * @return The parsed output
      */
     public abstract V parse(String value);
@@ -71,6 +76,16 @@ public abstract class SettingBase<V> {
      */
     public void accept(String value) {
         this.setValue(this.parse(value));
+    }
+
+    @SneakyThrows
+    public void serialize(DataOutputStream stream) {
+        stream.writeUTF(getConfigSave());
+    }
+
+    @SneakyThrows
+    public void deserialize(DataInputStream stream) {
+        accept(stream.readUTF());
     }
 
     /**
@@ -162,6 +177,7 @@ public abstract class SettingBase<V> {
          * Sets the name of this setting
          *
          * @param name The name
+         *
          * @return The current builder
          */
         public B name(String name) {
@@ -173,6 +189,7 @@ public abstract class SettingBase<V> {
          * Sets the description of this setting
          *
          * @param description The description
+         *
          * @return The current builder
          */
         public B description(String description) {
@@ -184,6 +201,7 @@ public abstract class SettingBase<V> {
          * Sets the default value of this setting
          *
          * @param defaultValue The default value
+         *
          * @return The current builder
          */
         public B defaultValue(V defaultValue) {
@@ -195,6 +213,7 @@ public abstract class SettingBase<V> {
          * Sets the changed listener of this setting
          *
          * @param changed The listener
+         *
          * @return The current builder
          */
         public B onChanged(Consumer<V> changed) {

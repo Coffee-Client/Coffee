@@ -4,12 +4,7 @@
 
 package coffee.client.helper.network.proxy;
 
-import coffee.client.helper.network.handler.socksx.v4.DefaultSocks4CommandRequest;
-import coffee.client.helper.network.handler.socksx.v4.Socks4ClientDecoder;
-import coffee.client.helper.network.handler.socksx.v4.Socks4ClientEncoder;
-import coffee.client.helper.network.handler.socksx.v4.Socks4CommandResponse;
-import coffee.client.helper.network.handler.socksx.v4.Socks4CommandStatus;
-import coffee.client.helper.network.handler.socksx.v4.Socks4CommandType;
+import coffee.client.helper.network.handler.socksx.v4.*;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPipeline;
 

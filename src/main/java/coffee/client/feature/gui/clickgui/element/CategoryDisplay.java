@@ -79,8 +79,7 @@ public class CategoryDisplay extends Element {
         double iconDims = headerHeight() - iconPad * 2;
         Texture.MODULE_TYPES.bindAndDraw(stack, getPositionX() + iconPad, getPositionY() + iconPad, iconDims, iconDims, type.getTex());
 
-        titleRenderer.drawString(stack, type.getName(), (float) (getPositionX() + iconDims + iconPad * 2),
-                (float) (getPositionY() + headerHeight() / 2d - Math.round(titleRenderer.getFontHeight()) / 2d), 1f, 1f, 1f, 1f);
+        titleRenderer.drawString(stack, type.getName(), (float) (getPositionX() + iconDims + iconPad * 2), (float) (getPositionY() + headerHeight() / 2d - Math.round(titleRenderer.getFontHeight()) / 2d), 1f, 1f, 1f, 1f);
         layout.setPositionX(getPositionX() + 2);
         layout.setPositionY(getPositionY() + headerHeight());
         layout.render(stack, mouseX, mouseY);

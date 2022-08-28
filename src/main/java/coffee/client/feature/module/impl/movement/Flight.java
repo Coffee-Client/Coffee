@@ -116,8 +116,7 @@ public class Flight extends Module {
                     Vec3d vp = CoffeeMain.client.player.getPos();
                     Random r = new Random();
                     for (int i = 0; i < 10; i++) {
-                        CoffeeMain.client.world.addImportantParticle(ParticleTypes.SOUL_FIRE_FLAME, true, vp.x, vp.y, vp.z, (r.nextDouble() * 0.25) - .125, (r.nextDouble() * 0.25) - .125,
-                                (r.nextDouble() * 0.25) - .125);
+                        CoffeeMain.client.world.addImportantParticle(ParticleTypes.SOUL_FIRE_FLAME, true, vp.x, vp.y, vp.z, (r.nextDouble() * 0.25) - .125, (r.nextDouble() * 0.25) - .125, (r.nextDouble() * 0.25) - .125);
                     }
                 }
             }

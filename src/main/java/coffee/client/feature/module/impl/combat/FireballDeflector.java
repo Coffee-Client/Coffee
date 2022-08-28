@@ -20,11 +20,8 @@ import net.minecraft.util.math.Vec3d;
 import java.util.Objects;
 
 public class FireballDeflector extends Module {
-    final EnumSetting<Mode> mode = this.config.create(new EnumSetting.Builder<>(Mode.DeflectSomewhere).name("Mode")
-            .description("How to change the fireball's motion (ReflectBack = reflect back at shooter, DeflectSomewhere = idc get it away)")
-            .get());
-    final BooleanSetting checkVel = this.config.create(
-            new BooleanSetting.Builder(false).name("Check velocity").description("Checks if the fireball is actually approaching before hitting. Can get funky with a lot of them").get());
+    final EnumSetting<Mode> mode = this.config.create(new EnumSetting.Builder<>(Mode.DeflectSomewhere).name("Mode").description("How to change the fireball's motion (ReflectBack = reflect back at shooter, DeflectSomewhere = idc get it away)").get());
+    final BooleanSetting checkVel = this.config.create(new BooleanSetting.Builder(false).name("Check velocity").description("Checks if the fireball is actually approaching before hitting. Can get funky with a lot of them").get());
 
     public FireballDeflector() {
         super("FireballDeflector", "Deflects (or reflects) fireballs in your hit range", ModuleType.COMBAT);

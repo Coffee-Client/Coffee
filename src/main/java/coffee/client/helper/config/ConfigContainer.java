@@ -2,7 +2,7 @@
  * Copyright (c) 2022 Coffee Client, 0x150 and contributors. All rights reserved.
  */
 
-package coffee.client.helper;
+package coffee.client.helper.config;
 
 import coffee.client.helper.event.EventType;
 import coffee.client.helper.event.Events;

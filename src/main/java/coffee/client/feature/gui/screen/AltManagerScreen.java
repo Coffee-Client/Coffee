@@ -12,12 +12,7 @@ import coffee.client.feature.gui.widget.RoundButton;
 import coffee.client.feature.gui.widget.RoundTextFieldWidget;
 import coffee.client.helper.font.FontRenderers;
 import coffee.client.helper.font.adapter.FontAdapter;
-import coffee.client.helper.render.ClipStack;
-import coffee.client.helper.render.MSAAFramebuffer;
-import coffee.client.helper.render.PlayerHeadResolver;
-import coffee.client.helper.render.Rectangle;
-import coffee.client.helper.render.Renderer;
-import coffee.client.helper.render.Texture;
+import coffee.client.helper.render.*;
 import coffee.client.helper.util.Transitions;
 import coffee.client.mixin.IMinecraftClientMixin;
 import coffee.client.mixin.ISessionMixin;
@@ -45,14 +40,7 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
@@ -60,10 +48,10 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
     public static final Map<UUID, Texture> texCache = new HashMap<>();
     static final File ALTS_FILE = new File(CoffeeMain.BASE, "alts.sip");
     static final String TOP_NOTE = """
-            // DO NOT SHARE THIS FILE
-            // This file contains sensitive information about your accounts
-            // Unless you REALLY KNOW WHAT YOU ARE DOING, DO NOT SEND THIS TO ANYONE
-            """;
+        // DO NOT SHARE THIS FILE
+        // This file contains sensitive information about your accounts
+        // Unless you REALLY KNOW WHAT YOU ARE DOING, DO NOT SEND THIS TO ANYONE
+        """;
     static final Color bg = new Color(20, 20, 20);
     static final Color pillColor = new Color(25, 25, 25, 100);
     static final Color backgroundOverlay = new Color(0, 0, 0, 130);
@@ -97,12 +85,7 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
     }
 
     public List<AltContainer> getAlts() {
-        return alts.stream()
-                .filter(altContainer -> altContainer.storage.cachedName.toLowerCase().startsWith(search.get().toLowerCase()) || Arrays.stream(altContainer.storage.tags.split(","))
-                        .map(String::trim)
-                        .filter(s -> !s.isEmpty())
-                        .anyMatch(s -> s.toLowerCase().startsWith(search.get().toLowerCase())))
-                .collect(Collectors.toList());
+        return alts.stream().filter(altContainer -> altContainer.storage.cachedName.toLowerCase().startsWith(search.get().toLowerCase()) || Arrays.stream(altContainer.storage.tags.split(",")).map(String::trim).filter(s -> !s.isEmpty()).anyMatch(s -> s.toLowerCase().startsWith(search.get().toLowerCase()))).collect(Collectors.toList());
     }
 
     void tryParseAltsFile(String txt) {
@@ -187,9 +170,7 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
             for (JsonElement jsonElement : ja) {
                 JsonObject jo = jsonElement.getAsJsonObject();
                 try {
-                    AltStorage container = new AltStorage(jo.get("cachedUsername").getAsString(), jo.get("email").getAsString(), jo.get("password").getAsString(),
-                            UUID.fromString(jo.get("cachedUUID").getAsString()), AddScreenOverlay.AccountType.valueOf(jo.get("type").getAsString()),
-                            jo.get("tags") == null ? "" : jo.get("tags").getAsString());
+                    AltStorage container = new AltStorage(jo.get("cachedUsername").getAsString(), jo.get("email").getAsString(), jo.get("password").getAsString(), UUID.fromString(jo.get("cachedUUID").getAsString()), AddScreenOverlay.AccountType.valueOf(jo.get("type").getAsString()), jo.get("tags") == null ? "" : jo.get("tags").getAsString());
                     container.valid = !jo.has("valid") || jo.get("valid").getAsBoolean();
                     AltContainer ac = new AltContainer(0, 0, 0, container);
                     ac.renderY = ac.renderX = -1;
@@ -252,8 +233,7 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
                 this.remove();
             }
         });
-        tags = new RoundButton(RoundButton.STANDARD, fromX + texDim + padding * 2 + buttonWidth + padding / 2d + buttonWidth + padding / 2d, toY - 20 - padding, buttonWidth - padding, 20, "Tags",
-                this::editTags);
+        tags = new RoundButton(RoundButton.STANDARD, fromX + texDim + padding * 2 + buttonWidth + padding / 2d + buttonWidth + padding / 2d, toY - 20 - padding, buttonWidth - padding, 20, "Tags", this::editTags);
 
         toY = height - getPadding();
         buttonWidth = toX - fromX - padding * 3 - texDim;
@@ -294,8 +274,7 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
                 HudNotification.create("Failed to log in", 5000, HudNotification.Type.ERROR);
                 return;
             }
-            Session newSession = new Session(selectedAlt.storage.cachedName, selectedAlt.storage.cachedUuid.toString(), selectedAlt.storage.accessToken, Optional.empty(), Optional.empty(),
-                    Session.AccountType.MOJANG);
+            Session newSession = new Session(selectedAlt.storage.cachedName, selectedAlt.storage.cachedUuid.toString(), selectedAlt.storage.accessToken, Optional.empty(), Optional.empty(), Session.AccountType.MOJANG);
             ((IMinecraftClientMixin) CoffeeMain.client).setSession(newSession);
             HudNotification.create("Logged into account " + newSession.getUsername(), 5000, HudNotification.Type.INFO);
             updateCurrentAccount();
@@ -410,12 +389,7 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
             } else {
                 mail = "No email bound";
             }
-            AltContainer.PropEntry[] props = new AltContainer.PropEntry[] {
-                    new AltContainer.PropEntry(this.selectedAlt.storage.type == AddScreenOverlay.AccountType.CRACKED ? this.selectedAlt.storage.email : this.selectedAlt.storage.cachedName,
-                            FontRenderers.getCustomSize(22), this.selectedAlt.storage.valid ? 0xFFFFFF : 0xFF3333),
-                    new AltContainer.PropEntry(mail, FontRenderers.getRenderer(), 0xAAAAAA),
-                    new AltContainer.PropEntry("Type: " + this.selectedAlt.storage.type.s, FontRenderers.getRenderer(), 0xAAAAAA)
-            };
+            AltContainer.PropEntry[] props = new AltContainer.PropEntry[]{new AltContainer.PropEntry(this.selectedAlt.storage.type == AddScreenOverlay.AccountType.CRACKED ? this.selectedAlt.storage.email : this.selectedAlt.storage.cachedName, FontRenderers.getCustomSize(22), this.selectedAlt.storage.valid ? 0xFFFFFF : 0xFF3333), new AltContainer.PropEntry(mail, FontRenderers.getRenderer(), 0xAAAAAA), new AltContainer.PropEntry("Type: " + this.selectedAlt.storage.type.s, FontRenderers.getRenderer(), 0xAAAAAA)};
 
             float propsOffset = (float) (fromY + padding);
             for (AltContainer.PropEntry prop : props) {
@@ -455,10 +429,7 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
             uuid = FontRenderers.getRenderer().trimStringToWidth(uuid, maxWid - 1 - threeDotWidth);
             uuid += "...";
         }
-        AltContainer.PropEntry[] props = new AltContainer.PropEntry[] {
-                new AltContainer.PropEntry(CoffeeMain.client.getSession().getUsername(), FontRenderers.getCustomSize(22), 0xFFFFFF),
-                new AltContainer.PropEntry(uuid, FontRenderers.getRenderer(), 0xAAAAAA)
-        };
+        AltContainer.PropEntry[] props = new AltContainer.PropEntry[]{new AltContainer.PropEntry(CoffeeMain.client.getSession().getUsername(), FontRenderers.getCustomSize(22), 0xFFFFFF), new AltContainer.PropEntry(uuid, FontRenderers.getRenderer(), 0xAAAAAA)};
         float propsOffset = (float) (fromY + padding);
         for (AltContainer.PropEntry prop : props) {
             prop.cfr.drawString(stack, prop.name, (float) (fromX + padding + texDim + padding), propsOffset, prop.color, false);
@@ -827,8 +798,7 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
             add.setY(originY + padding + title.getMarginHeight() + FontRenderers.getRenderer().getMarginHeight() + padding + email.getHeight() + padding + passwd.getHeight() + padding);
             add.setEnabled(isAddApplicable());
             add.render(stack, mouseX, mouseY, delta);
-            widgetHei = padding + title.getMarginHeight() + FontRenderers.getRenderer()
-                    .getMarginHeight() + padding + email.getHeight() + padding + passwd.getHeight() + padding + type.getHeight() + padding;
+            widgetHei = padding + title.getMarginHeight() + FontRenderers.getRenderer().getMarginHeight() + padding + email.getHeight() + padding + passwd.getHeight() + padding + type.getHeight() + padding;
             stack.pop();
         }
 
@@ -964,8 +934,7 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
             RenderSystem.clear(GL40C.GL_COLOR_BUFFER_BIT, false);
             RenderSystem.colorMask(true, true, true, true);
             RenderSystem.setShader(GameRenderer::getPositionColorShader);
-            Renderer.R2D.renderRoundedQuadInternal(stack.peek().getPositionMatrix(), 0, 0, 0, 1, originX + padding, originY + padding, originX + padding + texWidth, originY + padding + texHeight, 5,
-                    20);
+            Renderer.R2D.renderRoundedQuadInternal(stack.peek().getPositionMatrix(), 0, 0, 0, 1, originX + padding, originY + padding, originX + padding + texWidth, originY + padding + texHeight, 5, 20);
 
             RenderSystem.blendFunc(GL40C.GL_DST_ALPHA, GL40C.GL_ONE_MINUS_DST_ALPHA);
             RenderSystem.setShaderTexture(0, tex);
@@ -983,11 +952,8 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
             } else {
                 mail = "No email bound";
             }
-            PropEntry[] props = new PropEntry[] {
-                    new PropEntry(this.storage.type == AddScreenOverlay.AccountType.CRACKED ? this.storage.email : this.storage.cachedName, FontRenderers.getCustomSize(22),
-                            storage.valid ? 0xFFFFFF : 0xFF3333), new PropEntry("Email: " + mail, FontRenderers.getRenderer(), 0xAAAAAA)
-                    /*, new PropEntry("Type: " + this.storage.type.s, FontRenderers.getRenderer(), 0xAAAAAA)*/
-            };
+            PropEntry[] props = new PropEntry[]{new PropEntry(this.storage.type == AddScreenOverlay.AccountType.CRACKED ? this.storage.email : this.storage.cachedName, FontRenderers.getCustomSize(22), storage.valid ? 0xFFFFFF : 0xFF3333), new PropEntry("Email: " + mail, FontRenderers.getRenderer(), 0xAAAAAA)
+                /*, new PropEntry("Type: " + this.storage.type.s, FontRenderers.getRenderer(), 0xAAAAAA)*/};
             float propsOffset = (float) (getHeight() - (texHeight)) / 2f;
             for (PropEntry prop : props) {
                 prop.cfr.drawString(stack, prop.name, (float) (originX + padding + texWidth + padding), (float) (originY + propsOffset), prop.color, false);
@@ -1007,10 +973,8 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
                 float h = FontRenderers.getRenderer().getMarginHeight();
                 float pad = 2;
                 w += pad * 2;
-                Renderer.R2D.renderRoundedQuad(stack, new Color(30, 30, 30), originX + padding + texWidth + padding + xOff, originY + getHeight() - h - pad * 2 - padding,
-                        originX + padding + texWidth + padding + xOff + w, originY + getHeight() - padding, 5, 10);
-                FontRenderers.getRenderer()
-                        .drawString(stack, v, originX + padding + texWidth + padding + xOff + pad, originY + getHeight() - pad - FontRenderers.getRenderer().getMarginHeight() - padding, 0xFFFFFF);
+                Renderer.R2D.renderRoundedQuad(stack, new Color(30, 30, 30), originX + padding + texWidth + padding + xOff, originY + getHeight() - h - pad * 2 - padding, originX + padding + texWidth + padding + xOff + w, originY + getHeight() - padding, 5, 10);
+                FontRenderers.getRenderer().drawString(stack, v, originX + padding + texWidth + padding + xOff + pad, originY + getHeight() - pad - FontRenderers.getRenderer().getMarginHeight() - padding, 0xFFFFFF);
                 xOff += w + 2;
             }
 

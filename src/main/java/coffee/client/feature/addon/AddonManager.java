@@ -25,18 +25,9 @@ import org.apache.logging.log4j.Level;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.FileVisitResult;
-import java.nio.file.FileVisitor;
-import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -45,7 +36,7 @@ import java.util.stream.Collectors;
 public class AddonManager {
     public static final File ADDON_DIRECTORY = new File(CoffeeMain.BASE, "addons");
     public static final File ADDON_RESOURCE_CACHE = new File(ADDON_DIRECTORY, ".res_cache");
-    private static final int[] EXPECTED_CLASS_SIGNATURE = new int[] { 0xCA, 0xFE, 0xBA, 0xBE };
+    private static final int[] EXPECTED_CLASS_SIGNATURE = new int[]{0xCA, 0xFE, 0xBA, 0xBE};
     public static AddonManager INSTANCE;
     private final List<AddonEntry> loadedAddons = new ArrayList<>();
 
@@ -126,13 +117,11 @@ public class AddonManager {
             CoffeeMain.log(Level.ERROR, "Failed to load " + file.getName());
             e.printStackTrace();
             if (e instanceof NoClassDefFoundError noClassDefFoundError) {
-                CoffeeMain.log(Level.INFO,
-                        "This error is in releation to the class file being remapped for the wrong dev environment. If you're running this in a dev environment, this is on you. In this case, please ask the developer(s) for a \"dev\" jar, and use that instead. If not, please report this error to the addon developer(s).");
+                CoffeeMain.log(Level.INFO, "This error is in releation to the class file being remapped for the wrong dev environment. If you're running this in a dev environment, this is on you. In this case, please ask the developer(s) for a \"dev\" jar, and use that instead. If not, please report this error to the addon developer(s).");
                 CoffeeMain.log(Level.INFO, "(Some additional information about the error: ERR:CLASS_MISSING, class " + noClassDefFoundError.getMessage() + " not found)");
             }
             if (e instanceof IncompatibleClassChangeError) {
-                CoffeeMain.log(Level.INFO,
-                        "This error either occurs because the addon is heavily obfuscated and the obfuscator is bad, or because the addon is built on an outdated coffee SDK. Please report this error to the addon developer(s).");
+                CoffeeMain.log(Level.INFO, "This error either occurs because the addon is heavily obfuscated and the obfuscator is bad, or because the addon is built on an outdated coffee SDK. Please report this error to the addon developer(s).");
             }
             if (e instanceof ClassCastException) {
                 CoffeeMain.log(Level.INFO, "This error probably occurs because of an outdated coffee SDK. Please report this error to the addon developer(s).");
@@ -274,9 +263,7 @@ public class AddonManager {
                     cSigP[i] = Byte.toUnsignedInt(cSig[i]);
                 }
                 if (!Arrays.equals(cSigP, EXPECTED_CLASS_SIGNATURE)) {
-                    throw new IllegalStateException("Invalid class file signature for " + jarEntry.getName() + ": expected 0x" + Arrays.stream(EXPECTED_CLASS_SIGNATURE)
-                            .mapToObj(value -> Integer.toHexString(value).toUpperCase())
-                            .collect(Collectors.joining()) + ", got 0x" + Arrays.stream(cSigP).mapToObj(value -> Integer.toHexString(value).toUpperCase()).collect(Collectors.joining()));
+                    throw new IllegalStateException("Invalid class file signature for " + jarEntry.getName() + ": expected 0x" + Arrays.stream(EXPECTED_CLASS_SIGNATURE).mapToObj(value -> Integer.toHexString(value).toUpperCase()).collect(Collectors.joining()) + ", got 0x" + Arrays.stream(cSigP).mapToObj(value -> Integer.toHexString(value).toUpperCase()).collect(Collectors.joining()));
                 }
                 Class<?> loadedClass = classLoader.defineAndGetClass(classBytes);
                 if (Addon.class.isAssignableFrom(loadedClass)) {

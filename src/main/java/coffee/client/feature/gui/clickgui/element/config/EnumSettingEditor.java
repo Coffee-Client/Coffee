@@ -12,12 +12,7 @@ import coffee.client.helper.render.Rectangle;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.Transitions;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.render.BufferBuilder;
-import net.minecraft.client.render.BufferRenderer;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.VertexFormat;
-import net.minecraft.client.render.VertexFormats;
+import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Matrix4f;
@@ -67,8 +62,7 @@ public class EnumSettingEditor extends SettingEditor<EnumSetting<?>> {
         Renderer.R2D.renderRoundedQuad(stack, new Color(40, 40, 40), getPositionX(), getPositionY(), getPositionX() + getWidth(), getPositionY() + getHeight(), 2, 8);
         fa.drawString(stack, configValue.name, getPositionX() + headerPad / 2d, getPositionY() + headerHeight() / 2d - fa.getFontHeight() / 2d, 0xFFFFFF);
         if (expandProg != 1) {
-            fa.drawString(stack, configValue.getValue().name(), (float) (getPositionX() + getWidth() - fa.getStringWidth(configValue.getValue().name()) - 2),
-                    (float) (getPositionY() + headerHeight() / 2d - fa.getFontHeight() / 2d), 1f, 1f, 1f, (float) Transitions.easeOutExpo(1 - expandProg));
+            fa.drawString(stack, configValue.getValue().name(), (float) (getPositionX() + getWidth() - fa.getStringWidth(configValue.getValue().name()) - 2), (float) (getPositionY() + headerHeight() / 2d - fa.getFontHeight() / 2d), 1f, 1f, 1f, (float) Transitions.easeOutExpo(1 - expandProg));
         }
         if (expandProg != 0) {
             float pp = (float) Transitions.easeOutExpo(expandProg);

@@ -46,8 +46,7 @@ public class AntiCrash extends Module {
     final BooleanSetting capAttributes = this.config.create(new BooleanSetting.Builder(true).name("Cap attributes").description("Caps the amount of attributes being rendered").get());
 
     @Getter
-    final DoubleSetting capAttributesAmount = this.config.create(
-            new DoubleSetting.Builder(4).name("Cap attrib. max").description("How many attributes should be allowed to render (per modifier equipment slot)").min(0).max(64).precision(0).get());
+    final DoubleSetting capAttributesAmount = this.config.create(new DoubleSetting.Builder(4).name("Cap attrib. max").description("How many attributes should be allowed to render (per modifier equipment slot)").min(0).max(64).precision(0).get());
 
 
     long lastScreen = System.currentTimeMillis();

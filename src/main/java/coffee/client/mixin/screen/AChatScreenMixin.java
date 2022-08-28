@@ -146,8 +146,8 @@ public class AChatScreenMixin extends Screen {
             return;
         }
         List<String> suggestions = getSuggestions(cmd).stream().map(s -> s.split("<")[0]) // strip everything after the first <
-                .filter(s -> !s.isEmpty()) // filter empty suggestions
-                .toList();
+            .filter(s -> !s.isEmpty()) // filter empty suggestions
+            .toList();
         if (suggestions.isEmpty()) {
             return;
         }

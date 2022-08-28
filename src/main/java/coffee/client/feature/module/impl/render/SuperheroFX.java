@@ -44,7 +44,7 @@ public class SuperheroFX extends Module {
     double sizeRandom = 0.1;
 
     @Setting(name = "Size", description = "How big the font should be", min = 3, max = 50, precision = 1)
-    double size = 1;
+    double size = 30;
 
     @Setting(name = "Amount", description = "How many fucks to spawn", min = 1, max = 20, precision = 0)
     double amount = 5;
@@ -84,8 +84,7 @@ public class SuperheroFX extends Module {
         if (renderer == null) {
             int fsize = 32 * 2;
             try {
-                renderer = new FontRenderer(
-                        Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(CoffeeMain.class.getClassLoader().getResourceAsStream("Superherofx.ttf"))).deriveFont(Font.PLAIN, fsize), fsize);
+                renderer = new FontRenderer(Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(CoffeeMain.class.getClassLoader().getResourceAsStream("Superherofx.ttf"))).deriveFont(Font.PLAIN, fsize), fsize);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -136,7 +135,7 @@ public class SuperheroFX extends Module {
             if (e == null) {
                 return;
             }
-            boolean[] isAttack = { false };
+            boolean[] isAttack = {false};
             packet.handle(new PlayerInteractEntityC2SPacket.Handler() {
                 @Override
                 public void interact(Hand hand) {

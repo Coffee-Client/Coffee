@@ -18,11 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec2f;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.*;
 
 import java.util.Objects;
 
@@ -120,8 +116,7 @@ public class Scaffold extends Module {
         int c = Objects.requireNonNull(client.player).getInventory().selectedSlot;
         client.player.getInventory().selectedSlot = s;
         BlockHitResult bhr = new BlockHitResult(new Vec3d(bp.getX(), bp.getY(), bp.getZ()), Direction.DOWN, bp, false);
-        Renderer.R3D.renderFadingBlock(Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 255), Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 100).darker(), Vec3d.of(bp),
-                new Vec3d(1, 1, 1), 1000);
+        Renderer.R3D.renderFadingBlock(Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 255), Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 100).darker(), Vec3d.of(bp), new Vec3d(1, 1, 1), 1000);
         Objects.requireNonNull(client.interactionManager).interactBlock(client.player, Hand.MAIN_HAND, bhr);
         client.player.getInventory().selectedSlot = c;
     }

@@ -41,6 +41,7 @@ public class ConfigManager {
      * Compresses a byte array using GZIP Deflate
      *
      * @param in The input
+     *
      * @return The compressed output
      * @throws Exception If something goes wrong
      */
@@ -56,6 +57,7 @@ public class ConfigManager {
      * Decompressed a byte array using GZIP Inflate
      *
      * @param in The compressed data
+     *
      * @return The decompressed date
      * @throws Exception If something goes wrong
      */

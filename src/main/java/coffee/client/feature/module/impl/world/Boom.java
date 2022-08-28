@@ -79,8 +79,7 @@ public class Boom extends Module {
         }
         HitResult hr = Objects.requireNonNull(CoffeeMain.client.player).raycast(200, 0, false);
         Vec3d n = hr.getPos();
-        String nbt = String.format("{EntityTag:{id:\"minecraft:fireball\",ExplosionPower:%db,Motion:[%sd,%sd,%sd],Pos:[%s,%s,%s],Item:{id:\"minecraft:egg\",Count:1b}}}",
-                ((int) Math.floor(power.getValue())), 0, -2, 0, n.getX(), n.getY(), n.getZ());
+        String nbt = String.format("{EntityTag:{id:\"minecraft:fireball\",ExplosionPower:%db,Motion:[%sd,%sd,%sd],Pos:[%s,%s,%s],Item:{id:\"minecraft:egg\",Count:1b}}}", ((int) Math.floor(power.getValue())), 0, -2, 0, n.getX(), n.getY(), n.getZ());
         ItemStack stack = Utils.generateItemStackWithMeta(nbt, Items.BAT_SPAWN_EGG);
         ItemStack air = CoffeeMain.client.player.getInventory().getMainHandStack().copy();
         Vec3d a = CoffeeMain.client.player.getEyePos();
@@ -100,8 +99,7 @@ public class Boom extends Module {
         }
         Vec3d v = Objects.requireNonNull(CoffeeMain.client.player).getRotationVector();
         v = v.multiply(speed.getValue() / 10d);
-        String nbt = String.format("{EntityTag:{id:\"minecraft:fireball\",ExplosionPower:%db,power:[%s,%s,%s],Item:{id:\"minecraft:egg\",Count:1b}}}", ((int) Math.floor(power.getValue())), v.x, v.y,
-                v.z);
+        String nbt = String.format("{EntityTag:{id:\"minecraft:fireball\",ExplosionPower:%db,power:[%s,%s,%s],Item:{id:\"minecraft:egg\",Count:1b}}}", ((int) Math.floor(power.getValue())), v.x, v.y, v.z);
         ItemStack stack = Utils.generateItemStackWithMeta(nbt, Items.BAT_SPAWN_EGG);
         ItemStack air = CoffeeMain.client.player.getInventory().getMainHandStack().copy();
         Vec3d a = CoffeeMain.client.player.getEyePos();

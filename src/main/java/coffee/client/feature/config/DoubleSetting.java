@@ -4,6 +4,10 @@
 
 package coffee.client.feature.config;
 
+import lombok.SneakyThrows;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -17,6 +21,18 @@ public class DoubleSetting extends SettingBase<Double> {
         this.precision = precision;
         this.min = min;
         this.max = max;
+    }
+
+    @Override
+    @SneakyThrows
+    public void serialize(DataOutputStream stream) {
+        stream.writeDouble(this.getValue());
+    }
+
+    @Override
+    @SneakyThrows
+    public void deserialize(DataInputStream stream) {
+        this.setValue(stream.readDouble());
     }
 
     public double getMin() {

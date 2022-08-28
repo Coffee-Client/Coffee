@@ -19,11 +19,7 @@ import net.minecraft.network.NetworkState;
 import net.minecraft.network.listener.ClientLoginPacketListener;
 import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket;
 import net.minecraft.network.packet.c2s.login.LoginHelloC2SPacket;
-import net.minecraft.network.packet.s2c.login.LoginCompressionS2CPacket;
-import net.minecraft.network.packet.s2c.login.LoginDisconnectS2CPacket;
-import net.minecraft.network.packet.s2c.login.LoginHelloS2CPacket;
-import net.minecraft.network.packet.s2c.login.LoginQueryRequestS2CPacket;
-import net.minecraft.network.packet.s2c.login.LoginSuccessS2CPacket;
+import net.minecraft.network.packet.s2c.login.*;
 import net.minecraft.text.Text;
 
 import java.net.InetSocketAddress;
@@ -37,12 +33,7 @@ public class SocketKick extends Command {
 
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
-        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.PLAYER, () -> Objects.requireNonNull(CoffeeMain.client.world)
-                .getPlayers()
-                .stream()
-                .map(abstractClientPlayerEntity -> abstractClientPlayerEntity.getGameProfile().getName())
-                .toList()
-                .toArray(String[]::new)));
+        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.PLAYER, () -> Objects.requireNonNull(CoffeeMain.client.world).getPlayers().stream().map(abstractClientPlayerEntity -> abstractClientPlayerEntity.getGameProfile().getName()).toList().toArray(String[]::new)));
     }
 
     @Override

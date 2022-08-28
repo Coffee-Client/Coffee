@@ -4,11 +4,11 @@
 
 package coffee.client.feature.gui.clickgui.element;
 
-import coffee.client.feature.command.impl.ConfigUtils;
 import coffee.client.feature.gui.clickgui.ClickGUI;
 import coffee.client.feature.gui.element.Element;
 import coffee.client.feature.gui.element.impl.TexturedButtonElement;
 import coffee.client.feature.gui.notifications.hudNotif.HudNotification;
+import coffee.client.helper.config.ConfigInputFile;
 import coffee.client.helper.font.FontRenderers;
 import coffee.client.helper.render.Rectangle;
 import coffee.client.helper.render.Renderer;
@@ -21,17 +21,21 @@ import java.io.File;
 
 public class SavedConfigDisplay extends Element {
     ConfigsDisplay parent;
-    File configName;
+    File configPath;
+    String configName;
     TexturedButtonElement delete;
+    boolean warn;
 
-    public SavedConfigDisplay(double x, double y, double width, File configName, ConfigsDisplay parent) {
+    public SavedConfigDisplay(double x, double y, double width, File configPath, String name, boolean showWarning, ConfigsDisplay parent) {
         super(x, y, width, 20);
         this.parent = parent;
-        this.configName = configName;
+        this.configPath = configPath;
+        this.configName = name;
+        this.warn = showWarning;
         this.delete = new TexturedButtonElement(new Color(255, 70, 70), 0, 0, 16, 16, () -> {
             // SHUT THE FUCK UP
             //noinspection ResultOfMethodCallIgnored
-            configName.delete();
+            configPath.delete();
             parent.reinit();
         }, TexturedButtonElement.IconRenderer.fromSpritesheet(Texture.MODULE_TYPES, "delete.png"));
     }
@@ -63,7 +67,7 @@ public class SavedConfigDisplay extends Element {
                 }
             }
         }
-        String renderableConfigName = Utils.capAtLength(configName.getName(), getWidth() - this.delete.getWidth() - 4, FontRenderers.getRenderer());
+        String renderableConfigName = Utils.capAtLength(configName, getWidth() - this.delete.getWidth() - 4, FontRenderers.getRenderer());
         FontRenderers.getRenderer().drawString(stack, renderableConfigName, getPositionX() + 2, getPositionY() + getHeight() / 2d - FontRenderers.getRenderer().getFontHeight() / 2d, 0xFFFFFF);
         this.delete.setPositionX(getPositionX() + getWidth() - this.delete.getWidth() - 2);
         this.delete.setPositionY(getPositionY() + 2);
@@ -77,7 +81,7 @@ public class SavedConfigDisplay extends Element {
         if (inBounds(x, y) && button == 0) {
             if (!this.delete.inBounds(x, y)) {
                 try {
-                    ConfigUtils.load(this.configName);
+                    new ConfigInputFile(this.configPath).apply();
                 } catch (Exception e) {
                     HudNotification.create("Failed to load config. Check logs for more info", 5000, HudNotification.Type.ERROR);
                     e.printStackTrace();

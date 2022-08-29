@@ -94,7 +94,7 @@ public class MassUse extends Module {
                     }
                 }
             }
-        });
+        }, 0);
     }
 
     @Override

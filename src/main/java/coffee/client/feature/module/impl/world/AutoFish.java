@@ -37,7 +37,7 @@ public class AutoFish extends Module {
                     }).start();
                 }
             }
-        });
+        }, 0);
     }
 
     @Override

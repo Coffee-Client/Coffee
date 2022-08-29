@@ -46,7 +46,7 @@ public class AirPlace extends Module {
                 } catch (Exception ignored) {
                 }
             }
-        });
+        }, 0);
     }
 
     @Override

@@ -39,7 +39,7 @@ public class Annihilator extends Module {
             if (event1.getButton() == 0 && event1.getAction() == 1) {
                 mousePressed();
             }
-        });
+        }, 0);
     }
 
     void mousePressed() {

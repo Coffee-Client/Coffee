@@ -51,13 +51,13 @@ public class Taco extends Command {
 
     public Taco() {
         super("Taco", "Config for the taco hud", "taco");
-        Events.registerEventHandler(EventType.CONFIG_SAVE, event -> saveConfig());
+        Events.registerEventHandler(EventType.CONFIG_SAVE, event -> saveConfig(), 0);
         Events.registerEventHandler(EventType.POST_INIT, event -> { // we in game, context is made, we can make textures
             if (!init.get()) {
                 initFramesAndConfig();
             }
             init.set(true);
-        });
+        }, 0);
     }
 
     static void initFramesAndConfig() {

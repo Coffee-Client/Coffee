@@ -47,7 +47,7 @@ public class FakeHacker extends Module {
                     target = pe;
                 }
             }
-        });
+        }, 0);
     }
 
     @Override

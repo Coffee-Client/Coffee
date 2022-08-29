@@ -42,7 +42,7 @@ public class Swing extends Module {
                 } catch (Exception ignored) {
                 }
             }
-        });
+        }, 0);
         Events.registerEventHandler(EventType.PACKET_SEND, event -> {
             if (!this.isEnabled()) {
                 return;
@@ -51,7 +51,7 @@ public class Swing extends Module {
             if (pe.getPacket() instanceof ClientCommandC2SPacket e && e.getMode() == ClientCommandC2SPacket.Mode.PRESS_SHIFT_KEY) {
                 event.setCancelled(true);
             }
-        });
+        }, 0);
     }
 
     @Override

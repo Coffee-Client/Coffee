@@ -54,7 +54,7 @@ public class ShowTntPrime extends Module {
                     }
                 }
             }
-        });
+        }, 0);
     }
 
     static void semicircle(MatrixStack stack, Color c, double x, double y, double rad, double width, double segments, double toRad) {

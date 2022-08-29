@@ -24,7 +24,7 @@ public class XCarry extends Module {
             if (pe.getPacket() instanceof CloseHandledScreenC2SPacket) {
                 pe.setCancelled(true);
             }
-        });
+        }, 0);
     }
 
     @Override

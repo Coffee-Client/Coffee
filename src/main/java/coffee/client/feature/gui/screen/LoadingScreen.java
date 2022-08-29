@@ -29,7 +29,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class LoadingScreen extends AAScreen implements FastTickable {
-    static final int atOnce = 1;
+    static final int atOnce = 3;
     static LoadingScreen INSTANCE = null;
     final AtomicBoolean loaded = new AtomicBoolean(false);
     final AtomicBoolean loadInProg = new AtomicBoolean(false);

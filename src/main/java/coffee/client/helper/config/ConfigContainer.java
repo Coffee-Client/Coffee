@@ -29,7 +29,7 @@ public class ConfigContainer {
         this.path = f;
         this.key = key;
         this.value = new JsonObject();
-        Events.registerEventHandler(EventType.CONFIG_SAVE, event -> this.save());
+        Events.registerEventHandler(EventType.CONFIG_SAVE, event -> this.save(), 0);
         reload();
     }
 

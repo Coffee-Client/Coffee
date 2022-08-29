@@ -56,8 +56,8 @@ public class HudRenderer {
                     element.mouseReleased();
                 }
             }
-        });
-        Events.registerEventHandler(EventType.CONFIG_SAVE, event -> saveConfig());
+        }, 0);
+        Events.registerEventHandler(EventType.CONFIG_SAVE, event -> saveConfig(), 0);
         loadConfig();
     }
 

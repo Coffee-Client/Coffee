@@ -38,7 +38,7 @@ public class NoFall extends Module {
                     ((IPlayerMoveC2SPacketMixin) event.getPacket()).setOnGround(true);
                 }
             }
-        });
+        }, 0);
     }
 
     @Override

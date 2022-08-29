@@ -52,7 +52,7 @@ public class Criticals extends Module {
                 }
                 ModuleRegistry.getByClass(NoFall.class).enabled = true; // re-enable nofall
             }
-        });
+        }, 0);
 
     }
 

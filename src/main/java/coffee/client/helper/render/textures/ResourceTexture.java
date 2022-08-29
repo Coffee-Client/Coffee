@@ -35,7 +35,9 @@ public class ResourceTexture implements Texture {
 
     @Override
     public void load() throws Throwable {
-        if (initialized.get()) return;
+        if (initialized.get()) {
+            return;
+        }
         initialized.set(true);
         try (InputStream is = getClass().getClassLoader().getResourceAsStream(path)) {
             if (is == null) {

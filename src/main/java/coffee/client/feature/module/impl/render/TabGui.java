@@ -38,7 +38,7 @@ public class TabGui extends Module {
             }
             KeyboardEvent me = (KeyboardEvent) event;
             handleMouse(me);
-        });
+        }, 0);
     }
 
     @Override

@@ -27,7 +27,7 @@ public class AntiOffhandCrash extends Module {
                     event.setCancelled(true);
                 }
             }
-        });
+        }, 0);
     }
 
     @Override

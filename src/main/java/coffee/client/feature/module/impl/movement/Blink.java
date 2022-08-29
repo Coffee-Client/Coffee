@@ -40,7 +40,7 @@ public class Blink extends Module {
             if (mode.getValue() == Mode.Delay) {
                 queue.add(event.getPacket());
             }
-        });
+        }, 0);
     }
 
     @Override

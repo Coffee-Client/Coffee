@@ -61,7 +61,7 @@ public class Hud extends Module {
             if (event.getPacket() instanceof WorldTimeUpdateS2CPacket) {
                 lastTimePacketReceived = System.currentTimeMillis();
             }
-        });
+        }, 0);
     }
 
     double calcTps(double n) {

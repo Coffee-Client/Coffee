@@ -10,6 +10,7 @@ import coffee.client.feature.module.impl.render.FreeLook;
 import coffee.client.helper.event.EventType;
 import coffee.client.helper.event.Events;
 import coffee.client.helper.event.events.PacketEvent;
+import lombok.Getter;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket;
 import net.minecraft.util.math.MathHelper;
@@ -26,21 +27,27 @@ public class Rotations {
     private static long lastModificationTime = 0;
     private static Vec3d targetV3;
 
+    @Getter
+    private static Vec3d lastKnownServerPos = Vec3d.ZERO;
+
     static {
         Events.registerEventHandler(EventType.PACKET_SEND, event1 -> {
             PacketEvent event = (PacketEvent) event1;
             if (event.getPacket() instanceof PlayerMoveC2SPacket packet) {
                 clientYaw = packet.getYaw(clientYaw);
                 clientPitch = packet.getPitch(clientPitch);
+                if (!event.isCancelled()) {
+                    lastKnownServerPos = new Vec3d(packet.getX(lastKnownServerPos.x), packet.getY(lastKnownServerPos.y), packet.getZ(lastKnownServerPos.z));
+                }
             }
-        });
+        }, 10); // last in queue
         Events.registerEventHandler(EventType.PACKET_RECEIVE, event -> {
             PacketEvent pe = (PacketEvent) event;
             if (pe.getPacket() instanceof PlayerPositionLookS2CPacket p) {
                 clientYaw = p.getYaw();
                 clientPitch = p.getPitch();
             }
-        });
+        }, 0);
     }
 
     static void timeoutCheck() {

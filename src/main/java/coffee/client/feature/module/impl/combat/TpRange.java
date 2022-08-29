@@ -56,7 +56,7 @@ public class TpRange extends Module {
                     esv.execute(this::theFunny);
                 }
             }
-        });
+        }, 0);
         Events.registerEventHandler(EventType.PACKET_RECEIVE, event -> {
             if (!this.isEnabled()) {
                 return;
@@ -65,7 +65,7 @@ public class TpRange extends Module {
             if (pe.getPacket() instanceof PlayerPositionLookS2CPacket && running.get()) {
                 event.setCancelled(true);
             }
-        });
+        }, 0);
     }
 
     void doIt() {

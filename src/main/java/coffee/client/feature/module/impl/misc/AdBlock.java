@@ -28,7 +28,7 @@ public class AdBlock extends Module {
                     blocked++;
                 }
             }
-        });
+        }, 0);
     }
 
     @Override

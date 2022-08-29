@@ -36,7 +36,7 @@ public class Backtrack extends Module {
             if (pe.getPacket() instanceof PlayerMoveC2SPacket) {
                 event.setCancelled(true);
             }
-        });
+        }, 0);
     }
 
     boolean shouldBacktrack() {

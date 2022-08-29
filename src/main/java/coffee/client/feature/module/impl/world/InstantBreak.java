@@ -45,7 +45,7 @@ public class InstantBreak extends Module {
                     whitelist.remove(packet);
                 }
             }
-        });
+        }, 0);
     }
 
     @Override

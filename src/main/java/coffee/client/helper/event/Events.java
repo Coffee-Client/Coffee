@@ -14,6 +14,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
@@ -22,19 +23,20 @@ import java.util.stream.Collectors;
 public class Events {
     static final List<ListenerEntry> entries = new CopyOnWriteArrayList<>();
 
-    public static ListenerEntry registerEventHandler(int uniqueId, EventType event, Consumer<? extends Event> handler) {
-        return registerEventHandler(uniqueId, event, handler, Events.class);
+    public static ListenerEntry registerEventHandler(int uniqueId, EventType event, Consumer<? extends Event> handler, int prio) {
+        return registerEventHandler(uniqueId, event, handler, Events.class, prio);
     }
 
-    public static ListenerEntry registerEventHandler(int uniqueId, EventType event, Consumer<? extends Event> handler, Class<?> owner) {
+    public static ListenerEntry registerEventHandler(int uniqueId, EventType event, Consumer<? extends Event> handler, Class<?> owner, int prio) {
         if (entries.stream().noneMatch(listenerEntry -> listenerEntry.id == uniqueId)) {
-            ListenerEntry le = new ListenerEntry(uniqueId, event, handler, owner);
+            ListenerEntry le = new ListenerEntry(uniqueId, event, handler, owner, prio);
             entries.add(le);
+            entries.sort(Comparator.comparingInt(ListenerEntry::prio));
             return le;
         } else {
             CoffeeMain.log(Level.WARN, uniqueId + " tried to register " + event.name() + " multiple times, unregistering previous and adding new");
             unregister(uniqueId);
-            return registerEventHandler(uniqueId, event, handler, owner); // yes this is recursive and no this will not repeat again because we unregistered
+            return registerEventHandler(uniqueId, event, handler, owner, prio); // yes this is recursive and no this will not repeat again because we unregistered
         }
     }
 
@@ -42,8 +44,8 @@ public class Events {
         entries.removeIf(listenerEntry -> listenerEntry.id == id);
     }
 
-    public static ListenerEntry registerEventHandler(EventType event, Consumer<? extends Event> handler) {
-        return registerEventHandler((int) Math.floor(Math.random() * 0xFFFFFF), event, handler);
+    public static ListenerEntry registerEventHandler(EventType event, Consumer<? extends Event> handler, int prio) {
+        return registerEventHandler((int) Math.floor(Math.random() * 0xFFFFFF), event, handler, prio);
     }
 
     public static void unregisterEventHandlerClass(Object instance) {
@@ -75,7 +77,7 @@ public class Events {
                             } catch (IllegalAccessException | InvocationTargetException e) {
                                 e.printStackTrace();
                             }
-                        }, instance.getClass());
+                        }, instance.getClass(), 0);
                         CoffeeMain.log(Level.INFO, "Registered event handler " + declaredMethod + " with id " + l.id);
                     }
                 }
@@ -100,7 +102,7 @@ public class Events {
                             } catch (IllegalAccessException | InvocationTargetException e) {
                                 e.printStackTrace();
                             }
-                        }, instance.getClass());
+                        }, instance.getClass(), 0);
                         CoffeeMain.log(Level.INFO, "Registered event handler " + declaredMethod + " with id " + l.id);
                     }
                 }
@@ -127,6 +129,7 @@ public class Events {
         return argument.isCancelled();
     }
 
-    public record ListenerEntry(int id, EventType type, Consumer<? extends Event> eventListener, Class<?> owner) {
+    public record ListenerEntry(int id, EventType type, Consumer<? extends Event> eventListener, Class<?> owner,
+                                int prio) {
     }
 }

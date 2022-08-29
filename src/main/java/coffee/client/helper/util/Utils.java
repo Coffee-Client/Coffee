@@ -41,12 +41,34 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
 import java.util.*;
 
 public class Utils {
 
     public static boolean sendPackets = true;
+
+    private static String recursiveToString(Object o) {
+        String s = o.toString();
+        if (s.split("@").length == 2) { // a.b.c@abcdef, default impl
+            return forceToString(o);
+        } else {
+            return s;
+        }
+    }
+
+    @SneakyThrows
+    public static String forceToString(Object o) {
+        String simpleName = o.getClass().getSimpleName();
+        StringBuilder props = new StringBuilder();
+        for (Field declaredField : o.getClass().getDeclaredFields()) {
+            declaredField.setAccessible(true);
+            props.append(declaredField.getName()).append("=").append(recursiveToString(declaredField.get(o))).append(",");
+        }
+        String s = props.substring(0, props.length() - 1);
+        return String.format("%s{%s}", simpleName, s);
+    }
 
     public static void throwIfAnyEquals(String message, Object ifEquals, Object... toCheck) {
         for (Object o : toCheck) {

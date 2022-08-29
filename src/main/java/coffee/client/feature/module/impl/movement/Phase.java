@@ -36,13 +36,13 @@ public class Phase extends Module {
             if (pe.getPacket() instanceof PlayerMoveC2SPacket && !Objects.requireNonNull(CoffeeMain.client.world).isSpaceEmpty(CoffeeMain.client.player, p)) {
                 event.setCancelled(true);
             }
-        });
+        }, 0);
         Events.registerEventHandler(EventType.NOCLIP_QUERY, event -> {
             if (!getNoClipState(((PlayerNoClipQueryEvent) event).getPlayer())) {
                 return;
             }
             ((PlayerNoClipQueryEvent) event).setNoClipState(PlayerNoClipQueryEvent.NoClipState.ACTIVE);
-        });
+        }, 0);
     }
 
     @Override

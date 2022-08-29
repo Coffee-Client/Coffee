@@ -469,7 +469,7 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
         String accessToken;
         UUID cachedUuid;
         boolean valid = true;
-        boolean didLogin = false;
+        boolean didSuccessfulLogin = false;
 
         public AltStorage(String n, String e, String p, UUID u, AddScreenOverlay.AccountType type, String tags) {
             this.cachedName = n;
@@ -863,10 +863,9 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
         }
 
         public void login() {
-            if (storage.didLogin) {
+            if (storage.didSuccessfulLogin) {
                 return;
             }
-            storage.didLogin = true;
             try {
                 MinecraftAuthenticator auth = new MinecraftAuthenticator();
                 MinecraftToken token = switch (storage.type) {
@@ -890,6 +889,7 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
                 storage.cachedUuid = profile.getUuid();
                 downloadTexture();
                 storage.valid = true;
+                storage.didSuccessfulLogin = true;
             } catch (Exception e) {
                 e.printStackTrace();
                 storage.valid = false;

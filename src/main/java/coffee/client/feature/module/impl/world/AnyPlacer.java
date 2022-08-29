@@ -77,7 +77,7 @@ public class AnyPlacer extends Module {
                     CoffeeMain.client.getNetworkHandler().sendPacket(ib);
                 }
             }
-        });
+        }, 0);
     }
 
     @Override

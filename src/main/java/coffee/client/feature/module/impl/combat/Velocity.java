@@ -47,7 +47,7 @@ public class Velocity extends Module {
                     event.setCancelled(true);
                 }
             }
-        });
+        }, 0);
     }
 
     @Override

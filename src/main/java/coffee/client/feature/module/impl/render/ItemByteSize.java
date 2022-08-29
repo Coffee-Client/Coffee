@@ -39,7 +39,7 @@ public class ItemByteSize extends Module {
                 fmt = humanReadableByteCountBin(count);
             }
             e.addClientLore("Size: " + fmt);
-        });
+        }, 0);
     }
 
     public static String humanReadableByteCountBin(long bytes) {

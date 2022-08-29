@@ -53,7 +53,7 @@ public class Boom extends Module {
                     fbInstant();
                 }
             }
-        });
+        }, 0);
         speed.showIf(() -> mode.getValue() == Mode.FireballGhast);
         // this is basically just to prevent the double hitting the fireball
         // if we hit the fireball after we fired it (1 second time frame from fire -> hit), we just don't do it
@@ -70,7 +70,7 @@ public class Boom extends Module {
                     event.setCancelled(true);
                 }
             }
-        });
+        }, 0);
     }
 
     void fbInstant() {

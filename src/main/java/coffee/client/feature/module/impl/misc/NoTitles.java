@@ -42,7 +42,7 @@ public class NoTitles extends Module {
                 event.setCancelled(true);
                 CoffeeMain.client.inGameHud.setDefaultTitleFade();
             }
-        });
+        }, 0);
     }
 
     @Override

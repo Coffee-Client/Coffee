@@ -10,12 +10,16 @@ import coffee.client.feature.config.annotation.Setting;
 import coffee.client.feature.config.annotation.VisibilitySpecifier;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
+import coffee.client.helper.event.EventListener;
+import coffee.client.helper.event.EventType;
+import coffee.client.helper.event.events.PacketEvent;
 import coffee.client.helper.util.Rotations;
 import coffee.client.helper.util.Timer;
 import coffee.client.helper.util.Utils;
 import coffee.client.mixin.IPlayerListEntryMixin;
 import com.google.common.util.concurrent.AtomicDouble;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
+import it.unimi.dsi.fastutil.ints.Int2DoubleArrayMap;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
@@ -27,6 +31,9 @@ import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.Packet;
+import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
+import net.minecraft.network.packet.s2c.play.PlayerSpawnS2CPacket;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.Box;
@@ -38,6 +45,45 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 public class Killaura extends Module {
+    private static final double[][] HITBOX_POSITION_OFFSETS = new double[][] {
+        /*  -- Y --
+         |  1 --- 2
+         X  |     |
+         |  0 --- 3
+        */
+        { 0, 0, 0 }, { 1, 0, 0 }, { 1, 0, 1 }, { 0, 0, 1 },
+
+        { 0, 1, 0 }, { 1, 1, 0 }, { 1, 1, 1 }, { 0, 1, 1 }, };
+    public static Int2DoubleArrayMap playersWhoHaveSpawnedAndStayedInOurRange = new Int2DoubleArrayMap();
+
+    private static Vec3d[] getHitboxPoints(LivingEntity le) {
+        float width = le.getWidth();
+        float height = le.getHeight();
+        Vec3d root = le.getPos().subtract(width / 2d, 0, width / 2d);
+        Vec3d[] t = new Vec3d[HITBOX_POSITION_OFFSETS.length];
+        for (int i = 0; i < HITBOX_POSITION_OFFSETS.length; i++) {
+            double[] entry = HITBOX_POSITION_OFFSETS[i];
+            Vec3d offset = new Vec3d(entry[0], entry[1], entry[2]).multiply(width, height, width);
+            t[i] = root.add(offset);
+        }
+        return t;
+    }
+
+    @EventListener(EventType.PACKET_RECEIVE)
+    void onPacketRecv(PacketEvent pe) {
+        Packet<?> packet = pe.getPacket();
+        if (packet instanceof PlayerSpawnS2CPacket ps) {
+            Vec3d lastKnownServerPos = Rotations.getLastKnownServerPos();
+            Vec3d f = new Vec3d(ps.getX(), ps.getY(), ps.getZ());
+            double v = f.distanceTo(lastKnownServerPos);
+            playersWhoHaveSpawnedAndStayedInOurRange.put(ps.getId(), v);
+        }
+    }
+
+    boolean isWithinSusRange(Vec3d d) {
+        return d.distanceTo(Rotations.getLastKnownServerPos()) < 10;
+    }
+
     final Timer attackCooldown = new Timer();
     final Random r = new Random();
     @Setting(name = "Attack mode", description = "How to attack the selected entities")
@@ -125,22 +171,21 @@ public class Killaura extends Module {
             return (int) (20d / speed.get()) * 50 + 20; // ticks -> ms + 1 tick
         }
     }
-    double mapFlags(boolean... d) {
-        double s = 0;
-        for (boolean b : d) {
-            s += b?1:0;
+
+    @EventListener(value = EventType.PACKET_SEND, prio = 10)
+    void onPacketSend(PacketEvent pe) {
+        if (pe.getPacket() instanceof PlayerMoveC2SPacket) {
+            for (Integer integer : playersWhoHaveSpawnedAndStayedInOurRange.keySet().toArray(Integer[]::new)) {
+                Entity entityById = client.world.getEntityById(integer);
+                if (entityById == null || !isWithinSusRange(entityById.getPos())) {
+                    playersWhoHaveSpawnedAndStayedInOurRange.remove((int) integer); // no longer applicable
+                } else {
+                    playersWhoHaveSpawnedAndStayedInOurRange.put((int) integer, entityById.getPos().distanceTo(Rotations.getLastKnownServerPos()));
+                }
+            }
         }
-        return s/d.length;
     }
-    double matrixBotConfidence(LivingEntity e) {
-        String entityName = e.getEntityName();
-        boolean allLowerCase = StringUtils.isAllLowerCase(entityName);
-        PlayerListEntry playerListEntry = client.getNetworkHandler().getPlayerListEntry(e.getUuid());
-        boolean hasDefaultSkin = playerListEntry != null && ((IPlayerListEntryMixin) playerListEntry).coffee_getTextures().get(MinecraftProfileTexture.Type.SKIN) == null;
-        boolean sprinting = e.isSprinting();
-        boolean hasZeroVel = e.getVelocity().equals(Vec3d.ZERO);
-        return mapFlags(allLowerCase,hasDefaultSkin,sprinting,hasZeroVel);
-    }
+
 
     double getRange() {
         if (CoffeeMain.client.interactionManager == null) {
@@ -153,17 +198,31 @@ public class Killaura extends Module {
         }
     }
 
+    double mapFlags(boolean... d) {
+        double s = 0;
+        for (boolean b : d) {
+            s += b ? 1 : 0;
+        }
+        return s / d.length;
+    }
+
+    boolean isInRange(Vec3d pos) {
+        return pos.distanceTo(client.player.getEyePos()) <= getRange();
+    }
+
     List<LivingEntity> selectTargets() {
         List<LivingEntity> entities = new ArrayList<>(StreamSupport.stream(client.world.getEntities().spliterator(), false).filter(entity -> !entity.equals(client.player)) // filter our player out
             .filter(Entity::isAlive).filter(Entity::isAttackable) // filter all entities we can't attack out
             .filter(entity -> entity instanceof LivingEntity) // filter all "entities" that aren't actual entities out
             .map(entity -> (LivingEntity) entity) // cast all entities to actual entities
-            .filter(this::isEntityApplicable).filter(entity -> entity.getPos().distanceTo(client.player.getEyePos()) <= getRange()) // filter all entities that are outside our range out
+            .filter(this::isEntityApplicable).filter(entity -> Arrays.stream(getHitboxPoints(entity)).anyMatch(this::isInRange)) // filter all entities that are outside our range out
             .filter(livingEntity -> {
-                if (matrixAntibot) return matrixBotConfidence(livingEntity) < matrixConfidence; // true = include, required confidence must be above current confidence
-                else return true;
-            })
-            .toList());
+                if (matrixAntibot) {
+                    return Antibot.MATRIX.computeConfidence(livingEntity) < matrixConfidence; // true = include, required confidence must be above current confidence
+                } else {
+                    return true;
+                }
+            }).toList());
         switch (selectMode) {
             case Distance ->
                 entities.sort(Comparator.comparingDouble(value -> value.distanceTo(client.player))); // low distance first
@@ -179,6 +238,74 @@ public class Killaura extends Module {
             case Single -> List.of(entities.get(0));
             case Multi -> new ArrayList<>(entities.subList(0, Math.min(entities.size(), (int) amount)));
         };
+    }
+
+    public static class Antibot {
+        public static AntibotEntry MATRIX = new AntibotEntry("Matrix", AntibotCheck.from("NameLowercase", 0.3, e -> StringUtils.isAllLowerCase(e.getEntityName())), AntibotCheck.from("NoVelocity", 0.1, e -> e.getVelocity().equals(Vec3d.ZERO)), AntibotCheck.from("DefaultSkin", 0.1, e -> {
+            PlayerListEntry playerListEntry = client.getNetworkHandler().getPlayerListEntry(e.getUuid());
+            return playerListEntry != null && ((IPlayerListEntryMixin) playerListEntry).coffee_getTextures().get(MinecraftProfileTexture.Type.SKIN) == null;
+        }), AntibotCheck.from("YTooClose", 0.1, e -> {
+            double diff = e.getPos().y - Rotations.getLastKnownServerPos().y;
+            return Math.abs(diff) < 1.4;
+        }), AntibotCheck.from("IllegalSprint", 0.2, e -> {
+            if (!e.isSprinting()) {
+                return false;
+            }
+            Vec3d lookDir1 = e.getRotationVector();
+            Vec3d lookDir = new Vec3d(lookDir1.x, 0, lookDir1.z).normalize();
+            Vec3d positionDiff = e.getPos().subtract(e.prevX, e.prevY, e.prevZ);
+            if (positionDiff.length() < 0.15) {
+                return true; // diff too small to be sprinting
+            }
+            Vec3d positionDiff1 = new Vec3d(positionDiff.x, 0, positionDiff.z).normalize();
+            double diff = Math.abs(Math.acos(lookDir.z) - Math.acos(positionDiff1.z));
+            return diff >= 0.9; // illegal angle at which to be sprinting
+        }), AntibotCheck.from("SpawnedAndStayedWithinRange", 0.3, e -> playersWhoHaveSpawnedAndStayedInOurRange.containsKey(e.getId())));
+
+        public interface Testable {
+            boolean violates(LivingEntity e);
+        }
+
+        public abstract static class AntibotCheck implements Testable {
+            public static AntibotCheck from(String name, double important, Testable f) {
+                return new AntibotCheck() {
+                    @Override
+                    public String name() {
+                        return name;
+                    }
+
+                    @Override
+                    double importance() {
+                        return important;
+                    }
+
+                    @Override
+                    public boolean violates(LivingEntity e) {
+                        return f.violates(e);
+                    }
+                };
+            }
+
+            abstract String name();
+
+            abstract double importance();
+
+            @Override
+            public String toString() {
+                return name();
+            }
+        }
+
+        public record AntibotEntry(String name, AntibotCheck... checks) {
+            public double computeConfidence(LivingEntity e) {
+                double d = Arrays.stream(checks).map(antibotCheck -> antibotCheck.violates(e) ? antibotCheck.importance() : 0).reduce(Double::sum).orElse(0d);
+                return d / Arrays.stream(checks).map(AntibotCheck::importance).reduce(Double::sum).orElse(0d);
+            }
+
+            public AntibotCheck[] getViolatingChecks(LivingEntity e) {
+                return Arrays.stream(checks).filter(antibotCheck -> antibotCheck.violates(e)).toArray(AntibotCheck[]::new);
+            }
+        }
     }
 
     boolean isEntityApplicable(LivingEntity le) {

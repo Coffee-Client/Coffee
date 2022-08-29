@@ -51,7 +51,7 @@ public class Flight extends Module {
             if (pe.getPacket() instanceof ClientCommandC2SPacket p && p.getMode() == ClientCommandC2SPacket.Mode.PRESS_SHIFT_KEY) {
                 event.setCancelled(true);
             }
-        });
+        }, 0);
     }
 
     @Override

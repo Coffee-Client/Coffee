@@ -51,7 +51,7 @@ public class ForEach extends Command {
                 message("Foreach operation completed");
                 recieving = false;
             }
-        });
+        }, 0);
     }
 
     @Override

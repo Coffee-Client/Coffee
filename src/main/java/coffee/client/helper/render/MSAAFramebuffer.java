@@ -50,6 +50,7 @@ public class MSAAFramebuffer extends Framebuffer {
     }
 
     public static void use(int samples, Runnable drawAction) {
+//        drawAction.run();
         use(samples, MinecraftClient.getInstance().getFramebuffer(), drawAction);
     }
 

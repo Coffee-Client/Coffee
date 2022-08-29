@@ -55,6 +55,7 @@
     "render.ModelPartCuboidMixin",
     "render.ModelPartMixin",
     "render.PlayerEntityRendererMixin",
+    "render.SodiumBlockOcclusionCacheMixin",
     "render.WorldRendererMixin",
     "screen.AChatScreenMixin",
     "screen.AGenericContainerScreenMixin",
@@ -70,6 +71,7 @@
     "screen.TitleScreenMixin"
   ],
   "client": [
+    "IPlayerListEntryMixin",
     "network.ClientPlayNetworkHandlerMixin",
     "render.BufferVertexConsumerMixin",
     "render.ChatHudLineMixin",

@@ -18,7 +18,8 @@ public class AbstractFabricPlatformMixin {
     private static final List<String> blacklistedNamesThatShouldntBeBlacklisted = List.of("guardian", "gaslight", "nochatreports");
 
     /**
-     *
+     * @author 0x150
+     * @reason fuck you viafabric
      */
     @Overwrite
     public final boolean hasPlugin(String name) {

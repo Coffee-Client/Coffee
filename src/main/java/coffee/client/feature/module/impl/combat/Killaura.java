@@ -13,7 +13,10 @@ import coffee.client.feature.module.ModuleType;
 import coffee.client.helper.util.Rotations;
 import coffee.client.helper.util.Timer;
 import coffee.client.helper.util.Utils;
+import coffee.client.mixin.IPlayerListEntryMixin;
 import com.google.common.util.concurrent.AtomicDouble;
+import com.mojang.authlib.minecraft.MinecraftProfileTexture;
+import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
@@ -28,6 +31,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -62,6 +66,10 @@ public class Killaura extends Module {
     boolean attackPlayers = true;
     @Setting(name = "Attack all", description = "Attacks all remaining entities")
     boolean attackAll = false;
+    @Setting(name = "Matrix antibot", description = "Filters the matrix bots out of the target list")
+    boolean matrixAntibot = true;
+    @Setting(name = "Matrix confidence", description = "How confident the antibot needs to be before filtering\n(0 = 0% confident, 1 = 100%)", min = 0, max = 1, precision = 1)
+    double matrixConfidence = 0.7;
     List<LivingEntity> targets = new ArrayList<>();
     int currentRandomDelay = 0;
 
@@ -89,6 +97,11 @@ public class Killaura extends Module {
         return attackMode == AttackMode.Single;
     }
 
+    @VisibilitySpecifier("Matrix confidence")
+    boolean shouldShowConfidence() {
+        return matrixAntibot;
+    }
+
     int getDelay() {
         if (client.player == null) {
             return 0;
@@ -112,6 +125,22 @@ public class Killaura extends Module {
             return (int) (20d / speed.get()) * 50 + 20; // ticks -> ms + 1 tick
         }
     }
+    double mapFlags(boolean... d) {
+        double s = 0;
+        for (boolean b : d) {
+            s += b?1:0;
+        }
+        return s/d.length;
+    }
+    double matrixBotConfidence(LivingEntity e) {
+        String entityName = e.getEntityName();
+        boolean allLowerCase = StringUtils.isAllLowerCase(entityName);
+        PlayerListEntry playerListEntry = client.getNetworkHandler().getPlayerListEntry(e.getUuid());
+        boolean hasDefaultSkin = playerListEntry != null && ((IPlayerListEntryMixin) playerListEntry).coffee_getTextures().get(MinecraftProfileTexture.Type.SKIN) == null;
+        boolean sprinting = e.isSprinting();
+        boolean hasZeroVel = e.getVelocity().equals(Vec3d.ZERO);
+        return mapFlags(allLowerCase,hasDefaultSkin,sprinting,hasZeroVel);
+    }
 
     double getRange() {
         if (CoffeeMain.client.interactionManager == null) {
@@ -130,6 +159,10 @@ public class Killaura extends Module {
             .filter(entity -> entity instanceof LivingEntity) // filter all "entities" that aren't actual entities out
             .map(entity -> (LivingEntity) entity) // cast all entities to actual entities
             .filter(this::isEntityApplicable).filter(entity -> entity.getPos().distanceTo(client.player.getEyePos()) <= getRange()) // filter all entities that are outside our range out
+            .filter(livingEntity -> {
+                if (matrixAntibot) return matrixBotConfidence(livingEntity) < matrixConfidence; // true = include, required confidence must be above current confidence
+                else return true;
+            })
             .toList());
         switch (selectMode) {
             case Distance ->

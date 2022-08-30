@@ -215,6 +215,7 @@ public class ModuleRegistry {
         registerModule(Debugger.class);
         registerModule(NoSlow.class);
         registerModule(GamemodeAlert.class);
+        registerModule(LecternCrash.class);
 
         rebuildSharedModuleList();
 

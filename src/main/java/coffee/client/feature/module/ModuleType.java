@@ -11,7 +11,8 @@ public enum ModuleType {
     WORLD("World", "world.png"),
     EXPLOIT("Exploit", "exploit.png"),
     ADDON_PROVIDED("Addons", "addons.png"),
-    COMBAT("Combat", "combat.png");
+    COMBAT("Combat", "combat.png"),
+    HIDDEN("", "");
 
 
     final String name;

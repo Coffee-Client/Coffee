@@ -58,16 +58,27 @@ public class Utils {
         }
     }
 
-    @SneakyThrows
     public static String forceToString(Object o) {
-        String simpleName = o.getClass().getSimpleName();
+        return forceToString(o.getClass().getSimpleName(), o);
+    }
+
+    @SneakyThrows
+    public static String forceToString(String classname, Object o) {
         StringBuilder props = new StringBuilder();
-        for (Field declaredField : o.getClass().getDeclaredFields()) {
-            declaredField.setAccessible(true);
-            props.append(declaredField.getName()).append("=").append(recursiveToString(declaredField.get(o))).append(",");
+        Class<?> dumpingClass = o.getClass();
+        while (dumpingClass != null) {
+            dumpFieldsToSb(props, o, dumpingClass);
+            dumpingClass = dumpingClass.getSuperclass();
         }
-        String s = props.substring(0, props.length() - 1);
-        return String.format("%s{%s}", simpleName, s);
+        String s = props.substring(0, java.lang.Math.max(props.length() - 1, 0));
+        return String.format("%s{%s}", classname, s);
+    }
+
+    private static void dumpFieldsToSb(StringBuilder sb, Object o, Class<?> c) throws IllegalAccessException {
+        for (Field declaredField : c.getDeclaredFields()) {
+            declaredField.setAccessible(true);
+            sb.append(declaredField.getName()).append("=").append(recursiveToString(declaredField.get(o))).append(",");
+        }
     }
 
     public static void throwIfAnyEquals(String message, Object ifEquals, Object... toCheck) {

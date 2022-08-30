@@ -212,6 +212,9 @@ public class ModuleRegistry {
         registerModule(Girlboss.class);
         registerModule(Waypoints.class);
         registerModule(NoMessageIndicators.class);
+        registerModule(Debugger.class);
+        registerModule(NoSlow.class);
+        registerModule(GamemodeAlert.class);
 
         rebuildSharedModuleList();
 

@@ -4,10 +4,12 @@
 
 package coffee.client.mixin.entity;
 
+import coffee.client.CoffeeMain;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleRegistry;
 import coffee.client.feature.module.impl.misc.PortalGUI;
 import coffee.client.feature.module.impl.movement.NoPush;
+import coffee.client.feature.module.impl.movement.NoSlow;
 import coffee.client.feature.module.impl.movement.Phase;
 import coffee.client.feature.module.impl.render.Freecam;
 import coffee.client.helper.manager.ConfigManager;
@@ -66,6 +68,15 @@ public class ClientPlayerEntityMixin {
         } else {
             return instance.getPitch();
         }
+    }
+
+    @Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isUsingItem()Z"))
+    boolean coffee_fakeIsUsingItem(ClientPlayerEntity instance) {
+        NoSlow noSlow = ModuleRegistry.getByClass(NoSlow.class);
+        if (this.equals(CoffeeMain.client.player) && noSlow.isEnabled() && noSlow.isEating()) {
+            return false;
+        }
+        return instance.isUsingItem();
     }
 
 }

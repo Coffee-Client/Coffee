@@ -4,12 +4,10 @@
 
 package coffee.client.feature.config.annotation;
 
-import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Repeatable(VisibilitySpecifiers.class)
-public @interface VisibilitySpecifier {
-    String value();
+public @interface VisibilitySpecifiers {
+    VisibilitySpecifier[] value();
 }

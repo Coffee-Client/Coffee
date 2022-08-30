@@ -60,24 +60,33 @@ public class AnnotationParser {
             }).get();
             for (Method declaredMethod : inst.getClass().getDeclaredMethods()) {
                 for (Annotation declaredAnnotation : declaredMethod.getDeclaredAnnotations()) {
+                    System.out.println(declaredAnnotation);
                     if (declaredAnnotation instanceof VisibilitySpecifier visSpec) {
-                        if (declaredMethod.getParameterCount() != 0 || declaredMethod.getReturnType() != boolean.class) {
-                            throw new RuntimeException("Invalid visibility specifier for " + settingName + ": " + declaredMethod);
-                        }
-                        if (visSpec.value().equals(settingName)) {
-                            declaredMethod.setAccessible(true);
-                            b.showIf(() -> {
-                                try {
-                                    return (boolean) declaredMethod.invoke(inst);
-                                } catch (IllegalAccessException | InvocationTargetException e) {
-                                    throw new RuntimeException(e);
-                                }
-                            });
+                        parseAnnotation(visSpec, declaredMethod, b);
+                    } else if (declaredAnnotation instanceof VisibilitySpecifiers visSpecs) {
+                        for (VisibilitySpecifier visibilitySpecifier : visSpecs.value()) {
+                            parseAnnotation(visibilitySpecifier, declaredMethod, b);
                         }
                     }
                 }
             }
             config.create(b);
+        }
+    }
+
+    private void parseAnnotation(VisibilitySpecifier spec, Method declaredMethod, SettingBase<?> base) {
+        if (declaredMethod.getParameterCount() != 0 || declaredMethod.getReturnType() != boolean.class) {
+            throw new RuntimeException("Invalid visibility specifier for " + base.getName() + ": " + declaredMethod);
+        }
+        if (spec.value().equals(base.getName())) {
+            declaredMethod.setAccessible(true);
+            base.showIf(() -> {
+                try {
+                    return (boolean) declaredMethod.invoke(inst);
+                } catch (IllegalAccessException | InvocationTargetException e) {
+                    throw new RuntimeException(e);
+                }
+            });
         }
     }
 }

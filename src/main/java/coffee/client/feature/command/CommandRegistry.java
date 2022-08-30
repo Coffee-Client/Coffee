@@ -89,6 +89,7 @@ public class CommandRegistry {
         vanillaCommands.add(new FakeNick());
         vanillaCommands.add(new Reset());
         vanillaCommands.add(new Kill());
+        vanillaCommands.add(new Debugger());
 
         rebuildSharedCommands();
     }

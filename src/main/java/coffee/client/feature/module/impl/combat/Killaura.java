@@ -13,6 +13,7 @@ import coffee.client.feature.module.ModuleType;
 import coffee.client.helper.event.EventListener;
 import coffee.client.helper.event.EventType;
 import coffee.client.helper.event.events.PacketEvent;
+import coffee.client.helper.manager.AttackManager;
 import coffee.client.helper.util.Rotations;
 import coffee.client.helper.util.Timer;
 import coffee.client.helper.util.Utils;
@@ -104,6 +105,9 @@ public class Killaura extends Module {
     double range = 5;
     @Setting(name = "Smooth look", description = "Smoothly looks at the target entity before attacking it\nHelps bypass anticheats")
     boolean smoothLook = true;
+    static Random random = new Random();
+    @Setting(name = "Smooth look speed", description = "How fast to turn on smooth look", min = 1, max = 20, precision = 1)
+    RangeSetting.Range smoothLookRange = new RangeSetting.Range(8, 12);
     @Setting(name = "Attack passive", description = "Attacks passive mobs")
     boolean attackPassive = false;
     @Setting(name = "Attack hostile", description = "Attacks hostile mobs")
@@ -121,6 +125,17 @@ public class Killaura extends Module {
 
     public Killaura() {
         super("Killaura", "Automatically attacks all entities in range", ModuleType.COMBAT);
+    }
+
+    @Setting(name = "Attack partner", description = "Only attacks the current combat partner (The player you intentionally hit before)\nCan be used to bypass bot checks")
+    boolean attackPartner = false;
+
+    @VisibilitySpecifier("Attack passive")
+    @VisibilitySpecifier("Attack hostile")
+    @VisibilitySpecifier("Attack players")
+    @VisibilitySpecifier("Attack all")
+    boolean shouldShowOptions() {
+        return !attackPartner;
     }
 
     @VisibilitySpecifier("Delay")
@@ -198,14 +213,6 @@ public class Killaura extends Module {
         }
     }
 
-    double mapFlags(boolean... d) {
-        double s = 0;
-        for (boolean b : d) {
-            s += b ? 1 : 0;
-        }
-        return s / d.length;
-    }
-
     boolean isInRange(Vec3d pos) {
         return pos.distanceTo(client.player.getEyePos()) <= getRange();
     }
@@ -240,27 +247,111 @@ public class Killaura extends Module {
         };
     }
 
+    @VisibilitySpecifier("Smooth look speed")
+    boolean shouldShowSmoothLookSpeed() {
+        return smoothLook;
+    }
+
+    boolean isEntityApplicable(LivingEntity le) {
+        if (attackPartner) {
+            return le.equals(AttackManager.getLastAttackInTimeRange());
+        }
+        if (le instanceof PlayerEntity) {
+            return attackPlayers;
+        } else if (le instanceof Monster) {
+            return attackHostile;
+        } else if (le instanceof PassiveEntity) {
+            return attackPassive;
+        }
+        return attackAll;
+    }
+
+    @Override
+    public void tick() {
+        targets = selectTargets();
+        if (!attackCooldown.hasExpired(getDelay() + currentRandomDelay)) {
+            return;
+        }
+        if (targets.isEmpty()) {
+            return;
+        }
+        boolean smooth = smoothLook && attackMode == AttackMode.Single;
+        if (smooth) {
+            LivingEntity target = targets.get(0);
+            Vec3d ranged = Rotations.getRotationVector(Rotations.getClientPitch(), Rotations.getClientYaw()).multiply(getRange());
+            Box allowed = client.player.getBoundingBox().stretch(ranged).expand(1, 1, 1);
+            EntityHitResult ehr = ProjectileUtil.raycast(CoffeeMain.client.player,
+                CoffeeMain.client.player.getCameraPosVec(0),
+                CoffeeMain.client.player.getCameraPosVec(0).add(ranged),
+                allowed,
+                Entity::isAttackable,
+                getRange() * getRange());
+            if (ehr != null && ehr.getEntity().equals(target)) {
+                attack(target);
+                pickNextRandomDelay();
+                attackCooldown.reset();
+            }
+        } else {
+            pickNextRandomDelay();
+            attackCooldown.reset();
+            for (LivingEntity target : targets) {
+                attack(target);
+            }
+        }
+    }
+
+    void pickNextRandomDelay() {
+        int min = (int) delayRandom.getMin();
+        int max = (int) delayRandom.getMax();
+        if (min >= max) {
+            currentRandomDelay = 0;
+        } else {
+            currentRandomDelay = r.nextInt(min, max);
+        }
+    }
+
+    void attack(LivingEntity target) {
+        CoffeeMain.client.interactionManager.attackEntity(CoffeeMain.client.player, target);
+        CoffeeMain.client.player.swingHand(Hand.MAIN_HAND);
+    }
+
+    @Override
+    public void onFastTick() {
+        boolean smooth = smoothLook && attackMode == AttackMode.Single;
+        if (smooth && !targets.isEmpty()) {
+            LivingEntity le = targets.get(0);
+            Rotations.lookAtPositionSmoothServerSide(Utils.getInterpolatedEntityPosition(le).add(0, le.getHeight() / 2d, 0),
+                random.nextDouble(smoothLookRange.getMin(), smoothLookRange.getMax()));
+        }
+    }
+
     public static class Antibot {
-        public static AntibotEntry MATRIX = new AntibotEntry("Matrix", AntibotCheck.from("NameLowercase", 0.3, e -> StringUtils.isAllLowerCase(e.getEntityName())), AntibotCheck.from("NoVelocity", 0.1, e -> e.getVelocity().equals(Vec3d.ZERO)), AntibotCheck.from("DefaultSkin", 0.1, e -> {
-            PlayerListEntry playerListEntry = client.getNetworkHandler().getPlayerListEntry(e.getUuid());
-            return playerListEntry != null && ((IPlayerListEntryMixin) playerListEntry).coffee_getTextures().get(MinecraftProfileTexture.Type.SKIN) == null;
-        }), AntibotCheck.from("YTooClose", 0.1, e -> {
-            double diff = e.getPos().y - Rotations.getLastKnownServerPos().y;
-            return Math.abs(diff) < 1.4;
-        }), AntibotCheck.from("IllegalSprint", 0.2, e -> {
-            if (!e.isSprinting()) {
-                return false;
-            }
-            Vec3d lookDir1 = e.getRotationVector();
-            Vec3d lookDir = new Vec3d(lookDir1.x, 0, lookDir1.z).normalize();
-            Vec3d positionDiff = e.getPos().subtract(e.prevX, e.prevY, e.prevZ);
-            if (positionDiff.length() < 0.15) {
-                return true; // diff too small to be sprinting
-            }
-            Vec3d positionDiff1 = new Vec3d(positionDiff.x, 0, positionDiff.z).normalize();
-            double diff = Math.abs(Math.acos(lookDir.z) - Math.acos(positionDiff1.z));
-            return diff >= 0.9; // illegal angle at which to be sprinting
-        }), AntibotCheck.from("SpawnedAndStayedWithinRange", 0.3, e -> playersWhoHaveSpawnedAndStayedInOurRange.containsKey(e.getId())));
+        public static AntibotEntry MATRIX = new AntibotEntry("Matrix",
+            AntibotCheck.from("NameLowercase", 0.3, e -> StringUtils.isAllLowerCase(e.getEntityName())),
+            AntibotCheck.from("NoVelocity", 0.1, e -> e.getVelocity().equals(Vec3d.ZERO)),
+            AntibotCheck.from("DefaultSkin", 0.1, e -> {
+                PlayerListEntry playerListEntry = client.getNetworkHandler().getPlayerListEntry(e.getUuid());
+                return playerListEntry != null && ((IPlayerListEntryMixin) playerListEntry).coffee_getTextures().get(MinecraftProfileTexture.Type.SKIN) == null;
+            }),
+            AntibotCheck.from("YTooClose", 0.1, e -> {
+                double diff = e.getPos().y - Rotations.getLastKnownServerPos().y;
+                return Math.abs(diff) < 1.4;
+            }),
+            AntibotCheck.from("IllegalSprint", 0.25, e -> {
+                if (!e.isSprinting()) {
+                    return false;
+                }
+                Vec3d lookDir1 = e.getRotationVector();
+                Vec3d lookDir = new Vec3d(lookDir1.x, 0, lookDir1.z).normalize();
+                Vec3d positionDiff = e.getPos().subtract(e.prevX, e.prevY, e.prevZ);
+                if (positionDiff.length() < 0.15) {
+                    return true; // diff too small to be sprinting
+                }
+                Vec3d positionDiff1 = new Vec3d(positionDiff.x, 0, positionDiff.z).normalize();
+                double diff = Math.abs(Math.acos(lookDir.z) - Math.acos(positionDiff1.z));
+                return diff >= 0.9; // illegal angle at which to be sprinting
+            }),
+            AntibotCheck.from("SpawnedAndStayedWithinRange", 0.3, e -> playersWhoHaveSpawnedAndStayedInOurRange.containsKey(e.getId())));
 
         public interface Testable {
             boolean violates(LivingEntity e);
@@ -305,70 +396,6 @@ public class Killaura extends Module {
             public AntibotCheck[] getViolatingChecks(LivingEntity e) {
                 return Arrays.stream(checks).filter(antibotCheck -> antibotCheck.violates(e)).toArray(AntibotCheck[]::new);
             }
-        }
-    }
-
-    boolean isEntityApplicable(LivingEntity le) {
-        if (le instanceof PlayerEntity) {
-            return attackPlayers;
-        } else if (le instanceof Monster) {
-            return attackHostile;
-        } else if (le instanceof PassiveEntity) {
-            return attackPassive;
-        }
-        return attackAll;
-    }
-
-    @Override
-    public void tick() {
-        targets = selectTargets();
-        if (!attackCooldown.hasExpired(getDelay() + currentRandomDelay)) {
-            return;
-        }
-        if (targets.isEmpty()) {
-            return;
-        }
-        boolean smooth = smoothLook && attackMode == AttackMode.Single;
-        if (smooth) {
-            LivingEntity target = targets.get(0);
-            Vec3d ranged = Rotations.getRotationVector(Rotations.getClientPitch(), Rotations.getClientYaw()).multiply(getRange());
-            Box allowed = client.player.getBoundingBox().stretch(ranged).expand(1, 1, 1);
-            EntityHitResult ehr = ProjectileUtil.raycast(CoffeeMain.client.player, CoffeeMain.client.player.getCameraPosVec(0), CoffeeMain.client.player.getCameraPosVec(0).add(ranged), allowed, Entity::isAttackable, getRange() * getRange());
-            if (ehr != null && ehr.getEntity().equals(target)) {
-                attack(target);
-                pickNextRandomDelay();
-                attackCooldown.reset();
-            }
-        } else {
-            pickNextRandomDelay();
-            attackCooldown.reset();
-            for (LivingEntity target : targets) {
-                attack(target);
-            }
-        }
-    }
-
-    void pickNextRandomDelay() {
-        int min = (int) delayRandom.getMin();
-        int max = (int) delayRandom.getMax();
-        if (min >= max) {
-            currentRandomDelay = 0;
-        } else {
-            currentRandomDelay = r.nextInt(min, max);
-        }
-    }
-
-    void attack(LivingEntity target) {
-        CoffeeMain.client.interactionManager.attackEntity(CoffeeMain.client.player, target);
-        CoffeeMain.client.player.swingHand(Hand.MAIN_HAND);
-    }
-
-    @Override
-    public void onFastTick() {
-        boolean smooth = smoothLook && attackMode == AttackMode.Single;
-        if (smooth && !targets.isEmpty()) {
-            LivingEntity le = targets.get(0);
-            Rotations.lookAtPositionSmoothServerSide(Utils.getInterpolatedEntityPosition(le).add(0, le.getHeight() / 2d, 0), 10);
         }
     }
 

@@ -82,27 +82,41 @@ public class ClickGUI extends AAScreen {
     public void initWidgets() {
         clearWidgets();
         double x = 5;
-        double lineY = 0;
+        double lineWidth = 0;
         double y = 5;
         for (ModuleType value : ModuleType.values()) {
             if (value == ModuleType.HIDDEN) {
                 continue;
             }
-            if (x + 100 > width) {
-                x = 5;
-                y += lineY + 5;
-                lineY = 0;
+            //            if (x + 100 > width) {
+            //                x = 5;
+            //                y += lineY + 5;
+            //                lineY = 0;
+            //            }
+            CategoryDisplay gd = new CategoryDisplay(value, 0, 0, 100);
+            if (y + gd.getHeight() > height - 5) {
+                y = 5;
+                x += lineWidth + 5;
+                lineWidth = 0;
             }
-            CategoryDisplay gd = new CategoryDisplay(value, x, y, 100);
-            x += gd.getWidth() + 5;
-            lineY = Math.max(lineY, gd.getHeight());
+            gd.setPositionX(x);
+            gd.setPositionY(y);
+            y += gd.getHeight() + 5;
+            lineWidth = Math.max(lineWidth, gd.getWidth());
             addChild(gd);
         }
-        if (x + 100 > width) {
-            x = 5;
-            y += lineY + 5;
+        //        if (x + 100 > width) {
+        //            x = 5;
+        //            y += lineY + 5;
+        //        }
+        ConfigsDisplay configsDisplay = new ConfigsDisplay(x, y, 100);
+        if (y + configsDisplay.getHeight() > height - 5) {
+            y = 5;
+            x += lineWidth + 5;
         }
-        addChild(new ConfigsDisplay(x, y, 100));
+        configsDisplay.setPositionX(x);
+        configsDisplay.setPositionY(y);
+        addChild(configsDisplay);
     }
 
     @Override

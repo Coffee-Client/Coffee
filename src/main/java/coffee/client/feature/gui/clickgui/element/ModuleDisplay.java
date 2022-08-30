@@ -83,8 +83,16 @@ public class ModuleDisplay extends Element {
         }
         if (leftAnim != 0) {
             double a = Transitions.easeOutExpo(leftAnim);
-            ClipStack.globalInstance.addWindow(stack, new Rectangle(getPositionX() + 2, getPositionY(), getPositionX() + 2 + 1.5, getPositionY() + 2 + (bruhHeight - 4) * a));
-            Renderer.R2D.renderRoundedQuad(stack, new Color(9, 162, 104), getPositionX() + 2, getPositionY() + 2, getPositionX() + 2 + 1.5, getPositionY() + 2 + (bruhHeight - 4), 1.5 / 2, 6);
+            ClipStack.globalInstance.addWindow(stack,
+                new Rectangle(getPositionX() + 2, getPositionY(), getPositionX() + 2 + 1.5, getPositionY() + 2 + (bruhHeight - 3) * a)); // leave one pixel at the bottom
+            Renderer.R2D.renderRoundedQuad(stack,
+                new Color(9, 162, 104),
+                getPositionX() + 2,
+                getPositionY() + 2,
+                getPositionX() + 2 + 1.5,
+                getPositionY() + 2 + (bruhHeight - 4),
+                1.5 / 2,
+                6);
             ClipStack.globalInstance.popWindow();
         }
         if (cfd.progress != 0) {

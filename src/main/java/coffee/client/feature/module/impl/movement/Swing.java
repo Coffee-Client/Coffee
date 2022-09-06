@@ -59,7 +59,12 @@ public class Swing extends Module {
         if (swinging == null) {
             return;
         }
-        Vec3d diff = Vec3d.of(swinging).add(0.5, 0.5, 0.5).subtract(Utils.getInterpolatedEntityPosition(CoffeeMain.client.player)).normalize().multiply(0.4).add(0, 0.03999999910593033 * 2, 0);
+        Vec3d diff = Vec3d.of(swinging)
+            .add(0.5, 0.5, 0.5)
+            .subtract(Utils.getInterpolatedEntityPosition(CoffeeMain.client.player))
+            .normalize()
+            .multiply(0.4)
+            .add(0, 0.03999999910593033 * 2, 0);
 
         CoffeeMain.client.player.addVelocity(diff.x, diff.y, diff.z);
         if (CoffeeMain.client.options.sneakKey.isPressed()) {

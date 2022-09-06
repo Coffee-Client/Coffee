@@ -61,7 +61,8 @@ public class ConfigUtils extends Command {
             return new PossibleArgument(ArgumentType.STRING, "load", "save");
         }
         if (args[0].equals("load") && index == 1) {
-            return new PossibleArgument(ArgumentType.STRING, Arrays.stream(Objects.requireNonNull(CONFIG_STORAGE.listFiles())).map(File::getName).toList().toArray(String[]::new));
+            return new PossibleArgument(ArgumentType.STRING,
+                Arrays.stream(Objects.requireNonNull(CONFIG_STORAGE.listFiles())).map(File::getName).toList().toArray(String[]::new));
         } else if (args[0].equals("save") && index >= 1) {
             return new PossibleArgument(ArgumentType.STRING, "<file name>");
         }
@@ -87,7 +88,8 @@ public class ConfigUtils extends Command {
                 String name = cif.getName();
                 boolean shouldWarn = CoffeeMain.getClientVersion() != version;
                 if (shouldWarn) {
-                    warn("The config file you're trying to load was saved with a different coffee version than you have currently. This might lead to some issues. Use with caution");
+                    warn(
+                        "The config file you're trying to load was saved with a different coffee version than you have currently. This might lead to some issues. Use with caution");
                 }
                 message("Loading config file " + name);
                 cif.apply();
@@ -106,15 +108,15 @@ public class ConfigUtils extends Command {
                         return;
                     }
                 }
-                try (FileOutputStream fos = new FileOutputStream(out);
-                    ConfigOutputStream cos = new ConfigOutputStream(fos, name)) {
+                try (FileOutputStream fos = new FileOutputStream(out); ConfigOutputStream cos = new ConfigOutputStream(fos, name)) {
                     //                    save(out);
                     cos.write();
                     if (ConfigsDisplay.instance != null) {
                         ConfigsDisplay.instance.reinit();
                     }
                     MutableText t = Text.literal("Saved config! Click to open");
-                    Style s = Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.of("Click to open"))).withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, out.getAbsolutePath()));
+                    Style s = Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.of("Click to open")))
+                        .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, out.getAbsolutePath()));
                     t.setStyle(s);
                     Objects.requireNonNull(CoffeeMain.client.player).sendMessage(t, false);
                 } catch (Exception e) {
@@ -125,7 +127,4 @@ public class ConfigUtils extends Command {
         }
     }
 
-    public record ConfigFileEntry(String name, File path, boolean warn) {
-
-    }
 }

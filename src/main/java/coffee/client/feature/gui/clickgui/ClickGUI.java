@@ -11,6 +11,7 @@ import coffee.client.feature.gui.screen.base.AAScreen;
 import coffee.client.feature.module.ModuleType;
 import coffee.client.helper.font.FontRenderers;
 import coffee.client.helper.manager.ShaderManager;
+import coffee.client.helper.render.AlphaOverride;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.Transitions;
 import coffee.client.helper.util.Utils;
@@ -131,7 +132,7 @@ public class ClickGUI extends AAScreen {
 
     @Override
     public void onFastTick() {
-        double delta = 0.04;
+        double delta = 0.03;
         if (closing) {
             delta *= -1;
         }
@@ -198,8 +199,16 @@ public class ClickGUI extends AAScreen {
         ShaderManager.BLUR.getEffect().setUniformValue("progress", (float) interpolated);
         ShaderManager.BLUR.render(delta);
         matrices.push();
-        matrices.scale((float) interpolated, (float) interpolated, 1);
+        double maxScale = 1.02;
+        double minScale = 1;
+        double scale = MathHelper.lerp(interpolated, maxScale, minScale);
+        double inverse = 1 - scale;
+        matrices.translate(inverse * width / 2, inverse * height / 2, 0);
+        matrices.scale((float) scale, (float) scale, 1);
+        AlphaOverride.pushAlphaMul((float) interpolated);
+
         super.render(matrices, mouseX, mouseY, delta);
+        AlphaOverride.popAlphaMul();
         matrices.pop();
 
     }
@@ -222,8 +231,19 @@ public class ClickGUI extends AAScreen {
             double hei = pad + FontRenderers.getRenderer().getFontHeight() + pad;
             stack.translate(0, (hei + pad) * (1 - Transitions.easeOutExpo(searchAnim)), 0);
             double textWid = FontRenderers.getRenderer().getStringWidth(oldSearchTerm);
-            Renderer.R2D.renderRoundedQuad(stack, new Color(20, 20, 20), width - pad - pad - textWid - pad, height - pad - hei, width - pad, height - pad, 5, 2, 2, 2, 10);
-            FontRenderers.getRenderer().drawString(stack, oldSearchTerm, width - pad - pad - textWid, height - pad - pad - FontRenderers.getRenderer().getFontHeight(), 0xFFFFFF);
+            Renderer.R2D.renderRoundedQuad(stack,
+                new Color(20, 20, 20),
+                width - pad - pad - textWid - pad,
+                height - pad - hei,
+                width - pad,
+                height - pad,
+                5,
+                2,
+                2,
+                2,
+                10);
+            FontRenderers.getRenderer()
+                .drawString(stack, oldSearchTerm, width - pad - pad - textWid, height - pad - pad - FontRenderers.getRenderer().getFontHeight(), 0xFFFFFF);
             stack.pop();
         }
         if (tooltipContent != null) {

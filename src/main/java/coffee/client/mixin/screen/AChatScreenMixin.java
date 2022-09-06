@@ -105,7 +105,9 @@ public class AChatScreenMixin extends Screen {
             }
         }
         String[] finalArgs = args;
-        return finalArgs.length > 0 ? a.stream().filter(s -> s.startsWith("<") || s.toLowerCase().startsWith(finalArgs[finalArgs.length - 1].toLowerCase())).collect(Collectors.toList()) : a;
+        return finalArgs.length > 0 ? a.stream()
+            .filter(s -> s.startsWith("<") || s.toLowerCase().startsWith(finalArgs[finalArgs.length - 1].toLowerCase()))
+            .collect(Collectors.toList()) : a;
     }
 
     double padding() {

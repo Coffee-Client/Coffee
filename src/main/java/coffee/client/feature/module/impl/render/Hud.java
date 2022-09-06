@@ -129,10 +129,13 @@ public class Hud extends Module {
             }
         } else {
             if (serverNotResponding == null) {
-                serverNotResponding = Notification.create(-1, "", true, Notification.Type.INFO, "Server not responding! " + minSec.format(System.currentTimeMillis() - lastTimePacketReceived));
+                serverNotResponding = Notification.create(-1,
+                    "",
+                    true,
+                    Notification.Type.INFO,
+                    "Server not responding! " + minSec.format(System.currentTimeMillis() - lastTimePacketReceived));
             }
-            serverNotResponding.contents = new String[] {
-                "Server not responding! " + minSec.format(System.currentTimeMillis() - lastTimePacketReceived) };
+            serverNotResponding.contents = new String[] { "Server not responding! " + minSec.format(System.currentTimeMillis() - lastTimePacketReceived) };
         }
         if (!NotificationRenderer.topBarNotifications.contains(serverNotResponding)) {
             serverNotResponding = null;
@@ -172,7 +175,8 @@ public class Hud extends Module {
             values.add(tpsString + " tps");
         }
         if (this.ping.getValue()) {
-            PlayerListEntry ple = Objects.requireNonNull(CoffeeMain.client.getNetworkHandler()).getPlayerListEntry(Objects.requireNonNull(CoffeeMain.client.player).getUuid());
+            PlayerListEntry ple = Objects.requireNonNull(CoffeeMain.client.getNetworkHandler())
+                .getPlayerListEntry(Objects.requireNonNull(CoffeeMain.client.player).getUuid());
             values.add((ple == null || ple.getLatency() == 0 ? "?" : ple.getLatency() + "") + " ms");
         }
         if (this.coords.getValue()) {
@@ -201,7 +205,10 @@ public class Hud extends Module {
     void drawModuleList(MatrixStack ms) {
         double width = CoffeeMain.client.getWindow().getScaledWidth();
         double y = 0;
-        for (Map.Entry<Module, ModuleEntry> moduleEntry : this.entryList.entrySet().stream().sorted(Comparator.comparingDouble(value -> -value.getValue().getRenderWidth())).toList()) {
+        for (Map.Entry<Module, ModuleEntry> moduleEntry : this.entryList.entrySet()
+            .stream()
+            .sorted(Comparator.comparingDouble(value -> -value.getValue().getRenderWidth()))
+            .toList()) {
             double prog = moduleEntry.getValue().getAnimProg() * 2;
             if (prog == 0) {
                 continue;

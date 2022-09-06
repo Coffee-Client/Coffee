@@ -58,7 +58,8 @@ public class HomeScreen extends ClientScreen {
     void load() {
         loaded = true;
         try {
-            HomeScreen.changelog = IOUtils.toString(Objects.requireNonNull(HomeScreen.class.getClassLoader().getResourceAsStream("changelogLatest.txt")), StandardCharsets.UTF_8);
+            HomeScreen.changelog = IOUtils.toString(Objects.requireNonNull(HomeScreen.class.getClassLoader().getResourceAsStream("changelogLatest.txt")),
+                StandardCharsets.UTF_8);
             updateCurrentAccount(() -> {
 
             });
@@ -99,7 +100,10 @@ public class HomeScreen extends ClientScreen {
         super.init();
         if (CompatHelper.wereAnyFound() && !showedCompatWarn && client.currentScreen == this) {
             showedCompatWarn = true;
-            client.setScreen(new NotificationScreen(Notification.Type.WARNING, "Compatability", "Compatibility issues found, some features might not be available", this));
+            client.setScreen(new NotificationScreen(Notification.Type.WARNING,
+                "Compatability",
+                "Compatibility issues found, some features might not be available",
+                this));
         }
         initWidgets();
         if (loaded) {
@@ -143,7 +147,14 @@ public class HomeScreen extends ClientScreen {
         double newH = 20;
         double per = newH / origH;
         double newW = origW * per;
-        Renderer.R2D.renderRoundedQuadWithShadow(stack, new Color(0, 0, 10, 200), padding, height - padding - padding - 20 - padding, width - padding, height - padding, 10, 20);
+        Renderer.R2D.renderRoundedQuadWithShadow(stack,
+            new Color(0, 0, 10, 200),
+            padding,
+            height - padding - padding - 20 - padding,
+            width - padding,
+            height - padding,
+            10,
+            20);
         coffee.client.helper.render.textures.Texture.ICON.bind();
         Renderer.R2D.renderTexture(stack, padding * 2, height - padding * 2 - newH, newW, newH, 0, 0, newW, newH, newW, newH);
         super.renderInternal(stack, mouseX, mouseY, delta); // render bottom row widgets

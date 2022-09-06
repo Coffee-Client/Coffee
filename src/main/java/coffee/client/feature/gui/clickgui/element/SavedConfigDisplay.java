@@ -62,13 +62,21 @@ public class SavedConfigDisplay extends Element {
                     }
                 }
                 if (render) { // should we render our tooltip and selection?
-                    Renderer.R2D.renderRoundedQuad(stack, new Color(255, 255, 255, 30), getPositionX(), getPositionY(), getPositionX() + getWidth(), getPositionY() + getHeight(), 2, 10);
+                    Renderer.R2D.renderRoundedQuad(stack,
+                        new Color(255, 255, 255, 30),
+                        getPositionX(),
+                        getPositionY(),
+                        getPositionX() + getWidth(),
+                        getPositionY() + getHeight(),
+                        2,
+                        10);
                     hovered = true;
                 }
             }
         }
         String renderableConfigName = Utils.capAtLength(configName, getWidth() - this.delete.getWidth() - 4, FontRenderers.getRenderer());
-        FontRenderers.getRenderer().drawString(stack, renderableConfigName, getPositionX() + 2, getPositionY() + getHeight() / 2d - FontRenderers.getRenderer().getFontHeight() / 2d, 0xFFFFFF);
+        FontRenderers.getRenderer()
+            .drawString(stack, renderableConfigName, getPositionX() + 2, getPositionY() + getHeight() / 2d - FontRenderers.getRenderer().getFontHeight() / 2d, 0xFFFFFF);
         this.delete.setPositionX(getPositionX() + getWidth() - this.delete.getWidth() - 2);
         this.delete.setPositionY(getPositionY() + 2);
         if (hovered) {

@@ -15,6 +15,7 @@ import coffee.client.helper.font.adapter.FontAdapter;
 import coffee.client.helper.render.Rectangle;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.render.textures.Texture;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.util.math.MatrixStack;
 
 import java.awt.Color;
@@ -22,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CategoryDisplay extends Element {
-    static final double maxHeight = 300;
+    static final double maxHeight = 250;
     final ModuleType type;
     final List<Module> modules = new ArrayList<>();
     final FlexLayoutElement layout;
@@ -74,12 +75,28 @@ public class CategoryDisplay extends Element {
         }
         setHeight(nh);
         layout.updateScroller();
-        Renderer.R2D.renderRoundedQuadWithShadow(stack, new Color(20, 20, 20), getPositionX(), getPositionY(), getPositionX() + getWidth(), getPositionY() + getHeight(), 3, 10);
+        Renderer.R2D.renderRoundedQuadWithShadow(stack,
+            new Color(20, 20, 20),
+            getPositionX(),
+            getPositionY(),
+            getPositionX() + getWidth(),
+            getPositionY() + getHeight(),
+            3,
+            10);
         double iconPad = 4;
         double iconDims = headerHeight() - iconPad * 2;
+        RenderSystem.enableBlend();
+        //        RenderSystem.setShaderColor(1f,1f,1f, AlphaOverride.compute(255)/255f);
         Texture.MODULE_TYPES.bindAndDraw(stack, getPositionX() + iconPad, getPositionY() + iconPad, iconDims, iconDims, type.getTex());
 
-        titleRenderer.drawString(stack, type.getName(), (float) (getPositionX() + iconDims + iconPad * 2), (float) (getPositionY() + headerHeight() / 2d - Math.round(titleRenderer.getFontHeight()) / 2d), 1f, 1f, 1f, 1f);
+        titleRenderer.drawString(stack,
+            type.getName(),
+            (float) (getPositionX() + iconDims + iconPad * 2),
+            (float) (getPositionY() + headerHeight() / 2d - Math.round(titleRenderer.getFontHeight()) / 2d),
+            1f,
+            1f,
+            1f,
+            1f);
         layout.setPositionX(getPositionX() + 2);
         layout.setPositionY(getPositionY() + headerHeight());
         layout.render(stack, mouseX, mouseY);

@@ -22,8 +22,14 @@ public class DiscordRPC extends Module {
     static final ExecutorService offThreadExec = Executors.newFixedThreadPool(1);
     long updateRequested = 0;
     boolean updateOutstanding = false;
-    final StringSetting details = this.config.create(new StringSetting.Builder("Using Coffee").name("Title").description("What to put as the title of the rpc").onChanged(s -> update()).get());
-    final StringSetting state = this.config.create(new StringSetting.Builder("Obliterating minecraft").name("Description").description("What to put as the description of the rpc").onChanged(s -> update()).get());
+    final StringSetting details = this.config.create(new StringSetting.Builder("Using Coffee").name("Title")
+        .description("What to put as the title of the rpc")
+        .onChanged(s -> update())
+        .get());
+    final StringSetting state = this.config.create(new StringSetting.Builder("Obliterating minecraft").name("Description")
+        .description("What to put as the description of the rpc")
+        .onChanged(s -> update())
+        .get());
     long startTime;
 
     public DiscordRPC() {

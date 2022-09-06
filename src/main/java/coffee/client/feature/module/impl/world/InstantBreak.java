@@ -27,7 +27,9 @@ public class InstantBreak extends Module {
 
     final List<Vec3d> positions = new ArrayList<>();
     final List<PlayerActionC2SPacket> whitelist = new ArrayList<>();
-    final EnumSetting<Priority> prio = this.config.create(new EnumSetting.Builder<>(Priority.Speed).name("Priority").description("What to do with the blocks being broken").get());
+    final EnumSetting<Priority> prio = this.config.create(new EnumSetting.Builder<>(Priority.Speed).name("Priority")
+        .description("What to do with the blocks being broken")
+        .get());
 
     public InstantBreak() {
         super("InstantBreak", "Breaks a block a lot faster", ModuleType.WORLD);
@@ -58,7 +60,8 @@ public class InstantBreak extends Module {
                     positions.add(p);
                 }
             } else {
-                Objects.requireNonNull(client.getNetworkHandler()).sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.STOP_DESTROY_BLOCK, last, Direction.DOWN));
+                Objects.requireNonNull(client.getNetworkHandler())
+                    .sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.STOP_DESTROY_BLOCK, last, Direction.DOWN));
                 positions.clear();
             }
         }

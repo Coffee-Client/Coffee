@@ -39,7 +39,11 @@ public enum SettingType {
         if (maxB == -1) {
             maxB = maxA;
         }
-        return new RangeSetting.Builder((RangeSetting.Range) inputField.get(declaringClass)).lowerMin(minA).lowerMax(maxA).upperMin(minB).upperMax(maxB).precision(setting.precision());
+        return new RangeSetting.Builder((RangeSetting.Range) inputField.get(declaringClass)).lowerMin(minA)
+            .lowerMax(maxA)
+            .upperMin(minB)
+            .upperMax(maxB)
+            .precision(setting.precision());
     });
     @Getter
     final Class<?> acceptedType;

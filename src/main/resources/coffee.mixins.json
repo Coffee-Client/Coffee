@@ -74,7 +74,6 @@
   "client": [
     "IPlayerListEntryMixin",
     "network.ClientPlayNetworkHandlerMixin",
-    "render.BufferVertexConsumerMixin",
     "render.ChatHudLineMixin",
     "render.IFramebufferMixin"
   ],

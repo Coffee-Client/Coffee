@@ -56,6 +56,49 @@ public class Killaura extends Module {
 
         { 0, 1, 0 }, { 1, 1, 0 }, { 1, 1, 1 }, { 0, 1, 1 }, };
     public static Int2DoubleArrayMap playersWhoHaveSpawnedAndStayedInOurRange = new Int2DoubleArrayMap();
+    static Random random = new Random();
+    final Timer attackCooldown = new Timer();
+    final Random r = new Random();
+    @Setting(name = "Attack mode", description = "How to attack the selected entities")
+    AttackMode attackMode = AttackMode.Single;
+    @Setting(name = "Amount", description = "Amount of entities to attack at once (in multi mode)", min = 1, max = 10, precision = 0)
+    double amount = 3;
+    @Setting(name = "Select mode", description = "How to select the next target")
+    SelectMode selectMode = SelectMode.Distance;
+    @Setting(name = "Automatic delay", description = "Automatically sets the delay")
+    boolean automaticDelay = true;
+    @Setting(name = "Delay", description = "Delay in milliseconds", min = 0, max = 2000, precision = 0)
+    double delay = 500;
+    @Setting(name = "Delay random", description = "How much randomness to apply to the delay (in ms)", min = 0, max = 1000, precision = 0)
+    RangeSetting.Range delayRandom = new RangeSetting.Range(0, 200);
+    @Setting(name = "Automatic range", description = "Automatically uses your max range as range")
+    boolean automaticRange = true;
+    @Setting(name = "Range", description = "How far to attack entities", min = 1, max = 7, precision = 1)
+    double range = 5;
+    @Setting(name = "Smooth look", description = "Smoothly looks at the target entity before attacking it\nHelps bypass anticheats")
+    boolean smoothLook = true;
+    @Setting(name = "Smooth look speed", description = "How fast to turn on smooth look", min = 1, max = 20, precision = 1)
+    RangeSetting.Range smoothLookRange = new RangeSetting.Range(8, 12);
+    @Setting(name = "Attack passive", description = "Attacks passive mobs")
+    boolean attackPassive = false;
+    @Setting(name = "Attack hostile", description = "Attacks hostile mobs")
+    boolean attackHostile = true;
+    @Setting(name = "Attack players", description = "Attacks players")
+    boolean attackPlayers = true;
+    @Setting(name = "Attack all", description = "Attacks all remaining entities")
+    boolean attackAll = false;
+    @Setting(name = "Matrix antibot", description = "Filters the matrix bots out of the target list")
+    boolean matrixAntibot = true;
+    @Setting(name = "Matrix confidence", description = "How confident the antibot needs to be before filtering\n(0 = 0% confident, 1 = 100%)", min = 0, max = 1, precision = 1)
+    double matrixConfidence = 0.7;
+    List<LivingEntity> targets = new ArrayList<>();
+    int currentRandomDelay = 0;
+    @Setting(name = "Attack partner", description = "Only attacks the current combat partner (The player you intentionally hit before)\nCan be used to bypass bot checks")
+    boolean attackPartner = false;
+
+    public Killaura() {
+        super("Killaura", "Automatically attacks all entities in range", ModuleType.COMBAT);
+    }
 
     private static Vec3d[] getHitboxPoints(LivingEntity le) {
         float width = le.getWidth();
@@ -84,51 +127,6 @@ public class Killaura extends Module {
     boolean isWithinSusRange(Vec3d d) {
         return d.distanceTo(Rotations.getLastKnownServerPos()) < 10;
     }
-
-    final Timer attackCooldown = new Timer();
-    final Random r = new Random();
-    @Setting(name = "Attack mode", description = "How to attack the selected entities")
-    AttackMode attackMode = AttackMode.Single;
-    @Setting(name = "Amount", description = "Amount of entities to attack at once (in multi mode)", min = 1, max = 10, precision = 0)
-    double amount = 3;
-    @Setting(name = "Select mode", description = "How to select the next target")
-    SelectMode selectMode = SelectMode.Distance;
-    @Setting(name = "Automatic delay", description = "Automatically sets the delay")
-    boolean automaticDelay = true;
-    @Setting(name = "Delay", description = "Delay in milliseconds", min = 0, max = 2000, precision = 0)
-    double delay = 500;
-    @Setting(name = "Delay random", description = "How much randomness to apply to the delay (in ms)", min = 0, max = 1000, precision = 0)
-    RangeSetting.Range delayRandom = new RangeSetting.Range(0, 200);
-    @Setting(name = "Automatic range", description = "Automatically uses your max range as range")
-    boolean automaticRange = true;
-    @Setting(name = "Range", description = "How far to attack entities", min = 1, max = 7, precision = 1)
-    double range = 5;
-    @Setting(name = "Smooth look", description = "Smoothly looks at the target entity before attacking it\nHelps bypass anticheats")
-    boolean smoothLook = true;
-    static Random random = new Random();
-    @Setting(name = "Smooth look speed", description = "How fast to turn on smooth look", min = 1, max = 20, precision = 1)
-    RangeSetting.Range smoothLookRange = new RangeSetting.Range(8, 12);
-    @Setting(name = "Attack passive", description = "Attacks passive mobs")
-    boolean attackPassive = false;
-    @Setting(name = "Attack hostile", description = "Attacks hostile mobs")
-    boolean attackHostile = true;
-    @Setting(name = "Attack players", description = "Attacks players")
-    boolean attackPlayers = true;
-    @Setting(name = "Attack all", description = "Attacks all remaining entities")
-    boolean attackAll = false;
-    @Setting(name = "Matrix antibot", description = "Filters the matrix bots out of the target list")
-    boolean matrixAntibot = true;
-    @Setting(name = "Matrix confidence", description = "How confident the antibot needs to be before filtering\n(0 = 0% confident, 1 = 100%)", min = 0, max = 1, precision = 1)
-    double matrixConfidence = 0.7;
-    List<LivingEntity> targets = new ArrayList<>();
-    int currentRandomDelay = 0;
-
-    public Killaura() {
-        super("Killaura", "Automatically attacks all entities in range", ModuleType.COMBAT);
-    }
-
-    @Setting(name = "Attack partner", description = "Only attacks the current combat partner (The player you intentionally hit before)\nCan be used to bypass bot checks")
-    boolean attackPartner = false;
 
     @VisibilitySpecifier("Attack passive")
     @VisibilitySpecifier("Attack hostile")
@@ -218,25 +216,26 @@ public class Killaura extends Module {
     }
 
     List<LivingEntity> selectTargets() {
-        List<LivingEntity> entities = new ArrayList<>(StreamSupport.stream(client.world.getEntities().spliterator(), false).filter(entity -> !entity.equals(client.player)) // filter our player out
-            .filter(Entity::isAlive).filter(Entity::isAttackable) // filter all entities we can't attack out
+        List<LivingEntity> entities = new ArrayList<>(StreamSupport.stream(client.world.getEntities().spliterator(), false)
+            .filter(entity -> !entity.equals(client.player)) // filter our player out
+            .filter(Entity::isAlive)
+            .filter(Entity::isAttackable) // filter all entities we can't attack out
             .filter(entity -> entity instanceof LivingEntity) // filter all "entities" that aren't actual entities out
             .map(entity -> (LivingEntity) entity) // cast all entities to actual entities
-            .filter(this::isEntityApplicable).filter(entity -> Arrays.stream(getHitboxPoints(entity)).anyMatch(this::isInRange)) // filter all entities that are outside our range out
+            .filter(this::isEntityApplicable)
+            .filter(entity -> Arrays.stream(getHitboxPoints(entity)).anyMatch(this::isInRange)) // filter all entities that are outside our range out
             .filter(livingEntity -> {
                 if (matrixAntibot) {
                     return Antibot.MATRIX.computeConfidence(livingEntity) < matrixConfidence; // true = include, required confidence must be above current confidence
                 } else {
                     return true;
                 }
-            }).toList());
+            })
+            .toList());
         switch (selectMode) {
-            case Distance ->
-                entities.sort(Comparator.comparingDouble(value -> value.distanceTo(client.player))); // low distance first
-            case LowHealthFirst ->
-                entities.sort(Comparator.comparingDouble(LivingEntity::getHealth)); // low health first
-            case HighHealthFirst ->
-                entities.sort(Comparator.comparingDouble(LivingEntity::getHealth).reversed()); // high health first
+            case Distance -> entities.sort(Comparator.comparingDouble(value -> value.distanceTo(client.player))); // low distance first
+            case LowHealthFirst -> entities.sort(Comparator.comparingDouble(LivingEntity::getHealth)); // low health first
+            case HighHealthFirst -> entities.sort(Comparator.comparingDouble(LivingEntity::getHealth).reversed()); // high health first
         }
         if (entities.isEmpty()) {
             return entities;
@@ -325,6 +324,44 @@ public class Killaura extends Module {
         }
     }
 
+    @Override
+    public void enable() {
+
+    }
+
+    @Override
+    public void disable() {
+
+    }
+
+    @Override
+    public String getContext() {
+        LinkedHashMap<String, Object> data = new LinkedHashMap<>();
+        data.put("Del", getDelay() + "+" + currentRandomDelay);
+        data.put("Ran", getRange());
+        data.put("Tar", targets.size());
+        return data.keySet().stream().map(s -> s + ":" + data.get(s).toString()).collect(Collectors.joining(" | "));
+    }
+
+    @Override
+    public void onWorldRender(MatrixStack matrices) {
+
+
+    }
+
+    @Override
+    public void onHudRender() {
+
+    }
+
+    public enum AttackMode {
+        Single, Multi
+    }
+
+    public enum SelectMode {
+        Distance, LowHealthFirst, HighHealthFirst
+    }
+
     public static class Antibot {
         public static AntibotEntry MATRIX = new AntibotEntry("Matrix",
             AntibotCheck.from("NameLowercase", 0.3, e -> StringUtils.isAllLowerCase(e.getEntityName())),
@@ -397,43 +434,5 @@ public class Killaura extends Module {
                 return Arrays.stream(checks).filter(antibotCheck -> antibotCheck.violates(e)).toArray(AntibotCheck[]::new);
             }
         }
-    }
-
-    @Override
-    public void enable() {
-
-    }
-
-    @Override
-    public void disable() {
-
-    }
-
-    @Override
-    public String getContext() {
-        LinkedHashMap<String, Object> data = new LinkedHashMap<>();
-        data.put("Del", getDelay() + "+" + currentRandomDelay);
-        data.put("Ran", getRange());
-        data.put("Tar", targets.size());
-        return data.keySet().stream().map(s -> s + ":" + data.get(s).toString()).collect(Collectors.joining(" | "));
-    }
-
-    @Override
-    public void onWorldRender(MatrixStack matrices) {
-
-
-    }
-
-    @Override
-    public void onHudRender() {
-
-    }
-
-    public enum AttackMode {
-        Single, Multi
-    }
-
-    public enum SelectMode {
-        Distance, LowHealthFirst, HighHealthFirst
     }
 }

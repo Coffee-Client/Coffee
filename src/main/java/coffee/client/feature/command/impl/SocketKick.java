@@ -33,7 +33,14 @@ public class SocketKick extends Command {
 
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
-        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.PLAYER, () -> Objects.requireNonNull(CoffeeMain.client.world).getPlayers().stream().map(abstractClientPlayerEntity -> abstractClientPlayerEntity.getGameProfile().getName()).toList().toArray(String[]::new)));
+        return StaticArgumentServer.serveFromStatic(index,
+            new PossibleArgument(ArgumentType.PLAYER,
+                () -> Objects.requireNonNull(CoffeeMain.client.world)
+                    .getPlayers()
+                    .stream()
+                    .map(abstractClientPlayerEntity -> abstractClientPlayerEntity.getGameProfile().getName())
+                    .toList()
+                    .toArray(String[]::new)));
     }
 
     @Override

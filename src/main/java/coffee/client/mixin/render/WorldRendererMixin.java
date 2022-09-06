@@ -4,22 +4,31 @@
 
 package coffee.client.mixin.render;
 
+import coffee.client.CoffeeMain;
 import coffee.client.feature.module.ModuleRegistry;
+import coffee.client.feature.module.impl.misc.AntiCrash;
 import coffee.client.feature.module.impl.render.BlockHighlighting;
 import coffee.client.helper.event.EventType;
 import coffee.client.helper.event.Events;
 import coffee.client.helper.event.events.ChunkRenderQueryEvent;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.ObjectSet;
 import net.minecraft.client.render.BlockBreakingInfo;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
+import java.util.Comparator;
 import java.util.SortedSet;
+import java.util.stream.StreamSupport;
 
 @Mixin(WorldRenderer.class)
 public class WorldRendererMixin {
@@ -37,5 +46,23 @@ public class WorldRendererMixin {
             return ObjectSet.of();
         }
         return instance.long2ObjectEntrySet();
+    }
+
+    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld;getEntities()Ljava/lang/Iterable;"))
+    Iterable<Entity> coffee_filterEntities(ClientWorld instance) {
+        AntiCrash inst = ModuleRegistry.getByClass(AntiCrash.class);
+        Iterable<Entity> entities = instance.getEntities();
+        if (!inst.isEnabled() || !inst.getHideMassEntities().getValue()) {
+            return entities;
+        }
+        Object2IntMap<EntityType<?>> entityTypeCount = new Object2IntArrayMap<>();
+        return StreamSupport.stream(entities.spliterator(), false)
+            .sorted(Comparator.comparingDouble(value -> value.distanceTo(CoffeeMain.client.cameraEntity)))
+            .filter(entity -> {
+                int oldCount = entityTypeCount.getOrDefault(entity.getType(), 0);
+                entityTypeCount.put(entity.getType(), oldCount + 1);
+                return oldCount < inst.getMassEntityAmount().getValue();
+            })
+            .toList();
     }
 }

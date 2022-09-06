@@ -61,7 +61,14 @@ public class ConfigDisplay extends Element {
             }
         }
         FontAdapter fnt = FontRenderers.getCustomSize(14);
-        TextElement nothing = new TextElement(fnt, "Nothing to see here", new Color(0.7f, 0.7f, 0.7f), true, getPositionX(), getPositionY(), getWidth(), fnt.getFontHeight() + 2);
+        TextElement nothing = new TextElement(fnt,
+            "Nothing to see here",
+            new Color(0.7f, 0.7f, 0.7f),
+            true,
+            getPositionX(),
+            getPositionY(),
+            getWidth(),
+            fnt.getFontHeight() + 2);
         if (daConfigs.isEmpty()) {
             daConfigs.add(nothing);
         }
@@ -87,7 +94,14 @@ public class ConfigDisplay extends Element {
         setHeight(fle.getActualHeight());
         double height1 = getHeight();
         if (height1 > 1.5) {
-            Renderer.R2D.renderRoundedQuad(stack, new Color(9, 162, 104), getPositionX() + 2, getPositionY(), getPositionX() + 3.5, getPositionY() + height1, 1.5 / 2d, 2);
+            Renderer.R2D.renderRoundedQuad(stack,
+                new Color(9, 162, 104),
+                getPositionX() + 2,
+                getPositionY(),
+                getPositionX() + 3.5,
+                getPositionY() + height1,
+                1.5 / 2d,
+                2);
         }
         fle.setPositionX(getPositionX() + leftPadding);
         fle.setPositionY(getPositionY());

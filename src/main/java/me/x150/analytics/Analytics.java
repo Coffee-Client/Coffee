@@ -156,9 +156,15 @@ public class Analytics {
      */
     private void send(TelemetryEvent event) {
         // make a new http request
-        HttpRequest request = HttpRequest.newBuilder().uri(telemetryURI).header("User-Agent", "x150_analytics/1.0").header("X-Session", hashSha256(getMac())).header("X-Source", modName).header("content-type", "application/json")
+        HttpRequest request = HttpRequest.newBuilder()
+            .uri(telemetryURI)
+            .header("User-Agent", "x150_analytics/1.0")
+            .header("X-Session", hashSha256(getMac()))
+            .header("X-Source", modName)
+            .header("content-type", "application/json")
             // post data to post
-            .POST(HttpRequest.BodyPublishers.ofString(event.toJObject().toString())).build();
+            .POST(HttpRequest.BodyPublishers.ofString(event.toJObject().toString()))
+            .build();
         // send the data async so we don't block the main thread
         client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).thenAccept(stringHttpResponse -> {
             // debug

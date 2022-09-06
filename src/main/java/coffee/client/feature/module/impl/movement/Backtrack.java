@@ -86,7 +86,10 @@ public class Backtrack extends Module {
         shouldCommit();
 
         if (!shouldBacktrack() && !committed) {
-            entries.add(new PositionEntry(Utils.getInterpolatedEntityPosition(CoffeeMain.client.player), CoffeeMain.client.player.getVelocity(), CoffeeMain.client.player.getPitch(), CoffeeMain.client.player.getYaw()));
+            entries.add(new PositionEntry(Utils.getInterpolatedEntityPosition(CoffeeMain.client.player),
+                CoffeeMain.client.player.getVelocity(),
+                CoffeeMain.client.player.getPitch(),
+                CoffeeMain.client.player.getYaw()));
         } else if (committed) {
             CoffeeMain.client.player.setNoGravity(true);
             moveTo(entries.get(0));

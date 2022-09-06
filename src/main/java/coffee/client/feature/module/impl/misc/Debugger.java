@@ -6,6 +6,7 @@ package coffee.client.feature.module.impl.misc;
 
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
+import coffee.client.helper.Profiler;
 import coffee.client.helper.event.EventListener;
 import coffee.client.helper.event.EventType;
 import coffee.client.helper.event.events.PacketEvent;
@@ -26,6 +27,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class Debugger extends Module {
     public static List<Class<? extends Packet<?>>> whitelistedPacketClasses = new ArrayList<>();
     public static List<LogEntry> logs = new CopyOnWriteArrayList<>();
+
     public Debugger() {
         super("Debugger", "the fucking", ModuleType.HIDDEN);
     }
@@ -99,6 +101,34 @@ public class Debugger extends Module {
                 1 + yOff + fa.getFontHeight());
             fa.drawString(ms, log.text, client.getWindow().getScaledWidth() - 1 - width, 1 + yOff, 0xFFFFFF);
             yOff += fa.getFontHeight();
+        }
+        List<Profiler.ProfilerEntry> entries = Profiler.getEntries();
+        int count = entries.stream().map(profilerEntry -> profilerEntry.getSubEntries().size() + 1).reduce(Integer::sum).orElse(0);
+        width = 0;
+        for (Profiler.ProfilerEntry entry : entries) {
+            String t = String.format("%s: %d (%.2f ms)", entry.getName(), entry.getDuration(), entry.getDuration() / 1e6);
+            width = Math.max(width, fa.getStringWidth(t));
+            for (Profiler.ProfilerEntry subEntry : entry.getSubEntries()) {
+                t = String.format(" -> %s: %d (%.2f ms)", subEntry.getName(), subEntry.getDuration(), subEntry.getDuration() / 1000d);
+                width = Math.max(width, fa.getStringWidth(t));
+            }
+        }
+        yOff = fa.getFontHeight() * count;
+        for (Profiler.ProfilerEntry entry : entries) {
+            String t = String.format("%s: %d (%.2f ms)", entry.getName(), entry.getDuration(), entry.getDuration() / 1e6);
+            Renderer.R2D.renderQuad(ms,
+                Color.BLACK,
+                client.getWindow().getScaledWidth() - 1 - width,
+                client.getWindow().getScaledHeight() - 1 - yOff,
+                client.getWindow().getScaledWidth() - 1,
+                client.getWindow().getScaledHeight() - 1);
+            fa.drawString(ms, t, client.getWindow().getScaledWidth() - 1 - width, client.getWindow().getScaledHeight() - 1 - yOff, 0xFFFFFF);
+            yOff -= fa.getFontHeight();
+            for (Profiler.ProfilerEntry subEntry : entry.getSubEntries()) {
+                t = String.format(" -> %s: %d (%.2f ms)", subEntry.getName(), subEntry.getDuration(), entry.getDuration() / 1e6);
+                fa.drawString(ms, t, client.getWindow().getScaledWidth() - 1 - width, client.getWindow().getScaledHeight() - 1 - yOff, 0xFFFFFF);
+                yOff -= fa.getFontHeight();
+            }
         }
     }
 

@@ -76,9 +76,23 @@ public class ButtonElement extends Element implements HasSpecialCursor {
         double originY = -height / 2d;
         Renderer.R2D.renderRoundedQuad(matrices, new Color(30, 30, 30), originX, originY, width / 2d, height / 2d, Math.min(height / 2d, radius), 10);
         if (animProgress != 0) {
-            Renderer.R2D.renderRoundedShadow(matrices, new Color(10, 10, 10, 100), originX, originY, width / 2d, height / 2d, Math.min(height / 2d, 5), 20, animProgress * 3);
+            Renderer.R2D.renderRoundedShadow(matrices,
+                new Color(10, 10, 10, 100),
+                originX,
+                originY,
+                width / 2d,
+                height / 2d,
+                Math.min(height / 2d, 5),
+                20,
+                animProgress * 3);
         }
-        FontRenderers.getRenderer().drawString(matrices, text, -(FontRenderers.getRenderer().getStringWidth(text)) / 2f, -FontRenderers.getRenderer().getMarginHeight() / 2f, isEnabled() ? textColor.getRGB() : 0xAAAAAA, false);
+        FontRenderers.getRenderer()
+            .drawString(matrices,
+                text,
+                -(FontRenderers.getRenderer().getStringWidth(text)) / 2f,
+                -FontRenderers.getRenderer().getMarginHeight() / 2f,
+                isEnabled() ? textColor.getRGB() : 0xAAAAAA,
+                false);
         matrices.pop();
     }
 

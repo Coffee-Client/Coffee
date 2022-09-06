@@ -65,7 +65,12 @@ public class ColorEditorElement extends Element {
         Color value = getValue();
         Color inverted = new Color(255 - value.getRed(), 255 - value.getGreen(), 255 - value.getBlue());
         double totalHeight = (getHeight() - slider.getHeight() - 1);
-        Renderer.R2D.renderCircle(stack, inverted, getPositionX() + MathHelper.clamp(x * getWidth(), 1, getWidth() - 1), getPositionY() + MathHelper.clamp(y * totalHeight, 1, totalHeight - 1), 1, 16);
+        Renderer.R2D.renderCircle(stack,
+            inverted,
+            getPositionX() + MathHelper.clamp(x * getWidth(), 1, getWidth() - 1),
+            getPositionY() + MathHelper.clamp(y * totalHeight, 1, totalHeight - 1),
+            1,
+            16);
         slider.setPositionX(getPositionX() + 1);
         slider.setWidth(getWidth() - 2);
         slider.setPositionY(getPositionY() + getHeight() - slider.getHeight());
@@ -167,9 +172,30 @@ public class ColorEditorElement extends Element {
         public void render(MatrixStack stack, double mouseX, double mouseY) {
             double actualX = getPositionX();
             double actualWidth = getWidth();
-            Renderer.R2D.renderRoundedQuad(stack, new Color(50, 50, 50), actualX, getPositionY() + getHeight() / 2d - 1.5 / 2d, actualX + actualWidth, getPositionY() + getHeight() / 2d + 1.5 / 2d, 1.5 / 2, 5);
-            Renderer.R2D.renderRoundedQuad(stack, Color.getHSBColor((float) value, 1f, 1f), actualX, getPositionY() + getHeight() / 2d - 1.5 / 2d, actualX + Math.max(actualWidth * value, 1.5), getPositionY() + getHeight() / 2d + 1.5 / 2d, 1.5 / 2, 5);
-            Renderer.R2D.renderRoundedQuad(stack, Color.WHITE, actualX + Math.max(actualWidth * value, 1.5) - 1.5 / 2, getPositionY(), actualX + Math.max(actualWidth * value, 1.5) + 1.5 / 2, getPositionY() + getHeight(), 1.5 / 2, 5);
+            Renderer.R2D.renderRoundedQuad(stack,
+                new Color(50, 50, 50),
+                actualX,
+                getPositionY() + getHeight() / 2d - 1.5 / 2d,
+                actualX + actualWidth,
+                getPositionY() + getHeight() / 2d + 1.5 / 2d,
+                1.5 / 2,
+                5);
+            Renderer.R2D.renderRoundedQuad(stack,
+                Color.getHSBColor((float) value, 1f, 1f),
+                actualX,
+                getPositionY() + getHeight() / 2d - 1.5 / 2d,
+                actualX + Math.max(actualWidth * value, 1.5),
+                getPositionY() + getHeight() / 2d + 1.5 / 2d,
+                1.5 / 2,
+                5);
+            Renderer.R2D.renderRoundedQuad(stack,
+                Color.WHITE,
+                actualX + Math.max(actualWidth * value, 1.5) - 1.5 / 2,
+                getPositionY(),
+                actualX + Math.max(actualWidth * value, 1.5) + 1.5 / 2,
+                getPositionY() + getHeight(),
+                1.5 / 2,
+                5);
         }
 
         void handleClick(double x) {

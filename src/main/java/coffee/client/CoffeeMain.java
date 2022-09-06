@@ -56,7 +56,8 @@ public class CoffeeMain implements ModInitializer {
     public static int getClientVersion() {
         if (CLIENT_VERSION == -1) {
             try {
-                CLIENT_VERSION = Integer.parseInt(IOUtils.toString(Objects.requireNonNull(CoffeeMain.class.getClassLoader().getResourceAsStream("version.txt")), StandardCharsets.UTF_8));
+                CLIENT_VERSION = Integer.parseInt(IOUtils.toString(Objects.requireNonNull(CoffeeMain.class.getClassLoader().getResourceAsStream("version.txt")),
+                    StandardCharsets.UTF_8));
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -100,7 +101,8 @@ public class CoffeeMain implements ModInitializer {
     void initFonts() {
         try {
             int fsize = 18 * 2;
-            FontRenderers.setRenderer(new QuickFontAdapter(new FontRenderer(Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(CoffeeMain.class.getClassLoader().getResourceAsStream("Font.ttf"))).deriveFont(Font.PLAIN, fsize), fsize)));
+            FontRenderers.setRenderer(new QuickFontAdapter(new FontRenderer(Font.createFont(Font.TRUETYPE_FONT,
+                Objects.requireNonNull(CoffeeMain.class.getClassLoader().getResourceAsStream("Font.ttf"))).deriveFont(Font.PLAIN, fsize), fsize)));
         } catch (FontFormatException | IOException e) {
             e.printStackTrace();
         }

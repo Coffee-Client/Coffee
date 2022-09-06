@@ -190,7 +190,8 @@ public class TextFieldElement extends Element implements HasSpecialCursor {
                     if (cursor == selectionStart && cursor == selectionEnd) {
                         String preText = text;
 
-                        int count = ctrl ? text.length() - cursor : (mods == (SystemUtils.IS_OS_WINDOWS ? GLFW.GLFW_MOD_CONTROL : GLFW.GLFW_MOD_ALT)) ? countToNextSpace(false) : 1;
+                        int count = ctrl ? text.length() - cursor : (mods == (SystemUtils.IS_OS_WINDOWS ? GLFW.GLFW_MOD_CONTROL : GLFW.GLFW_MOD_ALT)) ? countToNextSpace(
+                            false) : 1;
 
                         text = text.substring(0, cursor) + text.substring(cursor + count);
 
@@ -349,7 +350,18 @@ public class TextFieldElement extends Element implements HasSpecialCursor {
 
         Renderer.R2D.renderRoundedQuad(stack, new Color(40, 40, 40), getPositionX(), getPositionY(), getPositionX() + width, getPositionY() + height, radius, 10);
         if (isInvalid()) {
-            Renderer.R2D.renderRoundedOutline(stack, Color.RED, getPositionX() + .5, getPositionY() + .5, getPositionX() + width - .5, getPositionY() + height - .5, 5, 5, 5, 5, .5, 20);
+            Renderer.R2D.renderRoundedOutline(stack,
+                Color.RED,
+                getPositionX() + .5,
+                getPositionY() + .5,
+                getPositionX() + width - .5,
+                getPositionY() + height - .5,
+                5,
+                5,
+                5,
+                5,
+                .5,
+                20);
         }
 
         ClipStack.globalInstance.addWindow(stack, new Rectangle(getPositionX() + pad, getPositionY(), getPositionX() + width - pad, getPositionY() + height));
@@ -369,7 +381,12 @@ public class TextFieldElement extends Element implements HasSpecialCursor {
         ClipStack.globalInstance.popWindow();
         boolean renderCursor = (System.currentTimeMillis() % 1000) / 500d > 1;
         if (focused && renderCursor) {
-            Renderer.R2D.renderQuad(stack, Color.WHITE, getPositionX() + pad + getTextWidth(cursor) - overflowWidth, centerY, getPositionX() + pad + getTextWidth(cursor) - overflowWidth + 1, centerY + FontRenderers.getRenderer().getMarginHeight());
+            Renderer.R2D.renderQuad(stack,
+                Color.WHITE,
+                getPositionX() + pad + getTextWidth(cursor) - overflowWidth,
+                centerY,
+                getPositionX() + pad + getTextWidth(cursor) - overflowWidth + 1,
+                centerY + FontRenderers.getRenderer().getMarginHeight());
         }
 
     }

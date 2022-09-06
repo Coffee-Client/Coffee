@@ -26,7 +26,9 @@ public class ClickTP extends Module {
 
     private static BlockPos targeted = new BlockPos(0, 0, 0);
     final EnumSetting<Mode> mode = this.config.create(new EnumSetting.Builder<>(Mode.Normal).name("Mode").description("The way to teleport").get());
-    final BooleanSetting onlyctrl = this.config.create(new BooleanSetting.Builder(false).name("Only Ctrl").description("Only teleport when the control key is pressed").get());
+    final BooleanSetting onlyctrl = this.config.create(new BooleanSetting.Builder(false).name("Only Ctrl")
+        .description("Only teleport when the control key is pressed")
+        .get());
 
     public ClickTP() {
         super("ClickTP", "Teleport somewhere you clicked to", ModuleType.MOVEMENT);
@@ -99,7 +101,10 @@ public class ClickTP extends Module {
                     double y = yn / raycastdistance;
                     double z = zn / raycastdistance;
                     for (int i = 0; i < raycastdistance; i++) {
-                        client.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(player.getX() + x, player.getY() + y, player.getZ() + z, true));
+                        client.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(player.getX() + x,
+                            player.getY() + y,
+                            player.getZ() + z,
+                            true));
                     }
                     player.updatePosition(dest.getX(), dest.getY(), dest.getZ());
                 }
@@ -139,7 +144,10 @@ public class ClickTP extends Module {
                     double y = yn / rdd;
                     double z = zn / rdd;
                     for (int i = 0; i < rdd; i++) {
-                        client.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(player.getX() + x, player.getY() + y, player.getZ() + z, true));
+                        client.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(player.getX() + x,
+                            player.getY() + y,
+                            player.getZ() + z,
+                            true));
                         try {
                             Thread.sleep(10);
                         } catch (Exception ignored) {

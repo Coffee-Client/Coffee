@@ -142,7 +142,14 @@ public class WaypointEditScreen extends AAScreen {
         public void render(MatrixStack stack, double mouseX, double mouseY) {
             mouseOver = inBounds(mouseX, mouseY);
             double expand = Transitions.easeOutExpo(this.expand);
-            Renderer.R2D.renderRoundedQuad(stack, new Color(20, 20, 20), getPositionX(), getPositionY(), getPositionX() + getWidth(), getPositionY() + getHeight(), 5, 20);
+            Renderer.R2D.renderRoundedQuad(stack,
+                new Color(20, 20, 20),
+                getPositionX(),
+                getPositionY(),
+                getPositionX() + getWidth(),
+                getPositionY() + getHeight(),
+                5,
+                20);
             renderPlusIcon(stack, getPositionX() + getWidth() / 2d, getPositionY() + getHeight() / 2d, 10 + 2 * expand);
         }
 
@@ -203,7 +210,13 @@ public class WaypointEditScreen extends AAScreen {
         public WaypointVis(double x, double y, Waypoints.Waypoint wayp) {
             super(x, y, 100, 60);
             this.wayp = wayp;
-            this.actions = new ButtonGroupElement(0, 0, getWidth() - 10, 20, ButtonGroupElement.LayoutDirection.RIGHT, new ButtonGroupElement.ButtonEntry("Edit", this::edit), new ButtonGroupElement.ButtonEntry("Delete", this::delete));
+            this.actions = new ButtonGroupElement(0,
+                0,
+                getWidth() - 10,
+                20,
+                ButtonGroupElement.LayoutDirection.RIGHT,
+                new ButtonGroupElement.ButtonEntry("Edit", this::edit),
+                new ButtonGroupElement.ButtonEntry("Delete", this::delete));
         }
 
         void edit() {
@@ -224,7 +237,14 @@ public class WaypointEditScreen extends AAScreen {
         public void render(MatrixStack stack, double mouseX, double mouseY) {
             this.actions.setPositionX(getPositionX() + 5);
             this.actions.setPositionY(getPositionY() + getHeight() - 20 - 5);
-            Renderer.R2D.renderRoundedQuad(stack, new Color(20, 20, 20), getPositionX(), getPositionY(), getPositionX() + getWidth(), getPositionY() + getHeight(), 5, 20);
+            Renderer.R2D.renderRoundedQuad(stack,
+                new Color(20, 20, 20),
+                getPositionX(),
+                getPositionY(),
+                getPositionX() + getWidth(),
+                getPositionY() + getHeight(),
+                5,
+                20);
             QuickFontAdapter customSize = FontRenderers.getCustomSize(20);
             String t = Utils.capAtLength(wayp.getName(), getWidth() - 10, customSize);
             customSize.drawString(stack, t, getPositionX() + 5, getPositionY() + 5, 0xFFFFFF);

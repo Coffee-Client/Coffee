@@ -84,7 +84,8 @@ public class SuperheroFX extends Module {
         if (renderer == null) {
             int fsize = 32 * 2;
             try {
-                renderer = new FontRenderer(Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(CoffeeMain.class.getClassLoader().getResourceAsStream("Superherofx.ttf"))).deriveFont(Font.PLAIN, fsize), fsize);
+                renderer = new FontRenderer(Font.createFont(Font.TRUETYPE_FONT,
+                    Objects.requireNonNull(CoffeeMain.class.getClassLoader().getResourceAsStream("Superherofx.ttf"))).deriveFont(Font.PLAIN, fsize), fsize);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -167,7 +168,14 @@ public class SuperheroFX extends Module {
                 String w = words[r.nextInt(0, words.length)];
                 double randomN = r.nextDouble();
                 long lifetimeRnd = (long) (randomN * lifetimeRandom);
-                FxEntry fe = new FxEntry(w, pos.add(randomXOffset, randomYOffset, randomZOffset), velX, velY, velZ, System.currentTimeMillis(), (long) lifetime + lifetimeRnd, r.nextFloat());
+                FxEntry fe = new FxEntry(w,
+                    pos.add(randomXOffset, randomYOffset, randomZOffset),
+                    velX,
+                    velY,
+                    velZ,
+                    System.currentTimeMillis(),
+                    (long) lifetime + lifetimeRnd,
+                    r.nextFloat());
                 entries.add(fe);
             }
         }
@@ -203,7 +211,14 @@ public class SuperheroFX extends Module {
                     if (shadows) {
                         getRenderer().drawCenteredString(st, entry.text, 1f, 1f - getRenderer().getFontHeight() / 2f, .05f, .05f, .05f, 1f);
                     }
-                    getRenderer().drawCenteredString(st, entry.text, 0f, -getRenderer().getFontHeight() / 2f, a.getRed() / 255f, a.getGreen() / 255f, a.getBlue() / 255f, 1f);
+                    getRenderer().drawCenteredString(st,
+                        entry.text,
+                        0f,
+                        -getRenderer().getFontHeight() / 2f,
+                        a.getRed() / 255f,
+                        a.getGreen() / 255f,
+                        a.getBlue() / 255f,
+                        1f);
                 });
             }
         }

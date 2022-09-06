@@ -46,9 +46,18 @@ public class CaveMapper extends Module {
     final BooleanSetting quartz = this.config.create(new BooleanSetting.Builder(false).name("Quartz").description("Whether to show quartz").get());
     final BooleanSetting debris = this.config.create(new BooleanSetting.Builder(true).name("Ancient debris").description("Whether to show ancient debris").get());
     final BooleanSetting showScanned = this.config.create(new BooleanSetting.Builder(true).name("Show scanned").description("Whether to show the scanned area").get());
-    final BooleanSetting showEntire = this.config.create(new BooleanSetting.Builder(false).name("Show entire area").description("Whether to show the entire scanned area (VERY performance intensive)").get());
-    final DoubleSetting cacheSize = this.config.create(new DoubleSetting.Builder(10000).precision(0).name("Cache size").description("How big the cache should be (bigger = more time + more memory)").min(5000).max(30000).get());
-    final BooleanSetting includeTranslucent = this.config.create(new BooleanSetting.Builder(true).name("Scan transparent").description("Scan through transparent blocks as well").get());
+    final BooleanSetting showEntire = this.config.create(new BooleanSetting.Builder(false).name("Show entire area")
+        .description("Whether to show the entire scanned area (VERY performance intensive)")
+        .get());
+    final DoubleSetting cacheSize = this.config.create(new DoubleSetting.Builder(10000).precision(0)
+        .name("Cache size")
+        .description("How big the cache should be (bigger = more time + more memory)")
+        .min(5000)
+        .max(30000)
+        .get());
+    final BooleanSetting includeTranslucent = this.config.create(new BooleanSetting.Builder(true).name("Scan transparent")
+        .description("Scan through transparent blocks as well")
+        .get());
     BlockPos start = null;
     boolean scanned = false;
 
@@ -248,7 +257,11 @@ public class CaveMapper extends Module {
 
     @Override
     public String getContext() {
-        return scannedBlocks.size() + "S|" + new ArrayList<>(this.ores).stream().filter(blockPos -> shouldRenderOre(Objects.requireNonNull(CoffeeMain.client.world).getBlockState(blockPos).getBlock())).count() + "F|" + Utils.Math.roundToDecimal((double) new ArrayList<>(this.ores).stream().filter(blockPos -> shouldRenderOre(Objects.requireNonNull(CoffeeMain.client.world).getBlockState(blockPos).getBlock())).count() / scannedBlocks.size() * 100, 2) + "%D";
+        return scannedBlocks.size() + "S|" + new ArrayList<>(this.ores).stream()
+            .filter(blockPos -> shouldRenderOre(Objects.requireNonNull(CoffeeMain.client.world).getBlockState(blockPos).getBlock()))
+            .count() + "F|" + Utils.Math.roundToDecimal((double) new ArrayList<>(this.ores).stream()
+            .filter(blockPos -> shouldRenderOre(Objects.requireNonNull(CoffeeMain.client.world).getBlockState(blockPos).getBlock()))
+            .count() / scannedBlocks.size() * 100, 2) + "%D";
     }
 
     @Override
@@ -285,7 +298,8 @@ public class CaveMapper extends Module {
                 if (ores.contains(entry.getKey())) {
                     continue;
                 }
-                double dist = new Vec3d(entry.getKey().getX(), entry.getKey().getY(), entry.getKey().getZ()).distanceTo(Objects.requireNonNull(CoffeeMain.client.player).getPos());
+                double dist = new Vec3d(entry.getKey().getX(), entry.getKey().getY(), entry.getKey().getZ()).distanceTo(Objects.requireNonNull(CoffeeMain.client.player)
+                    .getPos());
                 dist = (1 - MathHelper.clamp(dist, 0, 15) / 15d) * 3d;
                 dist = Math.round(dist);
                 dist /= 3;
@@ -327,7 +341,11 @@ public class CaveMapper extends Module {
             Vec3d p = new Vec3d(ore.getX(), ore.getY(), ore.getZ());
             double dist = p.distanceTo(Objects.requireNonNull(CoffeeMain.client.player).getPos());
             dist = MathHelper.clamp(dist, 0, 30);
-            Renderer.R3D.renderFilled(matrices, Renderer.Util.modify(oreColors.containsKey(t) ? oreColors.get(t) : new Color(CoffeeMain.client.world.getBlockState(ore).getMapColor(CoffeeMain.client.world, ore).color), -1, -1, -1, (int) ((dist / 30d) * 200)), p, new Vec3d(1, 1, 1));
+            Renderer.R3D.renderFilled(matrices,
+                Renderer.Util.modify(oreColors.containsKey(t) ? oreColors.get(t) : new Color(CoffeeMain.client.world.getBlockState(ore)
+                    .getMapColor(CoffeeMain.client.world, ore).color), -1, -1, -1, (int) ((dist / 30d) * 200)),
+                p,
+                new Vec3d(1, 1, 1));
         }
     }
 

@@ -166,7 +166,8 @@ public class RoundTextFieldWidget implements Element, Drawable, Selectable, Does
                     if (cursor == selectionStart && cursor == selectionEnd) {
                         String preText = text;
 
-                        int count = ctrl ? text.length() - cursor : (mods == (SystemUtils.IS_OS_WINDOWS ? GLFW.GLFW_MOD_CONTROL : GLFW.GLFW_MOD_ALT)) ? countToNextSpace(false) : 1;
+                        int count = ctrl ? text.length() - cursor : (mods == (SystemUtils.IS_OS_WINDOWS ? GLFW.GLFW_MOD_CONTROL : GLFW.GLFW_MOD_ALT)) ? countToNextSpace(
+                            false) : 1;
 
                         text = text.substring(0, cursor) + text.substring(cursor + count);
 
@@ -374,7 +375,12 @@ public class RoundTextFieldWidget implements Element, Drawable, Selectable, Does
         ClipStack.globalInstance.popWindow();
         boolean renderCursor = (System.currentTimeMillis() % 1000) / 500d > 1;
         if (focused && renderCursor) {
-            Renderer.R2D.renderQuad(stack, Color.WHITE, x + pad + getTextWidth(cursor) - overflowWidth, centerY, x + pad + getTextWidth(cursor) - overflowWidth + 1, centerY + FontRenderers.getRenderer().getMarginHeight());
+            Renderer.R2D.renderQuad(stack,
+                Color.WHITE,
+                x + pad + getTextWidth(cursor) - overflowWidth,
+                centerY,
+                x + pad + getTextWidth(cursor) - overflowWidth + 1,
+                centerY + FontRenderers.getRenderer().getMarginHeight());
         }
 
     }

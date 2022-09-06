@@ -37,8 +37,7 @@ public class ConfigInputFile {
     }
 
     public void apply() {
-        try (ByteArrayInputStream bis = new ByteArrayInputStream(this.configContents);
-            DataInputStream data = new ConfigInputStream(bis)) {
+        try (ByteArrayInputStream bis = new ByteArrayInputStream(this.configContents); DataInputStream data = new ConfigInputStream(bis)) {
             int amount = data.readInt();
             for (int i = 0; i < amount; i++) {
                 String name = data.readUTF();

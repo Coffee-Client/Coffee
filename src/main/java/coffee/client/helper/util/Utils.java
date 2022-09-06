@@ -44,10 +44,21 @@ import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
 import java.util.*;
+import java.util.function.Function;
 
 public class Utils {
 
     public static boolean sendPackets = true;
+
+    @SafeVarargs
+    public static <T> T firstMatching(Function<T, Boolean> func, T... elements) {
+        return Arrays.stream(elements).filter(func::apply).findFirst().orElse(null);
+    }
+
+    @SafeVarargs
+    public static <T> T firstNonNull(T... elements) {
+        return firstMatching(Objects::nonNull, elements);
+    }
 
     private static String recursiveToString(Object o) {
         String s = o.toString();
@@ -208,13 +219,23 @@ public class Utils {
 
         public static void drop(int index) {
             int translatedSlotId = slotIndexToId(index);
-            Objects.requireNonNull(CoffeeMain.client.interactionManager).clickSlot(Objects.requireNonNull(CoffeeMain.client.player).currentScreenHandler.syncId, translatedSlotId, 1, SlotActionType.THROW, CoffeeMain.client.player);
+            Objects.requireNonNull(CoffeeMain.client.interactionManager)
+                .clickSlot(Objects.requireNonNull(CoffeeMain.client.player).currentScreenHandler.syncId,
+                    translatedSlotId,
+                    1,
+                    SlotActionType.THROW,
+                    CoffeeMain.client.player);
         }
 
         public static void moveStackToOther(int slotIdFrom, int slotIdTo) {
-            Objects.requireNonNull(CoffeeMain.client.interactionManager).clickSlot(0, slotIdFrom, 0, SlotActionType.PICKUP, CoffeeMain.client.player); // pick up item from stack
+            Objects.requireNonNull(CoffeeMain.client.interactionManager)
+                .clickSlot(0, slotIdFrom, 0, SlotActionType.PICKUP, CoffeeMain.client.player); // pick up item from stack
             CoffeeMain.client.interactionManager.clickSlot(0, slotIdTo, 0, SlotActionType.PICKUP, CoffeeMain.client.player); // put item to target
-            CoffeeMain.client.interactionManager.clickSlot(0, slotIdFrom, 0, SlotActionType.PICKUP, CoffeeMain.client.player); // (in case target slot had item) put item from target back to from
+            CoffeeMain.client.interactionManager.clickSlot(0,
+                slotIdFrom,
+                0,
+                SlotActionType.PICKUP,
+                CoffeeMain.client.player); // (in case target slot had item) put item from target back to from
         }
     }
 
@@ -270,7 +291,9 @@ public class Utils {
         public static PlayerInteractBlockC2SPacket generatePlace(BlockPos pos) {
             PendingUpdateManager pendingUpdateManager = getUpdateManager(CoffeeMain.client.world).incrementSequence();
 
-            var packet = new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, new BlockHitResult(new Vec3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5), Direction.UP, pos, false), pendingUpdateManager.getSequence());
+            var packet = new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND,
+                new BlockHitResult(new Vec3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5), Direction.UP, pos, false),
+                pendingUpdateManager.getSequence());
 
             pendingUpdateManager.close();
 

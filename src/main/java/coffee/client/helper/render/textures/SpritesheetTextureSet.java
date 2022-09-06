@@ -6,6 +6,7 @@ package coffee.client.helper.render.textures;
 
 import coffee.client.helper.gson.GsonSupplier;
 import coffee.client.helper.render.Rectangle;
+import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.Utils;
 import com.mojang.blaze3d.systems.RenderSystem;
 import lombok.Cleanup;
@@ -85,13 +86,14 @@ public class SpritesheetTextureSet implements Texture {
         float v0 = (float) (textureEntry.y / getBounds().getHeight());
         float u1 = (float) ((textureEntry.x + textureEntry.w) / getBounds().getWidth());
         float v1 = (float) ((textureEntry.y + textureEntry.h) / getBounds().getHeight());
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
         BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
-        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-        bufferBuilder.vertex(matrix, x0, y1, z).texture(u0, v1).next();
-        bufferBuilder.vertex(matrix, x1, y1, z).texture(u1, v1).next();
-        bufferBuilder.vertex(matrix, x1, y0, z).texture(u1, v0).next();
-        bufferBuilder.vertex(matrix, x0, y0, z).texture(u0, v0).next();
+        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
+        float v = Renderer.transformColor(255) / 255f;
+        bufferBuilder.vertex(matrix, x0, y1, z).texture(u0, v1).color(1f, 1f, 1f, v).next();
+        bufferBuilder.vertex(matrix, x1, y1, z).texture(u1, v1).color(1f, 1f, 1f, v).next();
+        bufferBuilder.vertex(matrix, x1, y0, z).texture(u1, v0).color(1f, 1f, 1f, v).next();
+        bufferBuilder.vertex(matrix, x0, y0, z).texture(u0, v0).color(1f, 1f, 1f, v).next();
         BufferRenderer.drawWithShader(bufferBuilder.end());
     }
 

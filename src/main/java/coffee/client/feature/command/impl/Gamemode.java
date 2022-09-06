@@ -27,7 +27,8 @@ public class Gamemode extends Command {
 
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
-        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.STRING, Arrays.stream(GameMode.values()).map(GameMode::getName).toList().toArray(String[]::new)));
+        return StaticArgumentServer.serveFromStatic(index,
+            new PossibleArgument(ArgumentType.STRING, Arrays.stream(GameMode.values()).map(GameMode::getName).toList().toArray(String[]::new)));
     }
 
     @Override

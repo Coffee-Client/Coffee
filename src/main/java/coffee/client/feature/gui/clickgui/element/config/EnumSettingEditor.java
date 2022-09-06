@@ -62,7 +62,14 @@ public class EnumSettingEditor extends SettingEditor<EnumSetting<?>> {
         Renderer.R2D.renderRoundedQuad(stack, new Color(40, 40, 40), getPositionX(), getPositionY(), getPositionX() + getWidth(), getPositionY() + getHeight(), 2, 8);
         fa.drawString(stack, configValue.name, getPositionX() + headerPad / 2d, getPositionY() + headerHeight() / 2d - fa.getFontHeight() / 2d, 0xFFFFFF);
         if (expandProg != 1) {
-            fa.drawString(stack, configValue.getValue().name(), (float) (getPositionX() + getWidth() - fa.getStringWidth(configValue.getValue().name()) - 2), (float) (getPositionY() + headerHeight() / 2d - fa.getFontHeight() / 2d), 1f, 1f, 1f, (float) Transitions.easeOutExpo(1 - expandProg));
+            fa.drawString(stack,
+                configValue.getValue().name(),
+                (float) (getPositionX() + getWidth() - fa.getStringWidth(configValue.getValue().name()) - 2),
+                (float) (getPositionY() + headerHeight() / 2d - fa.getFontHeight() / 2d),
+                1f,
+                1f,
+                1f,
+                (float) Transitions.easeOutExpo(1 - expandProg));
         }
         if (expandProg != 0) {
             float pp = (float) Transitions.easeOutExpo(expandProg);
@@ -83,15 +90,26 @@ public class EnumSettingEditor extends SettingEditor<EnumSetting<?>> {
             Renderer.endRender();
             stack.pop();
 
-            ClipStack.globalInstance.addWindow(stack, new Rectangle(getPositionX(), getPositionY() + headerHeight(), getPositionX() + getWidth(), getPositionY() + getHeight()));
+            ClipStack.globalInstance.addWindow(stack,
+                new Rectangle(getPositionX(), getPositionY() + headerHeight(), getPositionX() + getWidth(), getPositionY() + getHeight()));
 
             double offsetY = 0;
             double ballDim = 3;
             double innerBallDim = 2;
             for (Enum<?> enumSettingEntry : ese) {
-                Renderer.R2D.renderCircle(stack, new Color(20, 20, 20), getPositionX() + 2 + ballDim, getPositionY() + headerHeight() + offsetY + fa.getFontHeight() / 2d, ballDim, 20);
+                Renderer.R2D.renderCircle(stack,
+                    new Color(20, 20, 20),
+                    getPositionX() + 2 + ballDim,
+                    getPositionY() + headerHeight() + offsetY + fa.getFontHeight() / 2d,
+                    ballDim,
+                    20);
                 if (enumSettingEntry.ordinal() == configValue.getValue().ordinal()) {
-                    Renderer.R2D.renderCircle(stack, new Color(9, 162, 104), getPositionX() + 2 + ballDim, getPositionY() + headerHeight() + offsetY + fa.getFontHeight() / 2d, innerBallDim, 20);
+                    Renderer.R2D.renderCircle(stack,
+                        new Color(9, 162, 104),
+                        getPositionX() + 2 + ballDim,
+                        getPositionY() + headerHeight() + offsetY + fa.getFontHeight() / 2d,
+                        innerBallDim,
+                        20);
                 }
                 fa.drawString(stack, enumSettingEntry.name(), getPositionX() + ballDim * 2 + 4, getPositionY() + headerHeight() + offsetY, 0xFFFFFF);
                 offsetY += fa.getFontHeight() + 2;

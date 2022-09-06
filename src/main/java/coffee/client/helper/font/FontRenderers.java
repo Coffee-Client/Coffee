@@ -68,7 +68,8 @@ public class FontRenderers {
         }
         int fsize = size1;
         try {
-            QuickFontAdapter bruhAdapter = (new QuickFontAdapter(new FontRenderer(Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(FontRenderers.class.getClassLoader().getResourceAsStream("Font.ttf"))).deriveFont(Font.PLAIN, fsize), fsize)));
+            QuickFontAdapter bruhAdapter = (new QuickFontAdapter(new FontRenderer(Font.createFont(Font.TRUETYPE_FONT,
+                Objects.requireNonNull(FontRenderers.class.getClassLoader().getResourceAsStream("Font.ttf"))).deriveFont(Font.PLAIN, fsize), fsize)));
             fontRenderers.add(bruhAdapter);
             return bruhAdapter;
         } catch (Exception e) {

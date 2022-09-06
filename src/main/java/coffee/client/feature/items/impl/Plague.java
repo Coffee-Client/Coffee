@@ -25,7 +25,16 @@ public class Plague extends Item {
     public ItemStack generate() {
 
         ItemStack spawn = new ItemStack(Items.SKELETON_SPAWN_EGG);
-        NbtGroup ng = new NbtGroup(new NbtList("Enchantments", new NbtObject("", new NbtProperty("id", "minecraft:protection"), new NbtProperty("lvl", (short) 1))), new NbtObject("EntityTag", new NbtProperty("Duration", duration.getValue() * 20), new NbtList("Effects", new NbtObject("", new NbtProperty("Amplifier", (byte) 125), new NbtProperty("Duration", 2000), new NbtProperty("Id", (byte) 6))), new NbtProperty("Particle", "barrier"), new NbtProperty("Radius", 1.0f), new NbtProperty("RadiusPerTick", spread.getValue()), new NbtProperty("ReapplicationDelay", 0), new NbtProperty("id", "minecraft:area_effect_cloud")), new NbtProperty("HideFlags", 63));
+        NbtGroup ng = new NbtGroup(new NbtList("Enchantments", new NbtObject("", new NbtProperty("id", "minecraft:protection"), new NbtProperty("lvl", (short) 1))),
+            new NbtObject("EntityTag",
+                new NbtProperty("Duration", duration.getValue() * 20),
+                new NbtList("Effects", new NbtObject("", new NbtProperty("Amplifier", (byte) 125), new NbtProperty("Duration", 2000), new NbtProperty("Id", (byte) 6))),
+                new NbtProperty("Particle", "barrier"),
+                new NbtProperty("Radius", 1.0f),
+                new NbtProperty("RadiusPerTick", spread.getValue()),
+                new NbtProperty("ReapplicationDelay", 0),
+                new NbtProperty("id", "minecraft:area_effect_cloud")),
+            new NbtProperty("HideFlags", 63));
                 /*
         * {
     Enchantments: [

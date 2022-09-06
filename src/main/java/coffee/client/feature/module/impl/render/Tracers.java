@@ -51,7 +51,10 @@ public class Tracers extends Module {
         if (CoffeeMain.client.world == null || CoffeeMain.client.player == null) {
             return null;
         }
-        return StreamSupport.stream(CoffeeMain.client.world.getEntities().spliterator(), false).filter(entity -> entity.squaredDistanceTo(CoffeeMain.client.player) < 4096 && entity.getUuid() != CoffeeMain.client.player.getUuid() && isEntityApplicable(entity)).count() + "";
+        return StreamSupport.stream(CoffeeMain.client.world.getEntities().spliterator(), false)
+            .filter(entity -> entity.squaredDistanceTo(CoffeeMain.client.player) < 4096 && entity.getUuid() != CoffeeMain.client.player.getUuid() && isEntityApplicable(
+                entity))
+            .count() + "";
     }
 
     @Override
@@ -59,7 +62,9 @@ public class Tracers extends Module {
         if (CoffeeMain.client.world == null || CoffeeMain.client.player == null) {
             return;
         }
-        for (Entity entity : StreamSupport.stream(CoffeeMain.client.world.getEntities().spliterator(), false).sorted(Comparator.comparingDouble(value -> -value.distanceTo(CoffeeMain.client.player))).toList()) {
+        for (Entity entity : StreamSupport.stream(CoffeeMain.client.world.getEntities().spliterator(), false)
+            .sorted(Comparator.comparingDouble(value -> -value.distanceTo(CoffeeMain.client.player)))
+            .toList()) {
             if (entity.squaredDistanceTo(CoffeeMain.client.player) > 4096) {
                 continue;
             }

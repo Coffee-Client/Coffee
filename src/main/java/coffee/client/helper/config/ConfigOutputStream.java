@@ -34,7 +34,9 @@ public class ConfigOutputStream extends DataOutputStream {
     public void writeModule(Module module) {
         writeUTF(module.getName());
         writeBoolean(module.isEnabled());
-        List<SettingBase<?>> settings = new ArrayList<>(module.config.getSettings()).stream().filter(settingBase -> !settingBase.getValue().equals(settingBase.getDefaultValue())).toList();
+        List<SettingBase<?>> settings = new ArrayList<>(module.config.getSettings()).stream()
+            .filter(settingBase -> !settingBase.getValue().equals(settingBase.getDefaultValue()))
+            .toList();
         int size = settings.size();
         writeInt(size);
         for (SettingBase<?> setting : settings) {
@@ -48,18 +50,6 @@ public class ConfigOutputStream extends DataOutputStream {
         for (Module module : modules) {
             writeModule(module);
         }
-    }
-
-    public boolean isModuleChanged(Module m) {
-        if (m.isEnabled()) {
-            return true; // is enabled - different from default
-        }
-        for (SettingBase<?> setting : m.config.getSettings()) {
-            if (!setting.getValue().equals(setting.getDefaultValue())) {
-                return true; // value different
-            }
-        }
-        return false;
     }
 
     @SneakyThrows

@@ -19,6 +19,7 @@ import coffee.client.helper.font.adapter.FontAdapter;
 import coffee.client.helper.render.Rectangle;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.render.textures.Texture;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.util.math.MatrixStack;
 
 import java.awt.Color;
@@ -29,8 +30,7 @@ import java.util.List;
 
 public class ConfigsDisplay extends Element {
     static final double maxHeight = 300;
-    private static final char[] ILLEGAL_CHARACTERS = { '/', '\n', '\r', '\t', '\0', '\f', '`', '?', '*', '\\', '<', '>',
-        '|', '\"', ':' };
+    private static final char[] ILLEGAL_CHARACTERS = { '/', '\n', '\r', '\t', '\0', '\f', '`', '?', '*', '\\', '<', '>', '|', '\"', ':' };
     public static ConfigsDisplay instance;
     final FlexLayoutElement layout;
     final FontAdapter titleRenderer = FontRenderers.getRenderer();
@@ -77,7 +77,13 @@ public class ConfigsDisplay extends Element {
         the.add(fe);
         int clientVersion = CoffeeMain.getClientVersion();
         for (ConfigInputFile configFile : ConfigUtils.getConfigFiles()) {
-            SavedConfigDisplay scd = new SavedConfigDisplay(getPositionX(), getPositionY(), width - 4, configFile.getFile(), configFile.getName(), configFile.getVersion() != clientVersion, this);
+            SavedConfigDisplay scd = new SavedConfigDisplay(getPositionX(),
+                getPositionY(),
+                width - 4,
+                configFile.getFile(),
+                configFile.getName(),
+                configFile.getVersion() != clientVersion,
+                this);
             the.add(scd);
         }
         layout.setElements(the);
@@ -105,12 +111,27 @@ public class ConfigsDisplay extends Element {
         }
         setHeight(nh);
         layout.updateScroller();
-        Renderer.R2D.renderRoundedQuadWithShadow(stack, new Color(20, 20, 20), getPositionX(), getPositionY(), getPositionX() + getWidth(), getPositionY() + getHeight(), 3, 10);
+        Renderer.R2D.renderRoundedQuadWithShadow(stack,
+            new Color(20, 20, 20),
+            getPositionX(),
+            getPositionY(),
+            getPositionX() + getWidth(),
+            getPositionY() + getHeight(),
+            3,
+            10);
         double iconPad = 4;
         double iconDims = headerHeight() - iconPad * 2;
+        RenderSystem.enableBlend();
         Texture.MODULE_TYPES.bindAndDraw(stack, getPositionX() + iconPad, getPositionY() + iconPad, iconDims, iconDims, "configs.png");
 
-        titleRenderer.drawString(stack, "Configs", (float) (getPositionX() + iconDims + iconPad * 2), (float) (getPositionY() + headerHeight() / 2d - Math.round(titleRenderer.getFontHeight()) / 2d), 1f, 1f, 1f, 1f);
+        titleRenderer.drawString(stack,
+            "Configs",
+            (float) (getPositionX() + iconDims + iconPad * 2),
+            (float) (getPositionY() + headerHeight() / 2d - Math.round(titleRenderer.getFontHeight()) / 2d),
+            1f,
+            1f,
+            1f,
+            1f);
         layout.setPositionX(getPositionX() + 2);
         layout.setPositionY(getPositionY() + headerHeight());
         layout.render(stack, mouseX, mouseY);

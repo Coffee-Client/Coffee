@@ -41,7 +41,8 @@ public class Rename extends Command {
         if (!CoffeeMain.client.interactionManager.hasCreativeInventory()) {
             warn("You dont have creative mode; the item will only be renamed client side");
         } else {
-            CoffeeMain.client.getNetworkHandler().sendPacket(new CreativeInventoryActionC2SPacket(Utils.Inventory.slotIndexToId(CoffeeMain.client.player.getInventory().selectedSlot), iStack));
+            CoffeeMain.client.getNetworkHandler()
+                .sendPacket(new CreativeInventoryActionC2SPacket(Utils.Inventory.slotIndexToId(CoffeeMain.client.player.getInventory().selectedSlot), iStack));
         }
     }
 }

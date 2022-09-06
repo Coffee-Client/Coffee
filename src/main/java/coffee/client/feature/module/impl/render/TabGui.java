@@ -20,10 +20,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import org.lwjgl.glfw.GLFW;
 
 import java.awt.Color;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 import java.util.function.BooleanSupplier;
 
 public class TabGui extends Module {
@@ -52,14 +49,19 @@ public class TabGui extends Module {
     public void postInit() {
         if (tabStack.isEmpty()) {
             TabPane tbp = new TabPane();
-            for (ModuleType value : ModuleType.values()) {
+            for (ModuleType value : Arrays.stream(ModuleType.values()).filter(moduleType -> moduleType != ModuleType.HIDDEN).toList()) {
                 GuiEntry ge = new GuiEntry(value.getName(), () -> false, () -> {
                     TabPane modules = new TabPane();
                     for (Module module : ModuleRegistry.getModules()) {
                         if (module.getModuleType() != value) {
                             continue;
                         }
-                        GuiEntry ge1 = new GuiEntry(module.getName(), module::isEnabled, module::toggle, tabStack::pop, FontRenderers.getRenderer().getStringWidth(module.getName()), FontRenderers.getRenderer().getMarginHeight());
+                        GuiEntry ge1 = new GuiEntry(module.getName(),
+                            module::isEnabled,
+                            module::toggle,
+                            tabStack::pop,
+                            FontRenderers.getRenderer().getStringWidth(module.getName()),
+                            FontRenderers.getRenderer().getMarginHeight());
                         modules.entries.add(ge1);
                     }
                     if (modules.entries.isEmpty()) {
@@ -120,7 +122,14 @@ public class TabGui extends Module {
 
             double width = padOuter + scrollerWidth + 2 + Math.ceil(widest.width + 1) + 3;
             Renderer.R2D.renderRoundedQuadWithShadow(stack, ThemeManager.getMainTheme().getConfig(), 0, 0, width, height, 3, 20);
-            Renderer.R2D.renderRoundedQuad(stack, ThemeManager.getMainTheme().getAccent(), padOuter, yOffset + scrollerYOffset, padOuter + scrollerWidth, yOffset + scrollerYEnd, scrollerWidth / 2d, 20);
+            Renderer.R2D.renderRoundedQuad(stack,
+                ThemeManager.getMainTheme().getAccent(),
+                padOuter,
+                yOffset + scrollerYOffset,
+                padOuter + scrollerWidth,
+                yOffset + scrollerYEnd,
+                scrollerWidth / 2d,
+                20);
 
             double lastEnabledStackHeight = 0;
             double lastEnabledStackY = 0;
@@ -133,7 +142,14 @@ public class TabGui extends Module {
                     lastEnabledStackHeight += oneHeight;
                 } else {
                     if (lastEnabledStackHeight != 0) {
-                        Renderer.R2D.renderRoundedQuad(stack, new Color(40, 40, 40, 200), scrollerWidth + padOuter + 1, lastEnabledStackY, width - 2, lastEnabledStackY + lastEnabledStackHeight, 3, 20);
+                        Renderer.R2D.renderRoundedQuad(stack,
+                            new Color(40, 40, 40, 200),
+                            scrollerWidth + padOuter + 1,
+                            lastEnabledStackY,
+                            width - 2,
+                            lastEnabledStackY + lastEnabledStackHeight,
+                            3,
+                            20);
                     }
                     lastEnabledStackHeight = 0;
                     lastEnabledStackY = 0;
@@ -181,8 +197,7 @@ public class TabGui extends Module {
         List<GuiEntry> entries = new ArrayList<>();
     }
 
-    record GuiEntry(String text, BooleanSupplier isEnabled, Runnable onClick, Runnable onClose, double width,
-                    double height) {
+    record GuiEntry(String text, BooleanSupplier isEnabled, Runnable onClick, Runnable onClose, double width, double height) {
     }
 
 

@@ -51,7 +51,8 @@ public class Annihilator extends Module {
         BlockPos pos = new BlockPos(pos1);
         int startY = MathHelper.clamp(r(pos.getY() - range.getValue()), Objects.requireNonNull(CoffeeMain.client.world).getBottomY(), CoffeeMain.client.world.getTopY());
         int endY = MathHelper.clamp(r(pos.getY() + range.getValue()), CoffeeMain.client.world.getBottomY(), CoffeeMain.client.world.getTopY());
-        String cmd = "fill " + r(pos.getX() - range.getValue()) + " " + startY + " " + r(pos.getZ() - range.getValue()) + " " + r(pos.getX() + range.getValue()) + " " + endY + " " + r(pos.getZ() + range.getValue()) + " " + "minecraft:" + block.getValue();
+        String cmd = "fill " + r(pos.getX() - range.getValue()) + " " + startY + " " + r(pos.getZ() - range.getValue()) + " " + r(pos.getX() + range.getValue()) + " " + endY + " " + r(
+            pos.getZ() + range.getValue()) + " " + "minecraft:" + block.getValue();
         client.player.sendCommand(cmd);
     }
 

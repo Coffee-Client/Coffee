@@ -12,7 +12,11 @@ import net.minecraft.client.util.math.MatrixStack;
 public class TargetHUD extends HudElement {
 
     public TargetHUD() {
-        super("Target HUD", CoffeeMain.client.getWindow().getScaledWidth() / 2f + 10, CoffeeMain.client.getWindow().getScaledHeight() / 2f + 10, TargetHud.modalWidth, TargetHud.modalHeight);
+        super("Target HUD",
+            CoffeeMain.client.getWindow().getScaledWidth() / 2f + 10,
+            CoffeeMain.client.getWindow().getScaledHeight() / 2f + 10,
+            TargetHud.modalWidth,
+            TargetHud.modalHeight);
     }
 
     @Override

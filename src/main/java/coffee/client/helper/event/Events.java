@@ -67,7 +67,15 @@ public class Events {
                     }
                     Class<?>[] params = declaredMethod.getParameterTypes();
                     if (params.length != 1 || !params[0].isAssignableFrom(ev.value().getExpectedType())) {
-                        throw new IllegalArgumentException(String.format("Invalid signature: Expected %s.%s(%s) -> void, got %s.%s(%s) -> %s. Listener: %s", instance.getClass().getSimpleName(), declaredMethod.getName(), ev.value().getExpectedType().getSimpleName(), instance.getClass().getSimpleName(), declaredMethod.getName(), Arrays.stream(params).map(Class::getSimpleName).collect(Collectors.joining(", ")), declaredMethod.getReturnType().getName(), ev.value().name()));
+                        throw new IllegalArgumentException(String.format("Invalid signature: Expected %s.%s(%s) -> void, got %s.%s(%s) -> %s. Listener: %s",
+                            instance.getClass().getSimpleName(),
+                            declaredMethod.getName(),
+                            ev.value().getExpectedType().getSimpleName(),
+                            instance.getClass().getSimpleName(),
+                            declaredMethod.getName(),
+                            Arrays.stream(params).map(Class::getSimpleName).collect(Collectors.joining(", ")),
+                            declaredMethod.getReturnType().getName(),
+                            ev.value().name()));
                     } else {
                         declaredMethod.setAccessible(true);
 
@@ -92,7 +100,15 @@ public class Events {
                     EventListener ev = (EventListener) declaredAnnotation;
                     Class<?>[] params = declaredMethod.getParameterTypes();
                     if (params.length != 1 || !params[0].isAssignableFrom(ev.value().getExpectedType())) {
-                        throw new IllegalArgumentException(String.format("Invalid signature: Expected %s.%s(%s) -> void, got %s.%s(%s) -> %s. Listener: %s", instance.getClass().getSimpleName(), declaredMethod.getName(), ev.value().getExpectedType().getSimpleName(), instance.getClass().getSimpleName(), declaredMethod.getName(), Arrays.stream(params).map(Class::getSimpleName).collect(Collectors.joining(", ")), declaredMethod.getReturnType().getName(), ev.value().name()));
+                        throw new IllegalArgumentException(String.format("Invalid signature: Expected %s.%s(%s) -> void, got %s.%s(%s) -> %s. Listener: %s",
+                            instance.getClass().getSimpleName(),
+                            declaredMethod.getName(),
+                            ev.value().getExpectedType().getSimpleName(),
+                            instance.getClass().getSimpleName(),
+                            declaredMethod.getName(),
+                            Arrays.stream(params).map(Class::getSimpleName).collect(Collectors.joining(", ")),
+                            declaredMethod.getReturnType().getName(),
+                            ev.value().name()));
                     } else {
                         declaredMethod.setAccessible(true);
 
@@ -117,7 +133,10 @@ public class Events {
         }
 
         if (!event.getExpectedType().equals(argument.getClass())) {
-            throw new IllegalArgumentException(String.format("Attempted to invoke event %s with %s as event data, expected %s", event.name(), argument.getClass().getName(), event.getExpectedType().getName()));
+            throw new IllegalArgumentException(String.format("Attempted to invoke event %s with %s as event data, expected %s",
+                event.name(),
+                argument.getClass().getName(),
+                event.getExpectedType().getName()));
         }
         List<ListenerEntry> le = entries.stream().filter(listenerEntry -> listenerEntry.type == event).toList();
         if (le.size() == 0) {
@@ -129,7 +148,6 @@ public class Events {
         return argument.isCancelled();
     }
 
-    public record ListenerEntry(int id, EventType type, Consumer<? extends Event> eventListener, Class<?> owner,
-                                int prio) {
+    public record ListenerEntry(int id, EventType type, Consumer<? extends Event> eventListener, Class<?> owner, int prio) {
     }
 }

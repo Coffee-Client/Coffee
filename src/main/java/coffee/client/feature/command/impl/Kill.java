@@ -36,7 +36,14 @@ public class Kill extends Command {
 
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
-        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.STRING, Objects.requireNonNull(CoffeeMain.client.world).getPlayers().stream().map(abstractClientPlayerEntity -> abstractClientPlayerEntity.getGameProfile().getName()).toList().toArray(String[]::new)));
+        return StaticArgumentServer.serveFromStatic(index,
+            new PossibleArgument(ArgumentType.STRING,
+                Objects.requireNonNull(CoffeeMain.client.world)
+                    .getPlayers()
+                    .stream()
+                    .map(abstractClientPlayerEntity -> abstractClientPlayerEntity.getGameProfile().getName())
+                    .toList()
+                    .toArray(String[]::new)));
     }
 
     @Override
@@ -46,7 +53,13 @@ public class Kill extends Command {
         Vec3d pos = playerEntity.getPos();
         ItemStack current = client.player.getMainHandStack();
         ItemStack newStack = new ItemStack(Items.BAT_SPAWN_EGG);
-        NbtGroup group = new NbtGroup(new NbtObject("EntityTag", new NbtProperty("Duration", 5), new NbtList("Effects", new NbtObject("", new NbtProperty("Amplifier", 125), new NbtProperty("Id", 6))), new NbtProperty("Radius", 10), new NbtProperty("WaitTime", 1), new NbtProperty("id", "minecraft:area_effect_cloud"), new NbtList("Pos", new NbtProperty(pos.x), new NbtProperty(pos.y + 1), new NbtProperty(pos.z))));
+        NbtGroup group = new NbtGroup(new NbtObject("EntityTag",
+            new NbtProperty("Duration", 5),
+            new NbtList("Effects", new NbtObject("", new NbtProperty("Amplifier", 125), new NbtProperty("Id", 6))),
+            new NbtProperty("Radius", 10),
+            new NbtProperty("WaitTime", 1),
+            new NbtProperty("id", "minecraft:area_effect_cloud"),
+            new NbtList("Pos", new NbtProperty(pos.x), new NbtProperty(pos.y + 1), new NbtProperty(pos.z))));
         newStack.setNbt(group.toCompound());
         BlockHitResult bhr = new BlockHitResult(pos, Direction.DOWN, new BlockPos(pos), false);
         client.getNetworkHandler().sendPacket(new CreativeInventoryActionC2SPacket(Utils.Inventory.slotIndexToId(client.player.getInventory().selectedSlot), newStack));

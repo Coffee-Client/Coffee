@@ -4,6 +4,7 @@
 
 package coffee.client.helper.font.renderer;
 
+import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.Utils;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -50,7 +51,10 @@ public class FontRenderer {
         this.f = f;
         this.size = size;
         init();
-        cachedHeight = (float) glyphMap.values().stream().max(Comparator.comparingDouble(value -> value.dimensions.getHeight())).orElseThrow().dimensions.getHeight() * 0.25f;
+        cachedHeight = (float) glyphMap.values()
+            .stream()
+            .max(Comparator.comparingDouble(value -> value.dimensions.getHeight()))
+            .orElseThrow().dimensions.getHeight() * 0.25f;
     }
 
     public int getSize() {
@@ -155,6 +159,7 @@ public class FontRenderer {
     }
 
     private double drawChar(BufferBuilder bufferBuilder, Matrix4f matrix, char c, float r, float g, float b, float a) {
+        float v = Renderer.transformColor(a);
         Glyph glyph = glyphMap.computeIfAbsent(c, character -> new Glyph(character, this.f));
         RenderSystem.setShaderTexture(0, glyph.getImageTex());
 
@@ -165,10 +170,10 @@ public class FontRenderer {
         float inOffsetY = glyph.offsetY / (height + 10);
 
         bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
-        bufferBuilder.vertex(matrix, 0, height, 0).texture(0 + inOffsetX, 1 - inOffsetY).color(r, g, b, a).next();
-        bufferBuilder.vertex(matrix, width, height, 0).texture(1 - inOffsetX, 1 - inOffsetY).color(r, g, b, a).next();
-        bufferBuilder.vertex(matrix, width, 0, 0).texture(1 - inOffsetX, 0 + inOffsetY).color(r, g, b, a).next();
-        bufferBuilder.vertex(matrix, 0, 0, 0).texture(0 + inOffsetX, 0 + inOffsetY).color(r, g, b, a).next();
+        bufferBuilder.vertex(matrix, 0, height, 0).texture(0 + inOffsetX, 1 - inOffsetY).color(r, g, b, v).next();
+        bufferBuilder.vertex(matrix, width, height, 0).texture(1 - inOffsetX, 1 - inOffsetY).color(r, g, b, v).next();
+        bufferBuilder.vertex(matrix, width, 0, 0).texture(1 - inOffsetX, 0 + inOffsetY).color(r, g, b, v).next();
+        bufferBuilder.vertex(matrix, 0, 0, 0).texture(0 + inOffsetX, 0 + inOffsetY).color(r, g, b, v).next();
         BufferRenderer.drawWithShader(bufferBuilder.end());
 
         return width;

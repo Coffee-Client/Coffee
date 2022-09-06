@@ -1,3 +1,2 @@
-Added some suggestions
-Fixed a few bugs
-Usual changelog idk what to put
+Visual reformat, clickgui
+Bug fixes

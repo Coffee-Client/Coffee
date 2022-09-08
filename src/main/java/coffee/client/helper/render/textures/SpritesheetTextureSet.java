@@ -57,7 +57,6 @@ public class SpritesheetTextureSet implements Texture {
         URI uri = URI.create(spritesheet);
         HttpRequest get = HttpRequest.newBuilder().uri(uri).header("User-Agent", "coffee/1.0").build();
         HttpResponse<InputStream> send = client.send(get, HttpResponse.BodyHandlers.ofInputStream());
-        System.out.println(send.toString());
         @Cleanup InputStream body = send.body();
         BufferedImage read = ImageIO.read(body);
         Utils.registerBufferedImageTexture(spriteId, read);

@@ -201,7 +201,6 @@ public class ModuleRegistry {
         registerModule(AutoFish.class);
         registerModule(Reach.class);
         registerModule(AutoSign.class);
-        registerModule(ClickTP.class);
         registerModule(ChestHighlighter.class);
         registerModule(MoreChatHistory.class);
         registerModule(Radar.class);

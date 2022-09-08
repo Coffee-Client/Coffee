@@ -104,6 +104,7 @@ public class ModuleDisplay extends Element {
         }
         if (cfd.progress != 0) {
             float pp = (float) Transitions.easeOutExpo(cfd.progress);
+            pp = Renderer.transformColor(pp);
             Renderer.setupRender();
             RenderSystem.setShader(GameRenderer::getPositionColorShader);
             BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();

@@ -35,10 +35,6 @@ public class NbtFormatter implements NbtElementVisitor {
     private final List<String> pathParts;
     private RGBColorText result;
 
-    public NbtFormatter() {
-        this("    ", 0, Lists.newArrayList());
-    }
-
     public NbtFormatter(String prefix, int indentationLevel, List<String> pathParts) {
         this.prefix = prefix;
         this.indentationLevel = indentationLevel;

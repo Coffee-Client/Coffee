@@ -77,7 +77,7 @@ public class Waypoints extends Module {
 
     @Override
     public void enable() {
-        System.out.println(waypoints);
+
     }
 
     @Override

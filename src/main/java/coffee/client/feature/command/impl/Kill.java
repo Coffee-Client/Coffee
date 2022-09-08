@@ -51,7 +51,6 @@ public class Kill extends Command {
         StreamlineArgumentParser a = new StreamlineArgumentParser(args);
         PlayerEntity playerEntity = a.consumePlayerEntityFromName(false);
         Vec3d pos = playerEntity.getPos();
-        ItemStack current = client.player.getMainHandStack();
         ItemStack newStack = new ItemStack(Items.BAT_SPAWN_EGG);
         NbtGroup group = new NbtGroup(new NbtObject("EntityTag",
             new NbtProperty("Duration", 5),
@@ -64,7 +63,6 @@ public class Kill extends Command {
         BlockHitResult bhr = new BlockHitResult(pos, Direction.DOWN, new BlockPos(pos), false);
         client.getNetworkHandler().sendPacket(new CreativeInventoryActionC2SPacket(Utils.Inventory.slotIndexToId(client.player.getInventory().selectedSlot), newStack));
         client.getNetworkHandler().sendPacket(new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, bhr, Utils.increaseAndCloseUpdateManager(CoffeeMain.client.world)));
-        //        client.getNetworkHandler().sendPacket(new CreativeInventoryActionC2SPacket(Utils.Inventory.slotIndexToId(client.player.getInventory().selectedSlot), current));
     }
 }
 

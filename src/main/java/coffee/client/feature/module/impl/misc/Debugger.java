@@ -14,7 +14,6 @@ import coffee.client.helper.font.FontRenderers;
 import coffee.client.helper.font.adapter.FontAdapter;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.Utils;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.Packet;
 
@@ -50,10 +49,7 @@ public class Debugger extends Module {
         Packet<?> packet = incoming.getPacket();
         if (whitelistedPacketClasses.stream().anyMatch(aClass -> aClass.isInstance(packet))) {
             boolean cancelled = incoming.isCancelled();
-            String mapped = FabricLoader.getInstance().getMappingResolver().unmapClassName("named", packet.getClass().getName());
-            String[] split = mapped.split("\\.");
-            mapped = split[split.length - 1];
-            log(String.format("Cancelled: %s, %s", cancelled, Utils.forceToString(mapped, packet)));
+            log(String.format("Cancelled: %s, %s", cancelled, Utils.forceToString(packet)));
         }
     }
 

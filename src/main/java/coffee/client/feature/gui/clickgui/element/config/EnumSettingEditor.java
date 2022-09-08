@@ -73,6 +73,7 @@ public class EnumSettingEditor extends SettingEditor<EnumSetting<?>> {
         }
         if (expandProg != 0) {
             float pp = (float) Transitions.easeOutExpo(expandProg);
+            pp = Renderer.transformColor(pp);
             Renderer.setupRender();
             RenderSystem.setShader(GameRenderer::getPositionColorShader);
             BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();

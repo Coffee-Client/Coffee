@@ -22,8 +22,7 @@ public class Debugger extends Command {
                 validateArgumentsLength(args, 2, "packet class required");
                 String pClass = args[1];
                 try {
-                    String named = FabricLoader.getInstance().getMappingResolver().mapClassName("named", pClass);
-                    Class<?> aClass = Class.forName(named);
+                    Class<?> aClass = Class.forName(pClass);
                     if (!Packet.class.isAssignableFrom(aClass)) {
                         error("class " + aClass.getSimpleName() + " doesn't extend packet");
                         return;
@@ -33,6 +32,7 @@ public class Debugger extends Command {
                     coffee.client.feature.module.impl.misc.Debugger.whitelistedPacketClasses.add(pResolved);
                     success("whitelisted packet class " + pResolved.getSimpleName());
                 } catch (Exception e) {
+                    e.printStackTrace();
                     throw new CommandException("failed to resolve class " + pClass, null);
                 }
             }
@@ -40,8 +40,7 @@ public class Debugger extends Command {
                 validateArgumentsLength(args, 2, "packet class required");
                 String pClass = args[1];
                 try {
-                    String named = FabricLoader.getInstance().getMappingResolver().mapClassName("named", pClass);
-                    Class<?> aClass = Class.forName(named);
+                    Class<?> aClass = Class.forName(pClass);
                     if (!Packet.class.isAssignableFrom(aClass)) {
                         error("class " + aClass.getSimpleName() + " doesn't extend packet");
                         return;
@@ -54,6 +53,7 @@ public class Debugger extends Command {
                         error("class " + pResolved.getSimpleName() + " not in whitelist");
                     }
                 } catch (Exception e) {
+                    e.printStackTrace();
                     throw new CommandException("failed to resolve class " + pClass, null);
                 }
             }

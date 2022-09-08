@@ -108,9 +108,9 @@ public class TargetHud extends Module {
     @Override
     public void onFastTick() {
         renderWX1 = Transitions.transition(renderWX1, wX, 10);
-        if (re instanceof LivingEntity e) {
-            trackedHp = Transitions.transition(trackedHp, e.getHealth(), 15, 0.002);
-            trackedMaxHp = Transitions.transition(trackedMaxHp, e.getMaxHealth(), 15, 0.002);
+        if (re instanceof LivingEntity real) {
+            trackedHp = Transitions.transition(trackedHp, real.getHealth(), 15, 0.002);
+            trackedMaxHp = Transitions.transition(trackedMaxHp, real.getMaxHealth(), 15, 0.002);
         }
     }
 

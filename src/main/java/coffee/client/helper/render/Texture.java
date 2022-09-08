@@ -4,7 +4,6 @@
 
 package coffee.client.helper.render;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.util.Identifier;
 
 public class Texture extends Identifier {
@@ -29,7 +28,4 @@ public class Texture extends Identifier {
         return ret.toString();
     }
 
-    public void bind() {
-        RenderSystem.setShaderTexture(0, this);
-    }
 }

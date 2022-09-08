@@ -12,9 +12,7 @@ import coffee.client.helper.render.MSAAFramebuffer;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.render.textures.Texture;
 import coffee.client.helper.util.Utils;
-import com.google.common.util.concurrent.AtomicDouble;
 import com.mojang.blaze3d.systems.RenderSystem;
-import lombok.Data;
 import lombok.SneakyThrows;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
@@ -142,10 +140,4 @@ public class LoadingScreen extends AAScreen implements FastTickable {
         super.renderInternal(stack, mouseX, mouseY, delta);
     }
 
-    @Data
-    static class ProgressData {
-        AtomicDouble progress = new AtomicDouble(0);
-        AtomicDouble progressSmooth = new AtomicDouble(0);
-        AtomicBoolean workingOnIt = new AtomicBoolean(false);
-    }
 }

@@ -27,7 +27,7 @@ public class ConfigInputFile {
     }
 
     protected void parse() {
-        try (FileInputStream fis = new FileInputStream(file); DataInputStream data = new ConfigInputStream(fis)) {
+        try (FileInputStream fis = new FileInputStream(file); DataInputStream data = new DataInputStream(fis)) {
             this.version = data.readInt();
             this.name = data.readUTF();
             this.configContents = data.readAllBytes();
@@ -37,7 +37,7 @@ public class ConfigInputFile {
     }
 
     public void apply() {
-        try (ByteArrayInputStream bis = new ByteArrayInputStream(this.configContents); DataInputStream data = new ConfigInputStream(bis)) {
+        try (ByteArrayInputStream bis = new ByteArrayInputStream(this.configContents); DataInputStream data = new DataInputStream(bis)) {
             int amount = data.readInt();
             for (int i = 0; i < amount; i++) {
                 String name = data.readUTF();

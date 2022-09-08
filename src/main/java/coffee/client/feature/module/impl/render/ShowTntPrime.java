@@ -123,9 +123,7 @@ public class ShowTntPrime extends Module {
                 Vec3d ePos = Utils.getInterpolatedEntityPosition(e).add(0, e.getHeight(), 0);
                 Vec3d screenSpace = Renderer.R2D.getScreenSpaceCoordinate(ePos, matrices);
                 if (Renderer.R2D.isOnScreen(screenSpace)) {
-                    Utils.TickManager.runOnNextRender(() -> {
-                        drawSingleEntity(screenSpace, (TntEntity) e, prog);
-                    });
+                    Utils.TickManager.runOnNextRender(() -> drawSingleEntity(screenSpace, (TntEntity) e, prog));
                 }
             }
         }

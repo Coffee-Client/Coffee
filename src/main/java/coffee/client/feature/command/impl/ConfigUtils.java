@@ -37,15 +37,6 @@ public class ConfigUtils extends Command {
         for (File file : Objects.requireNonNullElse(CONFIG_STORAGE.listFiles(), new File[0])) {
             ConfigInputFile f = new ConfigInputFile(file);
             cfe.add(f);
-            //            try (FileInputStream fis = new FileInputStream(file); ConfigInputStream cis = new ConfigInputStream(fis)) {
-            //                int version = cis.getVersion();
-            //                boolean shouldWarn = CoffeeMain.getClientVersion() != version;
-            //                String name = cis.getName();
-            //                ConfigFileEntry e = new ConfigFileEntry(name, file, shouldWarn);
-            //                cfe.add(e);
-            //            } catch (Exception e) {
-            //                e.printStackTrace();
-            //            }
         }
         return cfe;
     }
@@ -109,7 +100,6 @@ public class ConfigUtils extends Command {
                     }
                 }
                 try (FileOutputStream fos = new FileOutputStream(out); ConfigOutputStream cos = new ConfigOutputStream(fos, name)) {
-                    //                    save(out);
                     cos.write();
                     if (ConfigsDisplay.instance != null) {
                         ConfigsDisplay.instance.reinit();

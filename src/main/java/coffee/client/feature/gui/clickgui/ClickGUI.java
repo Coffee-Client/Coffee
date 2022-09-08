@@ -89,11 +89,6 @@ public class ClickGUI extends AAScreen {
             if (value == ModuleType.HIDDEN) {
                 continue;
             }
-            //            if (x + 100 > width) {
-            //                x = 5;
-            //                y += lineY + 5;
-            //                lineY = 0;
-            //            }
             CategoryDisplay gd = new CategoryDisplay(value, 0, 0, 100);
             if (y + gd.getHeight() > height - 5) {
                 y = 5;
@@ -106,10 +101,6 @@ public class ClickGUI extends AAScreen {
             lineWidth = Math.max(lineWidth, gd.getWidth());
             addChild(gd);
         }
-        //        if (x + 100 > width) {
-        //            x = 5;
-        //            y += lineY + 5;
-        //        }
         ConfigsDisplay configsDisplay = new ConfigsDisplay(x, y, 100);
         if (y + configsDisplay.getHeight() > height - 5) {
             y = 5;
@@ -251,9 +242,6 @@ public class ClickGUI extends AAScreen {
             double height = FontRenderers.getRenderer().getFontHeight() * split.length + 2;
             double width = Arrays.stream(split).map(s -> FontRenderers.getRenderer().getStringWidth(s)).max(Comparator.comparingDouble(value -> value)).orElse(0f) + 4f;
             double tooltipX = Math.min(this.tooltipX, this.width - 4 - width);
-            //            if (tooltipX+width > this.width-4) {
-            //
-            //            }
 
             Renderer.R2D.renderRoundedQuadWithShadow(stack, new Color(30, 30, 30), tooltipX, tooltipY, tooltipX + width, tooltipY + height, 2, 6);
             double y = 0;

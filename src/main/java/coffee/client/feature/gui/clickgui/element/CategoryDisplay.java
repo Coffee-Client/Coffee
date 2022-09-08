@@ -86,7 +86,6 @@ public class CategoryDisplay extends Element {
         double iconPad = 4;
         double iconDims = headerHeight() - iconPad * 2;
         RenderSystem.enableBlend();
-        //        RenderSystem.setShaderColor(1f,1f,1f, AlphaOverride.compute(255)/255f);
         Texture.MODULE_TYPES.bindAndDraw(stack, getPositionX() + iconPad, getPositionY() + iconPad, iconDims, iconDims, type.getTex());
 
         titleRenderer.drawString(stack,

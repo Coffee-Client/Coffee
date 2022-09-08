@@ -36,7 +36,6 @@ public class TpRange extends Module {
         .get());
     final AtomicBoolean running = new AtomicBoolean(false);
     Vec3d spoofedPos = null;
-    Vec3d previousSpoofedPos = null;
 
     public TpRange() {
         super("TpRange", "Hits someone from VERY far away", ModuleType.COMBAT);
@@ -115,13 +114,11 @@ public class TpRange extends Module {
             double newZ = MathHelper.lerp(prog, from.z, pos.z);
             PlayerMoveC2SPacket p = new PlayerMoveC2SPacket.PositionAndOnGround(newX, newY, newZ, true);
             Objects.requireNonNull(CoffeeMain.client.getNetworkHandler()).sendPacket(p);
-            previousSpoofedPos = spoofedPos;
             spoofedPos = new Vec3d(newX, newY, newZ);
             Utils.sleep(10);
         }
         PlayerMoveC2SPacket p = new PlayerMoveC2SPacket.PositionAndOnGround(pos.x, pos.y, pos.z, true);
         Objects.requireNonNull(CoffeeMain.client.getNetworkHandler()).sendPacket(p);
-        previousSpoofedPos = null;
         spoofedPos = null;
     }
 

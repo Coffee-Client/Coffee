@@ -48,7 +48,6 @@ public class AnnotationParser {
             if (typeToParse == null) {
                 throw new IllegalArgumentException("Type " + declaredField.getType().getName() + " is not recognized as setting type");
             }
-            String settingName = annotation.name();
             SettingBase.Builder<?, ?, ?> base = typeToParse.getProvider().getExtern(annotation, declaredField, inst);
             SettingBase<?> b = base.name(annotation.name()).description(annotation.description()).onChanged(o -> {
                 try {
@@ -60,7 +59,6 @@ public class AnnotationParser {
             }).get();
             for (Method declaredMethod : inst.getClass().getDeclaredMethods()) {
                 for (Annotation declaredAnnotation : declaredMethod.getDeclaredAnnotations()) {
-                    System.out.println(declaredAnnotation);
                     if (declaredAnnotation instanceof VisibilitySpecifier visSpec) {
                         parseAnnotation(visSpec, declaredMethod, b);
                     } else if (declaredAnnotation instanceof VisibilitySpecifiers visSpecs) {

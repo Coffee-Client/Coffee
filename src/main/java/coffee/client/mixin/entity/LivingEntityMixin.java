@@ -57,7 +57,7 @@ public class LivingEntityMixin {
         }
     }
 
-    @Inject(method = "pushAwayFrom", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "pushAwayFrom", at = @At("HEAD"), cancellable = true, require = 0)
     public void coffee_cancelCollision(Entity entity, CallbackInfo ci) {
         if (this.equals(CoffeeMain.client.player)) {
             if (Objects.requireNonNull(ModuleRegistry.getByClass(NoPush.class)).isEnabled()) {

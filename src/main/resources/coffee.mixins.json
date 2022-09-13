@@ -72,7 +72,9 @@
     "screen.TitleScreenMixin"
   ],
   "client": [
+    "IKeyBindingMixin",
     "IPlayerListEntryMixin",
+    "KeyboardInputMixin",
     "network.ClientPlayNetworkHandlerMixin",
     "render.ChatHudLineMixin",
     "render.IFramebufferMixin"

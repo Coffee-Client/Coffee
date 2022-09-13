@@ -12,10 +12,7 @@ import org.apache.logging.log4j.Level;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -28,13 +25,19 @@ public class Events {
     }
 
     public static ListenerEntry registerEventHandler(int uniqueId, EventType event, Consumer<? extends Event> handler, Class<?> owner, int prio) {
-        if (entries.stream().noneMatch(listenerEntry -> listenerEntry.id == uniqueId)) {
+        Optional<ListenerEntry> first = entries.stream().filter(listenerEntry -> listenerEntry.id == uniqueId).findFirst();
+        if (first.isEmpty()) {
             ListenerEntry le = new ListenerEntry(uniqueId, event, handler, owner, prio);
             entries.add(le);
             entries.sort(Comparator.comparingInt(ListenerEntry::prio));
             return le;
         } else {
-            CoffeeMain.log(Level.WARN, uniqueId + " tried to register " + event.name() + " multiple times, unregistering previous and adding new");
+            ListenerEntry listenerEntry = first.get();
+            CoffeeMain.log(Level.WARN,
+                String.format("%s with id %s tried to register %s multiple times, unregistering and adding new handler",
+                    listenerEntry.owner.getName(),
+                    uniqueId,
+                    event.name()));
             unregister(uniqueId);
             return registerEventHandler(uniqueId, event, handler, owner, prio); // yes this is recursive and no this will not repeat again because we unregistered
         }
@@ -98,6 +101,9 @@ public class Events {
             for (Annotation declaredAnnotation : declaredMethod.getDeclaredAnnotations()) {
                 if (declaredAnnotation.annotationType() == EventListener.class) {
                     EventListener ev = (EventListener) declaredAnnotation;
+                    if (ev.value().isShouldStayRegisteredForModules()) {
+                        continue; // already registered this one
+                    }
                     Class<?>[] params = declaredMethod.getParameterTypes();
                     if (params.length != 1 || !params[0].isAssignableFrom(ev.value().getExpectedType())) {
                         throw new IllegalArgumentException(String.format("Invalid signature: Expected %s.%s(%s) -> void, got %s.%s(%s) -> %s. Listener: %s",

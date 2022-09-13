@@ -7,7 +7,9 @@ package coffee.client.feature.module.impl.world;
 import coffee.client.feature.config.DoubleSetting;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
-import coffee.client.helper.Keybind;
+import coffee.client.helper.event.EventListener;
+import coffee.client.helper.event.EventType;
+import coffee.client.helper.event.events.SneakQueryEvent;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.Rotations;
 import coffee.client.helper.util.Utils;
@@ -23,7 +25,7 @@ import net.minecraft.util.math.*;
 import java.util.Objects;
 
 public class Scaffold extends Module {
-    final DoubleSetting extend = this.config.create(new DoubleSetting.Builder(3).name("Extend")
+    final DoubleSetting extend = this.config.create(new DoubleSetting.Builder(0).name("Extend")
         .description("How many blocks to extend outwards")
         .min(0)
         .max(5)
@@ -56,12 +58,17 @@ public class Scaffold extends Module {
 
     @Override
     public void onWorldRender(MatrixStack matrices) {
-        client.options.sneakKey.setPressed(false);
+        //        client.options.sneakKey.setPressed(false);
     }
 
     @Override
     public void onHudRender() {
 
+    }
+
+    @EventListener(EventType.SNEAK_QUERY)
+    void overwriteSneak(SneakQueryEvent sq) {
+        sq.setSneaking(false);
     }
 
     @Override
@@ -82,7 +89,7 @@ public class Scaffold extends Module {
             }
         }
         if (client.player.getInventory().getStack(selIndex).getItem() != Items.AIR) {
-            boolean sneaking = new Keybind(client.options.sneakKey.getDefaultKey().getCode()).isPressed();
+            boolean sneaking = client.options.sneakKey.isPressed();
             if (sneaking) {
                 bp = bp.down();
             }

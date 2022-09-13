@@ -26,7 +26,8 @@ public enum EventType {
     HUD_RENDER(NonCancellableEvent.class, false),
     GAME_EXIT(NonCancellableEvent.class, true),
     SHOULD_RENDER_CHUNK(ChunkRenderQueryEvent.class, false),
-    WORLD_RENDER(WorldRenderEvent.class, false);
+    WORLD_RENDER(WorldRenderEvent.class, false),
+    SNEAK_QUERY(SneakQueryEvent.class, false);
     @Getter
     private final Class<? extends Event> expectedType;
     @Getter

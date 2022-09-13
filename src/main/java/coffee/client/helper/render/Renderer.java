@@ -76,12 +76,12 @@ public class Renderer {
             }
         }
 
-        static Matrix4f setupStack(MatrixStack stack) {
+        static Vec3d transformVec3d(Vec3d in) {
             Camera camera = CoffeeMain.client.gameRenderer.getCamera();
             Vec3d camPos = camera.getPos();
-            stack.translate(-camPos.x, -camPos.y, -camPos.z);
-            return stack.peek().getPositionMatrix();
+            return in.subtract(camPos);
         }
+
 
         static float[] getColor(Color c) {
             return new float[] { c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, transformColor(c.getAlpha() / 255f) };
@@ -103,8 +103,8 @@ public class Renderer {
 
         public static void renderCircleOutline(MatrixStack stack, Color c, Vec3d start, double rad, double width, double segments) {
             stack.push();
-            setupStack(stack);
-            stack.translate(start.x, start.y, start.z);
+            Vec3d vec3d = transformVec3d(start);
+            stack.translate(vec3d.x, vec3d.y, vec3d.z);
             double segments1 = MathHelper.clamp(segments, 2, 90);
 
             Matrix4f matrix = stack.peek().getPositionMatrix();
@@ -176,11 +176,12 @@ public class Renderer {
             float[] outline = getColor(colorOutline);
 
             stack.push();
-            Matrix4f matrix = setupStack(stack);
-            Vec3d end = start.add(dimensions);
-            float x1 = (float) start.x;
-            float y1 = (float) start.y;
-            float z1 = (float) start.z;
+            Matrix4f matrix = stack.peek().getPositionMatrix();
+            Vec3d vec3d = transformVec3d(start);
+            Vec3d end = vec3d.add(dimensions);
+            float x1 = (float) vec3d.x;
+            float y1 = (float) vec3d.y;
+            float z1 = (float) vec3d.z;
             float x2 = (float) end.x;
             float y2 = (float) end.y;
             float z2 = (float) end.z;
@@ -265,11 +266,12 @@ public class Renderer {
             float blue = color.getBlue() / 255f;
             float alpha = transformColor(color.getAlpha() / 255f);
             stack.push();
-            Matrix4f matrix = setupStack(stack);
-            Vec3d end = start.add(dimensions);
-            float x1 = (float) start.x;
-            float y1 = (float) start.y;
-            float z1 = (float) start.z;
+            Matrix4f matrix = stack.peek().getPositionMatrix();
+            Vec3d vec3d = transformVec3d(start);
+            Vec3d end = vec3d.add(dimensions);
+            float x1 = (float) vec3d.x;
+            float y1 = (float) vec3d.y;
+            float z1 = (float) vec3d.z;
             float x2 = (float) end.x;
             float y2 = (float) end.y;
             float z2 = (float) end.z;

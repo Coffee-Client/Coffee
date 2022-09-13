@@ -12,7 +12,11 @@ import coffee.client.feature.command.exception.CommandException;
 import coffee.client.feature.gui.clickgui.element.ConfigsDisplay;
 import coffee.client.helper.config.ConfigInputFile;
 import coffee.client.helper.config.ConfigOutputStream;
-import net.minecraft.text.*;
+import net.minecraft.text.ClickEvent;
+import net.minecraft.text.HoverEvent;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Style;
+import net.minecraft.text.Text;
 
 import java.io.File;
 import java.io.FileOutputStream;

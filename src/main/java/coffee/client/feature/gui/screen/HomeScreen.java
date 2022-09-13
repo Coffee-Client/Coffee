@@ -30,7 +30,12 @@ import org.lwjgl.opengl.GL40C;
 
 import java.awt.Color;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
 
 public class HomeScreen extends ClientScreen {
     static final double padding = 6;

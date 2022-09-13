@@ -5,7 +5,13 @@
 package coffee.client.feature.items;
 
 
-import coffee.client.feature.items.impl.*;
+import coffee.client.feature.items.impl.Backdoor;
+import coffee.client.feature.items.impl.Fireball;
+import coffee.client.feature.items.impl.InfiniSculk;
+import coffee.client.feature.items.impl.InfiniteEntity;
+import coffee.client.feature.items.impl.Nuke;
+import coffee.client.feature.items.impl.Plague;
+import coffee.client.feature.items.impl.Poof;
 
 import java.util.ArrayList;
 import java.util.List;

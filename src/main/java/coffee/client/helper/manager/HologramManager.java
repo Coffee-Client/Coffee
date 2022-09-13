@@ -6,7 +6,11 @@ package coffee.client.helper.manager;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.*;
+import net.minecraft.nbt.NbtByte;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtDouble;
+import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.NbtString;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
 

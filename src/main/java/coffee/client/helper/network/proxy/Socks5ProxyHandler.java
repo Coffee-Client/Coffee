@@ -4,7 +4,22 @@
 
 package coffee.client.helper.network.proxy;
 
-import coffee.client.helper.network.handler.socksx.v5.*;
+import coffee.client.helper.network.handler.socksx.v5.DefaultSocks5CommandRequest;
+import coffee.client.helper.network.handler.socksx.v5.DefaultSocks5InitialRequest;
+import coffee.client.helper.network.handler.socksx.v5.DefaultSocks5PasswordAuthRequest;
+import coffee.client.helper.network.handler.socksx.v5.Socks5AddressType;
+import coffee.client.helper.network.handler.socksx.v5.Socks5AuthMethod;
+import coffee.client.helper.network.handler.socksx.v5.Socks5ClientEncoder;
+import coffee.client.helper.network.handler.socksx.v5.Socks5CommandResponse;
+import coffee.client.helper.network.handler.socksx.v5.Socks5CommandResponseDecoder;
+import coffee.client.helper.network.handler.socksx.v5.Socks5CommandStatus;
+import coffee.client.helper.network.handler.socksx.v5.Socks5CommandType;
+import coffee.client.helper.network.handler.socksx.v5.Socks5InitialRequest;
+import coffee.client.helper.network.handler.socksx.v5.Socks5InitialResponse;
+import coffee.client.helper.network.handler.socksx.v5.Socks5InitialResponseDecoder;
+import coffee.client.helper.network.handler.socksx.v5.Socks5PasswordAuthResponse;
+import coffee.client.helper.network.handler.socksx.v5.Socks5PasswordAuthResponseDecoder;
+import coffee.client.helper.network.handler.socksx.v5.Socks5PasswordAuthStatus;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPipeline;
 import io.netty.util.NetUtil;

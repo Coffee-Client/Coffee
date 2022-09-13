@@ -17,7 +17,13 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.client.render.*;
+import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.BufferRenderer;
+import net.minecraft.client.render.Camera;
+import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.VertexFormat;
+import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -26,7 +32,12 @@ import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.Color;
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class CaveMapper extends Module {
 

@@ -21,7 +21,11 @@ import net.minecraft.util.math.MathHelper;
 import org.lwjgl.glfw.GLFW;
 
 import java.awt.Color;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class ClickGUI extends AAScreen {
     private static ClickGUI instance;

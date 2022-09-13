@@ -4,7 +4,14 @@
 
 package coffee.client.helper.nbt;
 
-import net.minecraft.nbt.*;
+import net.minecraft.nbt.NbtByte;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtDouble;
+import net.minecraft.nbt.NbtFloat;
+import net.minecraft.nbt.NbtInt;
+import net.minecraft.nbt.NbtLong;
+import net.minecraft.nbt.NbtShort;
+import net.minecraft.nbt.NbtString;
 
 import java.util.UUID;
 

@@ -4,7 +4,13 @@
 
 package coffee.client.feature.config.annotation;
 
-import coffee.client.feature.config.*;
+import coffee.client.feature.config.BooleanSetting;
+import coffee.client.feature.config.ColorSetting;
+import coffee.client.feature.config.DoubleSetting;
+import coffee.client.feature.config.EnumSetting;
+import coffee.client.feature.config.RangeSetting;
+import coffee.client.feature.config.SettingBase;
+import coffee.client.feature.config.StringSetting;
 import coffee.client.helper.util.Utils;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

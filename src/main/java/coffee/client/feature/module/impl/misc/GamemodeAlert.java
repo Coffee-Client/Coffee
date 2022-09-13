@@ -13,7 +13,11 @@ import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.world.GameMode;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class GamemodeAlert extends Module {
     static Map<UUID, GameMode> seen = new HashMap<>();

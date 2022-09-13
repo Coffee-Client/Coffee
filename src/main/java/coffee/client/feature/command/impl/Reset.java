@@ -52,7 +52,7 @@ public class Reset extends Command {
         } else {
             Module byName = ModuleRegistry.getByName(joined);
             if (byName == null) {
-                throw new CommandException("Module not found", null);
+                throw new CommandException("Module not found");
             }
             targets.add(byName);
         }

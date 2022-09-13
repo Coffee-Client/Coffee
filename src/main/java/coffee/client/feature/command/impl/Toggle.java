@@ -29,7 +29,7 @@ public class Toggle extends Command {
         validateArgumentsLength(args, 1, "Provide module name");
         Module m = ModuleRegistry.getByName(String.join(" ", args));
         if (m == null) {
-            throw new CommandException("Module not found", "Specify a module name that exists");
+            throw new CommandException("Module not found");
         } else {
             m.toggle();
         }

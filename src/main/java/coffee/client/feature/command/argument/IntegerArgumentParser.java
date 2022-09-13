@@ -12,7 +12,7 @@ public class IntegerArgumentParser implements ArgumentParser<Integer> {
         try {
             return Integer.parseInt(argument);
         } catch (Exception e) {
-            throw new CommandException("Invalid argument \"" + argument + "\": Expected a number", "Provide a valid number");
+            throw new CommandException("Invalid argument \"" + argument + "\": Expected a number");
         }
     }
 }

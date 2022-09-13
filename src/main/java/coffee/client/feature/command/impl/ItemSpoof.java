@@ -36,7 +36,7 @@ public class ItemSpoof extends Command {
         int amount = integerArgumentParser.parse(args[1]);
         Identifier i = Identifier.tryParse(args[0]);
         if (i == null) {
-            throw new CommandException("Invalid name \"" + args[0] + "\"", "Provide valid item identifier");
+            throw new CommandException("Invalid name \"" + args[0] + "\"");
         }
         Item item = Registry.ITEM.get(i);
         ItemStack stack = new ItemStack(item, amount);

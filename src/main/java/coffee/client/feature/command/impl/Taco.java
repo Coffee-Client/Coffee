@@ -209,7 +209,7 @@ public class Taco extends Command {
                 validateArgumentsLength(args, 2, "Provide new FPS");
                 int i = Utils.Math.tryParseInt(args[1], -1);
                 if (i < 1 || i > 1000) {
-                    throw new CommandException("Fps outside of bounds", "Specify fps count within 1-1000 fps");
+                    throw new CommandException("Fps outside of bounds");
                 }
                 config.fps = i;
                 success("set fps to " + i);
@@ -218,10 +218,10 @@ public class Taco extends Command {
                 validateArgumentsLength(args, 2, "Provide file name");
                 File f = new File(String.join(" ", Arrays.copyOfRange(args, 1, args.length)));
                 if (!f.exists()) {
-                    throw new CommandException("File doesn't exist", "Provide valid gif file");
+                    throw new CommandException("File doesn't exist");
                 }
                 if (!f.isFile()) {
-                    throw new CommandException("File is not a file", "Provide a valid .gif file");
+                    throw new CommandException("File is not a file");
                 }
                 message("Loading gif frames");
                 checkGifPath();

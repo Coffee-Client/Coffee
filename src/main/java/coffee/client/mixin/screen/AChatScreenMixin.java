@@ -74,6 +74,13 @@ public class AChatScreenMixin extends Screen {
         return true;
     }
 
+    private final List<String> cachedSuggestions = new ArrayList<>();
+
+    double padding() {
+        return 5;
+    }
+    private String previousCommand = "";
+
     List<String> getSuggestions(String command) {
         List<String> a = new ArrayList<>();
         String[] args = command.split(" +");
@@ -96,8 +103,12 @@ public class AChatScreenMixin extends Screen {
                 return new ArrayList<>(); // we have no command to ask -> we have no suggestions
             }
         } else {
+            outer:
             for (Command command1 : CommandRegistry.getCommands()) {
                 for (String alias : command1.getAliases()) {
+                    if (a.size() > 20) {
+                        break outer;
+                    }
                     if (alias.toLowerCase().startsWith(cmd.toLowerCase())) {
                         a.add(alias);
                     }
@@ -105,13 +116,11 @@ public class AChatScreenMixin extends Screen {
             }
         }
         String[] finalArgs = args;
-        return finalArgs.length > 0 ? a.stream()
+        return args.length > 0 ? a.stream()
             .filter(s -> s.startsWith("<") || s.toLowerCase().startsWith(finalArgs[finalArgs.length - 1].toLowerCase()))
+            .distinct()
+            .limit(20)
             .collect(Collectors.toList()) : a;
-    }
-
-    double padding() {
-        return 5;
     }
 
     void renderSuggestions(MatrixStack stack) {
@@ -120,10 +129,16 @@ public class AChatScreenMixin extends Screen {
         if (cmd.isEmpty()) {
             return;
         }
+        boolean changed = !previousCommand.equals(cmd);
+        previousCommand = cmd;
         float cmdTWidth = CoffeeMain.client.textRenderer.getWidth(cmd);
         double cmdXS = chatField.x + 5 + cmdTWidth;
 
-        List<String> suggestions = getSuggestions(cmd);
+        List<String> suggestions = changed ? getSuggestions(cmd) : cachedSuggestions;
+        if (changed) {
+            cachedSuggestions.clear();
+            cachedSuggestions.addAll(suggestions);
+        }
         if (suggestions.isEmpty()) {
             return;
         }

@@ -16,16 +16,29 @@ public class StreamlineArgumentParser {
     }
 
     public String consumeString() throws CommandException {
+        return consumeString(null);
+    }
+
+    public String consumeString(String defaultValue) throws CommandException {
         if (index >= args.length) {
-            throw new CommandException("Not enough arguments", null);
+            if (defaultValue != null) {
+                return defaultValue;
+            }
+            throw new CommandException("Not enough arguments");
         }
-        String el = args[index];
-        index++;
-        return el;
+        return args[index++];
+    }
+
+    public boolean isEmpty() {
+        return index >= args.length;
+    }
+
+    public int consumeInt(Integer defaultValue) throws CommandException {
+        return new IntegerArgumentParser().parse(consumeString(defaultValue == null ? null : defaultValue.toString()));
     }
 
     public int consumeInt() throws CommandException {
-        return new IntegerArgumentParser().parse(consumeString());
+        return consumeInt(null);
     }
 
     public double consumeDouble() throws CommandException {

@@ -33,7 +33,7 @@ public class Debugger extends Command {
                     success("whitelisted packet class " + pResolved.getSimpleName());
                 } catch (Exception e) {
                     e.printStackTrace();
-                    throw new CommandException("failed to resolve class " + pClass, null);
+                    throw new CommandException("failed to resolve class " + pClass);
                 }
             }
             case "removepacketclass" -> {
@@ -54,7 +54,7 @@ public class Debugger extends Command {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    throw new CommandException("failed to resolve class " + pClass, null);
+                    throw new CommandException("failed to resolve class " + pClass);
                 }
             }
             case "listnetpacketclasses" -> {

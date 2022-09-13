@@ -15,7 +15,7 @@ public class PlayerFromUuidArgumentParser implements ArgumentParser<PlayerEntity
     @Override
     public PlayerEntity parse(String argument) throws CommandException {
         if (CoffeeMain.client.world == null) {
-            throw new CommandException("World is not loaded", "Join a world or server");
+            throw new CommandException("World is not loaded");
         }
         try {
             UUID u = UUID.fromString(argument);
@@ -24,9 +24,9 @@ public class PlayerFromUuidArgumentParser implements ArgumentParser<PlayerEntity
                     return player;
                 }
             }
-            throw new CommandException("Invalid argument \"" + argument + "\": Player not found", "Provide the uuid of an existing player");
+            throw new CommandException("Invalid argument \"" + argument + "\": Player not found");
         } catch (Exception e) {
-            throw new CommandException("Invalid argument \"" + argument + "\": Expected an UUID", "Provide a valid UUID");
+            throw new CommandException("Invalid argument \"" + argument + "\": Expected an UUID");
         }
     }
 }

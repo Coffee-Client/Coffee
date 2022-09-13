@@ -39,7 +39,7 @@ public class Gamemode extends Command {
         validateArgumentsLength(args, 1, "Provide gamemode");
         GameMode gm = GameMode.byName(args[0], null);
         if (gm == null) {
-            throw new CommandException("Invalid gamemode", "Specify a valid gamemode");
+            throw new CommandException("Invalid gamemode");
         }
         CoffeeMain.client.interactionManager.setGameMode(gm);
     }

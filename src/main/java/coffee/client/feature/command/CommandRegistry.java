@@ -25,6 +25,7 @@ import coffee.client.feature.command.impl.ForEach;
 import coffee.client.feature.command.impl.Gamemode;
 import coffee.client.feature.command.impl.HClip;
 import coffee.client.feature.command.impl.Help;
+import coffee.client.feature.command.impl.HoloImage;
 import coffee.client.feature.command.impl.Hologram;
 import coffee.client.feature.command.impl.Inject;
 import coffee.client.feature.command.impl.Invsee;
@@ -132,6 +133,7 @@ public class CommandRegistry {
         vanillaCommands.add(new Reset());
         vanillaCommands.add(new Kill());
         vanillaCommands.add(new Debugger());
+        vanillaCommands.add(new HoloImage());
 
         rebuildSharedCommands();
     }
@@ -158,9 +160,6 @@ public class CommandRegistry {
                 c.onExecute(args);
             } catch (CommandException cex) {
                 Utils.Logging.error(cex.getMessage());
-                if (cex.getPotentialFix() != null) {
-                    Utils.Logging.error("Potential fix: " + cex.getPotentialFix());
-                }
             } catch (Exception e) {
                 Utils.Logging.error("Error while running command " + command);
                 e.printStackTrace();

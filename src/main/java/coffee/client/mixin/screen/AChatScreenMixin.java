@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2022 Coffee Client, 0x150 and contributors. Some rights reserved.
+ * Copyright (c) 2022 Coffee Client, 0x150 and contributors.
+ * Some rights reserved, refer to LICENSE file.
  */
 
 package coffee.client.mixin.screen;
@@ -44,11 +45,13 @@ import java.util.stream.Collectors;
 @Mixin(ChatScreen.class)
 public class AChatScreenMixin extends Screen {
 
+    private final List<String> cachedSuggestions = new ArrayList<>();
     @Shadow
     protected TextFieldWidget chatField;
     String previousSuggestionInput = "";
     @Shadow
     ChatInputSuggestor chatInputSuggestor;
+    private String previousCommand = "";
 
     protected AChatScreenMixin(Text title) {
         super(title);
@@ -74,12 +77,9 @@ public class AChatScreenMixin extends Screen {
         return true;
     }
 
-    private final List<String> cachedSuggestions = new ArrayList<>();
-
     double padding() {
         return 5;
     }
-    private String previousCommand = "";
 
     List<String> getSuggestions(String command) {
         List<String> a = new ArrayList<>();

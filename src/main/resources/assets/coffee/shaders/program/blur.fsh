@@ -16,9 +16,9 @@ out vec4 fragColor;
 void main() {
     vec4 blurred = vec4(0.0);
     float progRadius = floor(radius * progress);
-    for(float r = -progRadius; r <= progRadius; r += 1.0) {
+    for (float r = -progRadius; r <= progRadius; r += 1.0) {
         vec4 smple = texture(DiffuseSampler, texCoord + oneTexel * r * BlurDir);
-		// Accumulate smoothed blur
+        // Accumulate smoothed blur
         blurred = blurred + smple;
     }
     fragColor = blurred / (progRadius * 2.0 + 1.0);

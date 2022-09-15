@@ -7,6 +7,9 @@ package coffee.client.feature.command.impl;
 
 import coffee.client.feature.command.Command;
 import coffee.client.feature.command.exception.CommandException;
+import coffee.client.feature.gui.clickgui.ClickGUI;
+import coffee.client.feature.module.Module;
+import coffee.client.feature.module.ModuleRegistry;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.network.Packet;
 
@@ -19,6 +22,15 @@ public class Debugger extends Command {
     public void onExecute(String[] args) throws CommandException {
         validateArgumentsLength(args, 1, "action required");
         switch (args[0].toLowerCase()) {
+            case "reloadmodule" -> {
+                validateArgumentsLength(args, 2, "module name required");
+                Module byName = ModuleRegistry.getByName(args[1]);
+                if (byName == null) {
+                    throw new CommandException("module not found");
+                }
+                ModuleRegistry.reload(byName);
+                ClickGUI.reInit();
+            }
             case "addpacketclass" -> {
                 validateArgumentsLength(args, 2, "packet class required");
                 String pClass = args[1];

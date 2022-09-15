@@ -5,7 +5,6 @@
 
 package coffee.client.mixin.render;
 
-import coffee.client.CoffeeMain;
 import coffee.client.feature.gui.DoesMSAA;
 import coffee.client.feature.gui.notifications.NotificationRenderer;
 import coffee.client.feature.gui.notifications.hudNotif.HudNotificationRenderer;
@@ -22,6 +21,7 @@ import coffee.client.helper.render.MSAAFramebuffer;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.Rotations;
 import coffee.client.helper.util.Utils;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.render.Camera;
@@ -29,10 +29,14 @@ import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.RaycastContext;
 import org.objectweb.asm.Opcodes;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -40,26 +44,54 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = GameRenderer.class, priority = 990)
-public class GameRendererMixin {
+public abstract class GameRendererMixin {
 
-    private boolean vb;
-    private boolean dis;
+    @Shadow
+    @Final
+    private Camera camera;
+
+    @Shadow
+    protected abstract double getFov(Camera camera, float tickDelta, boolean changingFov);
+
+    @Shadow
+    public abstract void tick();
+
+    @Shadow
+    public abstract Matrix4f getBasicProjectionMatrix(double fov);
+
+    @Shadow
+    protected abstract void bobViewWhenHurt(MatrixStack matrices, float tickDelta);
+
+    @Shadow
+    public abstract void loadProjectionMatrix(Matrix4f projectionMatrix);
 
     @Inject(at = @At(value = "FIELD", target = "Lnet/minecraft/client/render/GameRenderer;renderHand:Z", opcode = Opcodes.GETFIELD, ordinal = 0), method = "renderWorld")
     void coffee_dispatchWorldRender(float tickDelta, long limitTime, MatrixStack matrix, CallbackInfo ci) {
-        if (vb) {
-            CoffeeMain.client.options.getBobView().setValue(true);
-            vb = false;
-        }
+        RenderSystem.backupProjectionMatrix();
+        clearViewBobbing(tickDelta);
+        MatrixStack ms = Renderer.R3D.getEmptyMatrixStack();
+        ms.push();
+        ms.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
+        ms.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(camera.getYaw() + 180.0F));
         MSAAFramebuffer.use(MSAAFramebuffer.MAX_SAMPLES, () -> {
             for (Module module : ModuleRegistry.getModules()) {
                 if (module.isEnabled()) {
-                    module.onWorldRender(matrix);
+                    module.onWorldRender(ms);
                 }
             }
-            Events.fireEvent(EventType.WORLD_RENDER, new WorldRenderEvent(matrix));
-            Renderer.R3D.renderFadingBlocks(matrix);
+            Events.fireEvent(EventType.WORLD_RENDER, new WorldRenderEvent(ms));
+            Renderer.R3D.renderFadingBlocks(ms);
         });
+        ms.pop();
+        RenderSystem.restoreProjectionMatrix();
+    }
+
+    void clearViewBobbing(float tickDelta) {
+        MatrixStack ms = Renderer.R3D.getEmptyMatrixStack();
+        double d = this.getFov(camera, tickDelta, true);
+        ms.peek().getPositionMatrix().multiply(this.getBasicProjectionMatrix(d));
+        this.bobViewWhenHurt(ms, tickDelta);
+        loadProjectionMatrix(ms.peek().getPositionMatrix());
     }
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;render(Lnet/minecraft/client/util/math/MatrixStack;IIF)V"))
@@ -92,21 +124,6 @@ public class GameRendererMixin {
 
             Events.fireEvent(EventType.HUD_RENDER, new NonCancellableEvent());
         });
-    }
-
-    @Inject(at = @At("HEAD"), method = "renderWorld")
-    private void coffee_preRenderWorld(float tickDelta, long limitTime, MatrixStack matrix, CallbackInfo ci) {
-        dis = true;
-    }
-
-    @Inject(at = @At("HEAD"), method = "bobView", cancellable = true)
-    private void coffee_stopCursorBob(MatrixStack matrices, float f, CallbackInfo ci) {
-        if (CoffeeMain.client.options.getBobView().getValue() && dis) {
-            vb = true;
-            CoffeeMain.client.options.getBobView().setValue(false);
-            dis = false;
-            ci.cancel();
-        }
     }
 
     @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;raycast(DFZ)Lnet/minecraft/util/hit/HitResult;"), method = "updateTargetedEntity", require = 0)

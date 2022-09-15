@@ -9,6 +9,7 @@ import coffee.client.CoffeeMain;
 import coffee.client.feature.config.annotation.Setting;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
+import coffee.client.helper.Rotation;
 import coffee.client.helper.config.ConfigContainer;
 import coffee.client.helper.event.EventListener;
 import coffee.client.helper.event.EventType;
@@ -22,7 +23,6 @@ import lombok.Data;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 
 import java.awt.Color;
@@ -57,8 +57,8 @@ public class Waypoints extends Module {
     public static List<Sightpoint> getSightpoints() {
         CopyOnWriteArrayList<Sightpoint> sightpoints = new CopyOnWriteArrayList<>(staticSightpoints);
         for (Waypoint waypoint : waypoints) {
-            Vec2f pitchYaw = Rotations.getPitchYawFromOtherEntity(client.gameRenderer.getCamera().getPos(), waypoint.position);
-            sightpoints.add(new Sightpoint(waypoint.name, pitchYaw.y, waypoint.color, false));
+            Rotation pitchYaw = Rotations.getPitchYawFromOtherEntity(client.gameRenderer.getCamera().getPos(), waypoint.position);
+            sightpoints.add(new Sightpoint(waypoint.name, pitchYaw.getYaw(), waypoint.color, false));
         }
         return sightpoints;
     }

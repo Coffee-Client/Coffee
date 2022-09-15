@@ -1,1 +1,85 @@
-{"frames":[{"frame":{"h":256,"w":256,"x":0,"y":0},"name":"addons.png"},{"frame":{"h":96,"w":96,"x":272,"y":112},"name":"movement.png"},{"frame":{"h":96,"w":96,"x":272,"y":0},"name":"combat.png"},{"frame":{"h":96,"w":96,"x":272,"y":224},"name":"render.png"},{"frame":{"h":96,"w":96,"x":0,"y":272},"name":"exploit.png"},{"frame":{"h":96,"w":96,"x":112,"y":272},"name":"world.png"},{"frame":{"h":48,"w":48,"x":384,"y":64},"name":"delete.png"},{"frame":{"h":96,"w":96,"x":224,"y":336},"name":"misc.png"},{"frame":{"h":48,"w":48,"x":384,"y":0},"name":"configs.png"}]}
+{
+  "frames": [
+    {
+      "frame": {
+        "h": 256,
+        "w": 256,
+        "x": 0,
+        "y": 0
+      },
+      "name": "addons.png"
+    },
+    {
+      "frame": {
+        "h": 96,
+        "w": 96,
+        "x": 272,
+        "y": 112
+      },
+      "name": "movement.png"
+    },
+    {
+      "frame": {
+        "h": 96,
+        "w": 96,
+        "x": 272,
+        "y": 0
+      },
+      "name": "combat.png"
+    },
+    {
+      "frame": {
+        "h": 96,
+        "w": 96,
+        "x": 272,
+        "y": 224
+      },
+      "name": "render.png"
+    },
+    {
+      "frame": {
+        "h": 96,
+        "w": 96,
+        "x": 0,
+        "y": 272
+      },
+      "name": "exploit.png"
+    },
+    {
+      "frame": {
+        "h": 96,
+        "w": 96,
+        "x": 112,
+        "y": 272
+      },
+      "name": "world.png"
+    },
+    {
+      "frame": {
+        "h": 48,
+        "w": 48,
+        "x": 384,
+        "y": 64
+      },
+      "name": "delete.png"
+    },
+    {
+      "frame": {
+        "h": 96,
+        "w": 96,
+        "x": 224,
+        "y": 336
+      },
+      "name": "misc.png"
+    },
+    {
+      "frame": {
+        "h": 48,
+        "w": 48,
+        "x": 384,
+        "y": 0
+      },
+      "name": "configs.png"
+    }
+  ]
+}

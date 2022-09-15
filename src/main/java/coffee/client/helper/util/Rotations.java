@@ -8,6 +8,7 @@ package coffee.client.helper.util;
 import coffee.client.CoffeeMain;
 import coffee.client.feature.module.ModuleRegistry;
 import coffee.client.feature.module.impl.render.FreeLook;
+import coffee.client.helper.Rotation;
 import coffee.client.helper.event.EventType;
 import coffee.client.helper.event.Events;
 import coffee.client.helper.event.events.PacketEvent;
@@ -170,7 +171,7 @@ public class Rotations {
 
     }
 
-    public static Vec2f getPitchYaw(Vec3d targetV3) {
+    public static Rotation getPitchYaw(Vec3d targetV3) {
         return getPitchYawFromOtherEntity(Objects.requireNonNull(CoffeeMain.client.player).getEyePos(), targetV3);
     }
 
@@ -184,21 +185,21 @@ public class Rotations {
         return new Vec3d(i * j, -k, h * j);
     }
 
-    public static Vec2f getPitchYawFromOtherEntity(Vec3d eyePos, Vec3d targetV3) {
+    public static Rotation getPitchYawFromOtherEntity(Vec3d eyePos, Vec3d targetV3) {
         double vec = 57.2957763671875;
         Vec3d target = targetV3.subtract(eyePos);
         double square = Math.sqrt(target.x * target.x + target.z * target.z);
         float pitch = MathHelper.wrapDegrees((float) (-(MathHelper.atan2(target.y, square) * vec)));
         float yaw = MathHelper.wrapDegrees((float) (MathHelper.atan2(target.z, target.x) * vec) - 90.0F);
-        return new Vec2f(pitch, yaw);
+        return new Rotation(pitch, yaw);
     }
 
     public static void update() {
         tick();
         if (targetV3 != null) {
-            Vec2f py = getPitchYaw(targetV3);
-            clientYaw = py.y;
-            clientPitch = py.x;
+            Rotation py = getPitchYaw(targetV3);
+            clientYaw = py.getYaw();
+            clientPitch = py.getPitch();
         }
     }
 
@@ -213,6 +214,12 @@ public class Rotations {
 
     public static float getClientYaw() {
         return clientYaw;
+    }
+
+    public static void setClientRotation(Rotation r) {
+        lastModificationTime = System.currentTimeMillis();
+        Rotations.clientYaw = r.getYaw();
+        Rotations.clientPitch = r.getPitch();
     }
 
     public static void setClientYaw(float clientYaw) {

@@ -11,6 +11,7 @@ import coffee.client.feature.config.DoubleSetting;
 import coffee.client.feature.config.EnumSetting;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
+import coffee.client.helper.Rotation;
 import coffee.client.helper.manager.AttackManager;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.Rotations;
@@ -22,7 +23,6 @@ import net.minecraft.entity.mob.Angerable;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 
 import java.util.ArrayList;
@@ -166,9 +166,9 @@ public class AimAssist extends Module {
         if (!aimInstant.getValue()) {
             Rotations.lookAtPositionSmooth(le.getPos().add(0, le.getHeight() / 2d, 0), laziness.getValue());
         } else {
-            Vec2f py = Rotations.getPitchYaw(le.getPos().add(0, le.getHeight() / 2d, 0));
-            Objects.requireNonNull(CoffeeMain.client.player).setPitch(py.x);
-            CoffeeMain.client.player.setYaw(py.y);
+            Rotation py = Rotations.getPitchYaw(le.getPos().add(0, le.getHeight() / 2d, 0));
+            Objects.requireNonNull(CoffeeMain.client.player).setPitch(py.getPitch());
+            CoffeeMain.client.player.setYaw(py.getYaw());
         }
     }
 

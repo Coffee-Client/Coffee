@@ -8,6 +8,7 @@ package coffee.client.feature.module.impl.world;
 import coffee.client.feature.config.DoubleSetting;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
+import coffee.client.helper.Rotation;
 import coffee.client.helper.event.EventListener;
 import coffee.client.helper.event.EventType;
 import coffee.client.helper.event.events.SneakQueryEvent;
@@ -24,7 +25,6 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 
 import java.util.Objects;
@@ -127,9 +127,9 @@ public class Scaffold extends Module {
         if (!st.getMaterial().isReplaceable()) {
             return;
         }
-        Vec2f py = Rotations.getPitchYaw(new Vec3d(bp.getX() + .5, bp.getY() + .5, bp.getZ() + .5));
-        Rotations.setClientPitch(py.x);
-        Rotations.setClientYaw(py.y);
+        Rotation py = Rotations.getPitchYaw(new Vec3d(bp.getX() + .5, bp.getY() + .5, bp.getZ() + .5));
+        Rotations.setClientPitch(py.getPitch());
+        Rotations.setClientYaw(py.getYaw());
         int c = Objects.requireNonNull(client.player).getInventory().selectedSlot;
         client.player.getInventory().selectedSlot = s;
         BlockHitResult bhr = new BlockHitResult(new Vec3d(bp.getX(), bp.getY(), bp.getZ()), Direction.DOWN, bp, false);

@@ -8,9 +8,11 @@ package coffee.client.feature.module;
 
 import coffee.client.CoffeeMain;
 import coffee.client.feature.addon.Addon;
+import coffee.client.feature.config.SettingBase;
 import coffee.client.feature.module.impl.combat.AimAssist;
 import coffee.client.feature.module.impl.combat.AutoAttack;
 import coffee.client.feature.module.impl.combat.AutoTrap;
+import coffee.client.feature.module.impl.combat.BowAimbot;
 import coffee.client.feature.module.impl.combat.Criticals;
 import coffee.client.feature.module.impl.combat.FireballDeflector;
 import coffee.client.feature.module.impl.combat.Killaura;
@@ -123,19 +125,22 @@ import coffee.client.feature.module.impl.world.Nuker;
 import coffee.client.feature.module.impl.world.Scaffold;
 import coffee.client.feature.module.impl.world.SurvivalNuker;
 import coffee.client.feature.module.impl.world.XRAY;
+import coffee.client.helper.event.Events;
 import org.apache.logging.log4j.Level;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ModuleRegistry {
     static final List<Module> vanillaModules = new ArrayList<>();
     static final List<AddonModuleEntry> customModules = new ArrayList<>();
-    static final List<Module> sharedModuleList = new ArrayList<>();
+    static final List<Module> sharedModuleList = new CopyOnWriteArrayList<>();
     static final AtomicBoolean reloadInProgress = new AtomicBoolean(false);
     static final AtomicBoolean initialized = new AtomicBoolean(false);
     static final Map<Class<? extends Module>, Module> cachedModuleClassMap = new ConcurrentHashMap<>();
@@ -184,7 +189,7 @@ public class ModuleRegistry {
         }
     }
 
-    private static void registerModule(Class<? extends Module> moduleClass) {
+    private static Module registerModule(Class<? extends Module> moduleClass) {
         Module instance = null;
         for (Constructor<?> declaredConstructor : moduleClass.getDeclaredConstructors()) {
             if (declaredConstructor.getParameterCount() != 0) {
@@ -201,6 +206,7 @@ public class ModuleRegistry {
         }
         //CoffeeMain.log(Level.INFO, "Initialized " + instance.getName() + " via " + moduleClass.getName());
         vanillaModules.add(instance);
+        return instance;
     }
 
     private static void initInner() {
@@ -325,6 +331,7 @@ public class ModuleRegistry {
         registerModule(NoSlow.class);
         registerModule(GamemodeAlert.class);
         registerModule(LecternCrash.class);
+        registerModule(BowAimbot.class);
 
         rebuildSharedModuleList();
 
@@ -340,6 +347,35 @@ public class ModuleRegistry {
         }
         awaitLockOpen();
         return sharedModuleList;
+    }
+
+    public static Module reload(Module m) {
+        if (m.isEnabled()) {
+            m.setEnabled(false);
+        }
+        Map<String, String> settings = new HashMap<>();
+        for (SettingBase<?> setting : m.config.getSettings()) {
+            settings.put(setting.name, setting.getConfigSave());
+        }
+        Class<? extends Module> moduleClass = m.getClass();
+        Events.unregisterEventHandlerClassEntirely(m);
+        reloadInProgress.set(true);
+        vanillaModules.remove(m);
+        cachedModuleClassMap.remove(moduleClass);
+        Module newModule = registerModule(moduleClass);
+        reloadInProgress.set(false);
+
+        newModule.postModuleInit();
+        newModule.postInit();
+        for (String s : settings.keySet()) {
+            SettingBase<?> settingBase = newModule.config.get(s);
+            if (settingBase != null) {
+                settingBase.accept(settings.get(s));
+            }
+        }
+        rebuildSharedModuleList();
+
+        return newModule;
     }
 
     private static void awaitLockOpen() {

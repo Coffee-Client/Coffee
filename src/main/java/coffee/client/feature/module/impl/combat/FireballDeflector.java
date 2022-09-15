@@ -10,12 +10,12 @@ import coffee.client.feature.config.BooleanSetting;
 import coffee.client.feature.config.EnumSetting;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
+import coffee.client.helper.Rotation;
 import coffee.client.helper.util.Rotations;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.FireballEntity;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
-import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 
 import java.util.Objects;
@@ -48,8 +48,8 @@ public class FireballDeflector extends Module {
                 return;
             }
             if (mode.getValue() == Mode.ReflectBack) {
-                Vec2f pitchYaw = Rotations.getPitchYawFromOtherEntity(fe.getPos().add(0, fe.getHeight() / 2, 0), owner.getPos().add(0, owner.getHeight() / 2, 0));
-                PlayerMoveC2SPacket p = new PlayerMoveC2SPacket.LookAndOnGround(pitchYaw.y, pitchYaw.x, CoffeeMain.client.player.isOnGround());
+                Rotation pitchYaw = Rotations.getPitchYawFromOtherEntity(fe.getPos().add(0, fe.getHeight() / 2, 0), owner.getPos().add(0, owner.getHeight() / 2, 0));
+                PlayerMoveC2SPacket p = new PlayerMoveC2SPacket.LookAndOnGround(pitchYaw.getYaw(), pitchYaw.getPitch(), CoffeeMain.client.player.isOnGround());
                 Objects.requireNonNull(CoffeeMain.client.getNetworkHandler()).sendPacket(p);
             }
         }

@@ -65,6 +65,15 @@ public class Events {
         }
     }
 
+    public static void unregisterEventHandlerClassEntirely(Object instance) {
+        for (ListenerEntry entry : new ArrayList<>(entries)) {
+            if (entry.owner.equals(instance.getClass())) {
+                CoffeeMain.log(Level.INFO, "Unregistering " + entry.type + ":" + entry.id);
+                entries.remove(entry);
+            }
+        }
+    }
+
     public static void registerTransientEventHandlerClassEvents(Object instance) {
         for (Method declaredMethod : instance.getClass().getDeclaredMethods()) {
             for (Annotation declaredAnnotation : declaredMethod.getDeclaredAnnotations()) {

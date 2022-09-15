@@ -1,1 +1,40 @@
-{"frames":[{"frame":{"h":128,"w":128,"x":0,"y":144},"name":"success.png"},{"frame":{"h":128,"w":128,"x":0,"y":0},"name":"error.png"},{"frame":{"h":128,"w":128,"x":144,"y":0},"name":"info.png"},{"frame":{"h":128,"w":128,"x":144,"y":144},"name":"warning.png"}]}
+{
+  "frames": [
+    {
+      "frame": {
+        "h": 128,
+        "w": 128,
+        "x": 0,
+        "y": 144
+      },
+      "name": "success.png"
+    },
+    {
+      "frame": {
+        "h": 128,
+        "w": 128,
+        "x": 0,
+        "y": 0
+      },
+      "name": "error.png"
+    },
+    {
+      "frame": {
+        "h": 128,
+        "w": 128,
+        "x": 144,
+        "y": 0
+      },
+      "name": "info.png"
+    },
+    {
+      "frame": {
+        "h": 128,
+        "w": 128,
+        "x": 144,
+        "y": 144
+      },
+      "name": "warning.png"
+    }
+  ]
+}

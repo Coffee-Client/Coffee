@@ -18,6 +18,7 @@ import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.texture.NativeImageBackedTexture;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.StringNbtReader;
@@ -50,12 +51,26 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Queue;
+import java.util.Spliterator;
 import java.util.UUID;
 import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public class Utils {
 
     public static boolean sendPackets = true;
+
+    public static Stream<LivingEntity> findEntities(Predicate<? super LivingEntity> requirement) {
+        Spliterator<Entity> spliterator = CoffeeMain.client.world.getEntities().spliterator();
+
+        return StreamSupport.stream(spliterator, false)
+            .filter(entity -> !entity.equals(CoffeeMain.client.player))
+            .filter(entity -> entity instanceof LivingEntity)
+            .map(entity -> (LivingEntity) entity)
+            .filter(requirement);
+    }
 
     @SafeVarargs
     public static <T> T firstMatching(Function<T, Boolean> func, T... elements) {

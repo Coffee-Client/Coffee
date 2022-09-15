@@ -5,21 +5,18 @@
 
 package coffee.client.feature.module.impl.misc;
 
+import coffee.client.CoffeeMain;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
-import coffee.client.feature.module.impl.combat.Killaura;
-import coffee.client.helper.font.FontRenderers;
-import coffee.client.helper.render.Renderer;
+import coffee.client.helper.util.Rotations;
 import coffee.client.helper.util.Utils;
-import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.projectile.ProjectileUtil;
+import net.minecraft.item.BowItem;
+import net.minecraft.util.hit.EntityHitResult;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
-
-import java.awt.Color;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.Locale;
-import java.util.Map;
 
 public class Test extends Module {
 
@@ -42,35 +39,46 @@ public class Test extends Module {
         return null;
     }
 
+    Entity target;
+
     @Override
     public void onWorldRender(MatrixStack matrices) {
-        for (AbstractClientPlayerEntity player : client.world.getPlayers()) {
-            Vec3d positionDiff = player.getPos().subtract(player.prevX, player.prevY, player.prevZ);
-            Vec3d positionDiff1 = new Vec3d(positionDiff.x, 0, positionDiff.z).normalize();
-            Vec3d interpolatedEntityPosition = Utils.getInterpolatedEntityPosition(player);
-            Renderer.R3D.renderLine(matrices, Color.RED, interpolatedEntityPosition, interpolatedEntityPosition.add(positionDiff1));
-            Vec3d pos = interpolatedEntityPosition.add(0, player.getStandingEyeHeight(), 0);
-            Vec3d screenSpace = Renderer.R2D.getScreenSpaceCoordinate(pos, matrices);
-            if (Renderer.R2D.isOnScreen(screenSpace)) {
-                Utils.TickManager.runOnNextRender(() -> {
-                    Map<String, Object> debugInfos = new LinkedHashMap<>();
-                    debugInfos.put("matrixViolating", Arrays.toString(Killaura.Antibot.MATRIX.getViolatingChecks(player)));
-                    debugInfos.put("confidence", String.format(Locale.ENGLISH, "%.2f", Killaura.Antibot.MATRIX.computeConfidence(player)));
-                    debugInfos.put("spawnAndShitDistance", Killaura.playersWhoHaveSpawnedAndStayedInOurRange.getOrDefault(player.getId(), -1));
-                    double longest = 0;
-                    for (String s : debugInfos.keySet()) {
-                        longest = Math.max(FontRenderers.getMono().getStringWidth(s), longest);
-                    }
-                    double yOff = 0;
-                    MatrixStack ms = Renderer.R3D.getEmptyMatrixStack();
-                    for (String s : debugInfos.keySet()) {
-                        FontRenderers.getMono().drawString(ms, s, screenSpace.x, screenSpace.y + yOff, 0xCCCCCC);
-                        FontRenderers.getMono().drawString(ms, debugInfos.get(s).toString(), screenSpace.x + longest + 3, screenSpace.y + yOff, 0xFFFFFF);
-                        yOff += FontRenderers.getMono().getFontHeight();
-                    }
-                });
-            }
+        double range = 200;
+        Vec3d ranged = Rotations.getRotationVector(Rotations.getClientPitch(), Rotations.getClientYaw()).multiply(range);
+        Box allowed = client.player.getBoundingBox().stretch(ranged).expand(1, 1, 1);
+        Vec3d cameraPosVec1 = CoffeeMain.client.player.getCameraPosVec(client.getTickDelta());
+        EntityHitResult ehr = ProjectileUtil.raycast(CoffeeMain.client.player, cameraPosVec1, cameraPosVec1.add(ranged), allowed, Entity::isAttackable, range * range);
+        if (ehr != null && ehr.getEntity() != null) {
+            target = ehr.getEntity();
         }
+        if (target == null) {
+            return;
+        }
+
+        float velocity = BowItem.getPullProgress(client.player.getItemUseTime());
+
+        Vec3d interpolatedEntityPosition = Utils.getInterpolatedEntityPosition(target);
+        Vec3d interpolatedEntityPosition1 = Utils.getInterpolatedEntityPosition(client.player);
+        Vec3d cameraPosVec = client.player.getCameraPosVec(client.getTickDelta());
+
+        double xDiff = interpolatedEntityPosition.getX() - interpolatedEntityPosition1.getX();
+        double yDiff = interpolatedEntityPosition.y + target.getHeight() / 2 - cameraPosVec.y;
+        double zDiff = interpolatedEntityPosition.getZ() - interpolatedEntityPosition1.getZ();
+
+        double xzDist = Math.sqrt(xDiff * xDiff + zDiff * zDiff);
+        double xzDistSq = xzDist * xzDist;
+
+        float velocitySq = velocity * velocity;
+
+        double sqrt = Math.sqrt((velocitySq * velocitySq) - ((xzDistSq / 180 + 2 * yDiff * velocitySq) / 180));
+        float pitch = (float) -Math.toDegrees(Math.atan((velocitySq - sqrt) / (xzDist / 180)));
+
+        if (!Float.isNaN(pitch)) {
+            Utils.Logging.message(pitch + "");
+            Rotations.setClientPitch(pitch);
+            Rotations.setClientYaw(Rotations.getPitchYaw(interpolatedEntityPosition.add(0, target.getHeight() / 2, 0)).getYaw());
+        }
+
     }
 
     @Override
@@ -80,6 +88,8 @@ public class Test extends Module {
 
     @Override
     public void tick() {
-
+        //                if (client.player.isUsingItem() && client.player.getItemUseTime() >= 3) {
+        //                    client.interactionManager.stopUsingItem(client.player);
+        //                }
     }
 }

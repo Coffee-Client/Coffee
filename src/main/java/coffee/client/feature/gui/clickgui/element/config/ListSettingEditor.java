@@ -5,30 +5,21 @@
 
 package coffee.client.feature.gui.clickgui.element.config;
 
-import coffee.client.feature.config.EnumSetting;
+import coffee.client.feature.config.ListSetting;
 import coffee.client.helper.font.FontRenderers;
 import coffee.client.helper.font.adapter.FontAdapter;
 import coffee.client.helper.render.ClipStack;
 import coffee.client.helper.render.Rectangle;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.Transitions;
-import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.render.BufferBuilder;
-import net.minecraft.client.render.BufferRenderer;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.VertexFormat;
-import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Matrix4f;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-public class EnumSettingEditor extends SettingEditor<EnumSetting<?>> {
+public class ListSettingEditor extends SettingEditor<ListSetting<?>> {
 
     static final FontAdapter fa = FontRenderers.getCustomSize(14);
     final double headerPad = 4;
@@ -36,10 +27,10 @@ public class EnumSettingEditor extends SettingEditor<EnumSetting<?>> {
     double expandProg = 0;
     boolean expanded = false;
 
-    public EnumSettingEditor(double x, double y, double width, EnumSetting<?> confValue) {
+    public ListSettingEditor(double x, double y, double width, ListSetting<?> confValue) {
         super(x, y, width, 0, confValue);
 
-        this.ese.addAll(Arrays.asList(confValue.getValues()));
+        this.ese.addAll(confValue.getAllValues());
         setHeight(fa.getFontHeight() + headerPad);
     }
 
@@ -67,58 +58,61 @@ public class EnumSettingEditor extends SettingEditor<EnumSetting<?>> {
         super.render(stack, mouseX, mouseY);
         Renderer.R2D.renderRoundedQuad(stack, new Color(30, 30, 30), getPositionX(), getPositionY(), getPositionX() + getWidth(), getPositionY() + getHeight(), 2, 8);
         fa.drawString(stack, configValue.name, getPositionX() + headerPad / 2d, getPositionY() + headerHeight() / 2d - fa.getFontHeight() / 2d, 0xFFFFFF);
-        if (expandProg != 1) {
-            fa.drawString(stack,
-                configValue.getValue().name(),
-                (float) (getPositionX() + getWidth() - fa.getStringWidth(configValue.getValue().name()) - 2),
-                (float) (getPositionY() + headerHeight() / 2d - fa.getFontHeight() / 2d),
-                1f,
-                1f,
-                1f,
-                (float) Transitions.easeOutExpo(1 - expandProg));
-        }
+        float delta = (float) Transitions.easeOutExpo(expandProg);
+        double rD = 6 + delta * 2;
+        Renderer.R2D.renderCheckmark(stack,
+            Color.WHITE,
+            getPositionX() + getWidth() - headerPad / 2d - rD / 2d,
+            getPositionY() + headerHeight() / 2d - delta * 1.5,
+            5,
+            5,
+            .5f,
+            MathHelper.lerp(delta, 45, -45));
         if (expandProg != 0) {
-            float pp = (float) Transitions.easeOutExpo(expandProg);
-            pp = Renderer.transformColor(pp);
-            Renderer.setupRender();
-            RenderSystem.setShader(GameRenderer::getPositionColorShader);
-            BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
-            bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR);
-            float arrowDim = 3;
-            stack.push();
-            stack.translate(getPositionX() + getWidth() - arrowDim - 2, getPositionY() + headerHeight() / 2d + arrowDim / 2d, 0);
-            Matrix4f m = stack.peek().getPositionMatrix();
-
-            bufferBuilder.vertex(m, -arrowDim, -arrowDim, 0).color(1f, 1f, 1f, pp).next();
-            bufferBuilder.vertex(m, 0, 0, 0).color(1f, 1f, 1f, pp).next();
-            bufferBuilder.vertex(m, arrowDim, -arrowDim, 0).color(1f, 1f, 1f, pp).next();
-
-            BufferRenderer.drawWithShader(bufferBuilder.end());
-            Renderer.endRender();
-            stack.pop();
+            //            float pp = (float) Transitions.easeOutExpo(expandProg);
+            //            pp = Renderer.transformColor(pp);
+            //            Renderer.setupRender();
+            //            RenderSystem.setShader(GameRenderer::getPositionColorShader);
+            //            BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
+            //            bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR);
+            //            float arrowDim = 3;
+            //            stack.push();
+            //            stack.translate(getPositionX() + getWidth() - arrowDim - 2, getPositionY() + headerHeight() / 2d + arrowDim / 2d, 0);
+            //            Matrix4f m = stack.peek().getPositionMatrix();
+            //
+            //            bufferBuilder.vertex(m, -arrowDim, -arrowDim, 0).color(1f, 1f, 1f, pp).next();
+            //            bufferBuilder.vertex(m, 0, 0, 0).color(1f, 1f, 1f, pp).next();
+            //            bufferBuilder.vertex(m, arrowDim, -arrowDim, 0).color(1f, 1f, 1f, pp).next();
+            //
+            //            BufferRenderer.drawWithShader(bufferBuilder.end());
+            //            Renderer.endRender();
+            //            stack.pop();
 
             ClipStack.globalInstance.addWindow(stack,
-                new Rectangle(getPositionX(), getPositionY() + headerHeight(), getPositionX() + getWidth(), getPositionY() + getHeight()));
+                new Rectangle(getPositionX(), getPositionY() + headerHeight() - 1, getPositionX() + getWidth(), getPositionY() + getHeight()));
 
-            double offsetY = 0;
-            double ballDim = 3;
-            double innerBallDim = 2;
+            double offsetY = 1;
+            double indicatorWid = fa.getFontHeight();
             for (Enum<?> enumSettingEntry : ese) {
-                Renderer.R2D.renderCircle(stack,
-                    new Color(20, 20, 20),
-                    getPositionX() + 2 + ballDim,
-                    getPositionY() + headerHeight() + offsetY + fa.getFontHeight() / 2d,
-                    ballDim,
-                    20);
-                if (enumSettingEntry.ordinal() == configValue.getValue().ordinal()) {
-                    Renderer.R2D.renderCircle(stack,
+                Renderer.R2D.renderRoundedQuad(stack,
+                    new Color(40, 40, 40),
+                    getPositionX() + 1,
+                    getPositionY() + headerHeight() + offsetY,
+                    getPositionX() + 1 + indicatorWid,
+                    getPositionY() + headerHeight() + offsetY + fa.getFontHeight(),
+                    2,
+                    5);
+                if (configValue.getValue().contains(enumSettingEntry)) {
+                    Renderer.R2D.renderCheckmark(stack,
                         new Color(9, 162, 104),
-                        getPositionX() + 2 + ballDim,
-                        getPositionY() + headerHeight() + offsetY + fa.getFontHeight() / 2d,
-                        innerBallDim,
-                        20);
+                        getPositionX() + 1 + indicatorWid / 2,
+                        getPositionY() + headerHeight() + offsetY + fa.getFontHeight() / 2d - .5,
+                        3,
+                        5,
+                        .5f,
+                        -45);
                 }
-                fa.drawString(stack, enumSettingEntry.name(), getPositionX() + ballDim * 2 + 4, getPositionY() + headerHeight() + offsetY, 0xFFFFFF);
+                fa.drawString(stack, enumSettingEntry.name(), getPositionX() + indicatorWid + 4, getPositionY() + headerHeight() + offsetY, 0xFFFFFF);
                 offsetY += fa.getFontHeight() + 2;
             }
 
@@ -127,6 +121,7 @@ public class EnumSettingEditor extends SettingEditor<EnumSetting<?>> {
     }
 
     @Override
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public boolean mouseClicked(double x, double y, int button) {
         if (new Rectangle(getPositionX(), getPositionY(), getPositionX() + getWidth(), getPositionY() + headerHeight()).contains(x, y)) {
             expanded = !expanded;
@@ -137,7 +132,14 @@ public class EnumSettingEditor extends SettingEditor<EnumSetting<?>> {
                 double startY = getPositionY() + headerHeight() + offsetY;
                 double endY = getPositionY() + headerHeight() + offsetY + fa.getFontHeight() + 2;
                 if (startY <= y && endY > y) {
-                    configValue.accept(enumSettingEntry.name()); // generic moment
+                    // NEVER DO THIS, EVER
+                    List value = configValue.getValue();
+                    if (value.contains(enumSettingEntry)) {
+                        value.remove(enumSettingEntry);
+                    } else {
+                        value.add(enumSettingEntry);
+                    }
+                    configValue.setValue(value);
                     break; // found our value, cancel
                 }
                 offsetY += fa.getFontHeight() + 2;
@@ -171,5 +173,4 @@ public class EnumSettingEditor extends SettingEditor<EnumSetting<?>> {
     public boolean keyReleased(int keyCode, int mods) {
         return false;
     }
-
 }

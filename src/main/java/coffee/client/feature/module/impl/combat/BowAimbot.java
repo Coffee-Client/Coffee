@@ -15,7 +15,6 @@ import coffee.client.helper.util.Utils;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.BowItem;
-import net.minecraft.item.CrossbowItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -116,13 +115,7 @@ public class BowAimbot extends Module {
     private boolean shouldAim() {
         ItemStack mainHandStack = client.player.getMainHandStack();
         Item item = mainHandStack.getItem();
-        if (item == Items.BOW) {
-            return client.player.isUsingItem() && BowItem.getPullProgress(client.player.getItemUseTime()) >= 0.1;
-        } else if (item == Items.CROSSBOW) {
-            return CrossbowItem.isCharged(mainHandStack);
-        } else {
-            return false;
-        }
+        return item == Items.BOW && client.player.isUsingItem() && BowItem.getPullProgress(client.player.getItemUseTime()) >= 0.1;
     }
 
     @Override

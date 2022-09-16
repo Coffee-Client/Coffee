@@ -459,8 +459,7 @@ public class Renderer {
             } else {
                 bb.vertex(mat, (float) arrowX, (float) arrowY + .5f, 0).color(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, alpha).next();
                 bb.vertex(mat, (float) (arrowX - arrowDimX / 2f), (float) (arrowY + arrowDimY + .5), 0)
-                    .color(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, alpha)
-                    .next();
+                    .color(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, alpha).next();
                 bb.vertex(mat, (float) (arrowX + arrowDimX / 2f), (float) (arrowY + arrowDimY + .5), 0)
                     .color(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, alpha)
                     .next();
@@ -468,6 +467,72 @@ public class Renderer {
             t.draw();
             endRender();
             return new Vec2f((float) roundStartX, (float) roundStartY);
+        }
+
+        public static float[] getCheckmarkDimensions(float firstPart, float secondPart, float angle) {
+            double a = Math.toRadians(angle - 90);
+            double b = Math.toRadians(angle);
+
+            double firstPointY = Math.sin(a) * firstPart;
+            double firstPointX = Math.cos(a) * firstPart;
+
+            double secondPointY = Math.sin(b) * secondPart;
+            double secondPointX = Math.cos(b) * secondPart;
+
+            double minX = Math.min(0, Math.min(firstPointX, secondPointX));
+            double maxX = Math.max(0, Math.max(firstPointX, secondPointX));
+
+            double minY = Math.min(0, Math.min(firstPointY, secondPointY));
+            double maxY = Math.max(0, Math.max(firstPointY, secondPointY));
+
+            double width = maxX - minX;
+            double height = maxY - minY;
+
+            //            double centerX = minX+width/2d;
+            //            double centerY = minY+height/2d;
+
+            return new float[] { (float) (minX), (float) (minY), (float) (maxX), (float) (maxY), (float) (width), (float) (height) };
+        }
+
+        public static void renderCheckmark(MatrixStack matrices, Color color, double x, double y, float firstPart, float secondPart, float width, float angle) {
+            matrices.push();
+            matrices.translate(x, y, 0);
+            matrices.multiply(new Quaternion(0, 0, angle, true));
+            matrices.translate(-secondPart / 2, firstPart / 2, 0);
+            Matrix4f matrix = matrices.peek().getPositionMatrix();
+            float a = transformColor((float) (color.getAlpha()) / 255.0F);
+            float r = (float) (color.getRed()) / 255.0F;
+            float g = (float) (color.getGreen()) / 255.0F;
+            float b = (float) (color.getBlue()) / 255.0F;
+            BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
+            setupRender();
+            RenderSystem.setShader(GameRenderer::getPositionColorShader);
+            bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
+            /*
+            2 -- 3
+            |    |
+            |    |
+            |    |
+            1 -- 4
+             */
+            bufferBuilder.vertex(matrix, 0, -firstPart, 0).color(r, g, b, a).next();
+            bufferBuilder.vertex(matrix, 0, 0, 0).color(r, g, b, a).next();
+            bufferBuilder.vertex(matrix, width, 0, 0).color(r, g, b, a).next();
+            bufferBuilder.vertex(matrix, width, -firstPart, 0).color(r, g, b, a).next();
+
+            /*
+            4 ---------- 3
+            |            |
+            1 ---------- 2
+             */
+            bufferBuilder.vertex(matrix, 0, 0, 0).color(r, g, b, a).next();
+            bufferBuilder.vertex(matrix, secondPart, 0, 0).color(r, g, b, a).next();
+            bufferBuilder.vertex(matrix, secondPart, -width, 0).color(r, g, b, a).next();
+            bufferBuilder.vertex(matrix, 0, -width, 0).color(r, g, b, a).next();
+
+            BufferRenderer.drawWithShader(bufferBuilder.end());
+            endRender();
+            matrices.pop();
         }
 
         public static void beginScissor(double x, double y, double endX, double endY) {

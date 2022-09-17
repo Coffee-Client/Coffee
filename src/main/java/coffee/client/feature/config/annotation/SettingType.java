@@ -9,6 +9,7 @@ import coffee.client.feature.config.BooleanSetting;
 import coffee.client.feature.config.ColorSetting;
 import coffee.client.feature.config.DoubleSetting;
 import coffee.client.feature.config.EnumSetting;
+import coffee.client.feature.config.ListSetting;
 import coffee.client.feature.config.RangeSetting;
 import coffee.client.feature.config.SettingBase;
 import coffee.client.feature.config.StringSetting;
@@ -51,7 +52,8 @@ public enum SettingType {
             .upperMin(minB)
             .upperMax(maxB)
             .precision(setting.precision());
-    });
+    }),
+    MULTIVALUE(ListSetting.FlagSet.class, (setting, inputField, declaringClass) -> new ListSetting.Builder<>(((ListSetting.FlagSet<?>) inputField.get(declaringClass))));
     @Getter
     final Class<?> acceptedType;
     @Getter

@@ -24,6 +24,7 @@ import org.lwjgl.glfw.GLFW;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -55,8 +56,12 @@ public class ClickGUI extends AAScreen {
         return instance;
     }
 
-    public boolean matchesSearchTerm(String content) {
+    public BitSet matchesSearchTerm(String content) {
         return Utils.searchMatches(content, searchTerm);
+    }
+
+    public boolean isSearchActive() {
+        return !searchTerm.isEmpty();
     }
 
     public void setTooltip(String content) {

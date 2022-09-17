@@ -6,6 +6,7 @@
 package coffee.client.feature.module.impl.combat;
 
 import coffee.client.CoffeeMain;
+import coffee.client.feature.config.ListSetting;
 import coffee.client.feature.config.RangeSetting;
 import coffee.client.feature.config.annotation.Setting;
 import coffee.client.feature.config.annotation.VisibilitySpecifier;
@@ -85,16 +86,36 @@ public class Killaura extends Module {
     boolean smoothLook = true;
     @Setting(name = "Smooth look speed", description = "How fast to turn on smooth look", min = 1, max = 20, precision = 1)
     RangeSetting.Range smoothLookRange = new RangeSetting.Range(8, 12);
-    @Setting(name = "Attack passive", description = "Attacks passive mobs")
-    boolean attackPassive = false;
-    @Setting(name = "Attack hostile", description = "Attacks hostile mobs")
-    boolean attackHostile = true;
-    @Setting(name = "Attack players", description = "Attacks players")
-    boolean attackPlayers = true;
-    @Setting(name = "Attack all", description = "Attacks all remaining entities")
-    boolean attackAll = false;
+
+    @Setting(name = "Attack filter", description = "Which entities to attack")
+    ListSetting.FlagSet<AttackFilter> attackFilter = new ListSetting.FlagSet<>(AttackFilter.Hostile, AttackFilter.Players);
+    //    @Setting(name = "Attack passive", description = "Attacks passive mobs")
+    //    boolean attackPassive = false;
+    //    @Setting(name = "Attack hostile", description = "Attacks hostile mobs")
+    //    boolean attackHostile = true;
+    //    @Setting(name = "Attack players", description = "Attacks players")
+    //    boolean attackPlayers = true;
+    //    @Setting(name = "Attack all", description = "Attacks all remaining entities")
+    //    boolean attackAll = false;
     @Setting(name = "Matrix antibot", description = "Filters the matrix bots out of the target list")
     boolean matrixAntibot = true;
+
+    boolean isEntityApplicable(LivingEntity le) {
+        if (attackPartner) {
+            return le.equals(AttackManager.getLastAttackInTimeRange());
+        }
+        if (le instanceof PlayerEntity) {
+            return attackFilter.isSet(AttackFilter.Players);
+        } else if (le instanceof Monster) {
+            //            return attackHostile;
+            return attackFilter.isSet(AttackFilter.Hostile);
+        } else if (le instanceof PassiveEntity) {
+            return attackFilter.isSet(AttackFilter.Passive);
+            //            return attackPassive;
+        }
+        //        return attackAll;
+        return attackFilter.isSet(AttackFilter.EverythingElse);
+    }
     @Setting(name = "Matrix confidence", description = "How confident the antibot needs to be before filtering\n(0 = 0% confident, 1 = 100%)", min = 0, max = 1, precision = 1)
     double matrixConfidence = 0.7;
     List<LivingEntity> targets = new ArrayList<>();
@@ -257,18 +278,8 @@ public class Killaura extends Module {
         return smoothLook;
     }
 
-    boolean isEntityApplicable(LivingEntity le) {
-        if (attackPartner) {
-            return le.equals(AttackManager.getLastAttackInTimeRange());
-        }
-        if (le instanceof PlayerEntity) {
-            return attackPlayers;
-        } else if (le instanceof Monster) {
-            return attackHostile;
-        } else if (le instanceof PassiveEntity) {
-            return attackPassive;
-        }
-        return attackAll;
+    public enum AttackFilter {
+        Passive, Hostile, Players, EverythingElse
     }
 
     @Override

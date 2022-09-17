@@ -102,7 +102,7 @@ public class ListSettingEditor extends SettingEditor<ListSetting<?>> {
                     getPositionY() + headerHeight() + offsetY + fa.getFontHeight(),
                     2,
                     5);
-                if (configValue.getValue().contains(enumSettingEntry)) {
+                if (configValue.getValue().getChecked().contains(enumSettingEntry)) {
                     Renderer.R2D.renderCheckmark(stack,
                         new Color(9, 162, 104),
                         getPositionX() + 1 + indicatorWid / 2,
@@ -133,13 +133,15 @@ public class ListSettingEditor extends SettingEditor<ListSetting<?>> {
                 double endY = getPositionY() + headerHeight() + offsetY + fa.getFontHeight() + 2;
                 if (startY <= y && endY > y) {
                     // NEVER DO THIS, EVER
-                    List value = configValue.getValue();
+                    List value = configValue.getValue().getChecked();
                     if (value.contains(enumSettingEntry)) {
                         value.remove(enumSettingEntry);
                     } else {
+                        //                        System.out.println(enumSettingEntry);
                         value.add(enumSettingEntry);
+                        //                        System.out.println(value);
                     }
-                    configValue.setValue(value);
+                    configValue.getValue().setChecked(value);
                     break; // found our value, cancel
                 }
                 offsetY += fa.getFontHeight() + 2;

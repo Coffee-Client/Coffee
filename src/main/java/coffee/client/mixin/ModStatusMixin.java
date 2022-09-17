@@ -7,14 +7,12 @@ package coffee.client.mixin;
 
 import coffee.client.feature.command.impl.SelfDestruct;
 import net.minecraft.util.ModStatus;
-import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Debug(export = true)
 @Mixin(ModStatus.class)
 public class ModStatusMixin {
     @Inject(method = "isModded", at = @At("HEAD"), cancellable = true)

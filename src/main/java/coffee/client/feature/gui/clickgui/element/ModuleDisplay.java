@@ -9,6 +9,8 @@ import coffee.client.feature.gui.clickgui.ClickGUI;
 import coffee.client.feature.gui.element.Element;
 import coffee.client.feature.module.Module;
 import coffee.client.helper.font.FontRenderers;
+import coffee.client.helper.font.adapter.impl.QuickFontAdapter;
+import coffee.client.helper.font.renderer.ColoredTextSegment;
 import coffee.client.helper.render.ClipStack;
 import coffee.client.helper.render.Rectangle;
 import coffee.client.helper.render.Renderer;
@@ -25,6 +27,9 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Matrix4f;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.BitSet;
+import java.util.List;
 
 public class ModuleDisplay extends Element {
     static final double margin = 2;
@@ -52,13 +57,47 @@ public class ModuleDisplay extends Element {
         leftAnim = MathHelper.clamp(leftAnim, 0, 1);
     }
 
-    boolean shouldBeActive() {
+    ColoredTextSegment cachedSegment;
+    BitSet previousSearchResult;
+
+    BitSet getMatches() {
         return ClickGUI.instance().matchesSearchTerm(module.getName());
     }
 
     @Override
     public boolean isActive() {
-        return shouldBeActive();
+        if (ClickGUI.instance().isSearchActive()) {
+            return !getMatches().isEmpty();
+        } else {
+            return true;
+        }
+    }
+
+    private ColoredTextSegment buildColoredTextSegment(BitSet searchResults, String s) {
+        StringBuilder currentString = new StringBuilder();
+        List<ColoredTextSegment> c = new ArrayList<>();
+        boolean matchedBefore = false;
+        char[] chars = s.toCharArray();
+        for (int i = 0; i < chars.length; i++) {
+            boolean matches = searchResults.get(i);
+            if (matchedBefore != matches) {
+                if (!matchedBefore) {
+                    c.add(new ColoredTextSegment(new ColoredTextSegment[0], currentString.toString(), 1f, 1f, 1f, 1f));
+                } else {
+                    c.add(new ColoredTextSegment(new ColoredTextSegment[0], currentString.toString(), 9 / 255f, 162 / 255f, 104 / 255f, 1f));
+                }
+                currentString = new StringBuilder();
+                matchedBefore = matches;
+            }
+            char current = chars[i];
+            currentString.append(current);
+        }
+        if (!matchedBefore) {
+            c.add(new ColoredTextSegment(new ColoredTextSegment[0], currentString.toString(), 1f, 1f, 1f, 1f));
+        } else {
+            c.add(new ColoredTextSegment(new ColoredTextSegment[0], currentString.toString(), 9 / 255f, 162 / 255f, 104 / 255f, 1f));
+        }
+        return new ColoredTextSegment(c.toArray(ColoredTextSegment[]::new), "", 1f, 1f, 1f, 1f);
     }
 
     @Override
@@ -128,15 +167,32 @@ public class ModuleDisplay extends Element {
             Renderer.endRender();
             stack.pop();
         }
-        FontRenderers.getRenderer()
-            .drawString(stack,
-                module.getName(),
-                (float) getPositionX() + 6,
-                (float) (getPositionY() + bruhHeight / 2d - FontRenderers.getRenderer().getFontHeight() / 2d),
-                1f,
-                1f,
-                1f,
-                module.isDisabled() ? 0.4f : 1f);
+        BitSet matches = getMatches();
+        if (ClickGUI.instance().isSearchActive()) {
+            if (previousSearchResult == null || !previousSearchResult.equals(matches)) {
+                previousSearchResult = matches;
+                cachedSegment = buildColoredTextSegment(matches, module.getName());
+            }
+        } else {
+            cachedSegment = null;
+        }
+        if (cachedSegment != null) {
+            ((QuickFontAdapter) FontRenderers.getRenderer()).getRenderer()
+                .drawString(stack,
+                    cachedSegment,
+                    (float) getPositionX() + 6,
+                    (float) (getPositionY() + bruhHeight / 2d - FontRenderers.getRenderer().getFontHeight() / 2d));
+        } else {
+            FontRenderers.getRenderer()
+                .drawString(stack,
+                    module.getName(),
+                    (float) getPositionX() + 6,
+                    (float) (getPositionY() + bruhHeight / 2d - FontRenderers.getRenderer().getFontHeight() / 2d),
+                    1f,
+                    1f,
+                    1f,
+                    module.isDisabled() ? 0.4f : 1f);
+        }
         this.cfd.setPositionX(getPositionX());
         this.cfd.setPositionY(getPositionY() + actualHeight + margin);
         if (this.cfd.progress != 0) {

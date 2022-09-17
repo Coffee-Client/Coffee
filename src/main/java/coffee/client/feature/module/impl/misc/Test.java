@@ -6,19 +6,20 @@
 package coffee.client.feature.module.impl.misc;
 
 import coffee.client.feature.config.ListSetting;
+import coffee.client.feature.config.annotation.Setting;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
-import coffee.client.helper.util.Utils;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 
 public class Test extends Module {
 
-    ListSetting<Real> r = this.config.create(new ListSetting.Builder<>(Real.A, Real.B).name("cock").description("suck").get());
+    @Setting(name = "REAL", description = "abc")
+    ListSetting.FlagSet<Real> r = new ListSetting.FlagSet<>(Real.A, Real.B);
 
     @Override
     public void enable() {
-        Utils.Logging.message(r.getConfigSave());
+
     }
 
     public Test() {

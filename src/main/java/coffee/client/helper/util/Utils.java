@@ -48,6 +48,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Queue;
@@ -79,22 +80,26 @@ public class Utils {
         });
     }
 
-    public static boolean searchMatches(String original, String search) {
+    public static BitSet searchMatches(String original, String search) {
         int searchIndex = 0;
+        BitSet matches = new BitSet();
         char[] chars = search.toLowerCase().toCharArray();
         String lower = original.toLowerCase();
         for (char aChar : chars) {
             if (searchIndex >= original.length()) {
-                return false;
+                matches.clear();
+                return matches;
             }
             int index;
             if ((index = lower.substring(searchIndex).indexOf(aChar)) >= 0) {
+                matches.set(searchIndex + index);
                 searchIndex += index + 1;
             } else {
-                return false;
+                matches.clear();
+                return matches;
             }
         }
-        return true;
+        return matches;
     }
 
     public static <T> T throwSilently(Supplier<T> func, Consumer<Throwable> errorHandler) {

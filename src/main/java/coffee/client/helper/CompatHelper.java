@@ -8,6 +8,7 @@ package coffee.client.helper;
 import coffee.client.CoffeeMain;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleRegistry;
+import coffee.client.feature.module.impl.misc.MoreChatHistory;
 import coffee.client.feature.module.impl.movement.NoLevitation;
 import coffee.client.feature.module.impl.movement.NoPush;
 import net.fabricmc.loader.api.FabricLoader;
@@ -21,6 +22,7 @@ public class CompatHelper {
     static final Map<String, Runnable> modsToLookOutFor = Util.make(new HashMap<>(), stringRunnableHashMap -> {
         stringRunnableHashMap.put("meteor-client", () -> disableModule(NoLevitation.class, "Meteor client is loaded"));
         stringRunnableHashMap.put("lithium", () -> disableModule(NoPush.class, "Lithium is loaded"));
+        stringRunnableHashMap.put("feather", () -> disableModule(MoreChatHistory.class, "Fether is loaded"));
     });
     static boolean anyFound = false;
 

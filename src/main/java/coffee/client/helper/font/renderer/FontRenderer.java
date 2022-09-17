@@ -20,14 +20,18 @@ import net.minecraft.util.Util;
 import net.minecraft.util.math.Matrix4f;
 
 import java.awt.Font;
+import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static org.lwjgl.opengl.GL11.*;
 
 public class FontRenderer {
+
     static final Map<Character, Integer> colorMap = Util.make(() -> {
         Map<Character, Integer> ci = new HashMap<>();
         ci.put('0', 0x000000);
@@ -73,6 +77,44 @@ public class FontRenderer {
             Glyph glyph = new Glyph(aChar, f);
             glyphMap.put(aChar, glyph);
         }
+    }
+
+    public void drawString(MatrixStack matrices, ColoredTextSegment cts, float x, float y) {
+
+        float roundedX = (float) Utils.Math.roundToDecimal(x, 1);
+        float roundedY = (float) Utils.Math.roundToDecimal(y, 1);
+        matrices.push();
+        matrices.translate(roundedX, roundedY, 0);
+        matrices.scale(0.25F, 0.25F, 1f);
+
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.enableTexture();
+        RenderSystem.disableCull();
+        GlStateManager._texParameter(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
+        BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
+
+        //        float xOffset = 0;
+        Queue<ColoredTextSegment> ctsC = new ArrayDeque<>();
+        ctsC.add(cts);
+        while (!ctsC.isEmpty()) {
+            ColoredTextSegment poll = ctsC.poll();
+            ctsC.addAll(Arrays.asList(poll.children()));
+            String text = poll.text();
+            if (text.isEmpty()) {
+                continue;
+            }
+
+            for (char c : text.toCharArray()) {
+                Matrix4f matrix = matrices.peek().getPositionMatrix();
+                double prevWidth = drawChar(bufferBuilder, matrix, c, poll.r(), poll.g(), poll.b(), poll.a());
+                matrices.translate(prevWidth, 0, 0);
+            }
+        }
+
+        matrices.pop();
     }
 
     public void drawString(MatrixStack matrices, String s, float x, float y, float r, float g, float b, float a) {

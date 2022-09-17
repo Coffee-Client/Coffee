@@ -28,7 +28,6 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Util;
 import org.lwjgl.glfw.GLFW;
-import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -43,7 +42,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Debug(export = true)
 @Mixin(ChatScreen.class)
 public class AChatScreenMixin extends Screen {
 
@@ -112,7 +110,7 @@ public class AChatScreenMixin extends Screen {
                     if (a.size() > 20) {
                         break outer;
                     }
-                    if (Utils.searchMatches(alias, cmd)) {
+                    if (!Utils.searchMatches(alias, cmd).isEmpty()) {
                         a.add(alias);
                     }
                 }
@@ -120,7 +118,7 @@ public class AChatScreenMixin extends Screen {
         }
         String[] finalArgs = args;
         return args.length > 0 ? a.stream()
-            .filter(s -> s.startsWith("<") || Utils.searchMatches(s, finalArgs[finalArgs.length - 1]))
+            .filter(s -> s.startsWith("<") || !Utils.searchMatches(s, finalArgs[finalArgs.length - 1]).isEmpty())
             .distinct()
             .limit(20)
             .collect(Collectors.toList()) : a;

@@ -18,7 +18,7 @@ public class ClickGUI extends Module {
 
     public ClickGUI() {
         super("ClickGUI", "A visual manager for all modules", ModuleType.RENDER);
-        this.keybind.accept(GLFW.GLFW_KEY_RIGHT_SHIFT + "");
+        this.keybind.setValue((double) GLFW.GLFW_KEY_RIGHT_SHIFT);
     }
 
     @Override

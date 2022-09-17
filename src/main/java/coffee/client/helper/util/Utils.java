@@ -53,8 +53,10 @@ import java.util.Objects;
 import java.util.Queue;
 import java.util.Spliterator;
 import java.util.UUID;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -70,6 +72,38 @@ public class Utils {
             .filter(entity -> entity instanceof LivingEntity)
             .map(entity -> (LivingEntity) entity)
             .filter(requirement);
+    }
+
+    public static <T> T throwSilently(Supplier<T> func) {
+        return throwSilently(func, throwable -> {
+        });
+    }
+
+    public static boolean searchMatches(String original, String search) {
+        int searchIndex = 0;
+        char[] chars = search.toLowerCase().toCharArray();
+        String lower = original.toLowerCase();
+        for (char aChar : chars) {
+            if (searchIndex >= original.length()) {
+                return false;
+            }
+            int index;
+            if ((index = lower.substring(searchIndex).indexOf(aChar)) >= 0) {
+                searchIndex += index + 1;
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static <T> T throwSilently(Supplier<T> func, Consumer<Throwable> errorHandler) {
+        try {
+            return func.get();
+        } catch (Throwable t) {
+            errorHandler.accept(t);
+            return null;
+        }
     }
 
     @SafeVarargs

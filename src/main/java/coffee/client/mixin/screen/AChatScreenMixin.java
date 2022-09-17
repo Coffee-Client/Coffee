@@ -16,6 +16,7 @@ import coffee.client.feature.module.impl.misc.InfChatLength;
 import coffee.client.helper.font.FontRenderers;
 import coffee.client.helper.render.MSAAFramebuffer;
 import coffee.client.helper.render.Renderer;
+import coffee.client.helper.util.Utils;
 import lombok.val;
 import net.minecraft.client.gui.screen.ChatInputSuggestor;
 import net.minecraft.client.gui.screen.ChatScreen;
@@ -25,6 +26,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.util.Util;
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
@@ -81,6 +83,7 @@ public class AChatScreenMixin extends Screen {
         return 5;
     }
 
+
     List<String> getSuggestions(String command) {
         List<String> a = new ArrayList<>();
         String[] args = command.split(" +");
@@ -109,7 +112,7 @@ public class AChatScreenMixin extends Screen {
                     if (a.size() > 20) {
                         break outer;
                     }
-                    if (alias.toLowerCase().startsWith(cmd.toLowerCase())) {
+                    if (Utils.searchMatches(alias, cmd)) {
                         a.add(alias);
                     }
                 }
@@ -117,7 +120,7 @@ public class AChatScreenMixin extends Screen {
         }
         String[] finalArgs = args;
         return args.length > 0 ? a.stream()
-            .filter(s -> s.startsWith("<") || s.toLowerCase().startsWith(finalArgs[finalArgs.length - 1].toLowerCase()))
+            .filter(s -> s.startsWith("<") || Utils.searchMatches(s, finalArgs[finalArgs.length - 1]))
             .distinct()
             .limit(20)
             .collect(Collectors.toList()) : a;
@@ -134,7 +137,11 @@ public class AChatScreenMixin extends Screen {
         float cmdTWidth = CoffeeMain.client.textRenderer.getWidth(cmd);
         double cmdXS = chatField.x + 5 + cmdTWidth;
 
-        List<String> suggestions = changed ? getSuggestions(cmd) : cachedSuggestions;
+        List<String> suggestions = changed ? Util.make(getSuggestions(cmd), strings -> {
+            if (strings.size() >= 20) {
+                strings.add("...");
+            }
+        }) : cachedSuggestions;
         if (changed) {
             cachedSuggestions.clear();
             cachedSuggestions.addAll(suggestions);

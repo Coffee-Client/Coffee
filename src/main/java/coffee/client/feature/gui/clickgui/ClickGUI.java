@@ -56,12 +56,7 @@ public class ClickGUI extends AAScreen {
     }
 
     public boolean matchesSearchTerm(String content) {
-        for (char c : searchTerm.toLowerCase().toCharArray()) {
-            if (!content.toLowerCase().contains(String.valueOf(c))) {
-                return false;
-            }
-        }
-        return true;
+        return Utils.searchMatches(content, searchTerm);
     }
 
     public void setTooltip(String content) {

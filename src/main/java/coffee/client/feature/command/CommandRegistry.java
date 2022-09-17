@@ -7,6 +7,7 @@ package coffee.client.feature.command;
 
 import coffee.client.feature.addon.Addon;
 import coffee.client.feature.command.exception.CommandException;
+import coffee.client.feature.command.impl.ApplyEffect;
 import coffee.client.feature.command.impl.ApplyVel;
 import coffee.client.feature.command.impl.Author;
 import coffee.client.feature.command.impl.Ban;
@@ -135,6 +136,7 @@ public class CommandRegistry {
         vanillaCommands.add(new Kill());
         vanillaCommands.add(new Debugger());
         vanillaCommands.add(new HoloImage());
+        vanillaCommands.add(new ApplyEffect());
 
         rebuildSharedCommands();
     }

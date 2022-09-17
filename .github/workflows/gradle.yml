@@ -37,4 +37,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: latest-dev.jar
-          path: build/libs
+          path: build/libs/coffee-1.0.0.jar

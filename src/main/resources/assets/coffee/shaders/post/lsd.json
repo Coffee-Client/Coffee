@@ -1,0 +1,21 @@
+{
+  "targets": [
+    "swap"
+  ],
+  "passes": [
+    {
+      "name": "coffee:lsd",
+      "intarget": "minecraft:main",
+      "outtarget": "swap",
+      "uniforms": [
+
+      ]
+    },
+    {
+      "name": "blit",
+      "intarget": "swap",
+      "outtarget": "minecraft:main",
+      "uniforms": []
+    }
+  ]
+}

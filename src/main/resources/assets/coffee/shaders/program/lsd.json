@@ -5,7 +5,7 @@
     "dstrgb": "1-srcalpha"
   },
   "vertex": "sobel",
-  "fragment": "coffee:blur",
+  "fragment": "coffee:lsd",
   "attributes": [
     "Position"
   ],
@@ -22,7 +22,9 @@
     {"name": "InSize",   "type": "float", "count": 2, "values": [1.0, 1.0]},
     {"name": "OutSize",  "type": "float", "count": 2, "values": [1.0, 1.0]},
     {"name": "BlurDir",  "type": "float", "count": 2, "values": [1.0, 1.0]},
-    {"name": "radius",   "type": "float", "count": 1, "values": [5.0]},
-    {"name": "progress", "type": "float", "count": 1, "values": [0.0]}
+    {"name": "seed",     "type": "float", "count": 1, "values": [0.0]},
+    {"name": "strength", "type": "float", "count": 1, "values": [0.0]},
+    {"name": "time",     "type": "float", "count": 1, "values": [0.0]},
+    {"name": "rotations","type": "float","count":1,"values": [0.0]}
   ]
 }

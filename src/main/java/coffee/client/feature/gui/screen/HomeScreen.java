@@ -7,9 +7,9 @@ package coffee.client.feature.gui.screen;
 
 import coffee.client.CoffeeMain;
 import coffee.client.feature.gui.ParticleRenderer;
+import coffee.client.feature.gui.element.impl.ButtonGroupElement;
 import coffee.client.feature.gui.notifications.Notification;
-import coffee.client.feature.gui.screen.base.ClientScreen;
-import coffee.client.feature.gui.widget.RoundButton;
+import coffee.client.feature.gui.screen.base.AAScreen;
 import coffee.client.helper.CompatHelper;
 import coffee.client.helper.font.FontRenderers;
 import coffee.client.helper.font.adapter.FontAdapter;
@@ -19,6 +19,7 @@ import coffee.client.helper.render.Renderer;
 import coffee.client.helper.render.Texture;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.screen.option.OptionsScreen;
 import net.minecraft.client.gui.screen.world.SelectWorldScreen;
@@ -31,14 +32,10 @@ import org.lwjgl.opengl.GL40C;
 
 import java.awt.Color;
 import java.nio.charset.StandardCharsets;
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-public class HomeScreen extends ClientScreen {
+public class HomeScreen extends AAScreen {
     static final double padding = 6;
     static String changelog = "";
     private static HomeScreen instance;
@@ -78,35 +75,33 @@ public class HomeScreen extends ClientScreen {
     public void resize(MinecraftClient client, int width, int height) {
         this.width = width;
         this.height = height;
-        clearChildren();
+        clearWidgets();
         initWidgets();
     }
 
     void initWidgets() {
-        List<Map.Entry<String, Runnable>> buttonsMap = new ArrayList<>();
-        buttonsMap.add(new AbstractMap.SimpleEntry<>("Singleplayer", () -> CoffeeMain.client.setScreen(new SelectWorldScreen(this))));
-        buttonsMap.add(new AbstractMap.SimpleEntry<>("Multiplayer", () -> CoffeeMain.client.setScreen(new MultiplayerScreen(this))));
-        buttonsMap.add(new AbstractMap.SimpleEntry<>("Realms", () -> CoffeeMain.client.setScreen(new RealmsMainScreen(this))));
-        buttonsMap.add(new AbstractMap.SimpleEntry<>("Alts", () -> {
-            CoffeeMain.client.setScreen(AltManagerScreen.instance());
-            //            CoffeeMain.client.setScreen(new TestScreen());
-        }));
-        buttonsMap.add(new AbstractMap.SimpleEntry<>("Settings", () -> CoffeeMain.client.setScreen(new OptionsScreen(this, CoffeeMain.client.options))));
-        buttonsMap.add(new AbstractMap.SimpleEntry<>("Quit", CoffeeMain.client::scheduleStop));
-        double w = 60;
-        double rootX = padding * 2 + 20 + padding;
-        double rootY = this.height - padding * 2 - 20;
-
-        for (Map.Entry<String, Runnable> stringRunnableEntry : buttonsMap) {
-            RoundButton rb = new RoundButton(RoundButton.STANDARD, rootX, rootY, w, 20, stringRunnableEntry.getKey(), stringRunnableEntry.getValue());
-            addDrawableChild(rb);
-            rootX += w + 5;
-        }
+        double entireWidth = 60 * 7;
+        double startX = padding * 2 + 20 + padding;
+        double endX = width - padding * 2;
+        double weHave = endX - startX;
+        entireWidth = Math.min(entireWidth, weHave);
+        ButtonGroupElement bge = new ButtonGroupElement(startX,
+            this.height - padding * 2 - 20,
+            entireWidth,
+            20,
+            ButtonGroupElement.LayoutDirection.RIGHT,
+            new ButtonGroupElement.ButtonEntry("Singleplayer", () -> CoffeeMain.client.setScreen(new SelectWorldScreen(this))),
+            new ButtonGroupElement.ButtonEntry("Multiplayer", () -> CoffeeMain.client.setScreen(new MultiplayerScreen(this))),
+            new ButtonGroupElement.ButtonEntry("Realms", () -> CoffeeMain.client.setScreen(new RealmsMainScreen(this))),
+            new ButtonGroupElement.ButtonEntry("Alts", () -> CoffeeMain.client.setScreen(AltManagerScreen.instance(this))),
+            new ButtonGroupElement.ButtonEntry("Options", () -> CoffeeMain.client.setScreen(new OptionsScreen(this, CoffeeMain.client.options))),
+            new ButtonGroupElement.ButtonEntry("Vanilla", () -> CoffeeMain.client.setScreen(new TitleScreen(false))),
+            new ButtonGroupElement.ButtonEntry("Quit", CoffeeMain.client::scheduleStop));
+        addChild(bge);
     }
 
     @Override
-    protected void init() {
-        super.init();
+    protected void initInternal() {
         if (CompatHelper.wereAnyFound() && !showedCompatWarn && client.currentScreen == this) {
             showedCompatWarn = true;
             client.setScreen(new NotificationScreen(Notification.Type.WARNING,
@@ -138,7 +133,7 @@ public class HomeScreen extends ClientScreen {
     @Override
     public void renderInternal(MatrixStack stack, int mouseX, int mouseY, float delta) {
 
-        Renderer.R2D.renderQuad(stack, new Color(20, 20, 20), 0, 0, width, height);
+        //        Renderer.R2D.renderQuad(stack, new Color(20, 20, 20), 0, 0, width, height);
 
         coffee.client.helper.render.textures.Texture.BACKGROUND.bind();
         Renderer.R2D.renderTexture(stack, 0, 0, width, height, 0, 0, width, height, width, height);

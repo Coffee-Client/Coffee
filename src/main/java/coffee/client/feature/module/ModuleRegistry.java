@@ -90,6 +90,7 @@ import coffee.client.feature.module.impl.render.Freecam;
 import coffee.client.feature.module.impl.render.Fullbright;
 import coffee.client.feature.module.impl.render.Hud;
 import coffee.client.feature.module.impl.render.ItemByteSize;
+import coffee.client.feature.module.impl.render.LSD;
 import coffee.client.feature.module.impl.render.MouseEars;
 import coffee.client.feature.module.impl.render.NameTags;
 import coffee.client.feature.module.impl.render.NoLiquidFog;
@@ -334,6 +335,7 @@ public class ModuleRegistry {
         registerModule(LecternCrash.class);
         registerModule(BowAimbot.class);
         registerModule(ResourcePackSpoof.class);
+        registerModule(LSD.class);
 
         rebuildSharedModuleList();
 

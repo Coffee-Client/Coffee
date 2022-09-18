@@ -27,6 +27,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mojang.blaze3d.systems.RenderSystem;
+import lombok.Setter;
 import me.x150.authlib.login.mojang.MinecraftAuthenticator;
 import me.x150.authlib.login.mojang.MinecraftToken;
 import me.x150.authlib.login.mojang.profile.MinecraftProfile;
@@ -84,16 +85,20 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
     double scrollSmooth = 0;
     Texture currentAccountTexture = new Texture("dynamic/currentaccount");
 
+    @Setter
+    Screen parent;
+
     private AltManagerScreen() {
         super(MSAAFramebuffer.MAX_SAMPLES);
         loadAlts();
         updateCurrentAccount();
     }
 
-    public static AltManagerScreen instance() {
+    public static AltManagerScreen instance(Screen parent) {
         if (instance == null) {
             instance = new AltManagerScreen();
         }
+        instance.setParent(parent);
         return instance;
     }
 

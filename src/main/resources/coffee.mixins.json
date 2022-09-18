@@ -68,8 +68,7 @@
     "screen.MultiplayerScreenMixin",
     "screen.ScreenMixin",
     "screen.SelectWorldScreenMixin",
-    "screen.SignEditScreenMixin",
-    "screen.TitleScreenMixin"
+    "screen.SignEditScreenMixin"
   ],
   "client": [
     "IKeyBindingMixin",
@@ -77,7 +76,8 @@
     "KeyboardInputMixin",
     "network.ClientPlayNetworkHandlerMixin",
     "render.ChatHudLineMixin",
-    "render.IFramebufferMixin"
+    "render.IFramebufferMixin",
+    "screen.TitleScreenMixin"
   ],
   "server": [],
   "injectors": {

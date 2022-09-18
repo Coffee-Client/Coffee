@@ -7,6 +7,7 @@ package coffee.client.mixin;
 
 import coffee.client.CoffeeMain;
 import coffee.client.feature.command.impl.SelfDestruct;
+import coffee.client.feature.gui.screen.LoadingScreen;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleRegistry;
 import coffee.client.feature.module.impl.world.FastUse;
@@ -19,12 +20,14 @@ import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.util.crash.CrashReport;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -83,6 +86,28 @@ public abstract class MinecraftClientMixin {
         if (SelfDestruct.shouldSelfDestruct()) {
             cir.setReturnValue("release");
         }
+    }
+
+    private Screen obtain(Screen original) {
+        if (original instanceof TitleScreen && !SelfDestruct.shouldSelfDestruct()) {
+            return LoadingScreen.instance();
+        }
+        return original;
+    }
+
+    @ModifyArg(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V"), index = 0)
+    Screen coffee_replaceTitleScreenNormal(Screen screen) {
+        return obtain(screen);
+    }
+
+    @ModifyArg(method = "method_45026", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/ConnectScreen;connect(Lnet/minecraft/client/gui/screen/Screen;Lnet/minecraft/client/MinecraftClient;Lnet/minecraft/client/network/ServerAddress;Lnet/minecraft/client/network/ServerInfo;)V"), index = 0)
+    Screen coffee_replaceTitleScreenDirectConnect(Screen screen) {
+        return obtain(screen);
+    }
+
+    @ModifyArg(method = "method_44648", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V"), index = 0)
+    Screen coffee_replaceTitleScreenBannedNotice(Screen screen) {
+        return obtain(screen);
     }
 
 }

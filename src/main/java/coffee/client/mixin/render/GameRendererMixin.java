@@ -121,9 +121,8 @@ public abstract class GameRendererMixin {
             }
 
             NotificationRenderer.render();
-
-            Events.fireEvent(EventType.HUD_RENDER, new NonCancellableEvent());
         });
+        Events.fireEvent(EventType.HUD_RENDER_NOMSAA, new NonCancellableEvent());
     }
 
     @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;raycast(DFZ)Lnet/minecraft/util/hit/HitResult;"), method = "updateTargetedEntity", require = 0)

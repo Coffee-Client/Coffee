@@ -34,7 +34,7 @@ public enum EventType {
     NOCLIP_QUERY(PlayerNoClipQueryEvent.class, false),
     KEYBOARD(KeyboardEvent.class, false),
     POST_INIT(NonCancellableEvent.class, true),
-    HUD_RENDER(NonCancellableEvent.class, false),
+    HUD_RENDER_NOMSAA(NonCancellableEvent.class, false),
     GAME_EXIT(NonCancellableEvent.class, true),
     SHOULD_RENDER_CHUNK(ChunkRenderQueryEvent.class, false),
     WORLD_RENDER(WorldRenderEvent.class, false),

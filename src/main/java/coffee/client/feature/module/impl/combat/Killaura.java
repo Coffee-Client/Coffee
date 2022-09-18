@@ -105,6 +105,7 @@ public class Killaura extends Module {
     int currentRandomDelay = 0;
     @Setting(name = "Attack partner", description = "Only attacks the current combat partner (The player you intentionally hit before)\nCan be used to bypass bot checks")
     boolean attackPartner = false;
+
     public Killaura() {
         super("Killaura", "Automatically attacks all entities in range", ModuleType.COMBAT);
     }

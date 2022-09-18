@@ -459,7 +459,8 @@ public class Renderer {
             } else {
                 bb.vertex(mat, (float) arrowX, (float) arrowY + .5f, 0).color(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, alpha).next();
                 bb.vertex(mat, (float) (arrowX - arrowDimX / 2f), (float) (arrowY + arrowDimY + .5), 0)
-                    .color(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, alpha).next();
+                    .color(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, alpha)
+                    .next();
                 bb.vertex(mat, (float) (arrowX + arrowDimX / 2f), (float) (arrowY + arrowDimY + .5), 0)
                     .color(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, alpha)
                     .next();

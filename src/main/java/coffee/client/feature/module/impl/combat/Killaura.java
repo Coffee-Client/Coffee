@@ -99,6 +99,28 @@ public class Killaura extends Module {
     //    boolean attackAll = false;
     @Setting(name = "Matrix antibot", description = "Filters the matrix bots out of the target list")
     boolean matrixAntibot = true;
+    @Setting(name = "Matrix confidence", description = "How confident the antibot needs to be before filtering\n(0 = 0% confident, 1 = 100%)", min = 0, max = 1, precision = 1)
+    double matrixConfidence = 0.7;
+    List<LivingEntity> targets = new ArrayList<>();
+    int currentRandomDelay = 0;
+    @Setting(name = "Attack partner", description = "Only attacks the current combat partner (The player you intentionally hit before)\nCan be used to bypass bot checks")
+    boolean attackPartner = false;
+    public Killaura() {
+        super("Killaura", "Automatically attacks all entities in range", ModuleType.COMBAT);
+    }
+
+    private static Vec3d[] getHitboxPoints(LivingEntity le) {
+        float width = le.getWidth();
+        float height = le.getHeight();
+        Vec3d root = le.getPos().subtract(width / 2d, 0, width / 2d);
+        Vec3d[] t = new Vec3d[HITBOX_POSITION_OFFSETS.length];
+        for (int i = 0; i < HITBOX_POSITION_OFFSETS.length; i++) {
+            double[] entry = HITBOX_POSITION_OFFSETS[i];
+            Vec3d offset = new Vec3d(entry[0], entry[1], entry[2]).multiply(width, height, width);
+            t[i] = root.add(offset);
+        }
+        return t;
+    }
 
     boolean isEntityApplicable(LivingEntity le) {
         if (attackPartner) {
@@ -115,29 +137,6 @@ public class Killaura extends Module {
         }
         //        return attackAll;
         return attackFilter.isSet(AttackFilter.EverythingElse);
-    }
-    @Setting(name = "Matrix confidence", description = "How confident the antibot needs to be before filtering\n(0 = 0% confident, 1 = 100%)", min = 0, max = 1, precision = 1)
-    double matrixConfidence = 0.7;
-    List<LivingEntity> targets = new ArrayList<>();
-    int currentRandomDelay = 0;
-    @Setting(name = "Attack partner", description = "Only attacks the current combat partner (The player you intentionally hit before)\nCan be used to bypass bot checks")
-    boolean attackPartner = false;
-
-    public Killaura() {
-        super("Killaura", "Automatically attacks all entities in range", ModuleType.COMBAT);
-    }
-
-    private static Vec3d[] getHitboxPoints(LivingEntity le) {
-        float width = le.getWidth();
-        float height = le.getHeight();
-        Vec3d root = le.getPos().subtract(width / 2d, 0, width / 2d);
-        Vec3d[] t = new Vec3d[HITBOX_POSITION_OFFSETS.length];
-        for (int i = 0; i < HITBOX_POSITION_OFFSETS.length; i++) {
-            double[] entry = HITBOX_POSITION_OFFSETS[i];
-            Vec3d offset = new Vec3d(entry[0], entry[1], entry[2]).multiply(width, height, width);
-            t[i] = root.add(offset);
-        }
-        return t;
     }
 
     @EventListener(EventType.PACKET_RECEIVE)
@@ -278,10 +277,6 @@ public class Killaura extends Module {
         return smoothLook;
     }
 
-    public enum AttackFilter {
-        Passive, Hostile, Players, EverythingElse
-    }
-
     @Override
     public void tick() {
         targets = selectTargets();
@@ -369,6 +364,10 @@ public class Killaura extends Module {
     @Override
     public void onHudRender() {
 
+    }
+
+    public enum AttackFilter {
+        Passive, Hostile, Players, EverythingElse
     }
 
     public enum AttackMode {

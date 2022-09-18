@@ -6,6 +6,8 @@
 package coffee.client.feature.command.impl;
 
 import coffee.client.feature.command.Command;
+import net.minecraft.text.ClickEvent;
+import net.minecraft.text.Text;
 
 public class Test extends Command {
     public Test() {
@@ -14,6 +16,6 @@ public class Test extends Command {
 
     @Override
     public void onExecute(String[] args) {
-
+        message(Text.literal("cock balls dick").styled(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://abc.com#&&gedit"))));
     }
 }

@@ -38,6 +38,8 @@ public class ModuleDisplay extends Element {
     final ConfigDisplay cfd;
     final CategoryDisplay parent;
     double leftAnim = 0;
+    ColoredTextSegment cachedSegment;
+    BitSet previousSearchResult;
 
     public ModuleDisplay(Module module, double x, double y, double width, CategoryDisplay parent) {
         super(x, y, width, actualHeight);
@@ -56,9 +58,6 @@ public class ModuleDisplay extends Element {
         leftAnim += delta;
         leftAnim = MathHelper.clamp(leftAnim, 0, 1);
     }
-
-    ColoredTextSegment cachedSegment;
-    BitSet previousSearchResult;
 
     BitSet getMatches() {
         return ClickGUI.instance().matchesSearchTerm(module.getName());

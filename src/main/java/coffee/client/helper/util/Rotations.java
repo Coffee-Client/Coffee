@@ -216,15 +216,15 @@ public class Rotations {
         return clientYaw;
     }
 
+    public static void setClientYaw(float clientYaw) {
+        lastModificationTime = System.currentTimeMillis();
+        Rotations.clientYaw = clientYaw;
+    }
+
     public static void setClientRotation(Rotation r) {
         lastModificationTime = System.currentTimeMillis();
         Rotations.clientYaw = r.getYaw();
         Rotations.clientPitch = r.getPitch();
-    }
-
-    public static void setClientYaw(float clientYaw) {
-        lastModificationTime = System.currentTimeMillis();
-        Rotations.clientYaw = clientYaw;
     }
 
     public static void enable() {

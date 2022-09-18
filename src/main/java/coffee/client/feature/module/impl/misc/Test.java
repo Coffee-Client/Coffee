@@ -16,18 +16,15 @@ public class Test extends Module {
 
     @Setting(name = "REAL", description = "abc")
     ListSetting.FlagSet<Real> r = new ListSetting.FlagSet<>(Real.A, Real.B);
-
-    @Override
-    public void enable() {
-
-    }
+    Entity target;
 
     public Test() {
         super("Test", "Testing stuff with the client, can be ignored", ModuleType.MISC);
     }
 
-    public enum Real {
-        A, B, C
+    @Override
+    public void enable() {
+
     }
 
     @Override
@@ -39,8 +36,6 @@ public class Test extends Module {
     public String getContext() {
         return null;
     }
-
-    Entity target;
 
     @Override
     public void onWorldRender(MatrixStack matrices) {
@@ -55,5 +50,9 @@ public class Test extends Module {
 
     @Override
     public void tick() {
+    }
+
+    public enum Real {
+        A, B, C
     }
 }

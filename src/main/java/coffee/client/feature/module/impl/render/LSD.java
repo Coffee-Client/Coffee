@@ -13,10 +13,12 @@ import coffee.client.helper.event.EventType;
 import coffee.client.helper.event.events.base.NonCancellableEvent;
 import coffee.client.helper.manager.ShaderManager;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.math.MathHelper;
 
 public class LSD extends Module {
 
     long startTime = System.currentTimeMillis();
+    long fadeIn = 6000;
 
     @Setting(name = "Intensity", description = "How intense the distorting effect is", min = 0, max = 6, precision = 1)
     double intensity = 1;
@@ -57,11 +59,14 @@ public class LSD extends Module {
 
     @EventListener(EventType.HUD_RENDER_NOMSAA)
     void hudRenderRaw(NonCancellableEvent e) {
+        float fadeInTime = (System.currentTimeMillis()-startTime)/(float)fadeIn;
+        fadeInTime = MathHelper.clamp(fadeInTime, 0, 1);
         float s = (System.currentTimeMillis() % 5000) / 5000f;
         float time = (System.currentTimeMillis() - startTime) / 5000f;
-        ShaderManager.LSD.getEffect().setUniformValue("strength", 1f);
+        ShaderManager.LSD.getEffect().setUniformValue("strength", fadeInTime);
         ShaderManager.LSD.getEffect().setUniformValue("time", time);
         ShaderManager.LSD.getEffect().setUniformValue("seed", s);
+        ShaderManager.LSD.getEffect().setUniformValue("rotations", (float) intensity*fadeInTime);
         ShaderManager.LSD.render(client.getTickDelta());
     }
 }

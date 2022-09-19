@@ -170,7 +170,7 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
 
     @Override
     public void close() {
-        super.close();
+        client.setScreen(parent);
         saveAlts();
     }
 

@@ -5,6 +5,7 @@
 
 package coffee.client.mixin.render;
 
+import coffee.client.CoffeeMain;
 import coffee.client.feature.gui.DoesMSAA;
 import coffee.client.feature.gui.notifications.NotificationRenderer;
 import coffee.client.feature.gui.notifications.hudNotif.HudNotificationRenderer;
@@ -12,6 +13,7 @@ import coffee.client.feature.gui.screen.base.ClientScreen;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleRegistry;
 import coffee.client.feature.module.impl.render.FreeLook;
+import coffee.client.feature.module.impl.render.LSD;
 import coffee.client.feature.module.impl.render.Zoom;
 import coffee.client.helper.event.EventType;
 import coffee.client.helper.event.Events;
@@ -19,6 +21,7 @@ import coffee.client.helper.event.events.WorldRenderEvent;
 import coffee.client.helper.event.events.base.NonCancellableEvent;
 import coffee.client.helper.render.MSAAFramebuffer;
 import coffee.client.helper.render.Renderer;
+import coffee.client.helper.util.AccurateFrameRateCounter;
 import coffee.client.helper.util.Rotations;
 import coffee.client.helper.util.Utils;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -112,6 +115,7 @@ public abstract class GameRendererMixin {
 
     @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiler/Profiler;pop()V", shift = At.Shift.BEFORE), method = "render")
     void coffee_postHudRenderNoCheck(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
+        AccurateFrameRateCounter.globalInstance.recordFrame();
         MSAAFramebuffer.use(MSAAFramebuffer.MAX_SAMPLES, () -> {
             Utils.TickManager.render();
             for (Module module : ModuleRegistry.getModules()) {
@@ -150,5 +154,16 @@ public abstract class GameRendererMixin {
     @Inject(method = "render", at = @At("RETURN"))
     void coffee_renderNotifs(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
         HudNotificationRenderer.instance.render(Renderer.R3D.getEmptyMatrixStack());
+    }
+
+    @Inject(method="render",at=@At(
+        "RETURN"
+    ))
+    void coffee_afterScreenRender(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
+        if (CoffeeMain.client.world == null || CoffeeMain.client.player == null) return;
+        LSD byClass = ModuleRegistry.getByClass(LSD.class);
+        if (byClass.isEnabled()) {
+            byClass.draw();
+        }
     }
 }

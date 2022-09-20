@@ -37,7 +37,6 @@
     "network.PlayerInteractEntityC2SPacketMixin",
     "render.AbstractBlockStateMixin",
     "render.AEntityRendererMixin",
-    "render.AInGameHudMixin",
     "render.BlockEntityRenderDispatcherMixin",
     "render.BlockMixin",
     "render.BlockRenderManagerMixin",

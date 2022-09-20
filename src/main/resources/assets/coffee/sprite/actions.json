@@ -1,0 +1,22 @@
+{
+  "frames": [
+    {
+      "frame": {
+        "h": 96,
+        "w": 96,
+        "x": 0,
+        "y": 0
+      },
+      "name": "command.png"
+    },
+    {
+      "frame": {
+        "h": 96,
+        "w": 96,
+        "x": 112,
+        "y": 0
+      },
+      "name": "toggle.png"
+    }
+  ]
+}

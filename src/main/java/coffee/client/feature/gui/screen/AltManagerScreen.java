@@ -26,6 +26,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.mojang.authlib.minecraft.UserApiService;
+import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 import com.mojang.blaze3d.systems.RenderSystem;
 import lombok.Setter;
 import me.x150.authlib.login.mojang.MinecraftAuthenticator;
@@ -35,6 +37,7 @@ import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.DefaultSkinHelper;
+import net.minecraft.client.util.ProfileKeys;
 import net.minecraft.client.util.Session;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
@@ -324,8 +327,22 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
                 Optional.empty(),
                 Optional.empty(),
                 Session.AccountType.MOJANG);
-            ((IMinecraftClientMixin) CoffeeMain.client).setSession(newSession);
-            HudNotification.create("Logged into account " + newSession.getUsername(), 5000, HudNotification.Type.INFO);
+            IMinecraftClientMixin accessor = ((IMinecraftClientMixin) CoffeeMain.client);
+            accessor.setSession(newSession);
+            // Fuck you, mojang
+            try {
+                YggdrasilAuthenticationService authenticationService = accessor.getAuthenticationService();
+                UserApiService userApiService = authenticationService.createUserApiService(newSession.getAccessToken());
+                accessor.setUserApiService(userApiService);
+                ProfileKeys pk = new ProfileKeys(userApiService, newSession.getProfile().getId(), CoffeeMain.client.runDirectory.toPath());
+                accessor.setProfileKeys(pk);
+
+                HudNotification.create("Logged into account " + newSession.getUsername(), 5000, HudNotification.Type.INFO);
+            } catch (Exception e) {
+                HudNotification.create("Logged in, but failed to get profile keys", 5000, HudNotification.Type.ERROR);
+                e.printStackTrace();
+            }
+
             updateCurrentAccount();
 
         }).start();

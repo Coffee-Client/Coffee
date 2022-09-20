@@ -61,7 +61,7 @@
     "screen.AGenericContainerScreenMixin",
     "screen.ChatHudMixin",
     "screen.CreativeInventoryScreenMixin",
-    "screen.GameMenuMixin",
+    "screen.GameMenuScreenMixin",
     "screen.ICommandSuggestorMixin",
     "screen.IDebugHudMixin",
     "screen.MultiplayerScreenMixin",

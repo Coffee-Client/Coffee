@@ -15,7 +15,6 @@ import coffee.client.helper.event.EventType;
 import coffee.client.helper.event.Events;
 import coffee.client.helper.event.events.base.NonCancellableEvent;
 import coffee.client.helper.manager.ConfigManager;
-import me.x150.analytics.Analytics;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
@@ -43,10 +42,7 @@ public abstract class MinecraftClientMixin {
     @Inject(method = "printCrashReport", at = @At("HEAD"))
     private static void coffee_printCrash(CrashReport report, CallbackInfo ci) {
         List<String> strings = ModuleRegistry.getModules().stream().filter(Module::isEnabled).map(Module::getName).toList();
-        report.addElement("Coffee client")
-            .add("Enabled modules", strings.isEmpty() ? "None" : String.join(", ", strings.toArray(String[]::new)))
-            .add("Dev environment", Analytics.isInDevEnvironment())
-            .add("Analytics enabled", !Analytics.shouldDisableAnalytics());
+        report.addElement("Coffee client").add("Enabled modules", strings.isEmpty() ? "None" : String.join(", ", strings.toArray(String[]::new)));
     }
 
     @Inject(method = "stop", at = @At("HEAD"))

@@ -25,6 +25,7 @@ import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vector4f;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL40C;
 
 import java.awt.Color;
 import java.util.Comparator;
@@ -36,7 +37,7 @@ import java.util.function.Supplier;
 public class Renderer {
     public static void setupRender() {
         RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
+        //        RenderSystem.defaultBlendFunc();
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
     }
 
@@ -489,9 +490,6 @@ public class Renderer {
             double width = maxX - minX;
             double height = maxY - minY;
 
-            //            double centerX = minX+width/2d;
-            //            double centerY = minY+height/2d;
-
             return new float[] { (float) (minX), (float) (minY), (float) (maxX), (float) (maxY), (float) (width), (float) (height) };
         }
 
@@ -660,6 +658,23 @@ public class Renderer {
             bufferBuilder.vertex(matrix, (float) x1, (float) y0, (float) z).texture(u1, v0).next();
             bufferBuilder.vertex(matrix, (float) x0, (float) y0, (float) z).texture(u0, v0).next();
             BufferRenderer.drawWithShader(bufferBuilder.end());
+        }
+
+        public static void runWithinBlendMask(Runnable maskDrawer, Runnable regularDrawer) {
+            RenderSystem.enableBlend();
+            RenderSystem.colorMask(false, false, false, true);
+            RenderSystem.clearColor(0.0F, 0.0F, 0.0F, 0.0F);
+            RenderSystem.clear(GL40C.GL_COLOR_BUFFER_BIT, false);
+            RenderSystem.colorMask(true, true, true, true);
+            RenderSystem.setShader(GameRenderer::getPositionColorShader);
+
+            maskDrawer.run();
+
+            RenderSystem.blendFunc(GL40C.GL_DST_ALPHA, GL40C.GL_ONE_MINUS_DST_ALPHA);
+
+            regularDrawer.run();
+
+            RenderSystem.defaultBlendFunc();
         }
 
         public static void renderCircle(MatrixStack matrices, Color c, double originX, double originY, double rad, int segments) {

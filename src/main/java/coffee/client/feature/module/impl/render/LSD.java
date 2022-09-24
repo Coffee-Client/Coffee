@@ -66,8 +66,8 @@ public class LSD extends Module {
         ShaderManager.LSD.render(client.getTickDelta());
     }
 
-//    @EventListener(EventType.HUD_RENDER_NOMSAA)
-//    void hudRenderRaw(NonCancellableEvent e) {
-//
-//    }
+    //    @EventListener(EventType.HUD_RENDER_NOMSAA)
+    //    void hudRenderRaw(NonCancellableEvent e) {
+    //
+    //    }
 }

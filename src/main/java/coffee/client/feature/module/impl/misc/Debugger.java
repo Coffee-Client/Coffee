@@ -16,6 +16,7 @@ import coffee.client.helper.font.adapter.FontAdapter;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.Utils;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.Entity;
 import net.minecraft.network.Packet;
 
 import java.awt.Color;
@@ -50,7 +51,9 @@ public class Debugger extends Module {
         Packet<?> packet = incoming.getPacket();
         if (whitelistedPacketClasses.stream().anyMatch(aClass -> aClass.isInstance(packet))) {
             boolean cancelled = incoming.isCancelled();
-            log(String.format("Cancelled: %s, %s", cancelled, Utils.forceToString(packet)));
+            String s = Utils.forceToString(packet);
+            //            log(String.format("Cancelled: %s, %s", cancelled, s));
+            System.out.println(s);
         }
     }
 
@@ -61,7 +64,9 @@ public class Debugger extends Module {
 
     @Override
     public void enable() {
-
+        for (Entity entity : client.world.getEntities()) {
+            System.out.printf("ID: %s, Name: %s%n", entity.getId(), entity.getEntityName());
+        }
     }
 
     @Override

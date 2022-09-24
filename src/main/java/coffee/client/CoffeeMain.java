@@ -21,7 +21,6 @@ import coffee.client.helper.font.renderer.FontRenderer;
 import coffee.client.helper.manager.ConfigManager;
 import coffee.client.helper.util.Rotations;
 import coffee.client.helper.util.Utils;
-import me.x150.analytics.Analytics;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Element;
@@ -91,10 +90,6 @@ public class CoffeeMain implements ModInitializer {
 
         log(Level.INFO, "Checking for compat issues");
         CompatHelper.init();
-
-        // view the info on top at Analytics before you say "analytics bad"
-        Analytics analytics = new Analytics(MOD_NAME);
-        analytics.gameLaunched();
 
         log(Level.INFO, "Done initializing");
     }

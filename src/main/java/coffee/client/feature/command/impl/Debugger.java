@@ -6,12 +6,14 @@
 package coffee.client.feature.command.impl;
 
 import coffee.client.feature.command.Command;
+import coffee.client.feature.command.argument.StreamlineArgumentParser;
 import coffee.client.feature.command.exception.CommandException;
 import coffee.client.feature.gui.clickgui.ClickGUI;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleRegistry;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.network.Packet;
+import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 
 public class Debugger extends Command {
     public Debugger() {
@@ -74,6 +76,15 @@ public class Debugger extends Command {
                 for (Class<? extends Packet<?>> whitelistedPacketClass : coffee.client.feature.module.impl.misc.Debugger.whitelistedPacketClasses) {
                     message(FabricLoader.getInstance().getMappingResolver().unmapClassName("named", whitelistedPacketClass.getName()));
                 }
+            }
+            case "sendmove" -> {
+                validateArgumentsLength(args, 4, "xyz required");
+                StreamlineArgumentParser a = new StreamlineArgumentParser(args);
+                a.consumeString();
+                double x = a.consumeDouble(), y = a.consumeDouble(), z = a.consumeDouble();
+                PlayerMoveC2SPacket.PositionAndOnGround positionAndOnGround = new PlayerMoveC2SPacket.PositionAndOnGround(x, y, z, false);
+                client.getNetworkHandler().sendPacket(positionAndOnGround);
+                client.player.updatePosition(x, y, z);
             }
         }
     }

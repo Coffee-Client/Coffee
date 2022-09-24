@@ -5,18 +5,13 @@
 
 package coffee.client.mixin.network;
 
-import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
+import net.minecraft.network.packet.c2s.play.VehicleMoveC2SPacket;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(PlayerMoveC2SPacket.class)
-public interface IPlayerMoveC2SPacketMixin {
-
-    @Mutable
-    @Accessor("onGround")
-    void setOnGround(boolean onGround);
-
+@Mixin(VehicleMoveC2SPacket.class)
+public interface IVehicleMoveC2SPacketMixin {
     @Mutable
     @Accessor("x")
     void setX(double x);
@@ -28,5 +23,4 @@ public interface IPlayerMoveC2SPacketMixin {
     @Mutable
     @Accessor("z")
     void setZ(double x);
-
 }

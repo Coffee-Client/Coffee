@@ -12,13 +12,19 @@ import coffee.client.feature.gui.widget.RoundButton;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.text.Text;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(MultiplayerScreen.class)
 public class MultiplayerScreenMixin extends Screen {
+    @Shadow
+    @Final
+    private Screen parent;
+
     public MultiplayerScreenMixin() {
         super(Text.of(""));
     }
@@ -31,5 +37,14 @@ public class MultiplayerScreenMixin extends Screen {
         double sourceY = 32 / 2d - 20 / 2d;
         RoundButton proxies = new RoundButton(RoundButton.STANDARD, 5, sourceY, 60, 20, "Proxies", () -> CoffeeMain.client.setScreen(new ProxyManagerScreen(this)));
         addDrawableChild(proxies);
+    }
+
+    /**
+     * Mojang forgot this
+     * I am fixing mojang's shitty coomer code
+     */
+    @Override
+    public void close() {
+        client.setScreen(parent);
     }
 }

@@ -32,6 +32,7 @@ import coffee.client.feature.module.impl.exploit.LecternCrash;
 import coffee.client.feature.module.impl.exploit.OffhandCrash;
 import coffee.client.feature.module.impl.exploit.PingSpoof;
 import coffee.client.feature.module.impl.exploit.ResourcePackSpoof;
+import coffee.client.feature.module.impl.exploit.Robowalk;
 import coffee.client.feature.module.impl.misc.AdBlock;
 import coffee.client.feature.module.impl.misc.AllowFormatCodes;
 import coffee.client.feature.module.impl.misc.AntiCrash;
@@ -336,6 +337,7 @@ public class ModuleRegistry {
         registerModule(BowAimbot.class);
         registerModule(ResourcePackSpoof.class);
         registerModule(LSD.class);
+        registerModule(Robowalk.class);
 
         rebuildSharedModuleList();
 

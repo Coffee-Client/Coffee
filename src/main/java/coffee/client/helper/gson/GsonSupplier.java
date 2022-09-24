@@ -13,6 +13,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializer;
+import net.minecraft.text.Text;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.Vec3d;
 
@@ -82,6 +83,14 @@ public class GsonSupplier {
 
         builder.registerTypeAdapter(Vec3d.class, vec3dJsonDeserializer);
         builder.registerTypeAdapter(Vec3d.class, vec3dJsonSerializer);
+        builder.registerTypeAdapter(Text.class, new Text.Serializer());
+    }
+
+    private static <T extends JsonElement> T ensureExists(T input, T defaultValue) {
+        if (input == null || input.isJsonNull()) {
+            return defaultValue;
+        }
+        return input;
     }
 
     private static int getAsIntOrDefault(JsonElement el, int defaultVal) {

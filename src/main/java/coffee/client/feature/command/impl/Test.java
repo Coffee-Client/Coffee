@@ -6,8 +6,8 @@
 package coffee.client.feature.command.impl;
 
 import coffee.client.feature.command.Command;
-import net.minecraft.text.ClickEvent;
-import net.minecraft.text.Text;
+import coffee.client.feature.command.exception.CommandException;
+import coffee.client.feature.gui.notifications.Notification;
 
 public class Test extends Command {
     public Test() {
@@ -15,7 +15,9 @@ public class Test extends Command {
     }
 
     @Override
-    public void onExecute(String[] args) {
-        message(Text.literal("cock balls dick").styled(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://abc.com#&&gedit"))));
+    public void onExecute(String[] args) throws CommandException {
+        for (Notification.Type value : Notification.Type.values()) {
+            Notification.create(5000, "Holy shit", value, "cum", "cum,", "cum");
+        }
     }
 }

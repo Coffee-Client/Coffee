@@ -194,13 +194,25 @@ public class NotificationRenderer {
                 notificationX + notificationWidth,
                 notificationY + notificationHeight,
                 5,
-                20);
-            Renderer.setupRender();
+                10);
             Color notifTheme = notification.type.getC();
+            Renderer.R2D.renderRoundedOutline(ms,
+                Renderer.Util.modify(notifTheme, -1, -1, -1, (int) Math.min(255, 255 * interpolatedAnimProgress)),
+                notificationX,
+                notificationY,
+                notificationX + notificationWidth,
+                notificationY + notificationHeight,
+                5,
+                5,
+                5,
+                5,
+                1,
+                10);
+            Renderer.setupRender();
             RenderSystem.setShaderColor(notifTheme.getRed() / 255f, notifTheme.getGreen() / 255f, notifTheme.getBlue() / 255f, (float) interpolatedAnimProgress);
             Texture.NOTIFICATION_TYPES.bindAndDraw(ms,
                 notificationX + texPadding,
-                notificationY + notificationHeight / 2d - iconDimensions / 2d,
+                notificationY + texPadding/* - iconDimensions / 2d*/,
                 iconDimensions,
                 iconDimensions,
                 notification.type.getSpriteName());

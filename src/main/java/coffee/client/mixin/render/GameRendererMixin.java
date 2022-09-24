@@ -156,11 +156,11 @@ public abstract class GameRendererMixin {
         HudNotificationRenderer.instance.render(Renderer.R3D.getEmptyMatrixStack());
     }
 
-    @Inject(method="render",at=@At(
-        "RETURN"
-    ))
+    @Inject(method = "render", at = @At("RETURN"))
     void coffee_afterScreenRender(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
-        if (CoffeeMain.client.world == null || CoffeeMain.client.player == null) return;
+        if (CoffeeMain.client.world == null || CoffeeMain.client.player == null) {
+            return;
+        }
         LSD byClass = ModuleRegistry.getByClass(LSD.class);
         if (byClass.isEnabled()) {
             byClass.draw();

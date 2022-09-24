@@ -20,12 +20,11 @@ import net.minecraft.util.Util;
 import net.minecraft.util.math.Matrix4f;
 
 import java.awt.Font;
-import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -97,11 +96,13 @@ public class FontRenderer {
         BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
 
         //        float xOffset = 0;
-        Queue<ColoredTextSegment> ctsC = new ArrayDeque<>();
+        //        Queue<ColoredTextSegment> ctsC = new ArrayDeque<>();
+        ArrayList<ColoredTextSegment> ctsC = new ArrayList<>();
         ctsC.add(cts);
         while (!ctsC.isEmpty()) {
-            ColoredTextSegment poll = ctsC.poll();
-            ctsC.addAll(Arrays.asList(poll.children()));
+            ColoredTextSegment poll = ctsC.get(0);
+            ctsC.remove(0);
+            ctsC.addAll(0, Arrays.asList(poll.children()));
             String text = poll.text();
             if (text.isEmpty()) {
                 continue;

@@ -179,8 +179,9 @@ public class HomeScreen extends AAScreen {
         } else {
             Renderer.R2D.renderTexture(stack, width - padding - texDim, padding, texDim, texDim, 8, 8, 8, 8, 64, 64);
         }
-        FontAdapter fa = FontRenderers.getRenderer();
         RenderSystem.defaultBlendFunc();
+
+        FontAdapter fa = FontRenderers.getRenderer();
         String uname = CoffeeMain.client.getSession().getUsername();
         double unameWidth = fa.getStringWidth(uname);
         fa.drawString(stack, uname, width - padding - texDim - padding - unameWidth, padding + texDim / 2d - fa.getFontHeight() / 2d, 0xFFFFFF);

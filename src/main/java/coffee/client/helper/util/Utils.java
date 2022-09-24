@@ -7,6 +7,7 @@ package coffee.client.helper.util;
 
 import coffee.client.CoffeeMain;
 import coffee.client.helper.font.adapter.FontAdapter;
+import coffee.client.helper.font.renderer.ColoredTextSegment;
 import coffee.client.helper.render.Texture;
 import coffee.client.mixin.ClientWorldMixin;
 import coffee.client.mixin.IMinecraftClientMixin;
@@ -26,6 +27,8 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket;
 import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.text.MutableText;
+import net.minecraft.text.OrderedText;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextColor;
 import net.minecraft.util.Hand;
@@ -45,12 +48,15 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
+import java.util.AbstractMap;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Queue;
 import java.util.Spliterator;
 import java.util.UUID;
@@ -203,8 +209,75 @@ public class Utils {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(bi, "png", baos);
             byte[] bytes = baos.toByteArray();
+            registerTexture(i, bytes);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-            ByteBuffer data = BufferUtils.createByteBuffer(bytes.length).put(bytes);
+    public static ColoredTextSegment getContent(Text text) {
+        List<ColoredTextSegment> segments = new ArrayList<>();
+        text.visit((style, asString) -> {
+            TextColor color = style.getColor();
+            Color rgb = new Color(color == null ? 0xFFFFFF : color.getRgb());
+            segments.add(new ColoredTextSegment(new ColoredTextSegment[0],
+                asString,
+                rgb.getRed() / 255f,
+                rgb.getGreen() / 255f,
+                rgb.getBlue() / 255f,
+                rgb.getAlpha() / 255f));
+            return Optional.empty();
+        }, Style.EMPTY);
+        return new ColoredTextSegment(segments.toArray(ColoredTextSegment[]::new), "", 1f, 1f, 1f, 1f);
+    }
+
+    public static ColoredTextSegment getContent(OrderedText text, boolean trimStart, boolean trimEnd) {
+        List<ColoredTextSegment> children = new ArrayList<>();
+        List<Map.Entry<String, Style>> l = new ArrayList<>();
+        text.accept((index, style, codePoint) -> {
+            if (trimStart && l.isEmpty() && codePoint == ' ') {
+                return true;
+            }
+            l.add(new AbstractMap.SimpleEntry<>(String.valueOf((char) codePoint), style));
+            return true;
+        });
+        int i = 1;
+        while (i < l.size()) {
+            Map.Entry<String, Style> first = l.get(i - 1);
+            Map.Entry<String, Style> second = l.get(i);
+            if (first.getValue().equals(second.getValue())) {
+                l.remove(i);
+                l.remove(i - 1);
+                l.add(i - 1, new AbstractMap.SimpleEntry<>(first.getKey() + second.getKey(), first.getValue()));
+            } else {
+                i++;
+            }
+        }
+        for (Map.Entry<String, Style> stringStyleEntry : l) {
+            TextColor color = stringStyleEntry.getValue().getColor();
+            Color c = new Color(color != null ? color.getRgb() : 0xFFFFFF);
+            children.add(new ColoredTextSegment(new ColoredTextSegment[0],
+                stringStyleEntry.getKey(),
+                c.getRed() / 255f,
+                c.getGreen() / 255f,
+                c.getBlue() / 255f,
+                c.getAlpha() / 255f));
+        }
+        return new ColoredTextSegment(children.toArray(ColoredTextSegment[]::new), "", 1f, 1f, 1f, 1f);
+    }
+
+    public static void registerBase64StringTexture(Texture i, String b64) {
+        try {
+            NativeImageBackedTexture tex = new NativeImageBackedTexture(NativeImage.read(b64));
+            CoffeeMain.client.execute(() -> CoffeeMain.client.getTextureManager().registerTexture(i, tex));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void registerTexture(Texture i, byte[] content) {
+        try {
+            ByteBuffer data = BufferUtils.createByteBuffer(content.length).put(content);
             data.flip();
             NativeImageBackedTexture tex = new NativeImageBackedTexture(NativeImage.read(data));
             CoffeeMain.client.execute(() -> CoffeeMain.client.getTextureManager().registerTexture(i, tex));

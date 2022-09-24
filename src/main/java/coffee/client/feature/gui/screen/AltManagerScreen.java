@@ -20,6 +20,9 @@ import coffee.client.helper.render.Rectangle;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.render.Texture;
 import coffee.client.helper.util.Transitions;
+import coffee.client.login.mojang.MinecraftAuthenticator;
+import coffee.client.login.mojang.MinecraftToken;
+import coffee.client.login.mojang.profile.MinecraftProfile;
 import coffee.client.mixin.IMinecraftClientMixin;
 import coffee.client.mixin.ISessionMixin;
 import com.google.gson.JsonArray;
@@ -30,9 +33,6 @@ import com.mojang.authlib.minecraft.UserApiService;
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 import com.mojang.blaze3d.systems.RenderSystem;
 import lombok.Setter;
-import me.x150.authlib.login.mojang.MinecraftAuthenticator;
-import me.x150.authlib.login.mojang.MinecraftToken;
-import me.x150.authlib.login.mojang.profile.MinecraftProfile;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.render.GameRenderer;
@@ -1003,10 +1003,10 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
                 if (token == null) {
                     throw new NullPointerException();
                 }
-                storage.accessToken = token.getAccessToken();
+                storage.accessToken = token.accessToken();
                 MinecraftProfile profile = auth.getGameProfile(token);
-                storage.cachedName = profile.getUsername();
-                storage.cachedUuid = profile.getUuid();
+                storage.cachedName = profile.username();
+                storage.cachedUuid = profile.uuid();
                 downloadTexture();
                 storage.valid = true;
                 storage.didSuccessfulLogin = true;

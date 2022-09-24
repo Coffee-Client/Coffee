@@ -1,4 +1,3 @@
+Major visual refactor
+Removed analytics
 Bug fixes
-Bow aimbot
-some other shit idk
-fun fact: meteor bowaimbot has 2 bugs :troll:

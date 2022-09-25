@@ -68,7 +68,7 @@ dependencies {
 
 	configurations.libImpl.dependencies.each {
 		implementation(it)
-		include(it)
+//		include(it)
 	}
 
 	configurations.modImpl.dependencies.each {
@@ -103,4 +103,10 @@ jar {
 	from("LICENSE") {
 		rename { "${it}_${project.archivesBaseName}"}
 	}
+
+	from {
+		configurations.libImpl.collect { it.isDirectory() ? it : zipTree(it) }
+	}
+	duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+
 }

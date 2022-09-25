@@ -62,8 +62,6 @@ public class HoloImage extends Command {
         try {
             HttpResponse<byte[]> send = client.send(req, HttpResponse.BodyHandlers.ofByteArray());
             byte[] body = send.body();
-            //            System.out.println(Arrays.toString(body));
-            //            System.out.println(new String(body).replaceAll("\\P{Print}", "."));
             BufferedImage read = ImageIO.read(new ByteArrayInputStream(body));
             success("Downloaded image, resizing");
             int newWidth = argParser.consumeInt(read.getWidth());

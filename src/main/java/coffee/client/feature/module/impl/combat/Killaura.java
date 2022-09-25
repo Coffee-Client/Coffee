@@ -89,14 +89,6 @@ public class Killaura extends Module {
 
     @Setting(name = "Attack filter", description = "Which entities to attack")
     ListSetting.FlagSet<AttackFilter> attackFilter = new ListSetting.FlagSet<>(AttackFilter.Hostile, AttackFilter.Players);
-    //    @Setting(name = "Attack passive", description = "Attacks passive mobs")
-    //    boolean attackPassive = false;
-    //    @Setting(name = "Attack hostile", description = "Attacks hostile mobs")
-    //    boolean attackHostile = true;
-    //    @Setting(name = "Attack players", description = "Attacks players")
-    //    boolean attackPlayers = true;
-    //    @Setting(name = "Attack all", description = "Attacks all remaining entities")
-    //    boolean attackAll = false;
     @Setting(name = "Matrix antibot", description = "Filters the matrix bots out of the target list")
     boolean matrixAntibot = true;
     @Setting(name = "Matrix confidence", description = "How confident the antibot needs to be before filtering\n(0 = 0% confident, 1 = 100%)", min = 0, max = 1, precision = 1)

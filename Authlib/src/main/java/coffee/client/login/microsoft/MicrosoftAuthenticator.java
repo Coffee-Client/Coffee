@@ -1,4 +1,7 @@
-
+/*
+ * Copyright (c) 2022 Coffee Client, 0x150 and contributors.
+ * Some rights reserved, refer to LICENSE file.
+ */
 
 package coffee.client.login.microsoft;
 
@@ -42,11 +45,12 @@ public class MicrosoftAuthenticator extends Authenticator<XboxToken> {
 
     private String generateLoginCode(String email, String password) {
         try {
-            URL url = new URL("https://login.live.com/oauth20_authorize.srf?redirect_uri=https://login.live.com/oauth20_desktop.srf&scope=service::user.auth.xboxlive.com::MBI_SSL&display=touch&response_type=code&locale=en&client_id=00000000402b5328");
-            HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
+            URL url = new URL(
+                "https://login.live.com/oauth20_authorize.srf?redirect_uri=https://login.live.com/oauth20_desktop.srf&scope=service::user.auth.xboxlive.com::MBI_SSL&display=touch&response_type=code&locale=en&client_id=00000000402b5328");
+            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             InputStream inputStream = httpURLConnection.getResponseCode() == 200 ? httpURLConnection.getInputStream() : httpURLConnection.getErrorStream();
             this.loginCookie = httpURLConnection.getHeaderField("set-cookie");
-            String responseData = (String)(new BufferedReader(new InputStreamReader(inputStream))).lines().collect(Collectors.joining());
+            String responseData = (new BufferedReader(new InputStreamReader(inputStream))).lines().collect(Collectors.joining());
             Matcher bodyMatcher = Pattern.compile("sFTTag: ?'.*value=\"(.*)\"/>'").matcher(responseData);
             if (bodyMatcher.find()) {
                 this.loginPPFT = bodyMatcher.group(1);
@@ -80,7 +84,7 @@ public class MicrosoftAuthenticator extends Authenticator<XboxToken> {
         String authToken;
         try {
             byte[] data = postData.getBytes(StandardCharsets.UTF_8);
-            HttpURLConnection connection = (HttpURLConnection)(new URL(this.loginUrl)).openConnection();
+            HttpURLConnection connection = (HttpURLConnection) (new URL(this.loginUrl)).openConnection();
             connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
             connection.setRequestProperty("Content-Length", String.valueOf(data.length));
             connection.setRequestProperty("Cookie", this.loginCookie);
@@ -169,7 +173,7 @@ public class MicrosoftAuthenticator extends Authenticator<XboxToken> {
             byte[] data = argumentBuilder.toString().getBytes(StandardCharsets.UTF_8);
             URL url = new URL("https://login.live.com/oauth20_token.srf");
             URLConnection urlConnection = url.openConnection();
-            HttpURLConnection httpURLConnection = (HttpURLConnection)urlConnection;
+            HttpURLConnection httpURLConnection = (HttpURLConnection) urlConnection;
             httpURLConnection.setRequestMethod("POST");
             httpURLConnection.setDoOutput(true);
             httpURLConnection.setFixedLengthStreamingMode(data.length);
@@ -204,7 +208,7 @@ public class MicrosoftAuthenticator extends Authenticator<XboxToken> {
         try {
             URL url = new URL("https://user.auth.xboxlive.com/user/authenticate");
             URLConnection urlConnection = url.openConnection();
-            HttpURLConnection httpURLConnection = (HttpURLConnection)urlConnection;
+            HttpURLConnection httpURLConnection = (HttpURLConnection) urlConnection;
             httpURLConnection.setDoOutput(true);
             JsonObject request = new JsonObject();
             request.addProperty("RelyingParty", "http://auth.xboxlive.com");
@@ -215,7 +219,7 @@ public class MicrosoftAuthenticator extends Authenticator<XboxToken> {
             properties.addProperty("RpsTicket", microsoftToken.getToken());
             this.sendXboxRequest(httpURLConnection, request, properties);
             JsonObject jsonObject = this.parseResponseData(httpURLConnection);
-            String uhs = ((JsonObject)jsonObject.getAsJsonObject("DisplayClaims").getAsJsonArray("xui").get(0)).get("uhs").getAsString();
+            String uhs = ((JsonObject) jsonObject.getAsJsonObject("DisplayClaims").getAsJsonArray("xui").get(0)).get("uhs").getAsString();
             return new XboxLiveToken(jsonObject.get("Token").getAsString(), uhs);
         } catch (IOException var9) {
             throw new AuthFailureException(String.format("Authentication error. Request could not be made! Cause: '%s'", var9.getMessage()));
@@ -226,7 +230,7 @@ public class MicrosoftAuthenticator extends Authenticator<XboxToken> {
         try {
             URL url = new URL("https://xsts.auth.xboxlive.com/xsts/authorize");
             URLConnection urlConnection = url.openConnection();
-            HttpURLConnection httpURLConnection = (HttpURLConnection)urlConnection;
+            HttpURLConnection httpURLConnection = (HttpURLConnection) urlConnection;
             httpURLConnection.setRequestMethod("POST");
             httpURLConnection.setDoOutput(true);
             JsonObject request = new JsonObject();
@@ -242,7 +246,7 @@ public class MicrosoftAuthenticator extends Authenticator<XboxToken> {
                 throw new AuthFailureException("No xbox account was found!");
             } else {
                 JsonObject jsonObject = this.parseResponseData(httpURLConnection);
-                String uhs = ((JsonObject)jsonObject.getAsJsonObject("DisplayClaims").getAsJsonArray("xui").get(0)).get("uhs").getAsString();
+                String uhs = ((JsonObject) jsonObject.getAsJsonObject("DisplayClaims").getAsJsonArray("xui").get(0)).get("uhs").getAsString();
                 return new XboxToken(jsonObject.get("Token").getAsString(), uhs);
             }
         } catch (IOException var10) {

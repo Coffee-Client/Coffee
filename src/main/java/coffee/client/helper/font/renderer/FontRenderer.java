@@ -95,8 +95,6 @@ public class FontRenderer {
         RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
         BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
 
-        //        float xOffset = 0;
-        //        Queue<ColoredTextSegment> ctsC = new ArrayDeque<>();
         ArrayList<ColoredTextSegment> ctsC = new ArrayList<>();
         ctsC.add(cts);
         while (!ctsC.isEmpty()) {

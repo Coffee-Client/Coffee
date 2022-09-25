@@ -116,11 +116,9 @@ public abstract class DirectConnectScreenMixin extends Screen implements FastTic
     }
 
     private void update() {
-        System.out.println(alreadyRefreshing.get());
         if (alreadyRefreshing.get()) {
             return;
         }
-        System.out.println("ok");
         String currentIp = this.addressField.getText();
         if (!ServerAddress.isValid(currentIp)) {
             return;
@@ -205,19 +203,17 @@ public abstract class DirectConnectScreenMixin extends Screen implements FastTic
 
         RenderSystem.setShaderTexture(0, serverTextureKnown ? SERVER_ICON : UNKNOWN_SERVER_ICON);
 
-        Renderer.R2D.runWithinBlendMask(() -> {
-            Renderer.R2D.renderRoundedQuadInternal(ms.peek().getPositionMatrix(),
-                0f,
-                0f,
-                0f,
-                (float) (v),
-                originX + innerPadding,
-                originY + innerPadding,
-                originX + minWidth - innerPadding,
-                originY + height - innerPadding,
-                5,
-                10);
-        }, () -> {
+        Renderer.R2D.runWithinBlendMask(() -> Renderer.R2D.renderRoundedQuadInternal(ms.peek().getPositionMatrix(),
+            0f,
+            0f,
+            0f,
+            (float) (v),
+            originX + innerPadding,
+            originY + innerPadding,
+            originX + minWidth - innerPadding,
+            originY + height - innerPadding,
+            5,
+            10), () -> {
             double w = minWidth - innerPadding * 2;
             Renderer.R2D.renderTexture(ms, originX + innerPadding, originY + innerPadding, w, w, 0, 0, w, w, w, w);
         });

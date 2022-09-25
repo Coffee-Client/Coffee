@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2022 Coffee Client, 0x150 and contributors.
+ * Some rights reserved, refer to LICENSE file.
+ */
+
 package coffee.client.login.mojang;
 
 import com.google.gson.annotations.Expose;
@@ -10,30 +15,6 @@ import java.util.List;
 @Getter
 @Setter
 public class AuthResponse {
-    @Getter
-    @Setter
-    public static class User {
-
-        @SerializedName("id")
-        @Expose
-        private String id;
-        @SerializedName("username")
-        @Expose
-        private String username;
-
-    }
-    @Getter
-    @Setter
-    public static class SelectedProfile {
-
-        @SerializedName("name")
-        @Expose
-        private String name;
-        @SerializedName("id")
-        @Expose
-        private String id;
-
-    }
     @SerializedName("user")
     @Expose
     private User user;
@@ -49,6 +30,32 @@ public class AuthResponse {
     @SerializedName("availableProfiles")
     @Expose
     private List<AvailableProfile> availableProfiles = null;
+
+    @Getter
+    @Setter
+    public static class User {
+
+        @SerializedName("id")
+        @Expose
+        private String id;
+        @SerializedName("username")
+        @Expose
+        private String username;
+
+    }
+
+    @Getter
+    @Setter
+    public static class SelectedProfile {
+
+        @SerializedName("name")
+        @Expose
+        private String name;
+        @SerializedName("id")
+        @Expose
+        private String id;
+
+    }
 
     @Getter
     @Setter

@@ -65,14 +65,8 @@ public class ListSetting<T extends Enum<?>> extends SettingBase<ListSetting.Flag
         @Getter
         Class<T> componentType;
 
-        //        public void setChecked(List<T> c) {
-        //            System.out.println(c);
-        //            this.checked.clear();
-        //            this.checked.addAll(c);
-        //            System.out.println(this.checked);
-        //        }
-
         @SafeVarargs
+        @SuppressWarnings("unchecked")
         public FlagSet(T... defaultChecked) {
             this.checked.addAll(Arrays.asList(defaultChecked));
             this.componentType = (Class<T>) defaultChecked.getClass().componentType();

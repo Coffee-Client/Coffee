@@ -69,24 +69,6 @@ public class ListSettingEditor extends SettingEditor<ListSetting<?>> {
             .5f,
             MathHelper.lerp(delta, 45, -45));
         if (expandProg != 0) {
-            //            float pp = (float) Transitions.easeOutExpo(expandProg);
-            //            pp = Renderer.transformColor(pp);
-            //            Renderer.setupRender();
-            //            RenderSystem.setShader(GameRenderer::getPositionColorShader);
-            //            BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
-            //            bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR);
-            //            float arrowDim = 3;
-            //            stack.push();
-            //            stack.translate(getPositionX() + getWidth() - arrowDim - 2, getPositionY() + headerHeight() / 2d + arrowDim / 2d, 0);
-            //            Matrix4f m = stack.peek().getPositionMatrix();
-            //
-            //            bufferBuilder.vertex(m, -arrowDim, -arrowDim, 0).color(1f, 1f, 1f, pp).next();
-            //            bufferBuilder.vertex(m, 0, 0, 0).color(1f, 1f, 1f, pp).next();
-            //            bufferBuilder.vertex(m, arrowDim, -arrowDim, 0).color(1f, 1f, 1f, pp).next();
-            //
-            //            BufferRenderer.drawWithShader(bufferBuilder.end());
-            //            Renderer.endRender();
-            //            stack.pop();
 
             ClipStack.globalInstance.addWindow(stack,
                 new Rectangle(getPositionX(), getPositionY() + headerHeight() - 1, getPositionX() + getWidth(), getPositionY() + getHeight()));
@@ -137,9 +119,7 @@ public class ListSettingEditor extends SettingEditor<ListSetting<?>> {
                     if (value.contains(enumSettingEntry)) {
                         value.remove(enumSettingEntry);
                     } else {
-                        //                        System.out.println(enumSettingEntry);
                         value.add(enumSettingEntry);
-                        //                        System.out.println(value);
                     }
                     configValue.getValue().setChecked(value);
                     break; // found our value, cancel

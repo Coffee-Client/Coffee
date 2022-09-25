@@ -53,10 +53,6 @@ public class EdgeSneak extends Module {
             }
         }
         this.shouldSneak = shouldSneak;
-        //        boolean isUserSneaking = client.options.sneakKey.isPressed();
-        //        if (Objects.requireNonNull(client.player).isOnGround()) {
-        //            client.options.sneakKey.setPressed(shouldSneak || isUserSneaking);
-        //        }
     }
 
     @Override

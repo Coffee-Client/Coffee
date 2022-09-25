@@ -3,11 +3,6 @@
  * Some rights reserved, refer to LICENSE file.
  */
 
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
-
 package coffee.client.exception;
 
 public class AuthFailureException extends RuntimeException {

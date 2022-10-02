@@ -1,6 +1,8 @@
 # Coffee Client
 A very based 1.19.2 build with some of the best visuals currently on the market.
 
+![](https://komarev.com/ghpvc/?username=Coffee-Client&style=for-the-badge&label=Views)
+
 ## Installing
 ### You will need:
 - Minecraft: Java Edition

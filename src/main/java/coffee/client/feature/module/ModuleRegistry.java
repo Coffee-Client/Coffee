@@ -16,6 +16,7 @@ import coffee.client.feature.module.impl.combat.BowAimbot;
 import coffee.client.feature.module.impl.combat.Criticals;
 import coffee.client.feature.module.impl.combat.FireballDeflector;
 import coffee.client.feature.module.impl.combat.Killaura;
+import coffee.client.feature.module.impl.combat.KnockbackPlus;
 import coffee.client.feature.module.impl.combat.Reach;
 import coffee.client.feature.module.impl.combat.ShulkerDeflector;
 import coffee.client.feature.module.impl.combat.TpRange;

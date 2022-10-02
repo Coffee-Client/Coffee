@@ -119,7 +119,28 @@ public class Rotations {
         setClientPitch(clientPitch + (float) add);
     }
 
-    public static void lookAtPositionSmooth(Vec3d target, double laziness) {
+    public static void lookAtPositionSmooth(float pitch, float yaw, float laziness) {
+        double delta, add, speed;
+
+        delta = MathHelper.wrapDegrees(yaw - CoffeeMain.client.player.getYaw());
+        speed = Math.abs(delta / laziness);
+        add = speed * (delta >= 0 ? 1 : -1);
+        if ((add >= 0 && add > delta) || (add < 0 && add < delta)) {
+            add = delta;
+        }
+        CoffeeMain.client.player.setYaw(CoffeeMain.client.player.getYaw() + (float) add);
+
+        // setting pitch
+        delta = MathHelper.wrapDegrees(pitch - CoffeeMain.client.player.getPitch());
+        speed = Math.abs(delta / laziness);
+        add = speed * (delta >= 0 ? 1 : -1);
+        if ((add >= 0 && add > delta) || (add < 0 && add < delta)) {
+            add = delta;
+        }
+        CoffeeMain.client.player.setPitch(CoffeeMain.client.player.getPitch() + (float) add);
+    }
+
+    public static void lookAtPositionSmooth(Vec3d target, float laziness) {
         double delX = target.x - Objects.requireNonNull(CoffeeMain.client.player).getX();
         double delZ = target.z - CoffeeMain.client.player.getZ();
         double delY = target.y - (CoffeeMain.client.player.getY() + CoffeeMain.client.player.getEyeHeight(CoffeeMain.client.player.getPose()));

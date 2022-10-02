@@ -6,40 +6,66 @@
 package coffee.client.mixin.screen;
 
 import coffee.client.CoffeeMain;
+import coffee.client.feature.gui.FastTickable;
 import coffee.client.feature.module.ModuleRegistry;
 import coffee.client.feature.module.impl.movement.InventoryWalk;
+import coffee.client.helper.util.Rotations;
+import coffee.client.mixin.IKeyBindingMixin;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
-import org.lwjgl.glfw.GLFW;
+import net.minecraft.util.math.MathHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Objects;
-
 
 @Mixin(HandledScreen.class)
-public abstract class AGenericContainerScreenMixin {
+public abstract class AGenericContainerScreenMixin extends Screen implements FastTickable {
+    private AGenericContainerScreenMixin() {
+        super(null);
+    }
 
-    final KeyBinding arrowRight = new KeyBinding("", GLFW.GLFW_KEY_RIGHT, "");
-    final KeyBinding arrowLeft = new KeyBinding("", GLFW.GLFW_KEY_LEFT, "");
-    final KeyBinding arrowUp = new KeyBinding("", GLFW.GLFW_KEY_UP, "");
-    final KeyBinding arrowDown = new KeyBinding("", GLFW.GLFW_KEY_DOWN, "");
     @Shadow
     protected int x;
     @Shadow
     protected int y;
 
+    float pitchOffset, yawOffset;
+    float initialPitch, initialYaw;
+
     boolean keyPressed(KeyBinding bind) {
-        return InputUtil.isKeyPressed(CoffeeMain.client.getWindow().getHandle(), bind.getDefaultKey().getCode());
+        int code = ((IKeyBindingMixin) bind).getBoundKey().getCode();
+//        return bind.isPressed();
+        return InputUtil.isKeyPressed(CoffeeMain.client.getWindow().getHandle(), code);
     }
 
     void setState(KeyBinding bind) {
         bind.setPressed(keyPressed(bind));
+    }
+
+    @Inject(method="init",at=@At("RETURN"))
+    void coffee_postInit(CallbackInfo ci) {
+        initialPitch = CoffeeMain.client.player.getPitch();
+        initialYaw = CoffeeMain.client.player.getYaw();
+    }
+
+    @Override
+    public void onFastTick() {
+        Rotations.lookAtPositionSmooth(MathHelper.clamp(initialPitch + pitchOffset, -90.0F, 90.0F), initialYaw + yawOffset, 20);
+    }
+
+    @Override
+    public void mouseMoved(double mouseX, double mouseY) {
+        float centerX = width / 2f;
+        float centerY = height / 2f;
+        yawOffset = (float) (mouseX - centerX) / 5f;
+        pitchOffset = (float) (mouseY - centerY) / 5f;
+        super.mouseMoved(mouseX, mouseY);
     }
 
     @Inject(method = "tick", at = @At("HEAD"))
@@ -52,25 +78,10 @@ public abstract class AGenericContainerScreenMixin {
         setState(go.rightKey);
         setState(go.backKey);
         setState(go.leftKey);
+
         setState(go.jumpKey);
         setState(go.sprintKey);
-
-        float yawOffset = 0f;
-        float pitchOffset = 0f;
-        if (keyPressed(arrowRight)) {
-            yawOffset += 5f;
-        }
-        if (keyPressed(arrowLeft)) {
-            yawOffset -= 5f;
-        }
-        if (keyPressed(arrowUp)) {
-            pitchOffset -= 5f;
-        }
-        if (keyPressed(arrowDown)) {
-            pitchOffset += 5f;
-        }
-        Objects.requireNonNull(CoffeeMain.client.player).setYaw(CoffeeMain.client.player.getYaw() + yawOffset);
-        CoffeeMain.client.player.setPitch(CoffeeMain.client.player.getPitch() + pitchOffset);
+        setState(go.sneakKey);
     }
 
 }

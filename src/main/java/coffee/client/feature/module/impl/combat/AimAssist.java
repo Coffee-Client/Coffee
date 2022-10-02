@@ -164,7 +164,7 @@ public class AimAssist extends Module {
 
     void aimAtTarget() {
         if (!aimInstant.getValue()) {
-            Rotations.lookAtPositionSmooth(le.getPos().add(0, le.getHeight() / 2d, 0), laziness.getValue());
+            Rotations.lookAtPositionSmooth(le.getPos().add(0, le.getHeight() / 2d, 0), (float) (laziness.getValue()+0));
         } else {
             Rotation py = Rotations.getPitchYaw(le.getPos().add(0, le.getHeight() / 2d, 0));
             Objects.requireNonNull(CoffeeMain.client.player).setPitch(py.getPitch());

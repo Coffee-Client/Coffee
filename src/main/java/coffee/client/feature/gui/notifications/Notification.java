@@ -76,7 +76,7 @@ public class Notification {
             line.append(c).append(" ");
         }
         splitContent.add(line.toString());
-        return create(duration, title, type, splitContent.toArray(new String[0]));
+        return create(duration, title, type, splitContent.toArray(String[]::new));
     }
 
     public enum Type {

@@ -91,7 +91,7 @@ public class ListSettingEditor extends SettingEditor<ListSetting<?>> {
                         getPositionY() + headerHeight() + offsetY + fa.getFontHeight() / 2d - .5,
                         3,
                         5,
-                        .5f,
+                        1f,
                         -45);
                 }
                 fa.drawString(stack, enumSettingEntry.name(), getPositionX() + indicatorWid + 4, getPositionY() + headerHeight() + offsetY, 0xFFFFFF);

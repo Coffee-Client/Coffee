@@ -66,6 +66,8 @@ dependencies {
 		transitive = false
 	}
 
+	modImpl(name: "baritone-unoptimized")
+
 	configurations.libImpl.dependencies.each {
 		implementation(it)
 //		include(it)
@@ -73,6 +75,7 @@ dependencies {
 
 	configurations.modImpl.dependencies.each {
 		modImplementation(it)
+//		implementation(it)
 		include(it)
 	}
 }

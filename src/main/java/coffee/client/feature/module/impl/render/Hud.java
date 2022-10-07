@@ -70,7 +70,7 @@ public class Hud extends Module {
     }
 
     double calcTps(double n) {
-        return (20.0 / Math.max((n - 1000.0) / (500.0), 1.0));
+        return 20.0 / Math.max((n - 1000.0) / 500.0, 1.0);
     }
 
     @Override

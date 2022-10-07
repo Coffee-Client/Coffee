@@ -31,6 +31,7 @@ public class BooleanSettingEditor extends SettingEditor<BooleanSetting> {
         }
         anim += delta;
         anim = MathHelper.clamp(anim, 0, 1);
+
     }
 
     @Override

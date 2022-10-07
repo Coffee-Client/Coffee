@@ -27,6 +27,7 @@ public class StringSettingEditor extends SettingEditor<StringSetting> {
     @Override
     public void tickAnimations() {
         this.rtfw.tickAnimations();
+
     }
 
     @Override

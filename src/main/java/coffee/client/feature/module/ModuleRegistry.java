@@ -16,7 +16,6 @@ import coffee.client.feature.module.impl.combat.BowAimbot;
 import coffee.client.feature.module.impl.combat.Criticals;
 import coffee.client.feature.module.impl.combat.FireballDeflector;
 import coffee.client.feature.module.impl.combat.Killaura;
-import coffee.client.feature.module.impl.combat.KnockbackPlus;
 import coffee.client.feature.module.impl.combat.Reach;
 import coffee.client.feature.module.impl.combat.ShulkerDeflector;
 import coffee.client.feature.module.impl.combat.TpRange;
@@ -39,6 +38,7 @@ import coffee.client.feature.module.impl.misc.AllowFormatCodes;
 import coffee.client.feature.module.impl.misc.AntiCrash;
 import coffee.client.feature.module.impl.misc.AntiOffhandCrash;
 import coffee.client.feature.module.impl.misc.AntiPacketKick;
+import coffee.client.feature.module.impl.misc.ChestIndexer;
 import coffee.client.feature.module.impl.misc.ClientSettings;
 import coffee.client.feature.module.impl.misc.Debugger;
 import coffee.client.feature.module.impl.misc.DiscordRPC;
@@ -339,6 +339,7 @@ public class ModuleRegistry {
         registerModule(ResourcePackSpoof.class);
         registerModule(LSD.class);
         registerModule(Robowalk.class);
+        registerModule(ChestIndexer.class);
 
         rebuildSharedModuleList();
 

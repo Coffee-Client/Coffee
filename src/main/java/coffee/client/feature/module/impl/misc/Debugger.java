@@ -52,7 +52,6 @@ public class Debugger extends Module {
         if (whitelistedPacketClasses.stream().anyMatch(aClass -> aClass.isInstance(packet))) {
             boolean cancelled = incoming.isCancelled();
             String s = Utils.forceToString(packet);
-            //            log(String.format("Cancelled: %s, %s", cancelled, s));
             System.out.println(s);
         }
     }

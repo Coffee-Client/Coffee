@@ -7,7 +7,13 @@ package coffee.client.feature.module.impl.misc;
 
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
+import coffee.client.helper.PathFinder;
+import coffee.client.helper.render.Renderer;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
+
+import java.awt.Color;
 
 public class Test extends Module {
 
@@ -15,9 +21,13 @@ public class Test extends Module {
         super("Test", "Testing stuff with the client, can be ignored", ModuleType.MISC);
     }
 
+    PathFinder pf;
     @Override
     public void enable() {
-
+        new Thread(() -> {
+            pf = new PathFinder(client.player.getBlockPos(), new BlockPos(100, 100, 100));
+            pf.find();
+        }).start();
     }
 
     @Override
@@ -32,8 +42,20 @@ public class Test extends Module {
 
     @Override
     public void onWorldRender(MatrixStack matrices) {
+        if (pf == null || pf.startEntry == null) {
+            return;
+        }
+        PathFinder.Entry entry = pf.startEntry;
+        while (entry != null && entry.next != null) {
+            Renderer.R3D.renderLine(matrices, Color.GREEN, Vec3d.of(entry.pos).add(.5, .5, .5), Vec3d.of(entry.next.pos).add(.5, .5, .5));
+            //            Renderer.R3D.renderLine(matrices, Color.RED, entry.pos, entry.next.pos);
+            entry = entry.next;
+        }
 
-
+        //        BlockPos[] blockPos = pf.visited.toArray(BlockPos[]::new);
+        //        for (BlockPos blockPo : blockPos) {
+        //            Renderer.R3D.renderOutline(matrices, Color.RED, Vec3d.of(blockPo), new Vec3d(1,1,1));
+        //        }
     }
 
     @Override

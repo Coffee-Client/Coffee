@@ -20,6 +20,7 @@ import net.minecraft.fluid.FluidState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -67,13 +68,14 @@ public class LivingEntityMixin {
         }
     }
 
-    @Redirect(method = "jump", at = @At(value = "INVOKE", target = "net/minecraft/entity/LivingEntity.getYaw()F"), require = 0)
-    private float coffee_overwriteJumpDirection(LivingEntity instance) {
-        if (instance.equals(CoffeeMain.client.player) && ModuleRegistry.getByClass(FreeLook.class).isEnabled() && !((boolean) FreeLook.instance()
-            .getEnableAA()
-            .getValue())) {
-            return ModuleRegistry.getByClass(FreeLook.class).newyaw;
+    // INCREDIBLE baritone hack, never fucking do this
+    // also fuck you leijurv for doing the same redirect as me
+    @SuppressWarnings("all") // ALSO never do this but in this case its ok because the mcdev plugin will not stop screaming
+    @ModifyVariable(method = "jump", at = @At(value = "STORE"), ordinal = 0)
+    private float coffee_replaceYaw(float f) {
+        if (equals(CoffeeMain.client.player) && ModuleRegistry.getByClass(FreeLook.class).isEnabled() && !((boolean) FreeLook.instance().getEnableAA().getValue())) {
+            return (float) Math.toDegrees(ModuleRegistry.getByClass(FreeLook.class).newyaw);
         }
-        return instance.getYaw();
+        return f;
     }
 }

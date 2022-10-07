@@ -60,6 +60,7 @@ public class EnumSettingEditor extends SettingEditor<EnumSetting<?>> {
         }
         expandProg += d;
         expandProg = MathHelper.clamp(expandProg, 0, 1);
+
     }
 
     @Override

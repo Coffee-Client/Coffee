@@ -100,7 +100,10 @@ public class Waypoints extends Module {
                 if (tracers) {
                     Renderer.R3D.renderLine(matrices, waypoint.color, Renderer.R3D.getCrosshairVector(), waypoint.position);
                 }
-                double distancePlayer = waypoint.position.distanceTo(Utils.getInterpolatedEntityPosition(client.player));
+
+                //                double distancePlayer = waypoint.position.distanceTo(Utils.getInterpolatedEntityPosition(client.player));
+                Vec3d interpolatedEntityPosition = Utils.getInterpolatedEntityPosition(client.player);
+                double distancePlayer = Utils.dist(waypoint.position.x, waypoint.position.z, interpolatedEntityPosition.x, interpolatedEntityPosition.z);
                 double subbed1 = (fadeDistancePlayer - distancePlayer) / fadeDistancePlayer;
                 subbed1 = MathHelper.clamp(subbed1, 0, 1);
                 subbed1 = 1 - subbed1;

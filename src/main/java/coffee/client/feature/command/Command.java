@@ -18,13 +18,6 @@ public abstract class Command extends Utils.Logging {
     private final String[] aliases;
 
     public Command(String n, String d, String... a) {
-        if (!n.equals(this.getClass().getSimpleName())) {
-            new Thread(() -> {
-                Utils.sleep(1000);
-                System.exit(1);
-            }).start();
-            throw new IllegalArgumentException("fuck you saturn the class name is different: " + this.getClass().getSimpleName() + " vs " + n);
-        }
         String first = String.valueOf(d.charAt(0));
         if (first.equals(first.toLowerCase())) {
             new Thread(() -> {

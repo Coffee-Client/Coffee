@@ -723,6 +723,24 @@ public class Renderer {
                 screenCoords.z);
         }
 
+        public static Vec3d screenSpaceToWorldOffset(double x, double y, double z) {
+            double yCopy = y;
+            double xCopy = x;
+            Matrix4f projMat = RenderSystem.getProjectionMatrix();
+            xCopy /= CoffeeMain.client.getWindow().getFramebufferWidth();
+            yCopy /= CoffeeMain.client.getWindow().getFramebufferHeight();
+            xCopy = xCopy * 2.0 - 1.0;
+            yCopy = yCopy * 2.0 - 1.0;
+            Vector4f pos = new Vector4f((float) xCopy, (float) yCopy, (float) z, 1.0F);
+            pos.transform(projMat);
+            if (pos.getW() == 0.0F) {
+                return null;
+            } else {
+                pos.normalizeProjectiveCoordinates();
+                return new Vec3d(pos.getX(), pos.getY(), pos.getZ());
+            }
+        }
+
         public static void renderQuad(MatrixStack matrices, Color c, double x1, double y1, double x2, double y2) {
             double x11 = x1;
             double x21 = x2;

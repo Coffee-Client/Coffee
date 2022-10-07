@@ -56,7 +56,10 @@ public abstract class AGenericContainerScreenMixin extends Screen implements Fas
 
     @Override
     public void onFastTick() {
-        Rotations.lookAtPositionSmooth(MathHelper.clamp(initialPitch + pitchOffset, -90.0F, 90.0F), initialYaw + yawOffset, 20);
+        InventoryWalk iw = ModuleRegistry.getByClass(InventoryWalk.class);
+        if (iw.isEnabled() && iw.mouseInInventory) {
+            Rotations.lookAtPositionSmooth(MathHelper.clamp(initialPitch + pitchOffset, -90.0F, 90.0F), initialYaw + yawOffset, iw.getMSpeed());
+        }
     }
 
     @Override

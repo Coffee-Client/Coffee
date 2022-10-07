@@ -81,6 +81,10 @@ public class Utils {
             .filter(requirement);
     }
 
+    public static float dist(double ax, double ay, double bx, double by) {
+        return (float) java.lang.Math.sqrt(java.lang.Math.pow(ax - bx, 2) + java.lang.Math.pow(ay - by, 2));
+    }
+
     public static <T> T throwSilently(Supplier<T> func) {
         return throwSilently(func, throwable -> {
         });

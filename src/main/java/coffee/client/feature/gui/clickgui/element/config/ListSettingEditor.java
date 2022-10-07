@@ -51,6 +51,7 @@ public class ListSettingEditor extends SettingEditor<ListSetting<?>> {
         }
         expandProg += d;
         expandProg = MathHelper.clamp(expandProg, 0, 1);
+
     }
 
     @Override

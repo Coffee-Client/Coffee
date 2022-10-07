@@ -11,6 +11,7 @@ import coffee.client.feature.command.impl.ApplyEffect;
 import coffee.client.feature.command.impl.ApplyVel;
 import coffee.client.feature.command.impl.Author;
 import coffee.client.feature.command.impl.Ban;
+import coffee.client.feature.command.impl.BaritoneCommand;
 import coffee.client.feature.command.impl.Bind;
 import coffee.client.feature.command.impl.CheckCmd;
 import coffee.client.feature.command.impl.Config;
@@ -43,6 +44,7 @@ import coffee.client.feature.command.impl.RandomBook;
 import coffee.client.feature.command.impl.Rename;
 import coffee.client.feature.command.impl.Reset;
 import coffee.client.feature.command.impl.Say;
+import coffee.client.feature.command.impl.Search;
 import coffee.client.feature.command.impl.SelfDestruct;
 import coffee.client.feature.command.impl.SocketKick;
 import coffee.client.feature.command.impl.SpawnData;
@@ -137,6 +139,8 @@ public class CommandRegistry {
         vanillaCommands.add(new Debugger());
         vanillaCommands.add(new HoloImage());
         vanillaCommands.add(new ApplyEffect());
+        vanillaCommands.add(new BaritoneCommand());
+        vanillaCommands.add(new Search());
 
         rebuildSharedCommands();
     }

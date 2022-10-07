@@ -99,7 +99,7 @@ public class FlexLayoutElement extends Element {
 
     @Override
     public void tickAnimations() {
-        for (Element element : getElements()) {
+        for (Element element : elements) {
             element.tickAnimations();
         }
         scroller.tick();

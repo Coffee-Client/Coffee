@@ -104,8 +104,6 @@ public class ConfigDisplay extends Element {
     @Override
     public void render(MatrixStack stack, double mouseX, double mouseY) {
         fle.updateScroller();
-        fle.setHeight(fle.getActualHeight());
-        setHeight(fle.getActualHeight());
         double height1 = getHeight();
         if (height1 > 1.5) {
             Renderer.R2D.renderRoundedQuad(stack,
@@ -125,6 +123,11 @@ public class ConfigDisplay extends Element {
 
     @Override
     public double getHeight() {
+        // Funny 0x150 moment
+        // "Oh yeah lets update the height of this fucking element MID FUCKING RENDER so that everything lags behind one frame!!!"
+        double actualHeight = fle.getActualHeight();
+        fle.setHeight(actualHeight);
+        setHeight(actualHeight);
         return super.getHeight() * Transitions.easeOutExpo(progress);
     }
 

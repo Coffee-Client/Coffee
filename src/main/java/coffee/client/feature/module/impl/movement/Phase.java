@@ -8,10 +8,8 @@ package coffee.client.feature.module.impl.movement;
 import coffee.client.CoffeeMain;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.Events;
-import coffee.client.helper.event.events.PacketEvent;
-import coffee.client.helper.event.events.PlayerNoClipQueryEvent;
+import coffee.client.helper.event.impl.NoclipQueryEvent;
+import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.player.PlayerEntity;
@@ -24,26 +22,28 @@ public class Phase extends Module {
 
     public Phase() {
         super("Phase", "Go through walls when flying (works best with creative)", ModuleType.MOVEMENT);
-        Events.registerEventHandler(EventType.PACKET_SEND, event -> {
-            if (!this.isEnabled() || CoffeeMain.client.player == null || !CoffeeMain.client.player.getAbilities().flying) {
-                return;
-            }
-            PacketEvent pe = (PacketEvent) event;
-            Box p = CoffeeMain.client.player.getBoundingBox(CoffeeMain.client.player.getPose()).offset(0, 0.27, 0).expand(0.25);
-            if (p.getYLength() < 2) {
-                p = p.expand(0, 1, 0);
-            }
-            p = p.offset(CoffeeMain.client.player.getPos());
-            if (pe.getPacket() instanceof PlayerMoveC2SPacket && !Objects.requireNonNull(CoffeeMain.client.world).isSpaceEmpty(CoffeeMain.client.player, p)) {
-                event.setCancelled(true);
-            }
-        }, 0);
-        Events.registerEventHandler(EventType.NOCLIP_QUERY, event -> {
-            if (!getNoClipState(((PlayerNoClipQueryEvent) event).getPlayer())) {
-                return;
-            }
-            ((PlayerNoClipQueryEvent) event).setNoClipState(PlayerNoClipQueryEvent.NoClipState.ACTIVE);
-        }, 0);
+    }
+
+    @MessageSubscription
+    void onNoclipQuery(NoclipQueryEvent event) {
+        if (event.getPlayer().getAbilities().flying) {
+            event.setShouldNoclip(true);
+        }
+    }
+
+    @MessageSubscription
+    void onPacketSend(coffee.client.helper.event.impl.PacketEvent.Sent pe) {
+        if (CoffeeMain.client.player == null || !CoffeeMain.client.player.getAbilities().flying) {
+            return;
+        }
+        Box p = CoffeeMain.client.player.getBoundingBox(CoffeeMain.client.player.getPose()).offset(0, 0.27, 0).expand(0.25);
+        if (p.getYLength() < 2) {
+            p = p.expand(0, 1, 0);
+        }
+        p = p.offset(CoffeeMain.client.player.getPos());
+        if (pe.getPacket() instanceof PlayerMoveC2SPacket && !Objects.requireNonNull(CoffeeMain.client.world).isSpaceEmpty(CoffeeMain.client.player, p)) {
+            pe.setCancelled(true);
+        }
     }
 
     @Override

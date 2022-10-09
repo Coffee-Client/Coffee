@@ -11,19 +11,20 @@ import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
 import coffee.client.helper.Rotation;
 import coffee.client.helper.config.ConfigContainer;
-import coffee.client.helper.event.EventListener;
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.events.base.NonCancellableEvent;
+import coffee.client.helper.event.EventSystem;
+import coffee.client.helper.event.impl.ConfigSaveEvent;
 import coffee.client.helper.font.FontRenderers;
 import coffee.client.helper.font.adapter.FontAdapter;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.Rotations;
 import coffee.client.helper.util.Utils;
 import lombok.Data;
+import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import org.apache.logging.log4j.Level;
 
 import java.awt.Color;
 import java.io.File;
@@ -40,7 +41,7 @@ public class Waypoints extends Module {
         e.add(new Sightpoint("270°", 270, Color.WHITE, true));
     });
     public static List<Waypoint> waypoints = new ArrayList<>();
-    public static ConfigContainer conf = new ConfigContainer(new File(CoffeeMain.BASE, "waypoints.coffee"), "");
+    public static ConfigContainer conf = new ConfigContainer(new File(CoffeeMain.BASE, "waypoints.coffee"));
     List<Runnable> real = new ArrayList<>();
     @Setting(name = "Tracers", description = "Shows tracers pointing to the waypoints")
     boolean tracers = true;
@@ -52,6 +53,17 @@ public class Waypoints extends Module {
         conf.reload();
         Config config1 = conf.get(Config.class);
         waypoints = (config1 == null || config1.getWaypoints() == null) ? new ArrayList<>() : new ArrayList<>(config1.getWaypoints());
+
+        EventSystem.manager.registerSubscribers(new Object() { // keep registered
+            @MessageSubscription
+            void onStop(ConfigSaveEvent ev) {
+                CoffeeMain.log(Level.INFO, "Saving waypoints");
+                Config c = new Config();
+                c.setWaypoints(waypoints);
+                conf.set(c);
+                conf.save();
+            }
+        });
     }
 
     public static List<Sightpoint> getSightpoints() {
@@ -63,13 +75,6 @@ public class Waypoints extends Module {
         return sightpoints;
     }
 
-    @EventListener(EventType.CONFIG_SAVE)
-    void onStop(NonCancellableEvent ev) {
-        Config c = new Config();
-        c.setWaypoints(waypoints);
-        conf.set(c);
-        conf.save();
-    }
 
     @Override
     public void tick() {

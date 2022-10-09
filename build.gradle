@@ -61,6 +61,7 @@ dependencies {
 	libImpl(group: "meteordevelopment", name: "discord-ipc", version: "1.1")
 	libImpl(name: "NetMC-1.0.0")
 	libImpl(project(":Authlib"))
+	libImpl(project(":Eventlib"))
 
 	modImpl(group: "io.github.ladysnake", name: "satin", version: "1.9.0") {
 		transitive = false

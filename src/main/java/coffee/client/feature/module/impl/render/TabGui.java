@@ -9,14 +9,12 @@ import coffee.client.feature.gui.theme.ThemeManager;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleRegistry;
 import coffee.client.feature.module.ModuleType;
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.Events;
-import coffee.client.helper.event.events.KeyboardEvent;
 import coffee.client.helper.font.FontRenderers;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.Transitions;
 import lombok.Data;
 import lombok.Getter;
+import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.client.util.math.MatrixStack;
 import org.lwjgl.glfw.GLFW;
 
@@ -34,13 +32,6 @@ public class TabGui extends Module {
 
     public TabGui() {
         super("TabGui", "Renders a small module manager top left", ModuleType.RENDER);
-        Events.registerEventHandler(EventType.KEYBOARD, event -> {
-            if (!this.isEnabled()) {
-                return;
-            }
-            KeyboardEvent me = (KeyboardEvent) event;
-            handleMouse(me);
-        }, 0);
     }
 
     @Override
@@ -90,8 +81,9 @@ public class TabGui extends Module {
         return index1;
     }
 
-    void handleMouse(KeyboardEvent me) {
-        if (me.getType() == 0) {
+    @MessageSubscription
+    void handleKey(coffee.client.helper.event.impl.KeyboardEvent me) {
+        if (me.getType() == coffee.client.helper.event.impl.KeyboardEvent.Type.RELEASE) {
             return;
         }
         if (tabStack.isEmpty()) {

@@ -16,10 +16,9 @@ import coffee.client.feature.module.AddonModule;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleRegistry;
 import coffee.client.helper.AddonClassLoader;
-import coffee.client.helper.event.EventListener;
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.Events;
-import coffee.client.helper.event.events.base.Event;
+import coffee.client.helper.event.EventSystem;
+import coffee.client.helper.event.impl.ConfigSaveEvent;
+import me.x150.jmessenger.MessageSubscription;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.Level;
 
@@ -67,16 +66,17 @@ public class AddonManager {
         }
         initializeAddons();
 
-        Events.registerEventHandlerClass(this);
+        EventSystem.manager.registerSubscribers(this);
+        //        Events.registerEventHandlerClass(this);
     }
 
     public static void init() {
         new AddonManager();
     }
 
-    @EventListener(value = EventType.GAME_EXIT)
+    @MessageSubscription
     @SuppressWarnings("unused")
-    void saveConfig(Event event) {
+    void saveConfig(ConfigSaveEvent event) {
         try {
             Files.walkFileTree(ADDON_RESOURCE_CACHE.toPath(), new FileVisitor<>() {
                 @Override

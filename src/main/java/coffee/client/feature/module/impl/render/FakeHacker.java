@@ -9,9 +9,8 @@ import coffee.client.CoffeeMain;
 import coffee.client.feature.gui.notifications.Notification;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.Events;
-import coffee.client.helper.event.events.MouseEvent;
+import coffee.client.helper.event.impl.MouseEvent;
+import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.command.argument.EntityAnchorArgumentType;
 import net.minecraft.entity.Entity;
@@ -31,24 +30,22 @@ public class FakeHacker extends Module {
 
     public FakeHacker() {
         super("FakeHacker", "Makes it seem like another user is hacking", ModuleType.RENDER);
-        Events.registerEventHandler(EventType.MOUSE_EVENT, event -> {
-            if (!this.isEnabled()) {
-                return;
+    }
+
+    @MessageSubscription
+    void on(coffee.client.helper.event.impl.MouseEvent me) {
+        if (CoffeeMain.client.player == null || CoffeeMain.client.world == null) {
+            return;
+        }
+        if (CoffeeMain.client.currentScreen != null) {
+            return;
+        }
+        if (me.getType() == MouseEvent.Type.CLICK && me.getButton() == 2) {
+            HitResult hr = CoffeeMain.client.crosshairTarget;
+            if (hr instanceof EntityHitResult ehr && ehr.getEntity() instanceof PlayerEntity pe) {
+                target = pe;
             }
-            if (CoffeeMain.client.player == null || CoffeeMain.client.world == null) {
-                return;
-            }
-            if (CoffeeMain.client.currentScreen != null) {
-                return;
-            }
-            MouseEvent me = (MouseEvent) event;
-            if (me.getAction() == 1 && me.getButton() == 2) {
-                HitResult hr = CoffeeMain.client.crosshairTarget;
-                if (hr instanceof EntityHitResult ehr && ehr.getEntity() instanceof PlayerEntity pe) {
-                    target = pe;
-                }
-            }
-        }, 0);
+        }
     }
 
     @Override

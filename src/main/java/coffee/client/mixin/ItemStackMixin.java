@@ -6,9 +6,8 @@
 package coffee.client.mixin;
 
 import coffee.client.feature.module.impl.misc.AntiCrash;
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.Events;
-import coffee.client.helper.event.events.LoreQueryEvent;
+import coffee.client.helper.event.EventSystem;
+import coffee.client.helper.event.impl.LoreQueryEvent;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.attribute.EntityAttribute;
@@ -37,8 +36,10 @@ public class ItemStackMixin {
     void coffee_dispatchTooltipRender(PlayerEntity player, TooltipContext context, CallbackInfoReturnable<List<Text>> cir) {
         List<Text> cval = cir.getReturnValue();
         LoreQueryEvent event = new LoreQueryEvent((ItemStack) (Object) this, cval);
-        Events.fireEvent(EventType.LORE_QUERY, event);
-        cir.setReturnValue(event.getLore());
+        //        LoreQueryEvent event = new LoreQueryEvent((ItemStack) (Object) this, cval);
+        //        Events.fireEvent(EventType.LORE_QUERY, event);
+        EventSystem.manager.send(event);
+        cir.setReturnValue(event.getExistingLore());
     }
 
     // these 2 look incredibly fucked but they work

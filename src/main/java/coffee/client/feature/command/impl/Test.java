@@ -9,13 +9,12 @@ import coffee.client.feature.command.Command;
 import coffee.client.feature.command.argument.StreamlineArgumentParser;
 import coffee.client.feature.command.exception.CommandException;
 import coffee.client.helper.PathFinder;
-import coffee.client.helper.event.EventListener;
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.Events;
-import coffee.client.helper.event.events.PacketEvent;
-import coffee.client.helper.event.events.WorldRenderEvent;
+import coffee.client.helper.event.EventSystem;
+import coffee.client.helper.event.impl.PacketEvent;
+import coffee.client.helper.event.impl.RenderEvent;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.Utils;
+import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.block.BlockState;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.math.BlockPos;
@@ -31,11 +30,12 @@ public class Test extends Command {
 
     public Test() {
         super("Test", "REAL", "test");
-        Events.registerEventHandlerClass(this);
+        EventSystem.manager.registerSubscribers(this);
+        //        Events.registerEventHandlerClass(this);
     }
 
-    @EventListener(EventType.WORLD_RENDER)
-    void render(WorldRenderEvent ev) {
+    @MessageSubscription
+    void render(RenderEvent.World ev) {
         if (currentFinder == null) {
             return;
         }
@@ -49,8 +49,8 @@ public class Test extends Command {
         }
     }
 
-    @EventListener(EventType.PACKET_SEND)
-    void onPacketSend(PacketEvent pe) {
+    @MessageSubscription
+    void onPacketSend(PacketEvent.Sent pe) {
         if (pe.getPacket() instanceof PlayerMoveC2SPacket pmcs && currentFinder != null) {
             if (!whitelist.remove(pmcs)) {
                 pe.setCancelled(true);

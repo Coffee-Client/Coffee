@@ -12,13 +12,12 @@ import coffee.client.feature.gui.notifications.Notification;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleRegistry;
 import coffee.client.feature.module.ModuleType;
-import coffee.client.helper.event.EventListener;
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.events.PacketEvent;
+import coffee.client.helper.event.impl.PacketEvent;
 import coffee.client.helper.util.Utils;
 import coffee.client.mixin.network.IParticleS2CPacketMixin;
 import coffee.client.mixinUtil.ParticleManagerDuck;
 import lombok.Getter;
+import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 import net.minecraft.network.packet.s2c.play.OpenScreenS2CPacket;
@@ -106,8 +105,8 @@ public class AntiCrash extends Module {
         return instance;
     }
 
-    @EventListener(EventType.PACKET_RECEIVE)
-    void handlePacketEvent(PacketEvent e) {
+    @MessageSubscription
+    void handlePacketEvent(PacketEvent.Received e) {
         if (!this.isEnabled()) {
             return;
         }

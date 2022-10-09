@@ -7,11 +7,10 @@ package coffee.client.feature.module.impl.render;
 
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
-import coffee.client.helper.event.EventListener;
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.events.BlockEntityRenderEvent;
+import coffee.client.helper.event.impl.RenderEvent;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.Utils;
+import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.block.entity.ChestBlockEntity;
 import net.minecraft.client.util.math.MatrixStack;
@@ -34,13 +33,13 @@ public class ChestHighlighter extends Module {
         }
     }
 
-    @EventListener(value = EventType.BLOCK_ENTITY_RENDER)
-    void r(BlockEntityRenderEvent be) {
+    @MessageSubscription
+    void r(RenderEvent.BlockEntity be) {
         if (!this.isEnabled()) {
             return;
         }
-        if (be.getBlockEntity() instanceof ChestBlockEntity) {
-            addIfNotExisting(be.getBlockEntity().getPos());
+        if (be.getEntity() instanceof ChestBlockEntity) {
+            addIfNotExisting(be.getEntity().getPos());
         }
     }
 

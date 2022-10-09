@@ -12,12 +12,12 @@ import coffee.client.feature.command.coloring.ArgumentType;
 import coffee.client.feature.command.coloring.PossibleArgument;
 import coffee.client.feature.command.coloring.StaticArgumentServer;
 import coffee.client.feature.command.exception.CommandException;
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.Events;
-import coffee.client.helper.event.events.PacketEvent;
+import coffee.client.helper.event.EventSystem;
+import coffee.client.helper.event.impl.PacketEvent;
 import coffee.client.helper.util.Utils;
 import com.mojang.brigadier.suggestion.Suggestion;
 import com.mojang.brigadier.suggestion.Suggestions;
+import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.network.packet.c2s.play.RequestCommandCompletionsC2SPacket;
 import net.minecraft.network.packet.s2c.play.CommandSuggestionsS2CPacket;
@@ -34,25 +34,27 @@ public class ForEach extends Command {
 
     public ForEach() {
         super("ForEach", "Do something for each player", "forEach", "for", "fe");
-        Events.registerEventHandler(EventType.PACKET_RECEIVE, event -> {
-            if (!recieving) {
-                return;
-            }
-            PacketEvent pe = (PacketEvent) event;
-            if (pe.getPacket() instanceof CommandSuggestionsS2CPacket packet) {
-                Suggestions all = packet.getSuggestions();
-                for (Suggestion i : all.getList()) {
-                    String name = i.getText();
-                    if (name.contains(CoffeeMain.client.player.getName().toString())) {
-                        continue;
-                    }
-                    CoffeeMain.client.player.sendChatMessage(partial.replaceAll("%s", name), null);
-                    message(partial.replaceAll("%s", name));
+        EventSystem.manager.registerSubscribers(this);
+    }
+
+    @MessageSubscription
+    void onPR(PacketEvent.Received pe) {
+        if (!recieving) {
+            return;
+        }
+        if (pe.getPacket() instanceof CommandSuggestionsS2CPacket packet) {
+            Suggestions all = packet.getSuggestions();
+            for (Suggestion i : all.getList()) {
+                String name = i.getText();
+                if (name.contains(CoffeeMain.client.player.getName().toString())) {
+                    continue;
                 }
-                message("Foreach operation completed");
-                recieving = false;
+                CoffeeMain.client.player.sendChatMessage(partial.replaceAll("%s", name), null);
+                message(partial.replaceAll("%s", name));
             }
-        }, 0);
+            message("Foreach operation completed");
+            recieving = false;
+        }
     }
 
     @Override

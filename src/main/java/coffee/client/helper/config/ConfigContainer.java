@@ -5,33 +5,65 @@
 
 package coffee.client.helper.config;
 
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.Events;
 import coffee.client.helper.gson.GsonSupplier;
+import coffee.client.helper.util.Utils;
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import lombok.Getter;
 import org.apache.commons.io.FileUtils;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 @SuppressWarnings("unused")
 public class ConfigContainer {
     static final Gson gson = GsonSupplier.getGson();
+    private static final int[] EXPECTED_SIGNATURE = new int[] { 0xC0, 0xFF, 0xEE, 0x00 };
     final File path;
-    final String key;
     @Getter
-    JsonObject value;
+    JsonElement value;
     boolean loaded = false;
 
-    public ConfigContainer(File f, String key) {
+    public ConfigContainer(File f) {
+        this(f, new JsonObject());
+    }
+
+    public ConfigContainer(File f, JsonElement defaultValue) {
         this.path = f;
-        this.key = key;
-        this.value = new JsonObject();
-        Events.registerEventHandler(EventType.CONFIG_SAVE, event -> this.save(), 0);
+        this.value = defaultValue;
         reload();
+    }
+
+    private static String decompress(byte[] data) {
+        return Utils.throwSilently(() -> {
+            if (data.length < 4) {
+                return new String(data);
+            }
+            ByteArrayInputStream bais = new ByteArrayInputStream(data);
+
+            int[] firstFourBits = new int[4];
+            byte[] sig = new byte[4];
+            bais.read(sig, 0, 4);
+            for (int i = 0; i < firstFourBits.length; i++) {
+                firstFourBits[i] = Byte.toUnsignedInt(sig[i]);
+            }
+            System.out.println(Arrays.toString(firstFourBits));
+            System.out.println(Arrays.toString(EXPECTED_SIGNATURE));
+            if (!Arrays.equals(firstFourBits, EXPECTED_SIGNATURE)) {
+                return new String(data); // probably legacy format
+            }
+            GZIPInputStream gi = new GZIPInputStream(bais);
+            byte[] bytes = gi.readAllBytes();
+            return new String(bytes);
+        }, Throwable::printStackTrace);
     }
 
     public <T> T get(Class<T> type) {
@@ -42,16 +74,33 @@ public class ConfigContainer {
     }
 
     public void set(Object data) {
-        set(gson.toJsonTree(data).getAsJsonObject());
+        set(gson.toJsonTree(data));
     }
 
-    public void set(JsonObject obj) {
+    public void set(JsonElement obj) {
         value = obj;
     }
 
     void write(String data) {
+        byte[] b = data.getBytes(StandardCharsets.UTF_8);
         try {
-            FileUtils.write(path, data, StandardCharsets.UTF_8);
+            FileOutputStream fos = new FileOutputStream(path);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            GZIPOutputStream go = new GZIPOutputStream(baos);
+
+            // signature
+            for (int i : EXPECTED_SIGNATURE) {
+                fos.write(i);
+            }
+
+            // compress data
+            go.write(b);
+            go.flush();
+            go.close();
+
+            // write compressed data
+            fos.write(baos.toByteArray());
+            fos.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -62,8 +111,13 @@ public class ConfigContainer {
             return;
         }
         try {
-            String p = FileUtils.readFileToString(path, StandardCharsets.UTF_8);
-            set(JsonParser.parseString(p).getAsJsonObject());
+            byte[] t = FileUtils.readFileToByteArray(path);
+            String p = decompress(t);
+            System.out.println(p);
+            if (p == null) {
+                throw new IllegalStateException("Invalid data format");
+            }
+            set(JsonParser.parseString(p));
             loaded = true;
         } catch (Exception e) {
             e.printStackTrace();

@@ -26,21 +26,20 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(HandledScreen.class)
 public abstract class AGenericContainerScreenMixin extends Screen implements FastTickable {
-    private AGenericContainerScreenMixin() {
-        super(null);
-    }
-
     @Shadow
     protected int x;
     @Shadow
     protected int y;
-
     float pitchOffset, yawOffset;
     float initialPitch, initialYaw;
 
+    private AGenericContainerScreenMixin() {
+        super(null);
+    }
+
     boolean keyPressed(KeyBinding bind) {
         int code = ((IKeyBindingMixin) bind).getBoundKey().getCode();
-//        return bind.isPressed();
+        //        return bind.isPressed();
         return InputUtil.isKeyPressed(CoffeeMain.client.getWindow().getHandle(), code);
     }
 
@@ -48,7 +47,7 @@ public abstract class AGenericContainerScreenMixin extends Screen implements Fas
         bind.setPressed(keyPressed(bind));
     }
 
-    @Inject(method="init",at=@At("RETURN"))
+    @Inject(method = "init", at = @At("RETURN"))
     void coffee_postInit(CallbackInfo ci) {
         initialPitch = CoffeeMain.client.player.getPitch();
         initialYaw = CoffeeMain.client.player.getYaw();

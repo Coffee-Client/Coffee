@@ -7,10 +7,8 @@ package coffee.client.feature.module.impl.render;
 
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.Events;
-import coffee.client.helper.event.events.LoreQueryEvent;
 import coffee.client.helper.util.ByteCounter;
+import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.client.util.math.MatrixStack;
 
 import java.text.StringCharacterIterator;
@@ -18,29 +16,6 @@ import java.text.StringCharacterIterator;
 public class ItemByteSize extends Module {
     public ItemByteSize() {
         super("ItemByteSize", "Shows the size of an item in bytes on the tooltip", ModuleType.RENDER);
-        Events.registerEventHandler(EventType.LORE_QUERY, event -> {
-            if (!this.isEnabled()) {
-                return;
-            }
-
-            LoreQueryEvent e = (LoreQueryEvent) event;
-            ByteCounter inst = ByteCounter.instance();
-            inst.reset();
-            boolean error = false;
-            try {
-                e.getSource().getOrCreateNbt().write(inst);
-            } catch (Exception ignored) {
-                error = true;
-            }
-            long count = inst.getSize();
-            String fmt;
-            if (error) {
-                fmt = "§cError";
-            } else {
-                fmt = humanReadableByteCountBin(count);
-            }
-            e.addClientLore("Size: " + fmt);
-        }, 0);
     }
 
     public static String humanReadableByteCountBin(long bytes) {
@@ -56,6 +31,26 @@ public class ItemByteSize extends Module {
         }
         value *= Long.signum(bytes);
         return String.format("%.1f %ciB", value / 1024.0, ci.current());
+    }
+
+    @MessageSubscription
+    void onLoreQuery(coffee.client.helper.event.impl.LoreQueryEvent e) {
+        ByteCounter inst = ByteCounter.instance();
+        inst.reset();
+        boolean error = false;
+        try {
+            e.getSource().getOrCreateNbt().write(inst);
+        } catch (Exception ignored) {
+            error = true;
+        }
+        long count = inst.getSize();
+        String fmt;
+        if (error) {
+            fmt = "§cError";
+        } else {
+            fmt = humanReadableByteCountBin(count);
+        }
+        e.addClientLore("Size: " + fmt);
     }
 
     @Override

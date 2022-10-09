@@ -10,12 +10,14 @@ import coffee.client.feature.command.Command;
 import coffee.client.feature.command.coloring.ArgumentType;
 import coffee.client.feature.command.coloring.PossibleArgument;
 import coffee.client.feature.command.exception.CommandException;
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.Events;
+import coffee.client.helper.event.EventSystem;
+import coffee.client.helper.event.impl.ConfigSaveEvent;
+import coffee.client.helper.event.impl.WindowInitEvent;
 import coffee.client.helper.gson.GsonSupplier;
 import coffee.client.helper.render.Texture;
 import coffee.client.helper.util.Utils;
 import com.google.gson.Gson;
+import me.x150.jmessenger.MessageSubscription;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.Level;
 
@@ -52,13 +54,7 @@ public class Taco extends Command {
 
     public Taco() {
         super("Taco", "Config for the taco hud", "taco");
-        Events.registerEventHandler(EventType.CONFIG_SAVE, event -> saveConfig(), 0);
-        Events.registerEventHandler(EventType.POST_INIT, event -> { // we in game, context is made, we can make textures
-            if (!init.get()) {
-                initFramesAndConfig();
-            }
-            init.set(true);
-        }, 0);
+        EventSystem.manager.registerSubscribers(this);
     }
 
     static void initFramesAndConfig() {
@@ -179,6 +175,19 @@ public class Taco extends Command {
                 e.printStackTrace();
             }
         }
+    }
+
+    @MessageSubscription
+    void onConfigSave(ConfigSaveEvent e) {
+        saveConfig();
+    }
+
+    @MessageSubscription
+    void onPostInit(WindowInitEvent e) {
+        if (!init.get()) {
+            initFramesAndConfig();
+        }
+        init.set(true);
     }
 
     @Override

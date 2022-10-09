@@ -12,15 +12,16 @@ import coffee.client.feature.gui.notifications.NotificationRenderer;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleRegistry;
 import coffee.client.helper.CompatHelper;
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.Events;
-import coffee.client.helper.event.events.base.NonCancellableEvent;
+import coffee.client.helper.event.EventSystem;
+import coffee.client.helper.event.impl.WindowInitEvent;
 import coffee.client.helper.font.FontRenderers;
 import coffee.client.helper.font.adapter.impl.QuickFontAdapter;
 import coffee.client.helper.font.renderer.FontRenderer;
 import coffee.client.helper.manager.ConfigManager;
 import coffee.client.helper.util.Rotations;
 import coffee.client.helper.util.Utils;
+import me.x150.jmessenger.MessageSubscription;
+import me.x150.jmessenger.impl.SubscriberRegisterEvent;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Element;
@@ -75,6 +76,14 @@ public class CoffeeMain implements ModInitializer {
         log(Level.INFO, "Initializing");
 
         Runtime.getRuntime().addShutdownHook(new Thread(ConfigManager::saveState));
+
+        EventSystem.manager.registerSubscribers(new Object() {
+            @MessageSubscription
+            void onRegister(SubscriberRegisterEvent r) {
+                CoffeeMain.log(Level.INFO, "Registering", r.handler().callee().toString());
+            }
+        });
+
         if (BASE.exists() && !BASE.isDirectory()) {
             BASE.delete();
         }
@@ -170,7 +179,8 @@ public class CoffeeMain implements ModInitializer {
         FAST_TICKER.start();
         CommandRegistry.init();
         log(Level.INFO, "Sending post window init");
-        Events.fireEvent(EventType.POST_INIT, new NonCancellableEvent());
+        EventSystem.manager.send(new WindowInitEvent());
+        //        Events.fireEvent(EventType.POST_INIT, new NonCancellableEvent());
         for (Module module : new ArrayList<>(ModuleRegistry.getModules())) {
             module.postInit();
         }

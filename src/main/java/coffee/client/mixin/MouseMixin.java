@@ -6,9 +6,8 @@
 package coffee.client.mixin;
 
 import coffee.client.CoffeeMain;
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.Events;
-import coffee.client.helper.event.events.MouseEvent;
+import coffee.client.helper.event.EventSystem;
+import coffee.client.helper.event.impl.MouseEvent;
 import net.minecraft.client.Mouse;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -21,9 +20,14 @@ public class MouseMixin {
     @Inject(method = "onMouseButton", at = @At("HEAD"), cancellable = true)
     public void coffee_dispatchMouseEvent(long window, int button, int action, int mods, CallbackInfo ci) {
         if (window == CoffeeMain.client.getWindow().getHandle()) {
-            if (Events.fireEvent(EventType.MOUSE_EVENT, new MouseEvent(button, action))) {
+            MouseEvent me = new MouseEvent(button, MouseEvent.Type.of(action));
+            EventSystem.manager.send(me);
+            if (me.isCancelled()) {
                 ci.cancel();
             }
+            //            if (Events.fireEvent(EventType.MOUSE_EVENT, new MouseEvent(button, action))) {
+            //                ci.cancel();
+            //            }
         }
     }
 }

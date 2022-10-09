@@ -5,6 +5,9 @@
 
 package coffee.client.feature.gui.screen;
 
+import baritone.api.BaritoneAPI;
+import baritone.api.IBaritone;
+import baritone.api.pathing.goals.GoalXZ;
 import coffee.client.CoffeeMain;
 import coffee.client.feature.gui.HasSpecialCursor;
 import coffee.client.feature.gui.element.Element;
@@ -13,6 +16,7 @@ import coffee.client.feature.gui.element.impl.ButtonGroupElement;
 import coffee.client.feature.gui.element.impl.ColorEditorElement;
 import coffee.client.feature.gui.element.impl.FlexLayoutElement;
 import coffee.client.feature.gui.element.impl.TextFieldElement;
+import coffee.client.feature.gui.element.impl.TexturedButtonElement;
 import coffee.client.feature.gui.screen.base.AAScreen;
 import coffee.client.feature.gui.screen.base.CenterOverlayScreen;
 import coffee.client.feature.module.impl.render.Waypoints;
@@ -20,6 +24,7 @@ import coffee.client.helper.font.FontRenderers;
 import coffee.client.helper.font.adapter.impl.QuickFontAdapter;
 import coffee.client.helper.render.Cursor;
 import coffee.client.helper.render.Renderer;
+import coffee.client.helper.render.textures.Texture;
 import coffee.client.helper.util.Transitions;
 import coffee.client.helper.util.Utils;
 import net.minecraft.client.MinecraftClient;
@@ -211,9 +216,10 @@ public class WaypointEditScreen extends AAScreen {
     class WaypointVis extends Element {
         Waypoints.Waypoint wayp;
         ButtonGroupElement actions;
+        TexturedButtonElement delete;
 
         public WaypointVis(double x, double y, Waypoints.Waypoint wayp) {
-            super(x, y, 100, 60);
+            super(x, y, 120, 60);
             this.wayp = wayp;
             this.actions = new ButtonGroupElement(0,
                 0,
@@ -221,11 +227,23 @@ public class WaypointEditScreen extends AAScreen {
                 20,
                 ButtonGroupElement.LayoutDirection.RIGHT,
                 new ButtonGroupElement.ButtonEntry("Edit", this::edit),
-                new ButtonGroupElement.ButtonEntry("Delete", this::delete));
+                new ButtonGroupElement.ButtonEntry("Go here", this::go));
+            this.delete = new TexturedButtonElement(new Color(255, 70, 70),
+                0,
+                0,
+                16,
+                16,
+                this::delete,
+                TexturedButtonElement.IconRenderer.fromSpritesheet(Texture.MODULE_TYPES, "delete.png"));
         }
 
         void edit() {
             client.setScreen(new EditScreen(WaypointEditScreen.this, wayp));
+        }
+
+        void go() {
+            IBaritone primaryBaritone = BaritoneAPI.getProvider().getPrimaryBaritone();
+            primaryBaritone.getCustomGoalProcess().setGoalAndPath(new GoalXZ((int) wayp.getPosition().x, (int) wayp.getPosition().z));
         }
 
         void delete() {
@@ -242,6 +260,8 @@ public class WaypointEditScreen extends AAScreen {
         public void render(MatrixStack stack, double mouseX, double mouseY) {
             this.actions.setPositionX(getPositionX() + 5);
             this.actions.setPositionY(getPositionY() + getHeight() - 20 - 5);
+            this.delete.setPositionX(getPositionX() + getWidth() - 5 - this.delete.getWidth());
+            this.delete.setPositionY(getPositionY() + 5);
             Renderer.R2D.renderRoundedQuad(stack,
                 new Color(20, 20, 20),
                 getPositionX(),
@@ -251,14 +271,15 @@ public class WaypointEditScreen extends AAScreen {
                 5,
                 20);
             QuickFontAdapter customSize = FontRenderers.getCustomSize(20);
-            String t = Utils.capAtLength(wayp.getName(), getWidth() - 10, customSize);
+            String t = Utils.capAtLength(wayp.getName(), getWidth() - 10 - this.delete.getWidth(), customSize);
             customSize.drawString(stack, t, getPositionX() + 5, getPositionY() + 5, 0xFFFFFF);
             this.actions.render(stack, mouseX, mouseY);
+            this.delete.render(stack, mouseX, mouseY);
         }
 
         @Override
         public boolean mouseClicked(double x, double y, int button) {
-            return this.actions.mouseClicked(x, y, button);
+            return this.delete.mouseClicked(x, y, button) || this.actions.mouseClicked(x, y, button);
         }
 
         @Override

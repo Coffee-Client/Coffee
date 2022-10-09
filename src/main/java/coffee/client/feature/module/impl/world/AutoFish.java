@@ -9,10 +9,9 @@ import coffee.client.CoffeeMain;
 import coffee.client.feature.config.DoubleSetting;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.Events;
-import coffee.client.helper.event.events.PacketEvent;
+import coffee.client.helper.event.impl.PacketEvent;
 import coffee.client.helper.util.Utils;
+import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.c2s.play.PlayerInteractItemC2SPacket;
@@ -32,17 +31,18 @@ public class AutoFish extends Module {
 
     public AutoFish() {
         super("AutoFish", "Automatically catches fish for you", ModuleType.WORLD);
-        Events.registerEventHandler(EventType.PACKET_RECEIVE, packete -> {
-            PacketEvent event = (PacketEvent) packete;
-            if (event.getPacket() instanceof PlaySoundS2CPacket packet) {
-                if (packet.getSound().equals(SoundEvents.ENTITY_FISHING_BOBBER_SPLASH)) {
-                    new Thread(() -> {
-                        Utils.sleep(lazyRoundTime() * 100L);
-                        click();
-                    }).start();
-                }
+    }
+
+    @MessageSubscription
+    void on(PacketEvent.Received event) {
+        if (event.getPacket() instanceof PlaySoundS2CPacket packet) {
+            if (packet.getSound().equals(SoundEvents.ENTITY_FISHING_BOBBER_SPLASH)) {
+                new Thread(() -> {
+                    Utils.sleep(lazyRoundTime() * 100L);
+                    click();
+                }).start();
             }
-        }, 0);
+        }
     }
 
     @Override

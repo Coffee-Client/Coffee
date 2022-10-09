@@ -9,10 +9,8 @@ import coffee.client.feature.config.DoubleSetting;
 import coffee.client.feature.config.EnumSetting;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.Events;
-import coffee.client.helper.event.events.PacketEvent;
 import coffee.client.mixin.network.IPlayerMoveC2SPacketMixin;
+import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 
@@ -36,17 +34,15 @@ public class NoFall extends Module {
         super("NoFall", "Prevents fall damage", ModuleType.MOVEMENT);
 
         this.fallDist.showIf(() -> mode.getValue() != Mode.OnGround);
-        Events.registerEventHandler(EventType.PACKET_SEND, event1 -> {
-            if (!this.isEnabled() || !enabled) {
-                return;
+    }
+
+    @MessageSubscription
+    void onPacket(coffee.client.helper.event.impl.PacketEvent.Sent event) {
+        if (event.getPacket() instanceof PlayerMoveC2SPacket) {
+            if (mode.getValue() == Mode.OnGround) {
+                ((IPlayerMoveC2SPacketMixin) event.getPacket()).setOnGround(true);
             }
-            PacketEvent event = (PacketEvent) event1;
-            if (event.getPacket() instanceof PlayerMoveC2SPacket) {
-                if (mode.getValue() == Mode.OnGround) {
-                    ((IPlayerMoveC2SPacketMixin) event.getPacket()).setOnGround(true);
-                }
-            }
-        }, 0);
+        }
     }
 
     @Override

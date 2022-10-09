@@ -10,9 +10,7 @@ import coffee.client.feature.config.DoubleSetting;
 import coffee.client.feature.config.StringSetting;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.Events;
-import coffee.client.helper.event.events.MouseEvent;
+import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
@@ -29,18 +27,13 @@ public class Annihilator extends Module {
 
     public Annihilator() {
         super("Annihilator", "Nukes whatever you click at, requires /fill permissions", ModuleType.WORLD);
-        Events.registerEventHandler(EventType.MOUSE_EVENT, event -> {
-            if (!this.isEnabled()) {
-                return;
-            }
-            if (client.player == null) {
-                return;
-            }
-            MouseEvent event1 = (MouseEvent) event;
-            if (event1.getButton() == 0 && event1.getAction() == 1) {
-                mousePressed();
-            }
-        }, 0);
+    }
+
+    @MessageSubscription
+    void on(coffee.client.helper.event.impl.MouseEvent event1) {
+        if (event1.getButton() == 0 && event1.getType() == coffee.client.helper.event.impl.MouseEvent.Type.CLICK) {
+            mousePressed();
+        }
     }
 
     void mousePressed() {

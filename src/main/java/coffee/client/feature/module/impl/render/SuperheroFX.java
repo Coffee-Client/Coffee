@@ -9,15 +9,14 @@ import coffee.client.CoffeeMain;
 import coffee.client.feature.config.annotation.Setting;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
-import coffee.client.helper.event.EventListener;
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.events.PacketEvent;
+import coffee.client.helper.event.impl.PacketEvent;
 import coffee.client.helper.font.renderer.FontRenderer;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.Transitions;
 import coffee.client.helper.util.Utils;
 import coffee.client.mixin.network.PlayerInteractEntityC2SPacketMixin;
 import lombok.AllArgsConstructor;
+import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
@@ -128,8 +127,8 @@ public class SuperheroFX extends Module {
         }
     }
 
-    @EventListener(value = EventType.PACKET_SEND)
-    void packetSend(PacketEvent pe) {
+    @MessageSubscription
+    void packetSend(PacketEvent.Sent pe) {
         if (pe.getPacket() instanceof PlayerInteractEntityC2SPacket packet) {
             PlayerInteractEntityC2SPacketMixin mixin = (PlayerInteractEntityC2SPacketMixin) packet;
             int id = mixin.getEntityId();

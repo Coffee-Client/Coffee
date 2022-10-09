@@ -11,8 +11,10 @@ import coffee.client.feature.gui.notifications.hudNotif.HudNotification;
 import coffee.client.feature.gui.screen.base.ClientScreen;
 import coffee.client.feature.gui.widget.RoundButton;
 import coffee.client.feature.gui.widget.RoundTextFieldWidget;
+import coffee.client.helper.config.ConfigContainer;
 import coffee.client.helper.font.FontRenderers;
 import coffee.client.helper.font.adapter.FontAdapter;
+import coffee.client.helper.gson.GsonSupplier;
 import coffee.client.helper.render.ClipStack;
 import coffee.client.helper.render.MSAAFramebuffer;
 import coffee.client.helper.render.PlayerHeadResolver;
@@ -27,11 +29,11 @@ import coffee.client.mixin.IMinecraftClientMixin;
 import coffee.client.mixin.ISessionMixin;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.mojang.authlib.minecraft.UserApiService;
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 import com.mojang.blaze3d.systems.RenderSystem;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Setter;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.Screen;
@@ -41,13 +43,11 @@ import net.minecraft.client.util.ProfileKeys;
 import net.minecraft.client.util.Session;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
-import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.Level;
 import org.lwjgl.opengl.GL40C;
 
 import java.awt.Color;
 import java.io.File;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -64,11 +64,12 @@ import java.util.stream.Collectors;
 public class AltManagerScreen extends ClientScreen implements FastTickable {
     public static final Map<UUID, Texture> texCache = new HashMap<>();
     static final File ALTS_FILE = new File(CoffeeMain.BASE, "alts.sip");
-    static final String TOP_NOTE = """
-        // DO NOT SHARE THIS FILE
-        // This file contains sensitive information about your accounts
-        // Unless you REALLY KNOW WHAT YOU ARE DOING, DO NOT SEND THIS TO ANYONE
-        """;
+    static final ConfigContainer CONFIG_CONTAINER = new ConfigContainer(ALTS_FILE, new JsonArray());
+    //    static final String TOP_NOTE = """
+    //        // DO NOT SHARE THIS FILE
+    //        // This file contains sensitive information about your accounts
+    //        // Unless you REALLY KNOW WHAT YOU ARE DOING, DO NOT SEND THIS TO ANYONE
+    //        """;
     static final Color bg = new Color(20, 20, 20);
     static final Color pillColor = new Color(25, 25, 25, 100);
     static final Color backgroundOverlay = new Color(0, 0, 0, 130);
@@ -149,26 +150,15 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
 
     void saveAlts() {
         CoffeeMain.log(Level.INFO, "Saving alts");
-        JsonArray root = new JsonArray();
+        List<ConfigAltEntry> altl = new ArrayList<>();
         for (AltContainer alt1 : alts) {
             AltStorage alt = alt1.storage;
-            JsonObject current = new JsonObject();
-            current.addProperty("email", alt.email);
-            current.addProperty("password", alt.password);
-            current.addProperty("type", alt.type.name());
-            current.addProperty("cachedUsername", alt.cachedName);
-            current.addProperty("cachedUUID", alt.cachedUuid != null ? alt.cachedUuid.toString() : null);
-            current.addProperty("valid", alt.valid);
-            // remove every tag that is empty or consists of only spaces
             List<String> parsedTags = Arrays.stream(alt.tags.split(",")).map(String::trim).filter(s -> !s.isEmpty()).toList();
-            current.addProperty("tags", parsedTags.isEmpty() ? "" : String.join(",", parsedTags));
-            root.add(current);
+            ConfigAltEntry e = new ConfigAltEntry(alt.email, alt.password, alt.cachedName, alt.type, alt.cachedUuid, alt.valid, String.join(",", parsedTags));
+            altl.add(e);
         }
-        try {
-            FileUtils.write(ALTS_FILE, TOP_NOTE + "\n" + root, StandardCharsets.UTF_8);
-        } catch (Exception ignored) {
-            CoffeeMain.log(Level.ERROR, "Failed to write alts file");
-        }
+        CONFIG_CONTAINER.set(altl);
+        CONFIG_CONTAINER.save();
     }
 
     @Override
@@ -181,37 +171,47 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
     void loadAlts() {
         CoffeeMain.log(Level.INFO, "Loading alts");
 
-        if (!ALTS_FILE.isFile()) {
-            ALTS_FILE.delete();
+        CONFIG_CONTAINER.reload();
+        JsonArray asJsonArray = CONFIG_CONTAINER.getValue().getAsJsonArray();
+        for (JsonElement jsonElement : asJsonArray) {
+            ConfigAltEntry configAltEntry = GsonSupplier.getGson().fromJson(jsonElement, ConfigAltEntry.class);
+            AltStorage container = new AltStorage(configAltEntry.cachedUsername,
+                configAltEntry.email,
+                configAltEntry.password,
+                configAltEntry.cachedUUID,
+                configAltEntry.type,
+                configAltEntry.tags);
+            container.valid = configAltEntry.valid;
+            AltContainer ac = new AltContainer(0, 0, 0, container);
+            ac.renderY = ac.renderX = -1;
+            alts.add(ac);
         }
-        if (!ALTS_FILE.exists()) {
-            CoffeeMain.log(Level.INFO, "Skipping alt loading because file doesn't exist");
-            return;
-        }
-        try {
-            String contents = FileUtils.readFileToString(ALTS_FILE, StandardCharsets.UTF_8);
-            JsonArray ja = JsonParser.parseString(contents).getAsJsonArray();
-            for (JsonElement jsonElement : ja) {
-                JsonObject jo = jsonElement.getAsJsonObject();
-                try {
-                    AltStorage container = new AltStorage(jo.get("cachedUsername").getAsString(),
-                        jo.get("email").getAsString(),
-                        jo.get("password").getAsString(),
-                        UUID.fromString(jo.get("cachedUUID").getAsString()),
-                        AddScreenOverlay.AccountType.valueOf(jo.get("type").getAsString()),
-                        jo.get("tags") == null ? "" : jo.get("tags").getAsString());
-                    container.valid = !jo.has("valid") || jo.get("valid").getAsBoolean();
-                    AltContainer ac = new AltContainer(0, 0, 0, container);
-                    ac.renderY = ac.renderX = -1;
-                    alts.add(ac);
-                } catch (Exception ignored) {
+        //        if (!ALTS_FILE.isFile()) {
+        //            ALTS_FILE.delete();
+        //        }
+        //        if (!ALTS_FILE.exists()) {
+        //            CoffeeMain.log(Level.INFO, "Skipping alt loading because file doesn't exist");
+        //            return;
+        //        }
+        //        try {
+        //            String contents = FileUtils.readFileToString(ALTS_FILE, StandardCharsets.UTF_8);
+        //            JsonArray ja = JsonParser.parseString(contents).getAsJsonArray();
+        //            for (JsonElement jsonElement : ja) {
+        //                JsonObject jo = jsonElement.getAsJsonObject();
+        //                try {
 
-                }
-
-            }
-        } catch (Exception ignored) {
-            CoffeeMain.log(Level.ERROR, "Failed to read alts file - corrupted?");
-        }
+        //                    container.valid = !jo.has("valid") || jo.get("valid").getAsBoolean();
+        //                    AltContainer ac = new AltContainer(0, 0, 0, container);
+        //                    ac.renderY = ac.renderX = -1;
+        //                    alts.add(ac);
+        //                } catch (Exception ignored) {
+        //
+        //                }
+        //
+        //            }
+        //        } catch (Exception ignored) {
+        //            CoffeeMain.log(Level.ERROR, "Failed to read alts file - corrupted?");
+        //        }
     }
 
     double getPadding() {
@@ -551,6 +551,16 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
             }
         }
         return false;
+    }
+
+    @AllArgsConstructor
+    @Data
+    static class ConfigAltEntry {
+        public String email, password, cachedUsername;
+        public AddScreenOverlay.AccountType type;
+        public UUID cachedUUID;
+        public boolean valid;
+        public String tags;
     }
 
     static class AltStorage {

@@ -9,11 +9,9 @@ import coffee.client.CoffeeMain;
 import coffee.client.feature.config.annotation.Setting;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.Events;
-import coffee.client.helper.event.events.MouseEvent;
 import coffee.client.helper.util.Rotations;
 import coffee.client.helper.util.Utils;
+import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.ProjectileUtil;
@@ -40,51 +38,43 @@ public class AnyPlacer extends Module {
 
     public AnyPlacer() {
         super("AnyPlacer", "Places spawn eggs with infinite reach (requires creative)", ModuleType.WORLD);
-        Events.registerEventHandler(EventType.MOUSE_EVENT, event -> {
-            if (!this.isEnabled()) {
-                return;
-            }
-            if (CoffeeMain.client.player == null || CoffeeMain.client.world == null) {
-                return;
-            }
-            if (CoffeeMain.client.currentScreen != null) {
-                return;
-            }
-            MouseEvent me = (MouseEvent) event;
-            if ((me.getAction() == 1 || me.getAction() == 2) && me.getButton() == 1) {
-                ItemStack sex = CoffeeMain.client.player.getMainHandStack();
-                if (sex.getItem() instanceof SpawnEggItem) {
-                    event.setCancelled(true);
-                    Vec3d rotationVector = Rotations.getRotationVector(Rotations.getClientPitch(), Rotations.getClientYaw());
-                    EntityHitResult raycast = ProjectileUtil.raycast(client.player,
-                        CoffeeMain.client.player.getCameraPosVec(0),
-                        CoffeeMain.client.player.getCameraPosVec(0).add(rotationVector.multiply(500)),
-                        client.player.getBoundingBox().stretch(rotationVector.multiply(500)).expand(1, 1, 1),
-                        Entity::isAttackable,
-                        500 * 500);
-                    Vec3d spawnPos;
-                    if (raycast != null && raycast.getEntity() != null) {
-                        spawnPos = raycast.getPos();
-                    } else {
-                        HitResult hr = CoffeeMain.client.player.raycast(500, 0, true);
-                        spawnPos = hr.getPos();
-                    }
-                    spawnPos = spawnPos.add(0, heightOffset, 0);
-                    NbtCompound entityTag = sex.getOrCreateSubNbt("EntityTag");
-                    NbtList nl = new NbtList();
-                    nl.add(NbtDouble.of(spawnPos.x));
-                    nl.add(NbtDouble.of(spawnPos.y));
-                    nl.add(NbtDouble.of(spawnPos.z));
-                    entityTag.put("Pos", nl);
-                    CreativeInventoryActionC2SPacket a = new CreativeInventoryActionC2SPacket(Utils.Inventory.slotIndexToId(CoffeeMain.client.player.getInventory().selectedSlot),
-                        sex);
-                    Objects.requireNonNull(CoffeeMain.client.getNetworkHandler()).sendPacket(a);
-                    BlockHitResult bhr = new BlockHitResult(CoffeeMain.client.player.getPos(), Direction.DOWN, new BlockPos(CoffeeMain.client.player.getPos()), false);
-                    PlayerInteractBlockC2SPacket ib = new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, bhr, Utils.increaseAndCloseUpdateManager(CoffeeMain.client.world));
-                    CoffeeMain.client.getNetworkHandler().sendPacket(ib);
+    }
+
+    @MessageSubscription
+    void on(coffee.client.helper.event.impl.MouseEvent me) {
+        if (me.getButton() == 1) {
+            ItemStack sex = CoffeeMain.client.player.getMainHandStack();
+            if (sex.getItem() instanceof SpawnEggItem) {
+                me.setCancelled(true);
+                Vec3d rotationVector = Rotations.getRotationVector(Rotations.getClientPitch(), Rotations.getClientYaw());
+                EntityHitResult raycast = ProjectileUtil.raycast(client.player,
+                    CoffeeMain.client.player.getCameraPosVec(0),
+                    CoffeeMain.client.player.getCameraPosVec(0).add(rotationVector.multiply(500)),
+                    client.player.getBoundingBox().stretch(rotationVector.multiply(500)).expand(1, 1, 1),
+                    Entity::isAttackable,
+                    500 * 500);
+                Vec3d spawnPos;
+                if (raycast != null && raycast.getEntity() != null) {
+                    spawnPos = raycast.getPos();
+                } else {
+                    HitResult hr = CoffeeMain.client.player.raycast(500, 0, true);
+                    spawnPos = hr.getPos();
                 }
+                spawnPos = spawnPos.add(0, heightOffset, 0);
+                NbtCompound entityTag = sex.getOrCreateSubNbt("EntityTag");
+                NbtList nl = new NbtList();
+                nl.add(NbtDouble.of(spawnPos.x));
+                nl.add(NbtDouble.of(spawnPos.y));
+                nl.add(NbtDouble.of(spawnPos.z));
+                entityTag.put("Pos", nl);
+                CreativeInventoryActionC2SPacket a = new CreativeInventoryActionC2SPacket(Utils.Inventory.slotIndexToId(CoffeeMain.client.player.getInventory().selectedSlot),
+                    sex);
+                Objects.requireNonNull(CoffeeMain.client.getNetworkHandler()).sendPacket(a);
+                BlockHitResult bhr = new BlockHitResult(CoffeeMain.client.player.getPos(), Direction.DOWN, new BlockPos(CoffeeMain.client.player.getPos()), false);
+                PlayerInteractBlockC2SPacket ib = new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, bhr, Utils.increaseAndCloseUpdateManager(CoffeeMain.client.world));
+                CoffeeMain.client.getNetworkHandler().sendPacket(ib);
             }
-        }, 0);
+        }
     }
 
     @Override

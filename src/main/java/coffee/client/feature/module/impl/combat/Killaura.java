@@ -12,9 +12,7 @@ import coffee.client.feature.config.annotation.Setting;
 import coffee.client.feature.config.annotation.VisibilitySpecifier;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
-import coffee.client.helper.event.EventListener;
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.events.PacketEvent;
+import coffee.client.helper.event.impl.PacketEvent;
 import coffee.client.helper.manager.AttackManager;
 import coffee.client.helper.util.Rotations;
 import coffee.client.helper.util.Timer;
@@ -23,6 +21,7 @@ import coffee.client.mixin.IPlayerListEntryMixin;
 import com.google.common.util.concurrent.AtomicDouble;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import it.unimi.dsi.fastutil.ints.Int2DoubleArrayMap;
+import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
@@ -132,8 +131,8 @@ public class Killaura extends Module {
         return attackFilter.isSet(AttackFilter.EverythingElse);
     }
 
-    @EventListener(EventType.PACKET_RECEIVE)
-    void onPacketRecv(PacketEvent pe) {
+    @MessageSubscription
+    void onPacketRecv(PacketEvent.Received pe) {
         Packet<?> packet = pe.getPacket();
         if (packet instanceof PlayerSpawnS2CPacket ps) {
             Vec3d lastKnownServerPos = Rotations.getLastKnownServerPos();
@@ -204,8 +203,8 @@ public class Killaura extends Module {
         }
     }
 
-    @EventListener(value = EventType.PACKET_SEND, prio = 10)
-    void onPacketSend(PacketEvent pe) {
+    @MessageSubscription(priority = -10)
+    void onPacketSend(PacketEvent.Sent pe) {
         if (pe.getPacket() instanceof PlayerMoveC2SPacket) {
             for (Integer integer : playersWhoHaveSpawnedAndStayedInOurRange.keySet().toArray(Integer[]::new)) {
                 Entity entityById = client.world.getEntityById(integer);

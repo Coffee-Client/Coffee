@@ -9,9 +9,8 @@ import coffee.client.CoffeeMain;
 import coffee.client.feature.module.ModuleRegistry;
 import coffee.client.feature.module.impl.misc.AntiCrash;
 import coffee.client.feature.module.impl.render.BlockHighlighting;
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.Events;
-import coffee.client.helper.event.events.ChunkRenderQueryEvent;
+import coffee.client.helper.event.EventSystem;
+import coffee.client.helper.event.impl.ChunkRenderQuery;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
@@ -35,9 +34,9 @@ import java.util.stream.StreamSupport;
 public class WorldRendererMixin {
     @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/WorldRenderer;setupTerrain(Lnet/minecraft/client/render/Camera;Lnet/minecraft/client/render/Frustum;ZZ)V"), index = 3)
     private boolean coffee_renderEverything(boolean spectator) {
-        ChunkRenderQueryEvent query = new ChunkRenderQueryEvent();
-        Events.fireEvent(EventType.SHOULD_RENDER_CHUNK, query);
-        return query.wasModified() ? query.shouldRender() : spectator; // only submit our value if we have a reason to
+        ChunkRenderQuery query = new ChunkRenderQuery();
+        EventSystem.manager.send(query);
+        return query.isModified() ? query.isShouldRender() : spectator; // only submit our value if we have a reason to
     }
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lit/unimi/dsi/fastutil/longs/Long2ObjectMap;long2ObjectEntrySet()Lit/unimi/dsi/fastutil/objects/ObjectSet;"))

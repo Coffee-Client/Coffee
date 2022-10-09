@@ -10,10 +10,8 @@ import coffee.client.feature.config.DoubleSetting;
 import coffee.client.feature.config.EnumSetting;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.Events;
-import coffee.client.helper.event.events.PacketEvent;
 import coffee.client.mixin.network.IEntityVelocityUpdateS2CPacketMixin;
+import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 
@@ -37,28 +35,26 @@ public class Velocity extends Module {
         super("Velocity", "Modifies all incoming velocity updates", ModuleType.COMBAT);
         multiplierX.showIf(() -> mode.getValue() == Mode.Modify);
         multiplierY.showIf(() -> mode.getValue() == Mode.Modify);
-        Events.registerEventHandler(EventType.PACKET_RECEIVE, event -> {
-            if (!this.isEnabled() || CoffeeMain.client.player == null) {
-                return;
+    }
+
+    @MessageSubscription
+    void onA(coffee.client.helper.event.impl.PacketEvent.Received pe) {
+        if (pe.getPacket() instanceof EntityVelocityUpdateS2CPacket packet && packet.getId() == CoffeeMain.client.player.getId()) {
+            if (mode.getValue() == Mode.Modify) {
+                double velX = packet.getVelocityX() / 8000d; // don't ask me why they did this
+                double velY = packet.getVelocityY() / 8000d;
+                double velZ = packet.getVelocityZ() / 8000d;
+                velX *= multiplierX.getValue();
+                velY *= multiplierY.getValue();
+                velZ *= multiplierX.getValue();
+                IEntityVelocityUpdateS2CPacketMixin jesusFuckingChrist = (IEntityVelocityUpdateS2CPacketMixin) packet;
+                jesusFuckingChrist.setVelocityX((int) (velX * 8000));
+                jesusFuckingChrist.setVelocityY((int) (velY * 8000));
+                jesusFuckingChrist.setVelocityZ((int) (velZ * 8000));
+            } else {
+                pe.setCancelled(true);
             }
-            PacketEvent pe = (PacketEvent) event;
-            if (pe.getPacket() instanceof EntityVelocityUpdateS2CPacket packet && packet.getId() == CoffeeMain.client.player.getId()) {
-                if (mode.getValue() == Mode.Modify) {
-                    double velX = packet.getVelocityX() / 8000d; // don't ask me why they did this
-                    double velY = packet.getVelocityY() / 8000d;
-                    double velZ = packet.getVelocityZ() / 8000d;
-                    velX *= multiplierX.getValue();
-                    velY *= multiplierY.getValue();
-                    velZ *= multiplierX.getValue();
-                    IEntityVelocityUpdateS2CPacketMixin jesusFuckingChrist = (IEntityVelocityUpdateS2CPacketMixin) packet;
-                    jesusFuckingChrist.setVelocityX((int) (velX * 8000));
-                    jesusFuckingChrist.setVelocityY((int) (velY * 8000));
-                    jesusFuckingChrist.setVelocityZ((int) (velZ * 8000));
-                } else {
-                    event.setCancelled(true);
-                }
-            }
-        }, 0);
+        }
     }
 
     @Override

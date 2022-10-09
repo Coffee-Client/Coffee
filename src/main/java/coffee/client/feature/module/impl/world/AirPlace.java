@@ -8,11 +8,10 @@ package coffee.client.feature.module.impl.world;
 import coffee.client.CoffeeMain;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.Events;
-import coffee.client.helper.event.events.MouseEvent;
+import coffee.client.helper.event.impl.MouseEvent;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.Utils;
+import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.BlockItem;
 import net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket;
@@ -26,34 +25,33 @@ public class AirPlace extends Module {
 
     public AirPlace() {
         super("AirPlace", "Places blocks in the air", ModuleType.MISC);
-        Events.registerEventHandler(EventType.MOUSE_EVENT, event -> {
-            if (!this.isEnabled()) {
+    }
+
+    @MessageSubscription
+    void on(coffee.client.helper.event.impl.MouseEvent event) {
+        if (enabled && event.getButton() == 1 && event.getType() == MouseEvent.Type.CLICK) {
+            if (CoffeeMain.client.currentScreen != null) {
                 return;
             }
-            if (enabled && ((MouseEvent) event).getButton() == 1 && ((MouseEvent) event).getAction() == 1) {
-                if (CoffeeMain.client.currentScreen != null) {
+            try {
+                if (!client.world.getBlockState(((BlockHitResult) CoffeeMain.client.crosshairTarget).getBlockPos()).isAir()) {
                     return;
                 }
-                try {
-                    if (!client.world.getBlockState(((BlockHitResult) CoffeeMain.client.crosshairTarget).getBlockPos()).isAir()) {
-                        return;
-                    }
-                    CoffeeMain.client.player.networkHandler.sendPacket(new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND,
-                        (BlockHitResult) CoffeeMain.client.crosshairTarget,
-                        Utils.increaseAndCloseUpdateManager(CoffeeMain.client.world)));
-                    if ((client.player.getMainHandStack().getItem() instanceof BlockItem)) {
-                        Renderer.R3D.renderFadingBlock(Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 255),
-                            Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 100).darker(),
-                            Vec3d.of(((BlockHitResult) CoffeeMain.client.crosshairTarget).getBlockPos()),
-                            new Vec3d(1, 1, 1),
-                            1000);
-                    }
-                    CoffeeMain.client.player.swingHand(Hand.MAIN_HAND);
-                    event.setCancelled(true);
-                } catch (Exception ignored) {
+                CoffeeMain.client.player.networkHandler.sendPacket(new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND,
+                    (BlockHitResult) CoffeeMain.client.crosshairTarget,
+                    Utils.increaseAndCloseUpdateManager(CoffeeMain.client.world)));
+                if ((client.player.getMainHandStack().getItem() instanceof BlockItem)) {
+                    Renderer.R3D.renderFadingBlock(Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 255),
+                        Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 100).darker(),
+                        Vec3d.of(((BlockHitResult) CoffeeMain.client.crosshairTarget).getBlockPos()),
+                        new Vec3d(1, 1, 1),
+                        1000);
                 }
+                CoffeeMain.client.player.swingHand(Hand.MAIN_HAND);
+                event.setCancelled(true);
+            } catch (Exception ignored) {
             }
-        }, 0);
+        }
     }
 
     @Override

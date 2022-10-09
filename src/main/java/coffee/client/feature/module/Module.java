@@ -10,7 +10,7 @@ import coffee.client.feature.config.BooleanSetting;
 import coffee.client.feature.config.DoubleSetting;
 import coffee.client.feature.config.ModuleConfig;
 import coffee.client.feature.gui.notifications.Notification;
-import coffee.client.helper.event.Events;
+import coffee.client.helper.event.EventSystem;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.client.MinecraftClient;
@@ -55,7 +55,8 @@ public abstract class Module {
             }
         }
         this.toasts = this.config.create(new BooleanSetting.Builder(!hasAnnotation).name("Toasts").description("Whether to show enabled / disabled toasts").get());
-        Events.registerTransientEventHandlerClassEvents(this);
+        //        Events.registerTransientEventHandlerClassEvents(this);
+        //        EventSystem.manager.registerSubscribers(this);
     }
 
     public final void postModuleInit() {
@@ -117,11 +118,13 @@ public abstract class Module {
             Notification.create(1000, "Module toggle", Notification.Type.INFO, (this.enabled ? "§aEn" : "§cDis") + "abled §r" + this.getName());
         }
         if (this.enabled) {
-            Events.registerEventHandlerClass(this);
+            //            Events.registerEventHandlerClass(this);
+            EventSystem.manager.registerSubscribers(this);
             this.enable();
         } else {
             this.disable();
-            Events.unregisterEventHandlerClass(this);
+            //            Events.unregisterEventHandlerClass(this);
+            EventSystem.manager.unregister(this);
         }
     }
 

@@ -5,9 +5,8 @@
 
 package coffee.client.mixin.render;
 
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.Events;
-import coffee.client.helper.event.events.BlockEntityRenderEvent;
+import coffee.client.helper.event.EventSystem;
+import coffee.client.helper.event.impl.RenderEvent;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
@@ -22,8 +21,13 @@ public class BlockEntityRenderDispatcherMixin {
 
     @Inject(method = "render(Lnet/minecraft/block/entity/BlockEntity;FLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;)V", at = @At("HEAD"), cancellable = true)
     public <E extends BlockEntity> void coffee_preRender(E blockEntity, float tickDelta, MatrixStack matrix, VertexConsumerProvider vertexConsumerProvider, CallbackInfo ci) {
-        if (Events.fireEvent(EventType.BLOCK_ENTITY_RENDER, new BlockEntityRenderEvent(matrix, blockEntity))) {
+        RenderEvent re = new RenderEvent.BlockEntity(matrix, blockEntity);
+        EventSystem.manager.send(re);
+        if (re.isCancelled()) {
             ci.cancel();
         }
+        //        if (Events.fireEvent(EventType.BLOCK_ENTITY_RENDER, new BlockEntityRenderEvent(matrix, blockEntity))) {
+        //            ci.cancel();
+        //        }
     }
 }

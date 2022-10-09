@@ -11,9 +11,6 @@ import coffee.client.feature.gui.screen.LoadingScreen;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleRegistry;
 import coffee.client.feature.module.impl.world.FastUse;
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.Events;
-import coffee.client.helper.event.events.base.NonCancellableEvent;
 import coffee.client.helper.manager.ConfigManager;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
@@ -48,7 +45,6 @@ public abstract class MinecraftClientMixin {
     @Inject(method = "stop", at = @At("HEAD"))
     void coffee_dispatchExit(CallbackInfo ci) {
         ConfigManager.saveState();
-        Events.fireEvent(EventType.GAME_EXIT, new NonCancellableEvent());
     }
 
     @Inject(method = "<init>", at = @At("TAIL"))

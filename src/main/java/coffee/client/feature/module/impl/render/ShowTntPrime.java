@@ -8,14 +8,12 @@ package coffee.client.feature.module.impl.render;
 import coffee.client.CoffeeMain;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.Events;
-import coffee.client.helper.event.events.PacketEvent;
 import coffee.client.helper.font.FontRenderers;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.Utils;
 import com.mojang.blaze3d.systems.RenderSystem;
 import it.unimi.dsi.fastutil.ints.Int2IntArrayMap;
+import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.BufferRenderer;
 import net.minecraft.client.render.GameRenderer;
@@ -38,29 +36,6 @@ public class ShowTntPrime extends Module {
 
     public ShowTntPrime() {
         super("ShowTntPrime", "Shows how much time is left for a piece of tnt to explode", ModuleType.RENDER);
-        Events.registerEventHandler(EventType.PACKET_RECEIVE, event -> {
-            if (!this.isEnabled()) {
-                return;
-            }
-            PacketEvent pe = (PacketEvent) event;
-            if (pe.getPacket() instanceof EntityTrackerUpdateS2CPacket p) {
-                Entity e = CoffeeMain.client.world.getEntityById(p.id());
-                if (e == null) {
-                    return;
-                }
-                if (e instanceof TntEntity) {
-                    if (i2iamp.size() > 200) {
-                        return;
-                    }
-                    if (p.getTrackedValues() == null || p.getTrackedValues().size() == 0) {
-                        return;
-                    }
-                    if (!i2iamp.containsKey(p.id())) {
-                        i2iamp.put(p.id(), Integer.parseInt(p.getTrackedValues().get(0).get() + ""));
-                    }
-                }
-            }
-        }, 0);
     }
 
     static void semicircle(MatrixStack stack, Color c, double x, double y, double rad, double width, double segments, double toRad) {
@@ -95,6 +70,27 @@ public class ShowTntPrime extends Module {
         RenderSystem.enableTexture();
         RenderSystem.disableBlend();
         stack.pop();
+    }
+
+    @MessageSubscription
+    void onA(coffee.client.helper.event.impl.PacketEvent.Received pe) {
+        if (pe.getPacket() instanceof EntityTrackerUpdateS2CPacket p) {
+            Entity e = CoffeeMain.client.world.getEntityById(p.id());
+            if (e == null) {
+                return;
+            }
+            if (e instanceof TntEntity) {
+                if (i2iamp.size() > 200) {
+                    return;
+                }
+                if (p.getTrackedValues() == null || p.getTrackedValues().size() == 0) {
+                    return;
+                }
+                if (!i2iamp.containsKey(p.id())) {
+                    i2iamp.put(p.id(), Integer.parseInt(p.getTrackedValues().get(0).get() + ""));
+                }
+            }
+        }
     }
 
     @Override

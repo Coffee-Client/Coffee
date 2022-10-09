@@ -8,7 +8,6 @@ package coffee.client.feature.module;
 
 import coffee.client.CoffeeMain;
 import coffee.client.feature.addon.Addon;
-import coffee.client.feature.config.SettingBase;
 import coffee.client.feature.module.impl.combat.AimAssist;
 import coffee.client.feature.module.impl.combat.AutoAttack;
 import coffee.client.feature.module.impl.combat.AutoTrap;
@@ -18,7 +17,6 @@ import coffee.client.feature.module.impl.combat.FireballDeflector;
 import coffee.client.feature.module.impl.combat.Killaura;
 import coffee.client.feature.module.impl.combat.Reach;
 import coffee.client.feature.module.impl.combat.ShulkerDeflector;
-import coffee.client.feature.module.impl.combat.TpRange;
 import coffee.client.feature.module.impl.combat.Velocity;
 import coffee.client.feature.module.impl.exploit.AntiAntiXray;
 import coffee.client.feature.module.impl.exploit.AntiRDI;
@@ -40,7 +38,6 @@ import coffee.client.feature.module.impl.misc.AntiOffhandCrash;
 import coffee.client.feature.module.impl.misc.AntiPacketKick;
 import coffee.client.feature.module.impl.misc.ChestIndexer;
 import coffee.client.feature.module.impl.misc.ClientSettings;
-import coffee.client.feature.module.impl.misc.Debugger;
 import coffee.client.feature.module.impl.misc.DiscordRPC;
 import coffee.client.feature.module.impl.misc.GamemodeAlert;
 import coffee.client.feature.module.impl.misc.InfChatLength;
@@ -129,12 +126,10 @@ import coffee.client.feature.module.impl.world.Nuker;
 import coffee.client.feature.module.impl.world.Scaffold;
 import coffee.client.feature.module.impl.world.SurvivalNuker;
 import coffee.client.feature.module.impl.world.XRAY;
-import coffee.client.helper.event.Events;
 import org.apache.logging.log4j.Level;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -193,7 +188,7 @@ public class ModuleRegistry {
         }
     }
 
-    private static Module registerModule(Class<? extends Module> moduleClass) {
+    private static void registerModule(Class<? extends Module> moduleClass) {
         Module instance = null;
         for (Constructor<?> declaredConstructor : moduleClass.getDeclaredConstructors()) {
             if (declaredConstructor.getParameterCount() != 0) {
@@ -210,7 +205,6 @@ public class ModuleRegistry {
         }
         //CoffeeMain.log(Level.INFO, "Initialized " + instance.getName() + " via " + moduleClass.getName());
         vanillaModules.add(instance);
-        return instance;
     }
 
     private static void initInner() {
@@ -240,7 +234,6 @@ public class ModuleRegistry {
         registerModule(XRAY.class);
         registerModule(Decimator.class);
         registerModule(ClickGUI.class);
-        registerModule(TpRange.class);
         registerModule(AnyPlacer.class);
         registerModule(FireballDeflector.class);
         registerModule(ShulkerDeflector.class);
@@ -331,7 +324,6 @@ public class ModuleRegistry {
         registerModule(Girlboss.class);
         registerModule(Waypoints.class);
         registerModule(NoMessageIndicators.class);
-        registerModule(Debugger.class);
         registerModule(NoSlow.class);
         registerModule(GamemodeAlert.class);
         registerModule(LecternCrash.class);
@@ -355,35 +347,6 @@ public class ModuleRegistry {
         }
         awaitLockOpen();
         return sharedModuleList;
-    }
-
-    public static Module reload(Module m) {
-        if (m.isEnabled()) {
-            m.setEnabled(false);
-        }
-        Map<String, String> settings = new HashMap<>();
-        for (SettingBase<?> setting : m.config.getSettings()) {
-            settings.put(setting.name, setting.getConfigSave());
-        }
-        Class<? extends Module> moduleClass = m.getClass();
-        Events.unregisterEventHandlerClassEntirely(m);
-        reloadInProgress.set(true);
-        vanillaModules.remove(m);
-        cachedModuleClassMap.remove(moduleClass);
-        Module newModule = registerModule(moduleClass);
-        reloadInProgress.set(false);
-
-        newModule.postModuleInit();
-        newModule.postInit();
-        for (String s : settings.keySet()) {
-            SettingBase<?> settingBase = newModule.config.get(s);
-            if (settingBase != null) {
-                settingBase.accept(settings.get(s));
-            }
-        }
-        rebuildSharedModuleList();
-
-        return newModule;
     }
 
     private static void awaitLockOpen() {

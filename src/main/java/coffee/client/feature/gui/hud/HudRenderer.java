@@ -13,14 +13,14 @@ import coffee.client.feature.gui.hud.element.TabGui;
 import coffee.client.feature.gui.hud.element.Taco;
 import coffee.client.feature.gui.hud.element.TargetHUD;
 import coffee.client.feature.gui.screen.HudEditorScreen;
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.Events;
-import coffee.client.helper.event.events.MouseEvent;
+import coffee.client.helper.event.EventSystem;
+import coffee.client.helper.event.impl.ConfigSaveEvent;
 import coffee.client.helper.util.Utils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import me.x150.jmessenger.MessageSubscription;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.Level;
 
@@ -42,28 +42,7 @@ public class HudRenderer {
     double prevWY = CoffeeMain.client.getWindow().getScaledHeight();
 
     private HudRenderer() {
-        Events.registerEventHandler(EventType.MOUSE_EVENT, event -> {
-            if (!isEditing) {
-                return;
-            }
-            MouseEvent me = (MouseEvent) event;
-            if (me.getAction() == 1) {
-                mouseHeldDown = true;
-                prevX = Utils.Mouse.getMouseX();
-                prevY = Utils.Mouse.getMouseY();
-                for (HudElement element : elements) {
-                    if (element.mouseClicked(Utils.Mouse.getMouseX(), Utils.Mouse.getMouseY())) {
-                        break;
-                    }
-                }
-            } else if (me.getAction() == 0) {
-                mouseHeldDown = false;
-                for (HudElement element : elements) {
-                    element.mouseReleased();
-                }
-            }
-        }, 0);
-        Events.registerEventHandler(EventType.CONFIG_SAVE, event -> saveConfig(), 0);
+        EventSystem.manager.registerSubscribers(this);
         loadConfig();
     }
 
@@ -82,6 +61,33 @@ public class HudRenderer {
         he.add(new TabGui());
         he.add(new RadarElement());
         return he;
+    }
+
+    @MessageSubscription
+    void onMouse(coffee.client.helper.event.impl.MouseEvent me) {
+        if (!isEditing) {
+            return;
+        }
+        if (me.getType() == coffee.client.helper.event.impl.MouseEvent.Type.CLICK) {
+            mouseHeldDown = true;
+            prevX = Utils.Mouse.getMouseX();
+            prevY = Utils.Mouse.getMouseY();
+            for (HudElement element : elements) {
+                if (element.mouseClicked(Utils.Mouse.getMouseX(), Utils.Mouse.getMouseY())) {
+                    break;
+                }
+            }
+        } else if (me.getType() == coffee.client.helper.event.impl.MouseEvent.Type.LIFT) {
+            mouseHeldDown = false;
+            for (HudElement element : elements) {
+                element.mouseReleased();
+            }
+        }
+    }
+
+    @MessageSubscription
+    void onConfigSave(ConfigSaveEvent e) {
+
     }
 
     void saveConfig() {

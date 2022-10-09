@@ -7,9 +7,7 @@ package coffee.client.feature.module.impl.misc;
 
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.Events;
-import coffee.client.helper.event.events.PacketEvent;
+import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.packet.s2c.play.GameMessageS2CPacket;
 
@@ -18,18 +16,16 @@ public class AdBlock extends Module {
 
     public AdBlock() {
         super("AdBlock", "Blocks the /ad command on minehut from sending to you", ModuleType.MISC);
-        Events.registerEventHandler(EventType.PACKET_RECEIVE, event -> {
-            if (!this.isEnabled()) {
-                return;
+    }
+
+    @MessageSubscription
+    void onP(coffee.client.helper.event.impl.PacketEvent.Received pe) {
+        if (pe.getPacket() instanceof GameMessageS2CPacket msg) {
+            if (msg.content().getString().contains("[AD]")) {
+                pe.setCancelled(true);
+                blocked++;
             }
-            PacketEvent pe = (PacketEvent) event;
-            if (pe.getPacket() instanceof GameMessageS2CPacket msg) {
-                if (msg.content().getString().contains("[AD]")) {
-                    event.setCancelled(true);
-                    blocked++;
-                }
-            }
-        }, 0);
+        }
     }
 
     @Override

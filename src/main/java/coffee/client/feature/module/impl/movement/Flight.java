@@ -11,12 +11,9 @@ import coffee.client.feature.config.DoubleSetting;
 import coffee.client.feature.config.EnumSetting;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
-import coffee.client.helper.event.EventListener;
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.Events;
-import coffee.client.helper.event.events.PacketEvent;
 import coffee.client.helper.util.Timer;
 import coffee.client.helper.util.Utils;
+import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.Packet;
@@ -46,15 +43,13 @@ public class Flight extends Module {
 
     public Flight() {
         super("Flight", "Allows you to fly without having permission to", ModuleType.MOVEMENT);
-        Events.registerEventHandler(EventType.PACKET_SEND, event -> {
-            if (!this.isEnabled()) {
-                return;
-            }
-            PacketEvent pe = (PacketEvent) event;
-            if (pe.getPacket() instanceof ClientCommandC2SPacket p && p.getMode() == ClientCommandC2SPacket.Mode.PRESS_SHIFT_KEY) {
-                event.setCancelled(true);
-            }
-        }, 0);
+    }
+
+    @MessageSubscription
+    void onpacket(coffee.client.helper.event.impl.PacketEvent.Sent pe) {
+        if (pe.getPacket() instanceof ClientCommandC2SPacket p && p.getMode() == ClientCommandC2SPacket.Mode.PRESS_SHIFT_KEY) {
+            pe.setCancelled(true);
+        }
     }
 
     @Override
@@ -69,8 +64,12 @@ public class Flight extends Module {
             if (bypassTimer > 10) {
                 bypassTimer = 0;
                 Vec3d p = CoffeeMain.client.player.getPos();
-                CoffeeMain.client.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(p.x, p.y - 0.2, p.z, false));
-                CoffeeMain.client.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(p.x, p.y + 0.2, p.z, false));
+                if (!client.world.getBlockState(client.player.getBlockPos().down()).getMaterial().blocksMovement()) {
+                    CoffeeMain.client.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(p.x, p.y - 0.2, p.z, false));
+                }
+                if (!client.world.getBlockState(client.player.getBlockPos().up(2)).getMaterial().blocksMovement()) {
+                    CoffeeMain.client.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(p.x, p.y + 0.2, p.z, false));
+                }
             }
         }
         switch (mode.getValue()) {
@@ -135,7 +134,7 @@ public class Flight extends Module {
                     lag.reset();
                     for (int i = 0; i < 3; i++) {
                         if (!queue.isEmpty()) {
-                            Utils.sendPacket(queue.get(0));
+                            Utils.sendPacketNoEvent(queue.get(0));
                             queue.remove(0);
                         }
                     }
@@ -206,8 +205,8 @@ public class Flight extends Module {
             .sendPacket(new ClientCommandC2SPacket(CoffeeMain.client.player, ClientCommandC2SPacket.Mode.RELEASE_SHIFT_KEY));
     }
 
-    @EventListener(value = EventType.PACKET_SEND)
-    void giveTwoShits(PacketEvent event) {
+    @MessageSubscription
+    void giveTwoShits(coffee.client.helper.event.impl.PacketEvent.Sent event) {
         if (mode.getValue() == FlightMode.Walk) {
             if (!this.isEnabled()) {
                 return;

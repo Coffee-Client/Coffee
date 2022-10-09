@@ -9,4 +9,5 @@ pluginManagement {
     }
 }
 include 'Authlib'
+include 'Eventlib'
 

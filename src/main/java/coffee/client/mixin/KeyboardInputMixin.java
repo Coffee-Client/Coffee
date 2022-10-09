@@ -5,9 +5,8 @@
 
 package coffee.client.mixin;
 
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.Events;
-import coffee.client.helper.event.events.SneakQueryEvent;
+import coffee.client.helper.event.EventSystem;
+import coffee.client.helper.event.impl.ShouldSneakQuery;
 import net.minecraft.client.input.KeyboardInput;
 import net.minecraft.client.option.KeyBinding;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,8 +17,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public class KeyboardInputMixin {
     @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/KeyBinding;isPressed()Z", ordinal = 5))
     boolean coffee_modifySneakPressed(KeyBinding instance) {
-        SneakQueryEvent sq = new SneakQueryEvent(instance.isPressed());
-        Events.fireEvent(EventType.SNEAK_QUERY, sq);
-        return sq.isSneaking();
+        ShouldSneakQuery ssq = new ShouldSneakQuery(instance.isPressed());
+        EventSystem.manager.send(ssq);
+        return ssq.isShouldSneak();
     }
 }

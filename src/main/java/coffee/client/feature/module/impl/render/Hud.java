@@ -14,9 +14,7 @@ import coffee.client.feature.gui.theme.ThemeManager;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleRegistry;
 import coffee.client.feature.module.ModuleType;
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.Events;
-import coffee.client.helper.event.events.PacketEvent;
+import coffee.client.helper.event.EventSystem;
 import coffee.client.helper.font.FontRenderers;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.AccurateFrameRateCounter;
@@ -25,6 +23,7 @@ import coffee.client.helper.util.Transitions;
 import coffee.client.helper.util.Utils;
 import coffee.client.mixin.render.IInGameHudMixin;
 import coffee.client.mixin.screen.IDebugHudMixin;
+import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket;
@@ -61,12 +60,14 @@ public class Hud extends Module {
         super("Hud", "Shows information about the player on screen", ModuleType.RENDER);
         lastTimePacketReceived = System.currentTimeMillis();
 
-        Events.registerEventHandler(EventType.PACKET_RECEIVE, event1 -> {
-            PacketEvent event = (PacketEvent) event1;
-            if (event.getPacket() instanceof WorldTimeUpdateS2CPacket) {
-                lastTimePacketReceived = System.currentTimeMillis();
+        EventSystem.manager.registerSubscribers(new Object() { // don't unregister when disabled
+            @MessageSubscription
+            void on(coffee.client.helper.event.impl.PacketEvent.Received event) {
+                if (event.getPacket() instanceof WorldTimeUpdateS2CPacket) {
+                    lastTimePacketReceived = System.currentTimeMillis();
+                }
             }
-        }, 0);
+        });
     }
 
     double calcTps(double n) {

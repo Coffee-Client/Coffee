@@ -8,9 +8,8 @@ package coffee.client.feature.module.impl.movement;
 import coffee.client.CoffeeMain;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
-import coffee.client.helper.event.EventListener;
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.events.SneakQueryEvent;
+import coffee.client.helper.event.impl.ShouldSneakQuery;
+import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.BlockPos;
@@ -24,10 +23,10 @@ public class EdgeSneak extends Module {
         super("EdgeSneak", "Sneaks automatically at the edges of blocks", ModuleType.MOVEMENT);
     }
 
-    @EventListener(EventType.SNEAK_QUERY)
-    void querySneak(SneakQueryEvent sq) {
+    @MessageSubscription
+    void querySneak(ShouldSneakQuery sq) {
         if (this.shouldSneak) {
-            sq.setSneaking(true);
+            sq.setShouldSneak(true);
         }
     }
 

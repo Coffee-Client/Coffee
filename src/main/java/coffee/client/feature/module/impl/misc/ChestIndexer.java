@@ -8,13 +8,12 @@ package coffee.client.feature.module.impl.misc;
 import coffee.client.CoffeeMain;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
-import coffee.client.helper.event.EventListener;
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.events.PacketEvent;
+import coffee.client.helper.event.impl.PacketEvent;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.Timer;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -52,10 +51,10 @@ public class ChestIndexer extends Module {
         Blocks.LIGHT_BLUE_SHULKER_BOX, Blocks.YELLOW_SHULKER_BOX, Blocks.LIME_SHULKER_BOX, Blocks.PINK_SHULKER_BOX, Blocks.GRAY_SHULKER_BOX,
         Blocks.LIGHT_GRAY_SHULKER_BOX, Blocks.CYAN_SHULKER_BOX, Blocks.PURPLE_SHULKER_BOX, Blocks.BLUE_SHULKER_BOX, Blocks.BROWN_SHULKER_BOX, Blocks.GREEN_SHULKER_BOX,
         Blocks.RED_SHULKER_BOX, Blocks.BLACK_SHULKER_BOX, Blocks.BARREL };
-    Timer updateTimer = new Timer();
     public Map<BlockPos, Int2ObjectMap<ItemStack>> stacks = new HashMap<>();
     public Map<BlockPos, List<BlockPos>> childrenMap = new HashMap<>();
     public List<Entry> lastVisResults = new CopyOnWriteArrayList<>();
+    Timer updateTimer = new Timer();
     BlockPos currentPosClicked;
     int currentSid = -1;
 
@@ -63,8 +62,8 @@ public class ChestIndexer extends Module {
         super("ChestIndexer", "Indexes all chests you open, allows usage of .search", ModuleType.MISC);
     }
 
-    @EventListener(EventType.PACKET_RECEIVE)
-    void recv(PacketEvent pe) {
+    @MessageSubscription
+    void recv(coffee.client.helper.event.impl.PacketEvent.Received pe) {
         Packet<?> packet = pe.getPacket();
         if (packet instanceof OpenScreenS2CPacket os2) {
             if (this.currentPosClicked == null) {
@@ -126,8 +125,8 @@ public class ChestIndexer extends Module {
         return bs1.getBlock() == bs.getBlock();
     }
 
-    @EventListener(EventType.PACKET_SEND)
-    void send(PacketEvent pe) {
+    @MessageSubscription
+    void send(PacketEvent.Sent pe) {
         Packet<?> packet = pe.getPacket();
         if (packet instanceof PlayerInteractBlockC2SPacket p) {
             cleanupNeighbours();
@@ -195,7 +194,9 @@ public class ChestIndexer extends Module {
     public void tick() {
         if (updateTimer.hasExpired(5_000)) {
             for (BlockPos blockPos : new ArrayList<>(stacks.keySet())) {
-                if (!blockPos.isWithinDistance(client.player.getBlockPos(), 64)) continue; // dont update this one we have no fucking idea whats in it
+                if (!blockPos.isWithinDistance(client.player.getBlockPos(), 64)) {
+                    continue; // dont update this one we have no fucking idea whats in it
+                }
                 BlockState bs = client.world.getBlockState(blockPos);
                 if (!Arrays.asList(ALLOW_LIST).contains(bs.getBlock())) {
                     stacks.remove(blockPos);
@@ -243,15 +244,6 @@ public class ChestIndexer extends Module {
     public void onHudRender() {
 
     }
-
-    //    public void wipeDistant(BlockPos origin) {
-    //        for (BlockPos blockPos : new ArrayList<>(stacks.keySet())) {
-    //            if (blockPos != null && !blockPos.isWithinDistance(origin, 256)) {
-    //                stacks.remove(blockPos);
-    //                childrenMap.remove(blockPos);
-    //            }
-    //        }
-    //    }
 
     record Entry(long e, BlockPos bp) {
 

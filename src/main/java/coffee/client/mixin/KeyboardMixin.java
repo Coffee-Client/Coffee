@@ -7,9 +7,8 @@ package coffee.client.mixin;
 
 import coffee.client.CoffeeMain;
 import coffee.client.feature.command.impl.SelfDestruct;
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.Events;
-import coffee.client.helper.event.events.KeyboardEvent;
+import coffee.client.helper.event.EventSystem;
+import coffee.client.helper.event.impl.KeyboardEvent;
 import coffee.client.helper.manager.KeybindingManager;
 import net.minecraft.client.Keyboard;
 import net.minecraft.client.MinecraftClient;
@@ -37,7 +36,9 @@ public class KeyboardMixin {
                 return; // again, make sure we are in game and exist
             }
             KeybindingManager.updateSingle(key, action);
-            Events.fireEvent(EventType.KEYBOARD, new KeyboardEvent(key, action));
+            KeyboardEvent ke = new KeyboardEvent(key, KeyboardEvent.Type.of(action));
+            EventSystem.manager.send(ke);
+            //            Events.fireEvent(EventType.KEYBOARD, new KeyboardEvent(key, action));
         }
     }
 

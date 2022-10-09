@@ -8,11 +8,9 @@ package coffee.client.feature.module.impl.movement;
 import coffee.client.CoffeeMain;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.Events;
-import coffee.client.helper.event.events.PacketEvent;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.Utils;
+import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
@@ -29,15 +27,13 @@ public class Backtrack extends Module {
 
     public Backtrack() {
         super("Backtrack", "Allows you to redo your movement if you messed up", ModuleType.MOVEMENT);
-        Events.registerEventHandler(EventType.PACKET_SEND, event -> {
-            if (!this.isEnabled() || committed) {
-                return;
-            }
-            PacketEvent pe = (PacketEvent) event;
-            if (pe.getPacket() instanceof PlayerMoveC2SPacket) {
-                event.setCancelled(true);
-            }
-        }, 0);
+    }
+
+    @MessageSubscription
+    void onPacket(coffee.client.helper.event.impl.PacketEvent.Sent pe) {
+        if (pe.getPacket() instanceof PlayerMoveC2SPacket) {
+            pe.setCancelled(true);
+        }
     }
 
     boolean shouldBacktrack() {

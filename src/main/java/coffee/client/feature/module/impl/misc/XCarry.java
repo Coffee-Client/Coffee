@@ -7,9 +7,7 @@ package coffee.client.feature.module.impl.misc;
 
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.Events;
-import coffee.client.helper.event.events.PacketEvent;
+import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.packet.c2s.play.CloseHandledScreenC2SPacket;
 
@@ -17,15 +15,13 @@ public class XCarry extends Module {
 
     public XCarry() {
         super("XCarry", "Allows you to store items in your crafting grid", ModuleType.MISC);
-        Events.registerEventHandler(EventType.PACKET_SEND, event -> {
-            if (!this.isEnabled()) {
-                return;
-            }
-            PacketEvent pe = (PacketEvent) event;
-            if (pe.getPacket() instanceof CloseHandledScreenC2SPacket) {
-                pe.setCancelled(true);
-            }
-        }, 0);
+    }
+
+    @MessageSubscription
+    void a(coffee.client.helper.event.impl.PacketEvent pe) {
+        if (pe.getPacket() instanceof CloseHandledScreenC2SPacket) {
+            pe.setCancelled(true);
+        }
     }
 
     @Override

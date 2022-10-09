@@ -8,12 +8,10 @@ package coffee.client.feature.module.impl.world;
 import coffee.client.feature.config.EnumSetting;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.Events;
-import coffee.client.helper.event.events.PacketEvent;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.Utils;
 import coffee.client.mixin.IClientPlayerInteractionManagerMixin;
+import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
 import net.minecraft.util.math.BlockPos;
@@ -34,21 +32,19 @@ public class InstantBreak extends Module {
 
     public InstantBreak() {
         super("InstantBreak", "Breaks a block a lot faster", ModuleType.WORLD);
-        Events.registerEventHandler(EventType.PACKET_SEND, event -> {
-            if (!this.isEnabled()) {
-                return;
-            }
-            PacketEvent pe = (PacketEvent) event;
-            if (pe.getPacket() instanceof PlayerActionC2SPacket packet) {
-                if (!whitelist.contains(packet)) {
-                    if (packet.getAction() == PlayerActionC2SPacket.Action.START_DESTROY_BLOCK && prio.getValue() == Priority.Order) {
-                        event.setCancelled(true);
-                    }
-                } else {
-                    whitelist.remove(packet);
+    }
+
+    @MessageSubscription
+    void onPSe(coffee.client.helper.event.impl.PacketEvent.Sent pe) {
+        if (pe.getPacket() instanceof PlayerActionC2SPacket packet) {
+            if (!whitelist.contains(packet)) {
+                if (packet.getAction() == PlayerActionC2SPacket.Action.START_DESTROY_BLOCK && prio.getValue() == Priority.Order) {
+                    pe.setCancelled(true);
                 }
+            } else {
+                whitelist.remove(packet);
             }
-        }, 0);
+        }
     }
 
     @Override

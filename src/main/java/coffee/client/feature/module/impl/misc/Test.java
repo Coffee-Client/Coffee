@@ -17,11 +17,12 @@ import java.awt.Color;
 
 public class Test extends Module {
 
+    PathFinder pf;
+
     public Test() {
         super("Test", "Testing stuff with the client, can be ignored", ModuleType.MISC);
     }
 
-    PathFinder pf;
     @Override
     public void enable() {
         new Thread(() -> {

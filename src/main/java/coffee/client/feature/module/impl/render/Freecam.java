@@ -8,11 +8,10 @@ package coffee.client.feature.module.impl.render;
 import coffee.client.feature.config.DoubleSetting;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
-import coffee.client.helper.event.EventListener;
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.events.ChunkRenderQueryEvent;
-import coffee.client.helper.event.events.PacketEvent;
-import coffee.client.helper.event.events.PlayerNoClipQueryEvent;
+import coffee.client.helper.event.impl.ChunkRenderQuery;
+import coffee.client.helper.event.impl.NoclipQueryEvent;
+import coffee.client.helper.event.impl.PacketEvent;
+import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.EntityPose;
 import net.minecraft.network.packet.c2s.play.PlayerInputC2SPacket;
@@ -32,8 +31,8 @@ public class Freecam extends Module {
         super("Freecam", "Imitates spectator without you having permission to use it", ModuleType.RENDER);
     }
 
-    @EventListener(value = EventType.PACKET_SEND)
-    void onPacketSend(PacketEvent event) {
+    @MessageSubscription
+    void onPacketSend(PacketEvent.Sent event) {
         if (event.getPacket() instanceof PlayerMoveC2SPacket) {
             event.setCancelled(true);
         }
@@ -42,16 +41,16 @@ public class Freecam extends Module {
         }
     }
 
-    @EventListener(value = EventType.NOCLIP_QUERY)
-    void onNoclip(PlayerNoClipQueryEvent event) {
+    @MessageSubscription
+    void onNoclip(NoclipQueryEvent event) {
         if (event.getPlayer().isOnGround()) {
             return;
         }
-        event.setNoClipState(PlayerNoClipQueryEvent.NoClipState.ACTIVE);
+        event.setShouldNoclip(true);
     }
 
-    @EventListener(value = EventType.SHOULD_RENDER_CHUNK)
-    void shouldRenderChunk(ChunkRenderQueryEvent event) {
+    @MessageSubscription
+    void shouldRenderChunk(ChunkRenderQuery event) {
         event.setShouldRender(true);
     }
 

@@ -9,9 +9,8 @@ import coffee.client.CoffeeMain;
 import coffee.client.feature.config.SettingBase;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleRegistry;
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.Events;
-import coffee.client.helper.event.events.base.NonCancellableEvent;
+import coffee.client.helper.event.EventSystem;
+import coffee.client.helper.event.impl.ConfigSaveEvent;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -107,7 +106,8 @@ public class ConfigManager {
             e.printStackTrace();
             CoffeeMain.log(Level.ERROR, "Failed to save config!");
         }
-        Events.fireEvent(EventType.CONFIG_SAVE, new NonCancellableEvent());
+        EventSystem.manager.send(new ConfigSaveEvent());
+        //        Events.fireEvent(EventType.CONFIG_SAVE, new NonCancellableEvent());
     }
 
     /**

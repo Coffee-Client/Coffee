@@ -63,7 +63,7 @@ public class Search extends Command {
             }
         }
         if (args.length == 0) {
-            if(stacks.isEmpty()) {
+            if (stacks.isEmpty()) {
                 error("No items?");
                 return;
             }

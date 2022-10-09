@@ -11,20 +11,13 @@ import coffee.client.feature.config.EnumSetting;
 import coffee.client.feature.gui.notifications.Notification;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.Events;
-import coffee.client.helper.event.events.MouseEvent;
-import coffee.client.helper.event.events.PacketEvent;
 import coffee.client.helper.util.Utils;
-import coffee.client.mixin.network.PlayerInteractEntityC2SPacketMixin;
+import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.c2s.play.CreativeInventoryActionC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket;
-import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
@@ -52,36 +45,19 @@ public class Boom extends Module {
 
     public Boom() {
         super("Boom", "Spawns fireballs wherever you click", ModuleType.WORLD);
-        Events.registerEventHandler(EventType.MOUSE_EVENT, event -> {
-            if (!this.isEnabled() || CoffeeMain.client.currentScreen != null) {
-                return;
-            }
-            MouseEvent me = (MouseEvent) event;
-            if (me.getButton() == 0 && me.getAction() == 1) {
-                if (mode.getValue() == Mode.FireballGhast) {
-                    fbGhast();
-                } else {
-                    fbInstant();
-                }
-            }
-        }, 0);
         speed.showIf(() -> mode.getValue() == Mode.FireballGhast);
-        // this is basically just to prevent the double hitting the fireball
-        // if we hit the fireball after we fired it (1 second time frame from fire -> hit), we just don't do it
-        // we don't want to reset velocity we gave it
-        Events.registerEventHandler(EventType.PACKET_SEND, event -> {
-            if (!this.isEnabled()) {
-                return;
+    }
+
+    @MessageSubscription
+    void onMouse(coffee.client.helper.event.impl.MouseEvent me) {
+        if (me.getButton() == 0 && me.getType() == coffee.client.helper.event.impl.MouseEvent.Type.CLICK) {
+            if (mode.getValue() == Mode.FireballGhast) {
+                fbGhast();
+            } else {
+                fbInstant();
             }
-            PacketEvent pe = (PacketEvent) event;
-            if (pe.getPacket() instanceof PlayerInteractEntityC2SPacket e) {
-                PlayerInteractEntityC2SPacketMixin a = (PlayerInteractEntityC2SPacketMixin) e;
-                Entity entity = Objects.requireNonNull(CoffeeMain.client.world).getEntityById(a.getEntityId());
-                if (entity != null && entity.getType() == EntityType.FIREBALL && System.currentTimeMillis() - lastFired < 1000) {
-                    event.setCancelled(true);
-                }
-            }
-        }, 0);
+            me.setCancelled(true);
+        }
     }
 
     void fbInstant() {

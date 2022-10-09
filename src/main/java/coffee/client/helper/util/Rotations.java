@@ -9,10 +9,9 @@ import coffee.client.CoffeeMain;
 import coffee.client.feature.module.ModuleRegistry;
 import coffee.client.feature.module.impl.render.FreeLook;
 import coffee.client.helper.Rotation;
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.Events;
-import coffee.client.helper.event.events.PacketEvent;
+import coffee.client.helper.event.EventSystem;
 import lombok.Getter;
+import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket;
 import net.minecraft.util.math.MathHelper;
@@ -33,23 +32,26 @@ public class Rotations {
     private static Vec3d lastKnownServerPos = Vec3d.ZERO;
 
     static {
-        Events.registerEventHandler(EventType.PACKET_SEND, event1 -> {
-            PacketEvent event = (PacketEvent) event1;
-            if (event.getPacket() instanceof PlayerMoveC2SPacket packet) {
-                clientYaw = packet.getYaw(clientYaw);
-                clientPitch = packet.getPitch(clientPitch);
-                if (!event.isCancelled()) {
-                    lastKnownServerPos = new Vec3d(packet.getX(lastKnownServerPos.x), packet.getY(lastKnownServerPos.y), packet.getZ(lastKnownServerPos.z));
+        EventSystem.manager.registerSubscribers(new Object() {
+            @MessageSubscription
+            void onPacketSend(coffee.client.helper.event.impl.PacketEvent.Sent event) {
+                if (event.getPacket() instanceof PlayerMoveC2SPacket packet) {
+                    clientYaw = packet.getYaw(clientYaw);
+                    clientPitch = packet.getPitch(clientPitch);
+                    if (!event.isCancelled()) {
+                        lastKnownServerPos = new Vec3d(packet.getX(lastKnownServerPos.x), packet.getY(lastKnownServerPos.y), packet.getZ(lastKnownServerPos.z));
+                    }
                 }
             }
-        }, 10); // last in queue
-        Events.registerEventHandler(EventType.PACKET_RECEIVE, event -> {
-            PacketEvent pe = (PacketEvent) event;
-            if (pe.getPacket() instanceof PlayerPositionLookS2CPacket p) {
-                clientYaw = p.getYaw();
-                clientPitch = p.getPitch();
+
+            @MessageSubscription
+            void onPacketRecv(coffee.client.helper.event.impl.PacketEvent.Received pe) {
+                if (pe.getPacket() instanceof PlayerPositionLookS2CPacket p) {
+                    clientYaw = p.getYaw();
+                    clientPitch = p.getPitch();
+                }
             }
-        }, 0);
+        });
     }
 
     static void timeoutCheck() {

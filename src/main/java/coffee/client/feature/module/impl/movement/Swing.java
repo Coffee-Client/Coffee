@@ -9,13 +9,11 @@ import coffee.client.CoffeeMain;
 import coffee.client.feature.gui.theme.ThemeManager;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.Events;
-import coffee.client.helper.event.events.MouseEvent;
-import coffee.client.helper.event.events.PacketEvent;
+import coffee.client.helper.event.impl.MouseEvent;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.Utils;
 import com.mojang.blaze3d.systems.RenderSystem;
+import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
 import net.minecraft.util.hit.HitResult;
@@ -31,28 +29,24 @@ public class Swing extends Module {
 
     public Swing() {
         super("Swing", "Spiderman", ModuleType.MOVEMENT);
-        Events.registerEventHandler(EventType.MOUSE_EVENT, event -> {
-            if (!this.isEnabled() || CoffeeMain.client.currentScreen != null) {
-                return;
+    }
+
+    @MessageSubscription
+    void onA(coffee.client.helper.event.impl.PacketEvent.Sent pe) {
+        if (pe.getPacket() instanceof ClientCommandC2SPacket e && e.getMode() == ClientCommandC2SPacket.Mode.PRESS_SHIFT_KEY) {
+            pe.setCancelled(true);
+        }
+    }
+
+    @MessageSubscription
+    void on(coffee.client.helper.event.impl.MouseEvent me) {
+        if (me.getButton() == 0 && me.getType() == MouseEvent.Type.CLICK) {
+            try {
+                HitResult hit = Objects.requireNonNull(CoffeeMain.client.player).raycast(200, CoffeeMain.client.getTickDelta(), true);
+                swinging = new BlockPos(hit.getPos());
+            } catch (Exception ignored) {
             }
-            MouseEvent me = (MouseEvent) event;
-            if (me.getButton() == 0 && me.getAction() == 1) {
-                try {
-                    HitResult hit = Objects.requireNonNull(CoffeeMain.client.player).raycast(200, CoffeeMain.client.getTickDelta(), true);
-                    swinging = new BlockPos(hit.getPos());
-                } catch (Exception ignored) {
-                }
-            }
-        }, 0);
-        Events.registerEventHandler(EventType.PACKET_SEND, event -> {
-            if (!this.isEnabled()) {
-                return;
-            }
-            PacketEvent pe = (PacketEvent) event;
-            if (pe.getPacket() instanceof ClientCommandC2SPacket e && e.getMode() == ClientCommandC2SPacket.Mode.PRESS_SHIFT_KEY) {
-                event.setCancelled(true);
-            }
-        }, 0);
+        }
     }
 
     @Override

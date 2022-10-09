@@ -9,12 +9,11 @@ import coffee.client.feature.config.DoubleSetting;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
 import coffee.client.helper.Rotation;
-import coffee.client.helper.event.EventListener;
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.events.SneakQueryEvent;
+import coffee.client.helper.event.impl.ShouldSneakQuery;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.Rotations;
 import coffee.client.helper.util.Utils;
+import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.BlockItem;
@@ -71,9 +70,9 @@ public class Scaffold extends Module {
 
     }
 
-    @EventListener(EventType.SNEAK_QUERY)
-    void overwriteSneak(SneakQueryEvent sq) {
-        sq.setSneaking(false);
+    @MessageSubscription
+    void overwriteSneak(ShouldSneakQuery sq) {
+        sq.setShouldSneak(false);
     }
 
     @Override

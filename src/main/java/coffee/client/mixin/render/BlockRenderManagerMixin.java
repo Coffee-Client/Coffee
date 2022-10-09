@@ -5,9 +5,8 @@
 
 package coffee.client.mixin.render;
 
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.Events;
-import coffee.client.helper.event.events.BlockRenderEvent;
+import coffee.client.helper.event.EventSystem;
+import coffee.client.helper.event.impl.RenderEvent;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.block.BlockRenderManager;
@@ -24,9 +23,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class BlockRenderManagerMixin {
     @Inject(method = "renderBlock", at = @At("HEAD"), cancellable = true)
     void coffee_dispatchRenderEvent(BlockState state, BlockPos pos, BlockRenderView world, MatrixStack matrices, VertexConsumer vertexConsumer, boolean cull, Random random, CallbackInfo ci) {
-        BlockRenderEvent be = new BlockRenderEvent(matrices, pos, state);
-        if (Events.fireEvent(EventType.BLOCK_RENDER, be)) {
+        RenderEvent re = new RenderEvent.Block(matrices, pos, state);
+        EventSystem.manager.send(re);
+        if (re.isCancelled()) {
             ci.cancel();
         }
+        //        BlockRenderEvent be = new BlockRenderEvent(matrices, pos, state);
+        //        if (Events.fireEvent(EventType.BLOCK_RENDER, be)) {
+        //            ci.cancel();
+        //        }
     }
 }

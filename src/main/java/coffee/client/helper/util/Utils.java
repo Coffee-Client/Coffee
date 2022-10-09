@@ -60,16 +60,32 @@ import java.util.Optional;
 import java.util.Queue;
 import java.util.Spliterator;
 import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class Utils {
 
+    private static final ExecutorService esv = Executors.newCachedThreadPool();
     public static boolean sendPackets = true;
+
+    public static void waitUntil(BooleanSupplier e, Runnable v) {
+        if (!e.getAsBoolean()) {
+            v.run(); // dont need to spin up thread
+        } else {
+            esv.submit(() -> {
+                while (!e.getAsBoolean()) {
+                    Thread.onSpinWait();
+                }
+                v.run();
+            });
+        }
+    }
 
     public static Stream<LivingEntity> findEntities(Predicate<? super LivingEntity> requirement) {
         Spliterator<Entity> spliterator = CoffeeMain.client.world.getEntities().spliterator();
@@ -85,7 +101,7 @@ public class Utils {
         return (float) java.lang.Math.sqrt(java.lang.Math.pow(ax - bx, 2) + java.lang.Math.pow(ay - by, 2));
     }
 
-    public static <T> T throwSilently(Supplier<T> func) {
+    public static <T> T throwSilently(ThrowingSupplier<T> func) {
         return throwSilently(func, throwable -> {
         });
     }
@@ -112,7 +128,7 @@ public class Utils {
         return matches;
     }
 
-    public static <T> T throwSilently(Supplier<T> func, Consumer<Throwable> errorHandler) {
+    public static <T> T throwSilently(ThrowingSupplier<T> func, Consumer<Throwable> errorHandler) {
         try {
             return func.get();
         } catch (Throwable t) {
@@ -185,8 +201,7 @@ public class Utils {
         }
     }
 
-
-    public static void sendPacket(Packet<?> packet) {
+    public static void sendPacketNoEvent(Packet<?> packet) {
         sendPackets = false;
         CoffeeMain.client.player.networkHandler.sendPacket(packet);
         sendPackets = true;
@@ -341,6 +356,10 @@ public class Utils {
         int p = pum.getSequence();
         pum.close();
         return p;
+    }
+
+    public interface ThrowingSupplier<T> {
+        T get() throws Throwable;
     }
 
     public static class Inventory {

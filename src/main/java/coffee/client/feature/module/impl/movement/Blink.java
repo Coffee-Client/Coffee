@@ -8,9 +8,7 @@ package coffee.client.feature.module.impl.movement;
 import coffee.client.feature.config.EnumSetting;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.Events;
-import coffee.client.helper.event.events.PacketEvent;
+import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.Packet;
 import net.minecraft.network.packet.c2s.play.KeepAliveC2SPacket;
@@ -27,23 +25,17 @@ public class Blink extends Module {
 
     public Blink() {
         super("Blink", "Delay or cancel outgoing packets", ModuleType.MOVEMENT);
-        Events.registerEventHandler(EventType.PACKET_SEND, event1 -> {
-            if (!this.isEnabled()) {
-                return;
-            }
-            if (client.player == null || client.world == null) {
-                setEnabled(false);
-                return;
-            }
-            PacketEvent event = (PacketEvent) event1;
-            if (event.getPacket() instanceof KeepAliveC2SPacket) {
-                return;
-            }
-            event.setCancelled(true);
-            if (mode.getValue() == Mode.Delay) {
-                queue.add(event.getPacket());
-            }
-        }, 0);
+    }
+
+    @MessageSubscription
+    void onPacket(coffee.client.helper.event.impl.PacketEvent.Sent event) {
+        if (event.getPacket() instanceof KeepAliveC2SPacket) {
+            return;
+        }
+        event.setCancelled(true);
+        if (mode.getValue() == Mode.Delay) {
+            queue.add(event.getPacket());
+        }
     }
 
     @Override

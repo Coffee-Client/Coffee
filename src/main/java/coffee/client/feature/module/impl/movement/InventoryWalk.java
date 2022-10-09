@@ -17,6 +17,10 @@ public class InventoryWalk extends Module {
     @Setting(name = "Mouse speed", description = "How fast to turn with mouse movements", min = 0, max = 40, precision = 1)
     double mouseSpeed = 10;
 
+    public InventoryWalk() {
+        super("InventoryWalk", "Allows you to walk with an open inventory", ModuleType.MOVEMENT);
+    }
+
     @VisibilitySpecifier("Mouse speed")
     boolean showMouseSpeed() {
         return mouseInInventory;
@@ -24,10 +28,6 @@ public class InventoryWalk extends Module {
 
     public float getMSpeed() {
         return (float) (mouseSpeed - 39f);
-    }
-
-    public InventoryWalk() {
-        super("InventoryWalk", "Allows you to walk with an open inventory", ModuleType.MOVEMENT);
     }
 
     @Override

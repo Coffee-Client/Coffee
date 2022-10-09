@@ -15,10 +15,8 @@ import coffee.client.feature.module.ModuleRegistry;
 import coffee.client.feature.module.impl.render.FreeLook;
 import coffee.client.feature.module.impl.render.LSD;
 import coffee.client.feature.module.impl.render.Zoom;
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.Events;
-import coffee.client.helper.event.events.WorldRenderEvent;
-import coffee.client.helper.event.events.base.NonCancellableEvent;
+import coffee.client.helper.event.EventSystem;
+import coffee.client.helper.event.impl.RenderEvent;
 import coffee.client.helper.render.MSAAFramebuffer;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.AccurateFrameRateCounter;
@@ -82,8 +80,9 @@ public abstract class GameRendererMixin {
                     module.onWorldRender(ms);
                 }
             }
-            Events.fireEvent(EventType.WORLD_RENDER, new WorldRenderEvent(ms));
+            EventSystem.manager.send(new RenderEvent.World(ms));
             Renderer.R3D.renderFadingBlocks(ms);
+            Renderer.R3D.renderActions();
         });
         ms.pop();
         RenderSystem.restoreProjectionMatrix();
@@ -126,7 +125,7 @@ public abstract class GameRendererMixin {
 
             NotificationRenderer.render();
         });
-        Events.fireEvent(EventType.HUD_RENDER_NOMSAA, new NonCancellableEvent());
+        //        Events.fireEvent(EventType.HUD_RENDER_NOMSAA, new NonCancellableEvent());
     }
 
     @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;raycast(DFZ)Lnet/minecraft/util/hit/HitResult;"), method = "updateTargetedEntity", require = 0)

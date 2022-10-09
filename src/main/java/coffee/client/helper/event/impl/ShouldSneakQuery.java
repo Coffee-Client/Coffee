@@ -3,16 +3,16 @@
  * Some rights reserved, refer to LICENSE file.
  */
 
-package coffee.client.helper.event.events;
+package coffee.client.helper.event.impl;
 
-import coffee.client.helper.event.events.base.NonCancellableEvent;
+import coffee.client.helper.event.Event;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @AllArgsConstructor
-@Setter
 @Getter
-public class SneakQueryEvent extends NonCancellableEvent {
-    boolean sneaking;
+@Setter
+public class ShouldSneakQuery extends Event {
+    boolean shouldSneak;
 }

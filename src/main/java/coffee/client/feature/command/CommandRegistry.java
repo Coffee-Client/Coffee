@@ -17,7 +17,6 @@ import coffee.client.feature.command.impl.CheckCmd;
 import coffee.client.feature.command.impl.Config;
 import coffee.client.feature.command.impl.ConfigUtils;
 import coffee.client.feature.command.impl.Damage;
-import coffee.client.feature.command.impl.Debugger;
 import coffee.client.feature.command.impl.Drop;
 import coffee.client.feature.command.impl.EVclip;
 import coffee.client.feature.command.impl.Effect;
@@ -136,7 +135,6 @@ public class CommandRegistry {
         vanillaCommands.add(new FakeNick());
         vanillaCommands.add(new Reset());
         vanillaCommands.add(new Kill());
-        vanillaCommands.add(new Debugger());
         vanillaCommands.add(new HoloImage());
         vanillaCommands.add(new ApplyEffect());
         vanillaCommands.add(new BaritoneCommand());

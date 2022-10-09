@@ -7,9 +7,7 @@ package coffee.client.feature.module.impl.misc;
 
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
-import coffee.client.helper.event.EventType;
-import coffee.client.helper.event.Events;
-import coffee.client.helper.event.events.PacketEvent;
+import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.packet.s2c.play.PlaySoundS2CPacket;
 import net.minecraft.sound.SoundEvents;
@@ -18,17 +16,16 @@ public class AntiOffhandCrash extends Module {
 
     public AntiOffhandCrash() {
         super("AntiOffhandCrash", "Prevents you from getting crashed by OffhandCrash", ModuleType.MISC);
-        Events.registerEventHandler(EventType.PACKET_RECEIVE, event1 -> {
-            if (!this.isEnabled()) {
-                return;
+    }
+
+
+    @MessageSubscription
+    void on(coffee.client.helper.event.impl.PacketEvent.Received event) {
+        if (event.getPacket() instanceof PlaySoundS2CPacket) {
+            if (((PlaySoundS2CPacket) event.getPacket()).getSound() == SoundEvents.ITEM_ARMOR_EQUIP_GENERIC) {
+                event.setCancelled(true);
             }
-            PacketEvent event = (PacketEvent) event1;
-            if (event.getPacket() instanceof PlaySoundS2CPacket) {
-                if (((PlaySoundS2CPacket) event.getPacket()).getSound() == SoundEvents.ITEM_ARMOR_EQUIP_GENERIC) {
-                    event.setCancelled(true);
-                }
-            }
-        }, 0);
+        }
     }
 
     @Override

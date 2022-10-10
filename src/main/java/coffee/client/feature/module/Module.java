@@ -10,11 +10,14 @@ import coffee.client.feature.config.BooleanSetting;
 import coffee.client.feature.config.DoubleSetting;
 import coffee.client.feature.config.ModuleConfig;
 import coffee.client.feature.gui.notifications.Notification;
+import coffee.client.feature.module.impl.misc.ClientSettings;
 import coffee.client.helper.event.EventSystem;
+import coffee.client.helper.util.Utils;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.Text;
 
 import java.lang.annotation.Annotation;
 
@@ -55,8 +58,6 @@ public abstract class Module {
             }
         }
         this.toasts = this.config.create(new BooleanSetting.Builder(!hasAnnotation).name("Toasts").description("Whether to show enabled / disabled toasts").get());
-        //        Events.registerTransientEventHandlerClassEvents(this);
-        //        EventSystem.manager.registerSubscribers(this);
     }
 
     public final void postModuleInit() {
@@ -108,6 +109,7 @@ public abstract class Module {
         return enabled;
     }
 
+    static int lastNotification = -1;
     public void setEnabled(boolean enabled) {
         if (isDisabled()) {
             this.enabled = false;
@@ -115,7 +117,12 @@ public abstract class Module {
         }
         this.enabled = enabled;
         if (toasts.getValue()) {
-            Notification.create(1000, "Module toggle", Notification.Type.INFO, (this.enabled ? "§aEn" : "§cDis") + "abled §r" + this.getName());
+            String s = (this.enabled ? "§aEn" : "§cDis") + "abled §r" + this.getName();
+            if (ModuleRegistry.getByClass(ClientSettings.class).toggleStyle == ClientSettings.ToggleMode.Chat) {
+                Utils.Logging.removeMessage(lastNotification);
+                lastNotification = Utils.Logging.sendMessage(Text.literal(s));
+            }
+            else Notification.create(1000, "Module toggle", Notification.Type.INFO, s);
         }
         if (this.enabled) {
             //            Events.registerEventHandlerClass(this);

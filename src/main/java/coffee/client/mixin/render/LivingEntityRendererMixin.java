@@ -13,6 +13,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
+@SuppressWarnings("InvalidInjectorMethodSignature") // mixin addon too bad to get this shit
 @Mixin(LivingEntityRenderer.class)
 public class LivingEntityRendererMixin {
 

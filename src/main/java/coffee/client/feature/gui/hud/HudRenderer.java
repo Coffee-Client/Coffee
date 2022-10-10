@@ -87,7 +87,7 @@ public class HudRenderer {
 
     @MessageSubscription
     void onConfigSave(ConfigSaveEvent e) {
-
+        saveConfig();
     }
 
     void saveConfig() {

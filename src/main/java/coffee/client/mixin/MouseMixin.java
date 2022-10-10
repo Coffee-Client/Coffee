@@ -25,9 +25,6 @@ public class MouseMixin {
             if (me.isCancelled()) {
                 ci.cancel();
             }
-            //            if (Events.fireEvent(EventType.MOUSE_EVENT, new MouseEvent(button, action))) {
-            //                ci.cancel();
-            //            }
         }
     }
 }

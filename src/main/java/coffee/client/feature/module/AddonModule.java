@@ -5,6 +5,7 @@
 
 package coffee.client.feature.module;
 
+@SuppressWarnings("unused")
 public abstract class AddonModule extends Module {
     public AddonModule(String n, String d) {
         super(n, d, ModuleType.ADDON_PROVIDED);

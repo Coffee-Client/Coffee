@@ -27,7 +27,4 @@ public enum ArgumentType {
         return color;
     }
 
-    public Class<?>[] getAppliesTo() {
-        return appliesTo;
-    }
 }

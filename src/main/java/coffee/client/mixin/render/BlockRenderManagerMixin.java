@@ -28,9 +28,5 @@ public class BlockRenderManagerMixin {
         if (re.isCancelled()) {
             ci.cancel();
         }
-        //        BlockRenderEvent be = new BlockRenderEvent(matrices, pos, state);
-        //        if (Events.fireEvent(EventType.BLOCK_RENDER, be)) {
-        //            ci.cancel();
-        //        }
     }
 }

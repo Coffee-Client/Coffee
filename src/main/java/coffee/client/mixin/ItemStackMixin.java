@@ -36,8 +36,6 @@ public class ItemStackMixin {
     void coffee_dispatchTooltipRender(PlayerEntity player, TooltipContext context, CallbackInfoReturnable<List<Text>> cir) {
         List<Text> cval = cir.getReturnValue();
         LoreQueryEvent event = new LoreQueryEvent((ItemStack) (Object) this, cval);
-        //        LoreQueryEvent event = new LoreQueryEvent((ItemStack) (Object) this, cval);
-        //        Events.fireEvent(EventType.LORE_QUERY, event);
         EventSystem.manager.send(event);
         cir.setReturnValue(event.getExistingLore());
     }

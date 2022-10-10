@@ -53,10 +53,6 @@ public class Test extends Module {
             entry = entry.next;
         }
 
-        //        BlockPos[] blockPos = pf.visited.toArray(BlockPos[]::new);
-        //        for (BlockPos blockPo : blockPos) {
-        //            Renderer.R3D.renderOutline(matrices, Color.RED, Vec3d.of(blockPo), new Vec3d(1,1,1));
-        //        }
     }
 
     @Override

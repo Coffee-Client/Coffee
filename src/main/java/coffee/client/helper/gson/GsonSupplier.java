@@ -86,13 +86,6 @@ public class GsonSupplier {
         builder.registerTypeAdapter(Text.class, new Text.Serializer());
     }
 
-    private static <T extends JsonElement> T ensureExists(T input, T defaultValue) {
-        if (input == null || input.isJsonNull()) {
-            return defaultValue;
-        }
-        return input;
-    }
-
     private static int getAsIntOrDefault(JsonElement el, int defaultVal) {
         return el == null ? defaultVal : el.getAsInt();
     }

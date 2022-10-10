@@ -55,9 +55,6 @@ public abstract class GameRendererMixin {
     protected abstract double getFov(Camera camera, float tickDelta, boolean changingFov);
 
     @Shadow
-    public abstract void tick();
-
-    @Shadow
     public abstract Matrix4f getBasicProjectionMatrix(double fov);
 
     @Shadow
@@ -74,7 +71,7 @@ public abstract class GameRendererMixin {
         ms.push();
         ms.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
         ms.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(camera.getYaw() + 180.0F));
-        MSAAFramebuffer.use(MSAAFramebuffer.MAX_SAMPLES, () -> {
+        MSAAFramebuffer.use(() -> {
             for (Module module : ModuleRegistry.getModules()) {
                 if (module.isEnabled()) {
                     module.onWorldRender(ms);
@@ -106,7 +103,7 @@ public abstract class GameRendererMixin {
             }
         }
         if (shouldMsaa && !(instance instanceof ClientScreen)) { // only do msaa if we dont already do it and need it
-            MSAAFramebuffer.use(MSAAFramebuffer.MAX_SAMPLES, () -> instance.render(matrices, mouseX, mouseY, delta));
+            MSAAFramebuffer.use(() -> instance.render(matrices, mouseX, mouseY, delta));
         } else {
             instance.render(matrices, mouseX, mouseY, delta);
         }
@@ -115,7 +112,7 @@ public abstract class GameRendererMixin {
     @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiler/Profiler;pop()V", shift = At.Shift.BEFORE), method = "render")
     void coffee_postHudRenderNoCheck(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
         AccurateFrameRateCounter.globalInstance.recordFrame();
-        MSAAFramebuffer.use(MSAAFramebuffer.MAX_SAMPLES, () -> {
+        MSAAFramebuffer.use(() -> {
             Utils.TickManager.render();
             for (Module module : ModuleRegistry.getModules()) {
                 if (module.isEnabled()) {

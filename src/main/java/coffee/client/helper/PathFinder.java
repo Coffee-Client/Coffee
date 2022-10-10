@@ -45,16 +45,6 @@ public class PathFinder {
         Iterable<VoxelShape> blockCollisions = CoffeeMain.client.world.getBlockCollisions(CoffeeMain.client.player, stretch);
         Iterator<VoxelShape> iterator = blockCollisions.iterator();
         return iterator.hasNext();
-        //        Vec3d vec3d = Entity.adjustMovementForCollisions(CoffeeMain.client.player,
-        //            diff,
-        //            CoffeeMain.client.player.getBoundingBox(),
-        //            CoffeeMain.client.world,
-        //            new ArrayList<>());
-        //        return !vec3d.equals(diff);
-        //        assert CoffeeMain.client.player != null;
-        //        RaycastContext sc = new RaycastContext(a, b, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, CoffeeMain.client.player);
-        //        BlockHitResult raycast = CoffeeMain.client.world.raycast(sc);
-        //        return !raycast.getPos().equals(b);
     }
 
     Entry addEntry(BlockPos p) {

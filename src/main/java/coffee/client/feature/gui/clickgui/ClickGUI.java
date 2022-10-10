@@ -8,6 +8,8 @@ package coffee.client.feature.gui.clickgui;
 import coffee.client.feature.gui.clickgui.element.CategoryDisplay;
 import coffee.client.feature.gui.clickgui.element.ConfigsDisplay;
 import coffee.client.feature.gui.element.Element;
+import coffee.client.feature.gui.element.impl.ClickableTextElement;
+import coffee.client.feature.gui.screen.HelpScreen;
 import coffee.client.feature.gui.screen.base.AAScreen;
 import coffee.client.feature.module.ModuleType;
 import coffee.client.helper.font.FontRenderers;
@@ -43,6 +45,8 @@ public class ClickGUI extends AAScreen {
     double tooltipX, tooltipY;
     String tooltipContent;
 
+    ClickableTextElement help;
+
     public static void reInit() {
         if (instance != null) {
             instance.initWidgets();
@@ -77,6 +81,9 @@ public class ClickGUI extends AAScreen {
 
     @Override
     protected void initInternal() {
+        help = new ClickableTextElement(5, client.getWindow().getScaledHeight()-FontRenderers.getRenderer().getFontHeight()-5,"Click me for help",FontRenderers.getRenderer(),() -> {
+            client.setScreen(new HelpScreen(this));
+        },0xCCCCCC);
         closing = false;
         if (initialized) {
             return;
@@ -210,8 +217,8 @@ public class ClickGUI extends AAScreen {
     }
 
     @Override
-    public boolean shouldPause() {
-        return false;
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        return help.mouseClicked(mouseX, mouseY, button) || super.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override
@@ -257,5 +264,6 @@ public class ClickGUI extends AAScreen {
 
             tooltipContent = null;
         }
+        help.render(stack,mouseX,mouseY);
     }
 }

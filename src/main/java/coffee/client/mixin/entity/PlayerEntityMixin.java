@@ -12,10 +12,8 @@ import coffee.client.feature.module.impl.movement.VanillaSpeed;
 import coffee.client.helper.event.EventSystem;
 import coffee.client.helper.event.impl.NoclipQueryEvent;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.sound.SoundEvent;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -24,8 +22,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin {
-    @Shadow
-    public abstract void playSound(SoundEvent sound, float volume, float pitch);
 
     @Redirect(method = "tick", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/player/PlayerEntity;noClip:Z", opcode = Opcodes.PUTFIELD))
     void coffee_overwriteNoClip(PlayerEntity playerEntity, boolean value) {

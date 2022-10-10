@@ -48,9 +48,6 @@ public class ClientConnectionMixin {
         if (pe.isCancelled()) {
             ci.cancel();
         }
-        //        if (Events.fireEvent(EventType.PACKET_SEND, new PacketEvent(packet))) {
-        //            ci.cancel();
-        //        }
     }
 
 }

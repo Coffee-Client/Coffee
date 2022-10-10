@@ -41,7 +41,6 @@ public class Boom extends Module {
         .max(127)
         .get());
     final EnumSetting<Mode> mode = this.config.create(new EnumSetting.Builder<>(Mode.FireballGhast).name("Mode").description("How to send the fireball off").get());
-    long lastFired = 0L;
 
     public Boom() {
         super("Boom", "Spawns fireballs wherever you click", ModuleType.WORLD);
@@ -86,7 +85,6 @@ public class Boom extends Module {
         Objects.requireNonNull(CoffeeMain.client.getNetworkHandler()).sendPacket(u1);
         CoffeeMain.client.getNetworkHandler().sendPacket(p1);
         CoffeeMain.client.getNetworkHandler().sendPacket(u2);
-        lastFired = System.currentTimeMillis();
     }
 
     void fbGhast() {
@@ -112,7 +110,6 @@ public class Boom extends Module {
         Objects.requireNonNull(CoffeeMain.client.getNetworkHandler()).sendPacket(u1);
         CoffeeMain.client.getNetworkHandler().sendPacket(p1);
         CoffeeMain.client.getNetworkHandler().sendPacket(u2);
-        lastFired = System.currentTimeMillis();
     }
 
     @Override

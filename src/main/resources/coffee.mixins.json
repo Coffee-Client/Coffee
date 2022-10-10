@@ -68,12 +68,12 @@
     "screen.SignEditScreenMixin"
   ],
   "client": [
+    "ChatHudMixin",
     "IKeyBindingMixin",
     "IPlayerListEntryMixin",
     "KeyboardInputMixin",
     "network.ClientPlayNetworkHandlerMixin",
     "render.ChatHudLineMixin",
-    "render.IFramebufferMixin",
     "screen.DirectConnectScreenMixin",
     "screen.TitleScreenMixin"
   ],

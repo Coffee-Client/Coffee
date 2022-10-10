@@ -9,7 +9,6 @@ import baritone.api.BaritoneAPI;
 import coffee.client.feature.command.Command;
 import coffee.client.feature.command.coloring.ArgumentType;
 import coffee.client.feature.command.coloring.PossibleArgument;
-import coffee.client.feature.command.exception.CommandException;
 
 import java.util.stream.Stream;
 
@@ -29,7 +28,7 @@ public class BaritoneCommand extends Command {
     }
 
     @Override
-    public void onExecute(String[] args) throws CommandException {
+    public void onExecute(String[] args) {
         boolean executedAnything = BaritoneAPI.getProvider().getPrimaryBaritone().getCommandManager().execute(String.join(" ", args));
         if (!executedAnything) {
             error("Command not found");

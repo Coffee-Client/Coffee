@@ -61,7 +61,7 @@ public class Help extends Command {
                     message("No examples :(");
                 } else {
                     message("Examples:");
-                    String prefix = ModuleRegistry.getByClass(ClientSettings.class).getPrefix().getValue();
+                    String prefix = ModuleRegistry.getByClass(ClientSettings.class).prefix;
                     for (String example : e.examples()) {
                         String mEx = prefix + c.getAliases()[0] + " " + example;
                         message("  - " + mEx);

@@ -40,7 +40,7 @@ public class NoFall extends Module {
     void onPacket(coffee.client.helper.event.impl.PacketEvent.Sent event) {
         if (event.getPacket() instanceof PlayerMoveC2SPacket) {
             if (mode.getValue() == Mode.OnGround) {
-                ((IPlayerMoveC2SPacketMixin) event.getPacket()).setOnGround(true);
+                if (enabled) ((IPlayerMoveC2SPacketMixin) event.getPacket()).setOnGround(true);
             }
         }
     }

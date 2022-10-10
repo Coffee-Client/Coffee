@@ -58,7 +58,7 @@ public class AChatScreenMixin extends Screen {
     }
 
     private String getPrefix() {
-        return ModuleRegistry.getByClass(ClientSettings.class).getPrefix().getValue();
+        return ModuleRegistry.getByClass(ClientSettings.class).prefix;
     }
 
     @Redirect(method = "keyPressed", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/ChatScreen;sendMessage(Ljava/lang/String;Z)Z"))
@@ -132,7 +132,7 @@ public class AChatScreenMixin extends Screen {
         }
         boolean changed = !previousCommand.equals(cmd);
         previousCommand = cmd;
-        float cmdTWidth = CoffeeMain.client.textRenderer.getWidth(cmd);
+        float cmdTWidth = CoffeeMain.client.textRenderer.getWidth(chatField.getText());
         double cmdXS = chatField.x + 5 + cmdTWidth;
 
         List<String> suggestions = changed ? Util.make(getSuggestions(cmd), strings -> {
@@ -190,7 +190,7 @@ public class AChatScreenMixin extends Screen {
         String p = getPrefix();
         String t = chatField.getText();
         if (t.startsWith(p) && !SelfDestruct.shouldSelfDestruct()) {
-            MSAAFramebuffer.use(MSAAFramebuffer.MAX_SAMPLES, () -> renderSuggestions(matrices));
+            MSAAFramebuffer.use(() -> renderSuggestions(matrices));
         }
     }
 

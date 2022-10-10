@@ -32,7 +32,7 @@ public class ClientScreen extends Screen {
         CoffeeMain.client.keyboard.setRepeatEvents(true);
         if (samples != -1) {
             if (!MSAAFramebuffer.framebufferInUse()) {
-                MSAAFramebuffer.use(samples, () -> renderInternal(matrices, mouseX, mouseY, delta));
+                MSAAFramebuffer.use(() -> renderInternal(matrices, mouseX, mouseY, delta));
             } else {
                 renderInternal(matrices, mouseX, mouseY, delta);
             }

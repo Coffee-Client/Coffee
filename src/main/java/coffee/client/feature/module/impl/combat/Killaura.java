@@ -5,6 +5,7 @@
 
 package coffee.client.feature.module.impl.combat;
 
+import baritone.api.BaritoneAPI;
 import coffee.client.CoffeeMain;
 import coffee.client.feature.config.ListSetting;
 import coffee.client.feature.config.RangeSetting;
@@ -12,6 +13,7 @@ import coffee.client.feature.config.annotation.Setting;
 import coffee.client.feature.config.annotation.VisibilitySpecifier;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
+import coffee.client.helper.BaritoneHelper;
 import coffee.client.helper.event.impl.PacketEvent;
 import coffee.client.helper.manager.AttackManager;
 import coffee.client.helper.util.Rotations;
@@ -96,6 +98,9 @@ public class Killaura extends Module {
     int currentRandomDelay = 0;
     @Setting(name = "Attack partner", description = "Only attacks the current combat partner (The player you intentionally hit before)\nCan be used to bypass bot checks")
     boolean attackPartner = false;
+
+    @Setting(name = "Pause Baritone", description = "Pauses the baritone process when entities are in range")
+    boolean pauseBaritone = true;
 
     public Killaura() {
         super("Killaura", "Automatically attacks all entities in range", ModuleType.COMBAT);
@@ -272,12 +277,14 @@ public class Killaura extends Module {
     @Override
     public void tick() {
         targets = selectTargets();
+        if (targets.isEmpty()) {
+            if (BaritoneHelper.isPaused()) BaritoneHelper.resume("killaura");
+            return;
+        }
         if (!attackCooldown.hasExpired(getDelay() + currentRandomDelay)) {
             return;
         }
-        if (targets.isEmpty()) {
-            return;
-        }
+        if (pauseBaritone && BaritoneAPI.getProvider().getPrimaryBaritone().getPathingBehavior().isPathing()) BaritoneHelper.pause("killaura");
         boolean smooth = smoothLook && attackMode == AttackMode.Single;
         if (smooth) {
             LivingEntity target = targets.get(0);
@@ -335,7 +342,7 @@ public class Killaura extends Module {
 
     @Override
     public void disable() {
-
+        if (BaritoneHelper.isPaused()) BaritoneHelper.resume("killaura");
     }
 
     @Override
@@ -438,9 +445,6 @@ public class Killaura extends Module {
                 return d / Arrays.stream(checks).map(AntibotCheck::importance).reduce(Double::sum).orElse(0d);
             }
 
-            public AntibotCheck[] getViolatingChecks(LivingEntity e) {
-                return Arrays.stream(checks).filter(antibotCheck -> antibotCheck.violates(e)).toArray(AntibotCheck[]::new);
-            }
         }
     }
 }

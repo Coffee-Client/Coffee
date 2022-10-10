@@ -32,7 +32,7 @@ public class MSAAFramebuffer extends Framebuffer {
     public MSAAFramebuffer(int samples) {
         super(true);
         if (samples < MIN_SAMPLES || samples > MAX_SAMPLES) {
-            throw new IllegalArgumentException(String.format("The number of samples should be >= %s and <= %s.", MIN_SAMPLES, MAX_SAMPLES));
+            throw new IllegalArgumentException(String.format("The number of samples should be >= %s and <= %s, got %s.", MIN_SAMPLES, MAX_SAMPLES, samples));
         }
         if ((samples & (samples - 1)) != 0) {
             throw new IllegalArgumentException("The number of samples must be a power of two.");
@@ -50,8 +50,8 @@ public class MSAAFramebuffer extends Framebuffer {
         return INSTANCES.computeIfAbsent(samples, x -> new MSAAFramebuffer(samples));
     }
 
-    public static void use(int samples, Runnable drawAction) {
-        use(samples, MinecraftClient.getInstance().getFramebuffer(), drawAction);
+    public static void use(Runnable drawAction) {
+        use(Math.min(16, MAX_SAMPLES), MinecraftClient.getInstance().getFramebuffer(), drawAction); // 16 samples max, everything above is overkill
     }
 
     public static void use(int samples, Framebuffer mainBuffer, Runnable drawAction) {

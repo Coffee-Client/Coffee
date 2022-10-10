@@ -12,6 +12,7 @@ import coffee.client.helper.render.Texture;
 import coffee.client.mixin.ClientWorldMixin;
 import coffee.client.mixin.IMinecraftClientMixin;
 import coffee.client.mixin.IRenderTickCounterMixin;
+import coffee.client.mixinUtil.ChatHudDuck;
 import lombok.Cleanup;
 import lombok.SneakyThrows;
 import net.minecraft.client.network.PendingUpdateManager;
@@ -485,12 +486,27 @@ public class Utils {
 
     public static class Logging {
         static final Queue<Text> messageQueue = new ArrayDeque<>();
-
+        public static int messageDirect(String n, Color c) {
+            MutableText t = Text.literal(n).styled(style -> style.withColor(TextColor.fromRgb(c.getRGB())));
+            return sendMessage(t);
+        }
+        public static int sendMessage(Text t) {
+            MutableText append = Text.empty()
+                .append(Text.literal("[").styled(style -> style.withColor(0x454545)))
+                .append(Text.literal("Coffee").styled(style -> style.withColor(0x3AD99D)))
+                .append(Text.literal("]").styled(style -> style.withColor(0x454545)))
+                .append(" ")
+                .append(t);
+            return ((ChatHudDuck) CoffeeMain.client.inGameHud.getChatHud()).coffee_addChatMessage(append);
+        }
+        public static void removeMessage(int v) {
+            ((ChatHudDuck) CoffeeMain.client.inGameHud.getChatHud()).coffee_removeChatMessage(v);
+        }
         static void sendMessages() {
             if (CoffeeMain.client.player != null) {
                 Text next;
                 while ((next = messageQueue.poll()) != null) {
-                    CoffeeMain.client.player.sendMessage(next, false);
+                    sendMessage(next);
                 }
             }
         }

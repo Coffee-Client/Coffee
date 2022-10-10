@@ -386,7 +386,7 @@ public class Renderer {
         public static void renderActions() {
             Camera c = CoffeeMain.client.gameRenderer.getCamera();
             Vec3d cp = c.getPos();
-            currentStack.stream().sorted(Comparator.comparingDouble(value -> value.pos.distanceTo(cp))).forEach(Renderable::draw);
+            currentStack.stream().sorted(Comparator.comparingDouble(value -> -value.pos.distanceTo(cp))).forEach(Renderable::draw);
             currentStack.clear();
         }
 

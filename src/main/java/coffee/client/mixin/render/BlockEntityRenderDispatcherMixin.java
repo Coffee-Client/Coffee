@@ -26,8 +26,5 @@ public class BlockEntityRenderDispatcherMixin {
         if (re.isCancelled()) {
             ci.cancel();
         }
-        //        if (Events.fireEvent(EventType.BLOCK_ENTITY_RENDER, new BlockEntityRenderEvent(matrix, blockEntity))) {
-        //            ci.cancel();
-        //        }
     }
 }

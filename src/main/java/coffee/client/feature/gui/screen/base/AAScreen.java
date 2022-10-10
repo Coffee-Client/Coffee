@@ -106,6 +106,11 @@ public class AAScreen extends Screen implements FastTickable {
     }
 
     @Override
+    public boolean shouldPause() {
+        return false;
+    }
+
+    @Override
     public boolean charTyped(char chr, int modifiers) {
         return iterateOverChildren(element -> element.charTyped(chr, modifiers));
     }
@@ -158,7 +163,7 @@ public class AAScreen extends Screen implements FastTickable {
         CoffeeMain.client.keyboard.setRepeatEvents(true);
         if (samples != -1) {
             if (!MSAAFramebuffer.framebufferInUse()) {
-                MSAAFramebuffer.use(samples, () -> renderInternal(matrices, mouseX, mouseY, delta));
+                MSAAFramebuffer.use(() -> renderInternal(matrices, mouseX, mouseY, delta));
             } else {
                 renderInternal(matrices, mouseX, mouseY, delta);
             }

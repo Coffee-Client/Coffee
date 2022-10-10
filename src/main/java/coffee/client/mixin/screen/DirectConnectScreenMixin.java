@@ -176,7 +176,7 @@ public abstract class DirectConnectScreenMixin extends Screen implements FastTic
 
     @Inject(method = "render", at = @At("RETURN"))
     void coffee_postRender(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        MSAAFramebuffer.use(MSAAFramebuffer.MAX_SAMPLES, () -> coffee_innerRender(matrices));
+        MSAAFramebuffer.use(() -> coffee_innerRender(matrices));
     }
 
     @Override

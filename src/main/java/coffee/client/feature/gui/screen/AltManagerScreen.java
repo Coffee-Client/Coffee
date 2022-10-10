@@ -65,11 +65,6 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
     public static final Map<UUID, Texture> texCache = new HashMap<>();
     static final File ALTS_FILE = new File(CoffeeMain.BASE, "alts.sip");
     static final ConfigContainer CONFIG_CONTAINER = new ConfigContainer(ALTS_FILE, new JsonArray());
-    //    static final String TOP_NOTE = """
-    //        // DO NOT SHARE THIS FILE
-    //        // This file contains sensitive information about your accounts
-    //        // Unless you REALLY KNOW WHAT YOU ARE DOING, DO NOT SEND THIS TO ANYONE
-    //        """;
     static final Color bg = new Color(20, 20, 20);
     static final Color pillColor = new Color(25, 25, 25, 100);
     static final Color backgroundOverlay = new Color(0, 0, 0, 130);
@@ -167,7 +162,6 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
         saveAlts();
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     void loadAlts() {
         CoffeeMain.log(Level.INFO, "Loading alts");
 
@@ -186,32 +180,6 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
             ac.renderY = ac.renderX = -1;
             alts.add(ac);
         }
-        //        if (!ALTS_FILE.isFile()) {
-        //            ALTS_FILE.delete();
-        //        }
-        //        if (!ALTS_FILE.exists()) {
-        //            CoffeeMain.log(Level.INFO, "Skipping alt loading because file doesn't exist");
-        //            return;
-        //        }
-        //        try {
-        //            String contents = FileUtils.readFileToString(ALTS_FILE, StandardCharsets.UTF_8);
-        //            JsonArray ja = JsonParser.parseString(contents).getAsJsonArray();
-        //            for (JsonElement jsonElement : ja) {
-        //                JsonObject jo = jsonElement.getAsJsonObject();
-        //                try {
-
-        //                    container.valid = !jo.has("valid") || jo.get("valid").getAsBoolean();
-        //                    AltContainer ac = new AltContainer(0, 0, 0, container);
-        //                    ac.renderY = ac.renderX = -1;
-        //                    alts.add(ac);
-        //                } catch (Exception ignored) {
-        //
-        //                }
-        //
-        //            }
-        //        } catch (Exception ignored) {
-        //            CoffeeMain.log(Level.ERROR, "Failed to read alts file - corrupted?");
-        //        }
     }
 
     double getPadding() {

@@ -86,11 +86,6 @@ public class WaypointEditScreen extends AAScreen {
         Renderer.R2D.renderRoundedQuad(stack, Color.WHITE, x - 1, y - size / 2d, x + 1, y + size / 2d, 1, 5);
     }
 
-    @Override
-    public boolean shouldPause() {
-        return false;
-    }
-
     static class EditScreen extends CenterOverlayScreen {
         Waypoints.Waypoint wp;
 

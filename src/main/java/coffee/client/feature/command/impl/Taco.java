@@ -248,6 +248,10 @@ public class Taco extends Command {
                 }
             }
             case "toggle" -> {
+                if (!config.enabled && frames.isEmpty()) {
+                    error("Configure frames to show first: .taco play path/to/gif.gif");
+                    return;
+                }
                 config.enabled = !config.enabled;
                 if (config.enabled) {
                     success("Taco is now tacoing");

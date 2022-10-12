@@ -81,9 +81,12 @@ public class ClickGUI extends AAScreen {
 
     @Override
     protected void initInternal() {
-        help = new ClickableTextElement(5, client.getWindow().getScaledHeight()-FontRenderers.getRenderer().getFontHeight()-5,"Click me for help",FontRenderers.getRenderer(),() -> {
-            client.setScreen(new HelpScreen(this));
-        },0xCCCCCC);
+        help = new ClickableTextElement(5,
+            client.getWindow().getScaledHeight() - FontRenderers.getRenderer().getFontHeight() - 5,
+            "Click me for help",
+            FontRenderers.getRenderer(),
+            () -> client.setScreen(new HelpScreen(this)),
+            0xCCCCCC);
         closing = false;
         if (initialized) {
             return;
@@ -264,6 +267,6 @@ public class ClickGUI extends AAScreen {
 
             tooltipContent = null;
         }
-        help.render(stack,mouseX,mouseY);
+        help.render(stack, mouseX, mouseY);
     }
 }

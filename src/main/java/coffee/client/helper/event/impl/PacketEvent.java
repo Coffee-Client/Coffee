@@ -8,10 +8,12 @@ package coffee.client.helper.event.impl;
 import coffee.client.helper.event.Event;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.network.Packet;
 
 @AllArgsConstructor
 public abstract class PacketEvent extends Event {
+    @Setter
     @Getter
     Packet<?> packet;
 

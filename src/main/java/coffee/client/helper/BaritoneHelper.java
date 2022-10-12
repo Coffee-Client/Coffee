@@ -20,6 +20,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class BaritoneHelper {
     static List<String> idsWhoWantPause = new CopyOnWriteArrayList<>();
+    static int lastMessageId = -1;
+
     static {
         BaritoneAPI.getProvider().getPrimaryBaritone().getPathingControlManager().registerProcess(new IBaritoneProcess() {
             @Override
@@ -53,14 +55,16 @@ public class BaritoneHelper {
             }
         });
     }
-    static int lastMessageId = -1;
+
     public static void pause(String id) {
         if (idsWhoWantPause.isEmpty()) {
             ((ChatHudDuck) CoffeeMain.client.inGameHud.getChatHud()).coffee_removeChatMessage(lastMessageId);
-            lastMessageId = ((ChatHudDuck) CoffeeMain.client.inGameHud.getChatHud()).coffee_addChatMessage(Text.literal("Pausing baritone...").styled(style -> style.withColor(TextColor.fromRgb(
-                Color.YELLOW.getRGB()))));
+            lastMessageId = ((ChatHudDuck) CoffeeMain.client.inGameHud.getChatHud()).coffee_addChatMessage(Text.literal("Pausing baritone...")
+                .styled(style -> style.withColor(TextColor.fromRgb(Color.YELLOW.getRGB()))));
         }
-        if (!idsWhoWantPause.contains(id)) idsWhoWantPause.add(id);
+        if (!idsWhoWantPause.contains(id)) {
+            idsWhoWantPause.add(id);
+        }
     }
 
     public static boolean isPaused() {
@@ -71,8 +75,8 @@ public class BaritoneHelper {
         idsWhoWantPause.remove(id);
         if (idsWhoWantPause.isEmpty()) {
             ((ChatHudDuck) CoffeeMain.client.inGameHud.getChatHud()).coffee_removeChatMessage(lastMessageId);
-            lastMessageId = ((ChatHudDuck) CoffeeMain.client.inGameHud.getChatHud()).coffee_addChatMessage(Text.literal("Resuming baritone...").styled(style -> style.withColor(TextColor.fromRgb(
-                new Color(65, 217, 101).getRGB()))));
+            lastMessageId = ((ChatHudDuck) CoffeeMain.client.inGameHud.getChatHud()).coffee_addChatMessage(Text.literal("Resuming baritone...")
+                .styled(style -> style.withColor(TextColor.fromRgb(new Color(65, 217, 101).getRGB()))));
         }
     }
 }

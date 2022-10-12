@@ -23,10 +23,14 @@ public interface IPlayerMoveC2SPacketMixin {
 
     @Mutable
     @Accessor("y")
-    void setY(double x);
+    void setY(double y);
 
     @Mutable
     @Accessor("z")
-    void setZ(double x);
+    void setZ(double z);
+
+    @Mutable
+    @Accessor("changePosition")
+    void setChangePosition(boolean b);
 
 }

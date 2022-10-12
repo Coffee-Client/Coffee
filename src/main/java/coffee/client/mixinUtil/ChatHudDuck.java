@@ -9,5 +9,6 @@ import net.minecraft.text.Text;
 
 public interface ChatHudDuck {
     int coffee_addChatMessage(Text content);
+
     void coffee_removeChatMessage(int id);
 }

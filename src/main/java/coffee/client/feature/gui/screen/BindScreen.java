@@ -69,4 +69,9 @@ public class BindScreen extends ClientScreen {
         }
         super.tick();
     }
+
+    @Override
+    public boolean shouldPause() {
+        return false;
+    }
 }

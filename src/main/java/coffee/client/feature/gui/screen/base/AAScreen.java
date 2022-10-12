@@ -118,7 +118,7 @@ public class AAScreen extends Screen implements FastTickable {
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (keyCode == GLFW.GLFW_KEY_ESCAPE) {
-            CoffeeMain.client.setScreen(null);
+            close();
             return true;
         }
         return iterateOverChildren(element -> element.keyPressed(keyCode, modifiers));

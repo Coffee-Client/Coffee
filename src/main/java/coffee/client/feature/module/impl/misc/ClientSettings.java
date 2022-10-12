@@ -12,15 +12,8 @@ import coffee.client.feature.module.ModuleType;
 import net.minecraft.client.util.math.MatrixStack;
 
 public class ClientSettings extends Module {
-//    @Getter
-    //    final StringSetting prefix = this.config.create(new StringSetting.Builder(".").name("Prefix").description("The prefix to use for commands").get());
     @Setting(name = "Prefix", description = "The prefix to use for commands")
     public String prefix = ".";
-
-    public enum ToggleMode {
-        Notification, Chat
-    }
-
     @Setting(name = "Toggle style", description = "How the module toggle notifications should look")
     public ToggleMode toggleStyle = ToggleMode.Notification;
 
@@ -57,5 +50,9 @@ public class ClientSettings extends Module {
     @Override
     public void onHudRender() {
 
+    }
+
+    public enum ToggleMode {
+        Notification, Chat
     }
 }

@@ -176,12 +176,8 @@ public class FontRenderer {
     public float getStringWidth(String text) {
         float wid = 0;
         for (char c : stripControlCodes(text).toCharArray()) {
-            Glyph g = glyphMap.get(c);
-            if (g == null) {
-                wid += 20;
-            } else {
-                wid += g.dimensions.getWidth();
-            }
+            Glyph g = glyphMap.computeIfAbsent(c, character -> new Glyph(character, this.f));
+            wid += g.dimensions.getWidth();
         }
         return wid * 0.25f;
     }

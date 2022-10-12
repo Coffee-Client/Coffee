@@ -7,8 +7,6 @@ package coffee.client.feature.command.impl;
 
 import coffee.client.feature.command.Command;
 import coffee.client.feature.command.exception.CommandException;
-import coffee.client.mixinUtil.ChatHudDuck;
-import net.minecraft.text.Text;
 
 public class Test extends Command {
     public Test() {

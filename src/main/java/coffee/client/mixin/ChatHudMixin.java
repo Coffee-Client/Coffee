@@ -32,36 +32,43 @@ import java.util.List;
 public abstract class ChatHudMixin implements ChatHudDuck {
 
 
-    @Shadow public abstract int getWidth();
+    private final Int2ObjectMap<Pair<ChatHudLine, ChatHudLine.Visible>> idToHudLineMap = new Int2ObjectArrayMap<>();
+    @Shadow
+    @Final
+    private MinecraftClient client;
+    @Shadow
+    private int scrolledLines;
+    @Shadow
+    private boolean hasUnreadNewMessages;
+    @Shadow
+    @Final
+    private List<ChatHudLine.Visible> visibleMessages;
+    @Shadow
+    @Final
+    private List<ChatHudLine> messages;
 
-    @Shadow public abstract double getChatScale();
+    @Shadow
+    public abstract int getWidth();
 
-    @Shadow @Final private MinecraftClient client;
+    @Shadow
+    public abstract double getChatScale();
 
-    @Shadow protected abstract boolean isChatFocused();
+    @Shadow
+    protected abstract boolean isChatFocused();
 
-    @Shadow private int scrolledLines;
-
-    @Shadow private boolean hasUnreadNewMessages;
-
-    @Shadow public abstract void scroll(int scroll);
-
-    @Shadow @Final private List<ChatHudLine.Visible> visibleMessages;
-
-    @Shadow @Final private List<ChatHudLine> messages;
-
-    private Int2ObjectMap<Pair<ChatHudLine, ChatHudLine.Visible>> idToHudLineMap = new Int2ObjectArrayMap<>();
+    @Shadow
+    public abstract void scroll(int scroll);
 
     @Override
     public int coffee_addChatMessage(Text content) {
         CoffeeMain.log(Level.INFO, "[Client chat]", content.getString());
-        int i = MathHelper.floor((double)this.getWidth() / this.getChatScale());
+        int i = MathHelper.floor((double) this.getWidth() / this.getChatScale());
 
         List<OrderedText> list = ChatMessages.breakRenderedChatMessageLines(content, i, this.client.textRenderer);
         boolean bl = this.isChatFocused();
         int ticks = this.client.inGameHud.getTicks();
         ChatHudLine.Visible element = null;
-        for(int j = 0; j < list.size(); ++j) {
+        for (int j = 0; j < list.size(); ++j) {
             OrderedText orderedText = list.get(j);
             if (bl && this.scrolledLines > 0) {
                 this.hasUnreadNewMessages = true;
@@ -80,7 +87,9 @@ public abstract class ChatHudMixin implements ChatHudDuck {
             ChatHudLine.Visible visible = this.visibleMessages.get(this.visibleMessages.size() - 1);
             for (int integer : new IntArraySet(this.idToHudLineMap.keySet())) {
                 Pair<ChatHudLine, ChatHudLine.Visible> chatHudLineVisiblePair = this.idToHudLineMap.get(integer);
-                if (visible.equals(chatHudLineVisiblePair.getB())) this.idToHudLineMap.remove(integer);
+                if (visible.equals(chatHudLineVisiblePair.getB())) {
+                    this.idToHudLineMap.remove(integer);
+                }
             }
             this.visibleMessages.remove(visible);
         }
@@ -95,10 +104,10 @@ public abstract class ChatHudMixin implements ChatHudDuck {
                 break;
             }
         }
-//        if (indexFound == -1) indexFound = this.idToHudLineMap.size();
+        //        if (indexFound == -1) indexFound = this.idToHudLineMap.size();
         this.idToHudLineMap.put(indexFound, new Pair<>(element1, element));
 
-        while(this.messages.size() > history) {
+        while (this.messages.size() > history) {
             this.messages.remove(this.messages.size() - 1);
         }
         return indexFound;
@@ -107,7 +116,9 @@ public abstract class ChatHudMixin implements ChatHudDuck {
     @Override
     public void coffee_removeChatMessage(int id) {
         Pair<ChatHudLine, ChatHudLine.Visible> chatHudLineVisiblePair = this.idToHudLineMap.get(id);
-        if (chatHudLineVisiblePair == null) return;
+        if (chatHudLineVisiblePair == null) {
+            return;
+        }
         this.visibleMessages.remove(chatHudLineVisiblePair.getB());
         this.messages.remove(chatHudLineVisiblePair.getA());
         this.idToHudLineMap.remove(id);

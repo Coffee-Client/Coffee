@@ -278,13 +278,17 @@ public class Killaura extends Module {
     public void tick() {
         targets = selectTargets();
         if (targets.isEmpty()) {
-            if (BaritoneHelper.isPaused()) BaritoneHelper.resume("killaura");
+            if (BaritoneHelper.isPaused()) {
+                BaritoneHelper.resume("killaura");
+            }
             return;
         }
         if (!attackCooldown.hasExpired(getDelay() + currentRandomDelay)) {
             return;
         }
-        if (pauseBaritone && BaritoneAPI.getProvider().getPrimaryBaritone().getPathingBehavior().isPathing()) BaritoneHelper.pause("killaura");
+        if (pauseBaritone && BaritoneAPI.getProvider().getPrimaryBaritone().getPathingBehavior().isPathing()) {
+            BaritoneHelper.pause("killaura");
+        }
         boolean smooth = smoothLook && attackMode == AttackMode.Single;
         if (smooth) {
             LivingEntity target = targets.get(0);
@@ -342,7 +346,9 @@ public class Killaura extends Module {
 
     @Override
     public void disable() {
-        if (BaritoneHelper.isPaused()) BaritoneHelper.resume("killaura");
+        if (BaritoneHelper.isPaused()) {
+            BaritoneHelper.resume("killaura");
+        }
     }
 
     @Override

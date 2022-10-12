@@ -33,7 +33,8 @@ public class Rotations {
 
     static {
         EventSystem.manager.registerSubscribers(new Object() {
-            @MessageSubscription
+            @MessageSubscription(priority = 1000)
+                // call latest
             void onPacketSend(coffee.client.helper.event.impl.PacketEvent.Sent event) {
                 if (event.getPacket() instanceof PlayerMoveC2SPacket packet) {
                     clientYaw = packet.getYaw(clientYaw);
@@ -44,7 +45,8 @@ public class Rotations {
                 }
             }
 
-            @MessageSubscription
+            @MessageSubscription(priority = -1000)
+                // call first
             void onPacketRecv(coffee.client.helper.event.impl.PacketEvent.Received pe) {
                 if (pe.getPacket() instanceof PlayerPositionLookS2CPacket p) {
                     clientYaw = p.getYaw();

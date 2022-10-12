@@ -17,6 +17,7 @@ public class ClickableTextElement extends Element {
     String content;
     Runnable clicked;
     int color;
+
     public ClickableTextElement(double x, double y, String content, FontAdapter fa, Runnable onClick, int textColor) {
         super(x, y, fa.getStringWidth(content), fa.getFontHeight());
         this.fa = fa;
@@ -34,7 +35,7 @@ public class ClickableTextElement extends Element {
     public void render(MatrixStack stack, double mouseX, double mouseY) {
         fa.drawString(stack, this.content, getPositionX(), getPositionY(), this.color);
         if (inBounds(mouseX, mouseY)) {
-            Renderer.R2D.renderQuad(stack, Color.WHITE, getPositionX(), getPositionY() + getHeight(), getPositionX()+getWidth(), getPositionY() + getHeight()+.5);
+            Renderer.R2D.renderQuad(stack, Color.WHITE, getPositionX(), getPositionY() + getHeight(), getPositionX() + getWidth(), getPositionY() + getHeight() + .5);
         }
     }
 

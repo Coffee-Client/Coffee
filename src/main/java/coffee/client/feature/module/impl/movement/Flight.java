@@ -10,7 +10,9 @@ import coffee.client.feature.config.BooleanSetting;
 import coffee.client.feature.config.DoubleSetting;
 import coffee.client.feature.config.EnumSetting;
 import coffee.client.feature.module.Module;
+import coffee.client.feature.module.ModuleRegistry;
 import coffee.client.feature.module.ModuleType;
+import coffee.client.feature.module.impl.exploit.Robowalk;
 import coffee.client.helper.util.Timer;
 import coffee.client.helper.util.Utils;
 import coffee.client.mixin.network.IPlayerMoveC2SPacketMixin;
@@ -54,7 +56,9 @@ public class Flight extends Module {
         Vec3d pos = client.player.getPos();
         float pitch = client.player.getPitch();
         float yaw = client.player.getYaw();
-        return new PlayerMoveC2SPacket.Full(p.getX(pos.x), p.getY(pos.y), p.getZ(pos.z), yaw, pitch, p.isOnGround());
+        PlayerMoveC2SPacket.Full full = new PlayerMoveC2SPacket.Full(p.getX(pos.x), p.getY(pos.y), p.getZ(pos.z), yaw, pitch, p.isOnGround());
+        if (ModuleRegistry.getByClass(Robowalk.class).isEnabled()) Robowalk.processPacket(full);
+        return full;
     }
 
     @MessageSubscription
@@ -79,15 +83,13 @@ public class Flight extends Module {
                         pp.setZ(p.getZ(lsp.z));
                         pp.setY(y); // put us back on regular y if we end the hold cycle to reset the conditions
                         pp.setChangePosition(true);
-                        System.out.println("reset: " + y);
                     } else {
-                        System.out.println("hold: " + holdOn);
                         pp.setX(p.getX(lsp.x)); // default to current pos in case this one does NOT change position
                         pp.setZ(p.getZ(lsp.z));
                         pp.setY(holdOn);
                         pp.setChangePosition(true);
                     }
-                } else if (System.currentTimeMillis() - lastModify > 2000) {
+                } else if (System.currentTimeMillis() - lastModify > 1000) {
                     p = upgrade(p);
                     y = p.getY(lsp.y);
                     pe.setPacket(p);
@@ -96,8 +98,7 @@ public class Flight extends Module {
                     this.holdModify = true;
                     if (!client.world.getBlockState(client.player.getBlockPos().down()).getMaterial().blocksMovement()) {
                         double delta = Math.max(0, y - lastY);
-                        delta += 0.03126d;
-                        System.out.println("down to: " + (y - delta));
+                        delta += 0.05d;
                         IPlayerMoveC2SPacketMixin pp = ((IPlayerMoveC2SPacketMixin) p);
                         pp.setX(p.getX(lsp.x)); // default to last known server pos in case this one does NOT change position
                         pp.setZ(p.getZ(lsp.z));

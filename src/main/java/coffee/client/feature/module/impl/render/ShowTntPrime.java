@@ -74,7 +74,7 @@ public class ShowTntPrime extends Module {
 
     @MessageSubscription
     void onA(coffee.client.helper.event.impl.PacketEvent.Received pe) {
-        if (pe.getPacket() instanceof EntityTrackerUpdateS2CPacket p) {
+        if (pe.getPacket() instanceof EntityTrackerUpdateS2CPacket p && CoffeeMain.client.world != null) {
             Entity e = CoffeeMain.client.world.getEntityById(p.id());
             if (e == null) {
                 return;

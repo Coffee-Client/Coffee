@@ -34,6 +34,7 @@ import net.minecraft.text.Text;
 import net.minecraft.text.TextColor;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
@@ -96,6 +97,14 @@ public class Utils {
             .filter(entity -> entity instanceof LivingEntity)
             .map(entity -> (LivingEntity) entity)
             .filter(requirement);
+    }
+
+    public static boolean isABFree(Vec3d a, Vec3d b) {
+        assert CoffeeMain.client.player != null;
+        assert CoffeeMain.client.world != null;
+        RaycastContext rc = new RaycastContext(a, b, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, CoffeeMain.client.player);
+        BlockHitResult raycast = CoffeeMain.client.world.raycast(rc);
+        return raycast.getType() == HitResult.Type.MISS;
     }
 
     public static float dist(double ax, double ay, double bx, double by) {

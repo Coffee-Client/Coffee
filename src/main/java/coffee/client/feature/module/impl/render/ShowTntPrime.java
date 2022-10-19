@@ -114,7 +114,9 @@ public class ShowTntPrime extends Module {
 
     @Override
     public void onWorldRender(MatrixStack matrices) {
-        if (CoffeeMain.client.world == null) return;
+        if (CoffeeMain.client.world == null) {
+            return;
+        }
         for (Integer integer : i2iamp.keySet()) {
             Entity e = CoffeeMain.client.world.getEntityById(integer);
             if (e == null) {

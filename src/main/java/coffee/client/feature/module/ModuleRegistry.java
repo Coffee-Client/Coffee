@@ -34,6 +34,7 @@ import coffee.client.feature.module.impl.exploit.ResourcePackSpoof;
 import coffee.client.feature.module.impl.exploit.Robowalk;
 import coffee.client.feature.module.impl.misc.AdBlock;
 import coffee.client.feature.module.impl.misc.AllowFormatCodes;
+import coffee.client.feature.module.impl.misc.Angryman;
 import coffee.client.feature.module.impl.misc.AntiCrash;
 import coffee.client.feature.module.impl.misc.AntiOffhandCrash;
 import coffee.client.feature.module.impl.misc.AntiPacketKick;
@@ -334,6 +335,7 @@ public class ModuleRegistry {
         registerModule(Robowalk.class);
         registerModule(ChestIndexer.class);
         registerModule(KnockbackPlus.class);
+        registerModule(Angryman.class);
 
         rebuildSharedModuleList();
 

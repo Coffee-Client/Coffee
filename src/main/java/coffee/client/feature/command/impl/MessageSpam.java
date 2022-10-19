@@ -10,7 +10,6 @@ import coffee.client.feature.command.Command;
 import coffee.client.feature.command.argument.IntegerArgumentParser;
 import coffee.client.feature.command.coloring.ArgumentType;
 import coffee.client.feature.command.coloring.PossibleArgument;
-import coffee.client.feature.command.coloring.StaticArgumentServer;
 import coffee.client.feature.command.exception.CommandException;
 
 import java.util.Arrays;
@@ -22,7 +21,8 @@ public class MessageSpam extends Command {
 
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
-        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.NUMBER, "<amount>"), new PossibleArgument(ArgumentType.STRING, "<message>"));
+        if (index == 0) return new PossibleArgument(ArgumentType.NUMBER, "<amount>");
+        return new PossibleArgument(ArgumentType.STRING, "<message>");
     }
 
     @Override
@@ -30,7 +30,7 @@ public class MessageSpam extends Command {
         validateArgumentsLength(args, 2, "Provide amount and message");
         int amount = new IntegerArgumentParser().parse(args[0]);
         for (int i = 0; i < amount; i++) {
-            CoffeeMain.client.player.sendChatMessage(String.join("", Arrays.copyOfRange(args, 1, args.length)), null);
+            CoffeeMain.client.player.sendChatMessage(String.join(" ", Arrays.copyOfRange(args, 1, args.length)), null);
         }
     }
 }

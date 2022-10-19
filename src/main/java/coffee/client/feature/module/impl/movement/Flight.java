@@ -35,29 +35,29 @@ public class Flight extends Module {
 
     final EnumSetting<FlightMode> mode = this.config.create(new EnumSetting.Builder<>(FlightMode.Vanilla).name("Mode").description("How you fly").get());
     final BooleanSetting bypassVanillaAc = this.config.create(new BooleanSetting.Builder(true).name("Bypass vanilla AC")
-        .description("Whether to bypass the vanilla anticheat").get());
+        .description("Whether to bypass the vanilla anticheat")
+        .get());
     final DoubleSetting speed = this.config.create(new DoubleSetting.Builder(2).name("Speed").description("How fast you fly").min(0).max(10).get());
     final List<Packet<?>> queue = new ArrayList<>();
     final Timer lag = new Timer();
     boolean flewBefore = false;
-
-
-    public Flight() {
-        super("Flight", "Allows you to fly without having permission to", ModuleType.MOVEMENT);
-    }
-
     long lastModify = System.currentTimeMillis();
     long endModifyCycle = System.currentTimeMillis();
     boolean holdModify = false;
     double holdOn = 0d;
     double lastY = 0;
+    public Flight() {
+        super("Flight", "Allows you to fly without having permission to", ModuleType.MOVEMENT);
+    }
 
     static PlayerMoveC2SPacket.Full upgrade(PlayerMoveC2SPacket p) {
         Vec3d pos = client.player.getPos();
         float pitch = client.player.getPitch();
         float yaw = client.player.getYaw();
         PlayerMoveC2SPacket.Full full = new PlayerMoveC2SPacket.Full(p.getX(pos.x), p.getY(pos.y), p.getZ(pos.z), yaw, pitch, p.isOnGround());
-        if (ModuleRegistry.getByClass(Robowalk.class).isEnabled()) Robowalk.processPacket(full);
+        if (ModuleRegistry.getByClass(Robowalk.class).isEnabled()) {
+            Robowalk.processPacket(full);
+        }
         return full;
     }
 

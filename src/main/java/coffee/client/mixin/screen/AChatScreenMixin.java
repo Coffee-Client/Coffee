@@ -51,6 +51,7 @@ public class AChatScreenMixin extends Screen {
     String previousSuggestionInput = "";
     @Shadow
     ChatInputSuggestor chatInputSuggestor;
+    String fullCommand = "";
     private String previousCommand = "";
 
     protected AChatScreenMixin(Text title) {
@@ -80,7 +81,6 @@ public class AChatScreenMixin extends Screen {
     double padding() {
         return 5;
     }
-
 
     List<String> getSuggestions(String command) {
         List<String> a = new ArrayList<>();
@@ -225,7 +225,7 @@ public class AChatScreenMixin extends Screen {
                 return OrderedText.empty();
             }
             String p = getPrefix();
-            if (!t.startsWith(p)) {
+            if (t.length() <= p.length()) {
                 return vanillaTextProvider(s, integer);
             }
 
@@ -237,12 +237,11 @@ public class AChatScreenMixin extends Screen {
             }
             Command c = CommandRegistry.getByAlias(spl[0]);
             String[] args = Arrays.copyOfRange(spl, 1, spl.length);
-            if (c != null && args.length > 0) {
+            if (c != null && t.startsWith(p) && args.length > 0) {
                 List<OrderedText> texts = new ArrayList<>();
-                texts.add(OrderedText.styledForwardsVisitedString(p, Style.EMPTY));
                 int countedGaps = 0;
                 boolean countedSpaceBefore = false;
-                val chars = actualCommandText.toCharArray();
+                val chars = t.toCharArray();
                 for (int i = 0; i < chars.length; i++) {
                     char c1 = chars[i];
                     if (c1 == ' ') {

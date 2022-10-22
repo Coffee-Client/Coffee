@@ -43,6 +43,7 @@ public class TextFieldElement extends Element implements HasSpecialCursor {
     boolean invalid = false;
 
     double radius = 5;
+    int preselCursor = 0;
 
     public TextFieldElement(double x, double y, double width, double height, String text) {
         super(x, y, width, height);
@@ -70,18 +71,46 @@ public class TextFieldElement extends Element implements HasSpecialCursor {
 
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
-        int preSelectionCursor = 0;
-        if (selectionStart < preSelectionCursor && preSelectionCursor == selectionEnd) {
-            cursor = selectionStart;
-        } else if (selectionEnd > preSelectionCursor && preSelectionCursor == selectionStart) {
-            cursor = selectionEnd;
-        }
+        //        int preSelectionCursor = 0;
+        //        if (selectionStart < preSelectionCursor && preSelectionCursor == selectionEnd) {
+        //            cursor = selectionStart;
+        //        } else if (selectionEnd > preSelectionCursor && preSelectionCursor == selectionStart) {
+        //            cursor = selectionEnd;
+        //        }
 
         return false;
     }
 
     @Override
     public boolean mouseDragged(double x, double y, double xDelta, double yDelta, int button) {
+        if (button == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
+            double overflowWidth = getOverflowWidthForRender();
+            double start = getPositionX() + 2 - overflowWidth;
+            double currentWidth = 0;
+            char[] chars = text.toCharArray();
+            int foundIndex = -1;
+            for (int i = 0; i < chars.length; i++) {
+                currentWidth += FontRenderers.getRenderer().getStringWidth(String.valueOf(chars[i]));
+                if (start + currentWidth - FontRenderers.getRenderer().getStringWidth(String.valueOf(chars[i])) / 2 >= x) {
+                    foundIndex = i;
+                    break;
+                }
+            }
+            if (foundIndex < 0) {
+                foundIndex = text.length();
+            }
+            int newSelEnd = cursor = foundIndex;
+            if (newSelEnd < preselCursor) { // moved left
+                selectionStart = newSelEnd;
+                selectionEnd = preselCursor;
+            } else { // moved right or didnt move
+                selectionEnd = newSelEnd;
+                selectionStart = preselCursor;
+            }
+
+            cursorChanged();
+            return true;
+        }
         return false;
     }
 
@@ -513,7 +542,6 @@ public class TextFieldElement extends Element implements HasSpecialCursor {
         return 4;
     }
 
-
     @Override
     public void tickAnimations() {
 
@@ -531,6 +559,24 @@ public class TextFieldElement extends Element implements HasSpecialCursor {
 
                     runAction();
                 }
+            } else if (button == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
+                double overflowWidth = getOverflowWidthForRender();
+                double start = getPositionX() + 2 - overflowWidth;
+                double currentWidth = 0;
+                char[] chars = text.toCharArray();
+                int foundIndex = -1;
+                for (int i = 0; i < chars.length; i++) {
+                    currentWidth += FontRenderers.getRenderer().getStringWidth(String.valueOf(chars[i]));
+                    if (start + currentWidth - FontRenderers.getRenderer().getStringWidth(String.valueOf(chars[i])) / 2 >= mouseX) {
+                        foundIndex = i;
+                        break;
+                    }
+                }
+                if (foundIndex < 0) {
+                    foundIndex = text.length();
+                }
+                selectionStart = selectionEnd = cursor = foundIndex;
+                preselCursor = cursor;
             }
 
             setFocused(true);

@@ -19,6 +19,7 @@ import java.util.Comparator;
 public class Angryman extends Module {
     LivingEntity nextTarget;
     Timer updater = new Timer();
+
     public Angryman() {
         super("Angryman", "Automatically makes surrounding endermen angry, at you", ModuleType.MISC);
     }
@@ -31,7 +32,9 @@ public class Angryman extends Module {
                 .min(Comparator.comparingDouble(value -> value.distanceTo(client.player)))
                 .orElse(null);
         }
-        if (nextTarget != null) Rotations.lookAtV3(nextTarget.getEyePos());
+        if (nextTarget != null) {
+            Rotations.lookAtV3(nextTarget.getEyePos());
+        }
     }
 
     @Override

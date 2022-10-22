@@ -46,6 +46,7 @@ public class Flight extends Module {
     boolean holdModify = false;
     double holdOn = 0d;
     double lastY = 0;
+
     public Flight() {
         super("Flight", "Allows you to fly without having permission to", ModuleType.MOVEMENT);
     }

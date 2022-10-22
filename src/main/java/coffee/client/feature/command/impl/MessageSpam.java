@@ -21,7 +21,9 @@ public class MessageSpam extends Command {
 
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
-        if (index == 0) return new PossibleArgument(ArgumentType.NUMBER, "<amount>");
+        if (index == 0) {
+            return new PossibleArgument(ArgumentType.NUMBER, "<amount>");
+        }
         return new PossibleArgument(ArgumentType.STRING, "<message>");
     }
 

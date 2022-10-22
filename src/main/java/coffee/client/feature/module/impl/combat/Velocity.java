@@ -39,7 +39,9 @@ public class Velocity extends Module {
 
     @MessageSubscription
     void onA(coffee.client.helper.event.impl.PacketEvent.Received pe) {
-        if (CoffeeMain.client.player == null) return;
+        if (CoffeeMain.client.player == null) {
+            return;
+        }
         if (pe.getPacket() instanceof EntityVelocityUpdateS2CPacket packet && packet.getId() == CoffeeMain.client.player.getId()) {
             if (mode.getValue() == Mode.Modify) {
                 double velX = packet.getVelocityX() / 8000d; // don't ask me why they did this

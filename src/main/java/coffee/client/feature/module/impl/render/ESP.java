@@ -6,9 +6,10 @@
 package coffee.client.feature.module.impl.render;
 
 import coffee.client.CoffeeMain;
-import coffee.client.feature.config.BooleanSetting;
 import coffee.client.feature.config.DoubleSetting;
-import coffee.client.feature.config.EnumSetting;
+import coffee.client.feature.config.ListSetting;
+import coffee.client.feature.config.annotation.Setting;
+import coffee.client.feature.config.annotation.VisibilitySpecifier;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
 import coffee.client.helper.render.Renderer;
@@ -18,7 +19,6 @@ import coffee.client.helper.vertex.DumpVertexProvider;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.BufferRenderer;
-import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormat;
@@ -29,11 +29,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.mob.EndermanEntity;
 import net.minecraft.entity.mob.HostileEntity;
+import net.minecraft.entity.mob.Monster;
+import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.math.Vec3d;
-import org.lwjgl.opengl.GL11;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -41,24 +40,26 @@ import java.util.List;
 
 public class ESP extends Module {
     static DumpVertexProvider provider;
-    public final EnumSetting<Mode> outlineMode = this.config.create(new EnumSetting.Builder<>(Mode.Shader).name("Outline mode")
-        .description("How to render the outline")
-        .get());
-    public final EnumSetting<ShaderMode> shaderMode = this.config.create(new EnumSetting.Builder<>(ShaderMode.Simple).name("Shader mode")
-        .description("How to render the shader esp")
-        .get());
-    public final BooleanSetting entities = this.config.create(new BooleanSetting.Builder(true).name("Show entities").description("Render entities").get());
-    public final BooleanSetting players = this.config.create(new BooleanSetting.Builder(true).name("Show players").description("Render players").get());
     final DoubleSetting range = this.config.create(new DoubleSetting.Builder(64).name("Range")
         .description("How far to render the entities")
         .min(32)
         .max(128)
         .precision(1)
         .get());
+    @Setting(name = "Outline mode", description = "How to render the outline")
+    public Mode outlineMode = Mode.Shader;
+    @Setting(name = "Rect mode", description = "How to render the rect outline")
+    ShaderMode shaderMode = ShaderMode.Simple;
+    @Setting(name = "Entity filter", description = "Which entities to show")
+    ListSetting.FlagSet<AttackFilter> attackFilter = new ListSetting.FlagSet<>(AttackFilter.Hostile, AttackFilter.Players);
 
     public ESP() {
         super("ESP", "Shows where entities are", ModuleType.RENDER);
-        shaderMode.showIf(() -> outlineMode.getValue() == Mode.Shader);
+    }
+
+    @VisibilitySpecifier("Rect mode")
+    boolean shouldShowRect() {
+        return outlineMode == Mode.Rect;
     }
 
     @Override
@@ -81,13 +82,20 @@ public class ESP extends Module {
         return null;
     }
 
-    public boolean shouldRenderEntity(Entity e) {
-        return ((e instanceof PlayerEntity && players.getValue()) || entities.getValue());
+    public boolean shouldRenderEntity(Entity le) {
+        if (le instanceof PlayerEntity) {
+            return attackFilter.isSet(AttackFilter.Players);
+        } else if (le instanceof Monster) {
+            return attackFilter.isSet(AttackFilter.Hostile);
+        } else if (le instanceof PassiveEntity) {
+            return attackFilter.isSet(AttackFilter.Passive);
+        }
+        return attackFilter.isSet(AttackFilter.EverythingElse);
     }
 
     @Override
     public void onWorldRender(MatrixStack matrices) {
-        if (CoffeeMain.client.world == null || CoffeeMain.client.player == null) {
+        if (CoffeeMain.client.world == null || CoffeeMain.client.player == null || outlineMode == Mode.Shader) {
             return;
         }
 
@@ -116,18 +124,17 @@ public class ESP extends Module {
                     c = Color.GREEN;
                 }
                 Vec3d eSource = Utils.getInterpolatedEntityPosition(entity);
-                switch (outlineMode.getValue()) {
+                switch (outlineMode) {
                     case Filled -> Renderer.R3D.renderFilled(matrices,
                         Renderer.Util.modify(c, -1, -1, -1, 100),
                         eSource.subtract(new Vec3d(entity.getWidth(), 0, entity.getWidth()).multiply(0.5)),
                         new Vec3d(entity.getWidth(), entity.getHeight(), entity.getWidth()));
-                    case Rect -> renderOutline(entity, c, matrices);
                     case Outline -> Renderer.R3D.renderEdged(matrices,
                         Renderer.Util.modify(c, -1, -1, -1, 100),
                         c,
                         eSource.subtract(new Vec3d(entity.getWidth(), 0, entity.getWidth()).multiply(0.5)),
                         new Vec3d(entity.getWidth(), entity.getHeight(), entity.getWidth()));
-                    case Shader -> renderShaderOutline(entity, matrices);
+                    case Rect -> renderShaderOutline(entity, matrices);
                 }
             }
         }
@@ -141,7 +148,7 @@ public class ESP extends Module {
         Vec3d origin = Utils.getInterpolatedEntityPosition(e);
 
         List<Vec3d> boxPoints = new ArrayList<>();
-        if (shaderMode.getValue() == ShaderMode.Accurate) {
+        if (shaderMode == ShaderMode.Accurate) {
             EntityRenderer<? super Entity> eRenderer = client.getEntityRenderDispatcher().getRenderer(e);
             eRenderer.render(e, e.getYaw(), client.getTickDelta(), Renderer.R3D.getEmptyMatrixStack(), provider, 0);
             for (DumpVertexConsumer consumer : provider.getBuffers()) {
@@ -251,48 +258,8 @@ public class ESP extends Module {
 
     }
 
-    void renderOutline(Entity e, Color color, MatrixStack stack) {
-        Vec3d eSource = new Vec3d(MathHelper.lerp(CoffeeMain.client.getTickDelta(), e.prevX, e.getX()),
-            MathHelper.lerp(CoffeeMain.client.getTickDelta(), e.prevY, e.getY()),
-            MathHelper.lerp(CoffeeMain.client.getTickDelta(), e.prevZ, e.getZ()));
-        float red = color.getRed() / 255f;
-        float green = color.getGreen() / 255f;
-        float blue = color.getBlue() / 255f;
-        float alpha = color.getAlpha() / 255f;
-        Camera c = CoffeeMain.client.gameRenderer.getCamera();
-        Vec3d camPos = c.getPos();
-        Vec3d start = eSource.subtract(camPos);
-        float x = (float) start.x;
-        float y = (float) start.y;
-        float z = (float) start.z;
-
-        double r = Math.toRadians(-c.getYaw() + 90);
-        float sin = (float) (Math.sin(r) * (e.getWidth() / 1.7));
-        float cos = (float) (Math.cos(r) * (e.getWidth() / 1.7));
-        stack.push();
-
-        Matrix4f matrix = stack.peek().getPositionMatrix();
-        BufferBuilder buffer = Tessellator.getInstance().getBuffer();
-        RenderSystem.setShader(GameRenderer::getPositionColorShader);
-        GL11.glDepthFunc(GL11.GL_LEQUAL);
-        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
-        RenderSystem.defaultBlendFunc();
-        RenderSystem.enableBlend();
-        buffer.begin(VertexFormat.DrawMode.DEBUG_LINES, VertexFormats.POSITION_COLOR);
-
-        buffer.vertex(matrix, x + sin, y, z + cos).color(red, green, blue, alpha).next();
-        buffer.vertex(matrix, x - sin, y, z - cos).color(red, green, blue, alpha).next();
-        buffer.vertex(matrix, x - sin, y, z - cos).color(red, green, blue, alpha).next();
-        buffer.vertex(matrix, x - sin, y + e.getHeight(), z - cos).color(red, green, blue, alpha).next();
-        buffer.vertex(matrix, x - sin, y + e.getHeight(), z - cos).color(red, green, blue, alpha).next();
-        buffer.vertex(matrix, x + sin, y + e.getHeight(), z + cos).color(red, green, blue, alpha).next();
-        buffer.vertex(matrix, x + sin, y + e.getHeight(), z + cos).color(red, green, blue, alpha).next();
-        buffer.vertex(matrix, x + sin, y, z + cos).color(red, green, blue, alpha).next();
-
-        BufferRenderer.drawWithShader(buffer.end());
-        GL11.glDepthFunc(GL11.GL_LEQUAL);
-        RenderSystem.disableBlend();
-        stack.pop();
+    public enum AttackFilter {
+        Passive, Hostile, Players, EverythingElse
     }
 
     public enum ShaderMode {

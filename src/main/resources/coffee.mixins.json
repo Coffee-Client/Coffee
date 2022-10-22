@@ -72,6 +72,8 @@
     "IKeyBindingMixin",
     "IPlayerListEntryMixin",
     "KeyboardInputMixin",
+    "PostProcessShaderMixin",
+    "ShaderEffectMixin",
     "network.ClientPlayNetworkHandlerMixin",
     "render.ChatHudLineMixin",
     "screen.DirectConnectScreenMixin",

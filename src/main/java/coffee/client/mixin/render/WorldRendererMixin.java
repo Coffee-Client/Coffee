@@ -9,12 +9,15 @@ import coffee.client.CoffeeMain;
 import coffee.client.feature.module.ModuleRegistry;
 import coffee.client.feature.module.impl.misc.AntiCrash;
 import coffee.client.feature.module.impl.render.BlockHighlighting;
+import coffee.client.feature.module.impl.render.ESP;
 import coffee.client.helper.event.EventSystem;
 import coffee.client.helper.event.impl.ChunkRenderQuery;
+import coffee.client.helper.manager.ShaderManager;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.ObjectSet;
+import net.minecraft.client.gl.ShaderEffect;
 import net.minecraft.client.render.BlockBreakingInfo;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.util.math.MatrixStack;
@@ -38,6 +41,21 @@ public class WorldRendererMixin {
         EventSystem.manager.send(query);
         return query.isModified() ? query.isShouldRender() : spectator; // only submit our value if we have a reason to
     }
+
+    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gl/ShaderEffect;render(F)V", ordinal = 0))
+    void coffee_replaceShader(ShaderEffect instance, float tickDelta) {
+        ESP byClass = ModuleRegistry.getByClass(ESP.class);
+        if (byClass.isEnabled() && byClass.outlineMode == ESP.Mode.Shader) {
+            ShaderManager.OUTLINE.render(tickDelta);
+        } else {
+            instance.render(tickDelta);
+        }
+    }
+
+    //    @Redirect(method="drawEntityOutlinesFramebuffer", at=@At(value = "INVOKE",target = "Lnet/minecraft/client/gl/Framebuffer;draw(IIZ)V"))
+    //    void coffee_boxMsaa(Framebuffer instance, int width, int height, boolean disableBlend) {
+    //        MSAAFramebuffer.use(() -> instance.draw(width, height, disableBlend));
+    //    }
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lit/unimi/dsi/fastutil/longs/Long2ObjectMap;long2ObjectEntrySet()Lit/unimi/dsi/fastutil/objects/ObjectSet;"))
     ObjectSet<Long2ObjectMap.Entry<SortedSet<BlockBreakingInfo>>> coffee_highlightBlocks(Long2ObjectMap<SortedSet<BlockBreakingInfo>> instance, MatrixStack matrices) {

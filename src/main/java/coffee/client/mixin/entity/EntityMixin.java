@@ -8,13 +8,16 @@ package coffee.client.mixin.entity;
 import coffee.client.CoffeeMain;
 import coffee.client.feature.module.ModuleRegistry;
 import coffee.client.feature.module.impl.movement.IgnoreWorldBorder;
+import coffee.client.feature.module.impl.render.ESP;
 import coffee.client.feature.module.impl.render.FreeLook;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.border.WorldBorder;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Entity.class)
 public abstract class EntityMixin {
@@ -31,5 +34,13 @@ public abstract class EntityMixin {
             return fl.newyaw;
         }
         return instance.getYaw();
+    }
+
+    @Inject(method = "isGlowing", at = @At("HEAD"), cancellable = true)
+    void coffee_overwriteGlowing(CallbackInfoReturnable<Boolean> cir) {
+        ESP byClass = ModuleRegistry.getByClass(ESP.class);
+        if (byClass.isEnabled() && byClass.outlineMode == ESP.Mode.Shader) {
+            cir.setReturnValue(byClass.shouldRenderEntity((Entity) (Object) this));
+        }
     }
 }

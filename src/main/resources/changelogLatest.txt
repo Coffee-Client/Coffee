@@ -1,3 +1,2 @@
-Move to new event system
-Bug fixes
-Gaming
+Fixed baritone bug
+Shader esp

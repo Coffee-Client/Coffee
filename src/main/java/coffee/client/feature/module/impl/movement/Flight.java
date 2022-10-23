@@ -304,6 +304,6 @@ public class Flight extends Module {
     }
 
     public enum FlightMode {
-        Vanilla, Static, ThreeD, Jetpack, Walk
+        Vanilla, Static, _3D, Jetpack, Walk
     }
 }

@@ -119,7 +119,9 @@ public class EnumSettingEditor extends SettingEditor<EnumSetting<?>> {
                         innerBallDim,
                         20);
                 }
-                fa.drawString(stack, enumSettingEntry.name(), getPositionX() + ballDim * 2 + 4, getPositionY() + headerHeight() + offsetY, 0xFFFFFF);
+                String name = enumSettingEntry.name();
+                while(name.startsWith("_")) name = name.substring(1);
+                fa.drawString(stack, name, getPositionX() + ballDim * 2 + 4, getPositionY() + headerHeight() + offsetY, 0xFFFFFF);
                 offsetY += fa.getFontHeight() + 2;
             }
 

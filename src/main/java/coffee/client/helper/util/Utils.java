@@ -15,6 +15,8 @@ import coffee.client.mixin.IRenderTickCounterMixin;
 import coffee.client.mixinUtil.ChatHudDuck;
 import lombok.Cleanup;
 import lombok.SneakyThrows;
+import net.minecraft.block.*;
+import net.minecraft.block.entity.*;
 import net.minecraft.client.network.PendingUpdateManager;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.texture.NativeImageBackedTexture;

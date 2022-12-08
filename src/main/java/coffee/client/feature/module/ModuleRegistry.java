@@ -81,7 +81,7 @@ import coffee.client.feature.module.impl.movement.Swing;
 import coffee.client.feature.module.impl.movement.VanillaSpeed;
 import coffee.client.feature.module.impl.render.BlockHighlighting;
 import coffee.client.feature.module.impl.render.CaveMapper;
-import coffee.client.feature.module.impl.render.ChestHighlighter;
+import coffee.client.feature.module.impl.render.StorageHighlighter;
 import coffee.client.feature.module.impl.render.ClickGUI;
 import coffee.client.feature.module.impl.render.ESP;
 import coffee.client.feature.module.impl.render.FakeHacker;
@@ -315,7 +315,7 @@ public class ModuleRegistry {
         registerModule(AutoFish.class);
         registerModule(Reach.class);
         registerModule(AutoSign.class);
-        registerModule(ChestHighlighter.class);
+        registerModule(StorageHighlighter.class);
         registerModule(MoreChatHistory.class);
         registerModule(Radar.class);
         registerModule(SuperheroFX.class);

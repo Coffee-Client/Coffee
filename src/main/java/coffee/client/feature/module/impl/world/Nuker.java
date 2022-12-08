@@ -15,11 +15,11 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.registry.Registry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,7 @@ import java.util.function.Consumer;
 public class Nuker extends Module {
     static final List<Block> instantBreaks = Util.make(() -> {
         ArrayList<Block> piss = new ArrayList<>();
-        for (Block block : Registry.BLOCK) {
+        for (Block block : Registries.BLOCK) {
             if (block.getHardness() == 0f && block.getBlastResistance() == 0f) {
                 piss.add(block);
             }

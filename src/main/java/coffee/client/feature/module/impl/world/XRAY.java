@@ -14,10 +14,10 @@ import com.google.common.collect.Lists;
 import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.OreBlock;
+import net.minecraft.block.ExperienceDroppingBlock;
 import net.minecraft.block.RedstoneOreBlock;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registries;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ public class XRAY extends Module {
 
     public XRAY() {
         super("XRAY", "Allows you to see ores through blocks", ModuleType.WORLD);
-        Registry.BLOCK.forEach(block -> {
+        Registries.BLOCK.forEach(block -> {
             if (blockApplicable(block)) {
                 blocks.add(block);
             }
@@ -36,7 +36,7 @@ public class XRAY extends Module {
 
     boolean blockApplicable(Block block) {
         boolean c1 = block == Blocks.CHEST || block == Blocks.FURNACE || block == Blocks.END_GATEWAY || block == Blocks.COMMAND_BLOCK || block == Blocks.ANCIENT_DEBRIS;
-        boolean c2 = block instanceof OreBlock || block instanceof RedstoneOreBlock;
+        boolean c2 = block instanceof ExperienceDroppingBlock || block instanceof RedstoneOreBlock;
         return c1 || c2;
     }
 

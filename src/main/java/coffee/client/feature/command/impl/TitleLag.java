@@ -42,9 +42,9 @@ public class TitleLag extends Command {
         validateArgumentsLength(args, 1, "Provide target player");
         PlayerEntity target = new PlayerFromNameArgumentParser(true).parse(args[0]);
         String targetName = target.getGameProfile().getName();
-        CoffeeMain.client.player.sendCommand("gamerule sendCommandFeedback false");
-        CoffeeMain.client.player.sendCommand("title " + targetName + " times 0 999999999 0");
-        CoffeeMain.client.player.sendCommand("gamerule sendCommandFeedback true");
+        client.getNetworkHandler().sendCommand("gamerule sendCommandFeedback false");
+        client.getNetworkHandler().sendCommand("title " + targetName + " times 0 999999999 0");
+        client.getNetworkHandler().sendCommand("gamerule sendCommandFeedback true");
         ItemStack stack = new ItemStack(Items.COMMAND_BLOCK, 1);
         try {
             stack.setNbt(StringNbtReader.parse("{BlockEntityTag:{Command:\"/title " + targetName + " title {\\\"text\\\":\\\"" + "l".repeat(32767) + "\\\",\\\"obfuscated\\\":true}\",powered:0b,auto:1b,conditionMet:1b}}"));

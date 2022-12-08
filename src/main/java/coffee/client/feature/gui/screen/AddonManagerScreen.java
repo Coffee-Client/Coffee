@@ -174,7 +174,7 @@ public class AddonManagerScreen extends ClientScreen implements FastTickable {
             RenderSystem.clearColor(0.0F, 0.0F, 0.0F, 0.0F);
             RenderSystem.clear(GL40C.GL_COLOR_BUFFER_BIT, false);
             RenderSystem.colorMask(true, true, true, true);
-            RenderSystem.setShader(GameRenderer::getPositionColorShader);
+            RenderSystem.setShader(GameRenderer::getPositionColorProgram);
             Renderer.R2D.renderRoundedQuadInternal(stack.peek().getPositionMatrix(),
                 background.getRed() / 255f,
                 background.getGreen() / 255f,

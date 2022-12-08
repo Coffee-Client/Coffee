@@ -23,13 +23,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.c2s.play.CreativeInventoryActionC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.registry.Registry;
 
 import java.util.Objects;
 
@@ -48,7 +48,7 @@ public class ApplyEffect extends Command {
                     .map(abstractClientPlayerEntity -> abstractClientPlayerEntity.getGameProfile().getName())
                     .toList()
                     .toArray(String[]::new)),
-            new PossibleArgument(ArgumentType.STRING, Registry.STATUS_EFFECT.getIds().stream().map(Identifier::toString).toArray(String[]::new)),
+            new PossibleArgument(ArgumentType.STRING, Registries.STATUS_EFFECT.getIds().stream().map(Identifier::toString).toArray(String[]::new)),
             new PossibleArgument(ArgumentType.NUMBER, "<amplifier>"),
             new PossibleArgument(ArgumentType.NUMBER, "<duration ticks>"));
     }
@@ -64,7 +64,7 @@ public class ApplyEffect extends Command {
         if (id == null) {
             throw new CommandException("Invalid potion effect");
         }
-        StatusEffect statusEffect = Registry.STATUS_EFFECT.get(id);
+        StatusEffect statusEffect = Registries.STATUS_EFFECT.get(id);
         int rawId = StatusEffect.getRawId(statusEffect);
 
         Vec3d pos = target.getPos();

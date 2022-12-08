@@ -39,7 +39,7 @@ import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.DefaultSkinHelper;
-import net.minecraft.client.util.ProfileKeys;
+import net.minecraft.client.util.ProfileKeysImpl;
 import net.minecraft.client.util.Session;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
@@ -302,7 +302,7 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
                 YggdrasilAuthenticationService authenticationService = accessor.getAuthenticationService();
                 UserApiService userApiService = authenticationService.createUserApiService(newSession.getAccessToken());
                 accessor.setUserApiService(userApiService);
-                ProfileKeys pk = new ProfileKeys(userApiService, newSession.getProfile().getId(), CoffeeMain.client.runDirectory.toPath());
+                ProfileKeysImpl pk = new ProfileKeysImpl(userApiService, newSession.getProfile().getId(), CoffeeMain.client.runDirectory.toPath());
                 accessor.setProfileKeys(pk);
 
                 HudNotification.create("Logged into account " + newSession.getUsername(), 5000, HudNotification.Type.INFO);
@@ -408,7 +408,7 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
             RenderSystem.clearColor(0.0F, 0.0F, 0.0F, 0.0F);
             RenderSystem.clear(GL40C.GL_COLOR_BUFFER_BIT, false);
             RenderSystem.colorMask(true, true, true, true);
-            RenderSystem.setShader(GameRenderer::getPositionColorShader);
+            RenderSystem.setShader(GameRenderer::getPositionColorProgram);
             Renderer.R2D.renderRoundedQuadInternal(stack.peek().getPositionMatrix(),
                 0,
                 0,
@@ -464,7 +464,7 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
         RenderSystem.clearColor(0.0F, 0.0F, 0.0F, 0.0F);
         RenderSystem.clear(GL40C.GL_COLOR_BUFFER_BIT, false);
         RenderSystem.colorMask(true, true, true, true);
-        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+        RenderSystem.setShader(GameRenderer::getPositionColorProgram);
         Renderer.R2D.renderRoundedQuadInternal(stack.peek().getPositionMatrix(),
             0,
             0,
@@ -1036,7 +1036,7 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
             RenderSystem.clearColor(0.0F, 0.0F, 0.0F, 0.0F);
             RenderSystem.clear(GL40C.GL_COLOR_BUFFER_BIT, false);
             RenderSystem.colorMask(true, true, true, true);
-            RenderSystem.setShader(GameRenderer::getPositionColorShader);
+            RenderSystem.setShader(GameRenderer::getPositionColorProgram);
             Renderer.R2D.renderRoundedQuadInternal(stack.peek().getPositionMatrix(),
                 0,
                 0,

@@ -16,7 +16,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Quaternion;
+import net.minecraft.util.math.RotationAxis;
 
 import java.awt.Color;
 
@@ -80,7 +80,7 @@ public class HudNotification {
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
         stack.push();
         stack.translate(rootX + notifWidth - pad - texDim + texDim / 2d, rootY + pad + texDim / 2d, 0);
-        stack.multiply(new Quaternion(0f, 0f, (float) (expandAnim * 360f), true));
+        stack.multiply(RotationAxis.POSITIVE_Z.rotationDegrees((float) (expandAnim * 360f)));
         Texture.NOTIFICATION_TYPES.bindAndDraw(stack, -texDim / 2d, -texDim / 2d, texDim, texDim, type.i);
         stack.pop();
         ClipStack.globalInstance.addWindow(stack, new Rectangle(rootX + pad, rootY, rootX + notifWidth - pad - texDim - pad, rootY + notifHeight));

@@ -17,7 +17,7 @@ import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Util;
-import net.minecraft.util.math.Matrix4f;
+import org.joml.Matrix4f;
 
 import java.awt.Font;
 import java.util.ArrayList;
@@ -92,7 +92,7 @@ public class FontRenderer {
         RenderSystem.disableCull();
         GlStateManager._texParameter(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-        RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
+        RenderSystem.setShader(GameRenderer::getPositionTexColorProgram);
         BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
 
         ArrayList<ColoredTextSegment> ctsC = new ArrayList<>();
@@ -132,7 +132,7 @@ public class FontRenderer {
         RenderSystem.disableCull();
         GlStateManager._texParameter(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-        RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
+        RenderSystem.setShader(GameRenderer::getPositionTexColorProgram);
         BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
         boolean isInSelector = false;
         for (char c : s.toCharArray()) {
@@ -217,7 +217,7 @@ public class FontRenderer {
         bufferBuilder.vertex(matrix, width, height, 0).texture(1 - inOffsetX, 1 - inOffsetY).color(r, g, b, v).next();
         bufferBuilder.vertex(matrix, width, 0, 0).texture(1 - inOffsetX, 0 + inOffsetY).color(r, g, b, v).next();
         bufferBuilder.vertex(matrix, 0, 0, 0).texture(0 + inOffsetX, 0 + inOffsetY).color(r, g, b, v).next();
-        BufferRenderer.drawWithShader(bufferBuilder.end());
+        BufferRenderer.drawWithGlobalProgram(bufferBuilder.end());
 
         return width;
     }

@@ -21,7 +21,7 @@ import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Matrix4f;
+import org.joml.Matrix4f;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -82,7 +82,7 @@ public class EnumSettingEditor extends SettingEditor<EnumSetting<?>> {
             float pp = (float) Transitions.easeOutExpo(expandProg);
             pp = Renderer.transformColor(pp);
             Renderer.setupRender();
-            RenderSystem.setShader(GameRenderer::getPositionColorShader);
+            RenderSystem.setShader(GameRenderer::getPositionColorProgram);
             BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
             bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR);
             float arrowDim = 3;
@@ -94,7 +94,7 @@ public class EnumSettingEditor extends SettingEditor<EnumSetting<?>> {
             bufferBuilder.vertex(m, 0, 0, 0).color(1f, 1f, 1f, pp).next();
             bufferBuilder.vertex(m, arrowDim, -arrowDim, 0).color(1f, 1f, 1f, pp).next();
 
-            BufferRenderer.drawWithShader(bufferBuilder.end());
+            BufferRenderer.drawWithGlobalProgram(bufferBuilder.end());
             Renderer.endRender();
             stack.pop();
 
@@ -120,7 +120,9 @@ public class EnumSettingEditor extends SettingEditor<EnumSetting<?>> {
                         20);
                 }
                 String name = enumSettingEntry.name();
-                while(name.startsWith("_")) name = name.substring(1);
+                while (name.startsWith("_")) {
+                    name = name.substring(1);
+                }
                 fa.drawString(stack, name, getPositionX() + ballDim * 2 + 4, getPositionY() + headerHeight() + offsetY, 0xFFFFFF);
                 offsetY += fa.getFontHeight() + 2;
             }

@@ -202,7 +202,7 @@ public class ClickGUI extends AAScreen {
             super.close();
         }
         double interpolated = Transitions.easeOutExpo(progress);
-        ShaderManager.BLUR.getEffect().setUniformValue("progress", (float) interpolated);
+        ShaderManager.BLUR.setUniformf("progress", (float) interpolated);
         ShaderManager.BLUR.render(delta);
         matrices.push();
         double maxScale = 1.02;

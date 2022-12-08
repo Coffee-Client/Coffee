@@ -71,10 +71,10 @@
     "ChatHudMixin",
     "IKeyBindingMixin",
     "IPlayerListEntryMixin",
+    "JsonEffectShaderProgramMixin",
     "KeyboardInputMixin",
     "PostProcessShaderMixin",
     "ShaderEffectMixin",
-    "network.ClientPlayNetworkHandlerMixin",
     "render.ChatHudLineMixin",
     "screen.DirectConnectScreenMixin",
     "screen.TitleScreenMixin"

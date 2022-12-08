@@ -24,7 +24,7 @@ import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Matrix4f;
+import org.joml.Matrix4f;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -150,7 +150,7 @@ public class ModuleDisplay extends Element {
             float pp = (float) Transitions.easeOutExpo(cfd.progress);
             pp = Renderer.transformColor(pp);
             Renderer.setupRender();
-            RenderSystem.setShader(GameRenderer::getPositionColorShader);
+            RenderSystem.setShader(GameRenderer::getPositionColorProgram);
             BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
             bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR);
             float arrowDim = 3;
@@ -162,7 +162,7 @@ public class ModuleDisplay extends Element {
             bufferBuilder.vertex(m, 0, 0, 0).color(1f, 1f, 1f, pp).next();
             bufferBuilder.vertex(m, arrowDim, -arrowDim, 0).color(1f, 1f, 1f, pp).next();
 
-            BufferRenderer.drawWithShader(bufferBuilder.end());
+            BufferRenderer.drawWithGlobalProgram(bufferBuilder.end());
             Renderer.endRender();
             stack.pop();
         }

@@ -49,7 +49,7 @@ public class ForEach extends Command {
                 if (name.contains(CoffeeMain.client.player.getName().toString())) {
                     continue;
                 }
-                CoffeeMain.client.player.sendChatMessage(partial.replaceAll("%s", name), null);
+                client.getNetworkHandler().sendChatMessage(partial.replaceAll("%s", name));
                 message(partial.replaceAll("%s", name));
             }
             message("Foreach operation completed");
@@ -82,8 +82,8 @@ public class ForEach extends Command {
                         .equals(Objects.requireNonNull(CoffeeMain.client.player).getUuid())) {
                         runner.execute(() -> {
                             try {
-                                CoffeeMain.client.player.sendChatMessage(String.join(" ", Arrays.copyOfRange(args, 2, args.length))
-                                    .replaceAll("%s", playerListEntry.getProfile().getName()), null);
+                                client.getNetworkHandler().sendChatMessage(String.join(" ", Arrays.copyOfRange(args, 2, args.length))
+                                    .replaceAll("%s", playerListEntry.getProfile().getName()));
                                 Thread.sleep(delay);
                             } catch (Exception ignored) {
                             }

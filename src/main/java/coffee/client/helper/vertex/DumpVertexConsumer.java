@@ -8,7 +8,7 @@ package coffee.client.helper.vertex;
 import lombok.Data;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3f;
+import org.joml.Vector3f;
 
 import java.util.Stack;
 
@@ -61,7 +61,7 @@ public class DumpVertexConsumer implements VertexConsumer {
 
     @Override
     public VertexConsumer normal(float x, float y, float z) {
-        stack.peek().setNormal(new Vec3f(x, y, z));
+        stack.peek().setNormal(new Vector3f(x, y, z));
         return this;
     }
 
@@ -91,6 +91,6 @@ public class DumpVertexConsumer implements VertexConsumer {
         float[] texture = new float[2];
         int[] overlay = new int[2];
         int[] lightUv = new int[2];
-        Vec3f normal = new Vec3f(0, 0, 0);
+        Vector3f normal = new Vector3f(0, 0, 0);
     }
 }

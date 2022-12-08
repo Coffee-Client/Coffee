@@ -5,7 +5,7 @@
 
 package coffee.client.helper.math;
 
-import net.minecraft.util.math.Matrix4f;
+import org.joml.Matrix4f;
 import org.lwjgl.system.MemoryStack;
 
 import java.nio.FloatBuffer;
@@ -76,7 +76,7 @@ public class Matrix4x4 {
     public static Matrix4x4 copyFromRowMajor(Matrix4f matrix4f) {
         try (MemoryStack memoryStack = MemoryStack.stackPush()) {
             FloatBuffer floatBuffer = memoryStack.mallocFloat(16);
-            matrix4f.write(floatBuffer, true);
+            matrix4f.set(floatBuffer);
             return new Matrix4x4(floatBuffer);
         }
     }
@@ -84,7 +84,7 @@ public class Matrix4x4 {
     public static Matrix4x4 copyFromColumnMajor(Matrix4f matrix4f) {
         try (MemoryStack memoryStack = MemoryStack.stackPush()) {
             FloatBuffer floatBuffer = memoryStack.mallocFloat(16);
-            matrix4f.write(floatBuffer, false);
+            matrix4f.set(floatBuffer);
             return new Matrix4x4(floatBuffer);
         }
     }
@@ -351,7 +351,7 @@ public class Matrix4x4 {
             floatBuffer.put(13, this.a31);
             floatBuffer.put(14, this.a32);
             floatBuffer.put(15, this.a33);
-            matrix4f.read(floatBuffer, false);
+            matrix4f.get(floatBuffer);
             return matrix4f;
         }
     }

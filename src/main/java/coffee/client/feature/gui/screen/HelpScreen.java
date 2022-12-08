@@ -72,7 +72,7 @@ public class HelpScreen extends AAScreen {
         if (parent != null) {
             parent.render(matrices, -999, -999, delta);
         }
-        ShaderManager.BLUR.getEffect().setUniformValue("progress", (float) 1);
+        ShaderManager.BLUR.setUniformf("progress", (float) 1);
         ShaderManager.BLUR.render(delta);
         super.render(matrices, mouseX, mouseY, delta);
     }

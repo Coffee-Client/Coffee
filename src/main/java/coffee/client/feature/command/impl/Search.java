@@ -18,9 +18,9 @@ import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -36,7 +36,7 @@ public class Search extends Command {
 
     private static String[] getAllFuckingItemIds() {
         if (ALL_FUCKING_ITEM_IDS == null) {
-            ALL_FUCKING_ITEM_IDS = Registry.ITEM.getIds().stream().map(Identifier::toString).toArray(String[]::new);
+            ALL_FUCKING_ITEM_IDS = Registries.ITEM.getIds().stream().map(Identifier::toString).toArray(String[]::new);
         }
         return ALL_FUCKING_ITEM_IDS;
     }
@@ -81,7 +81,7 @@ public class Search extends Command {
             }
         } else {
             String search = args[0];
-            Item searchFor = Utils.throwSilently(() -> Registry.ITEM.get(new Identifier(search)));
+            Item searchFor = Utils.throwSilently(() -> Registries.ITEM.get(new Identifier(search)));
             if (searchFor == null) {
                 throw new CommandException("Invalid search term");
             }

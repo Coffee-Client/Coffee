@@ -28,8 +28,8 @@ import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.math.Vec3d;
+import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.Color;
@@ -292,7 +292,7 @@ public class CaveMapper extends Module {
 
         Camera cam = CoffeeMain.client.gameRenderer.getCamera();
         BufferBuilder buffer = Tessellator.getInstance().getBuffer();
-        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+        RenderSystem.setShader(GameRenderer::getPositionColorProgram);
         GL11.glDepthFunc(GL11.GL_ALWAYS);
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
         RenderSystem.defaultBlendFunc();
@@ -337,7 +337,7 @@ public class CaveMapper extends Module {
                 }
             }
         }
-        BufferRenderer.drawWithShader(buffer.end());
+        BufferRenderer.drawWithGlobalProgram(buffer.end());
         GL11.glDepthFunc(GL11.GL_LEQUAL);
         RenderSystem.disableBlend();
         RenderSystem.enableCull();

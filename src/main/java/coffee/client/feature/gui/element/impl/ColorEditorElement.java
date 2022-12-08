@@ -17,7 +17,7 @@ import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Matrix4f;
+import org.joml.Matrix4f;
 
 import java.awt.Color;
 import java.util.function.Consumer;
@@ -50,7 +50,7 @@ public class ColorEditorElement extends Element {
         BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
         Renderer.setupRender();
         RenderSystem.disableCull();
-        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+        RenderSystem.setShader(GameRenderer::getPositionColorProgram);
         bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
         bufferBuilder.vertex(matrix, (float) x, (float) y, 0.0F).color(1f, 1f, 1f, 1f).next();
         bufferBuilder.vertex(matrix, (float) (x + width), (float) y, 0.0F).color(g, h, k, 1f).next();
@@ -61,7 +61,7 @@ public class ColorEditorElement extends Element {
         bufferBuilder.vertex(matrix, (float) (x + width), (float) y, 0.0F).color(0f, 0f, 0f, 0f).next();
         bufferBuilder.vertex(matrix, (float) (x + width), (float) (y + height), 0.0F).color(0f, 0f, 0f, 1f).next();
         bufferBuilder.vertex(matrix, (float) x, (float) (y + height), 0.0F).color(0f, 0f, 0f, 1f).next();
-        BufferRenderer.drawWithShader(bufferBuilder.end());
+        BufferRenderer.drawWithGlobalProgram(bufferBuilder.end());
         Renderer.endRender();
     }
 

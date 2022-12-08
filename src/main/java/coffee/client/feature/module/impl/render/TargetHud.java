@@ -164,7 +164,7 @@ public class TargetHud extends Module {
             RenderSystem.clearColor(0.0F, 0.0F, 0.0F, 0.0F);
             RenderSystem.clear(GL40C.GL_COLOR_BUFFER_BIT, false);
             RenderSystem.colorMask(true, true, true, true);
-            RenderSystem.setShader(GameRenderer::getPositionColorShader);
+            RenderSystem.setShader(GameRenderer::getPositionColorProgram);
             Renderer.R2D.renderRoundedQuadInternal(stack.peek().getPositionMatrix(), 0, 0, 0, (float) renderWX, 5, 5, 5 + 32, 5 + 32, 5, 10);
 
             RenderSystem.blendFunc(GL40C.GL_DST_ALPHA, GL40C.GL_ONE_MINUS_DST_ALPHA);

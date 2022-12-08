@@ -63,11 +63,11 @@ dependencies {
 	libImpl(project(":Authlib"))
 	libImpl(project(":Eventlib"))
 
-	modImpl(group: "io.github.ladysnake", name: "satin", version: "1.9.0") {
-		transitive = false
-	}
+//	modImpl(group: "io.github.ladysnake", name: "satin", version: "1.9.0") {
+//		transitive = false
+//	}
 
-	modImpl(name: "baritone-unoptimized")
+	modImpl(name: "baritone-unoptimized-1.19.3")
 
 	configurations.libImpl.dependencies.each {
 		implementation(it)

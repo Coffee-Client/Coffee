@@ -5,7 +5,6 @@
 
 package coffee.client.feature.gui.screen.base;
 
-import coffee.client.CoffeeMain;
 import coffee.client.helper.render.MSAAFramebuffer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
@@ -29,7 +28,6 @@ public class ClientScreen extends Screen {
 
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        CoffeeMain.client.keyboard.setRepeatEvents(true);
         if (samples != -1) {
             if (!MSAAFramebuffer.framebufferInUse()) {
                 MSAAFramebuffer.use(() -> renderInternal(matrices, mouseX, mouseY, delta));

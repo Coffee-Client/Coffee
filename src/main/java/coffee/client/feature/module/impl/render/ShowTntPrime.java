@@ -25,9 +25,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.TntEntity;
 import net.minecraft.network.packet.s2c.play.EntityTrackerUpdateS2CPacket;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
+import org.joml.Matrix4f;
 
 import java.awt.Color;
 
@@ -54,7 +54,7 @@ public class ShowTntPrime extends Module {
         BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
         RenderSystem.enableBlend();
         RenderSystem.disableTexture();
-        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+        RenderSystem.setShader(GameRenderer::getPositionColorProgram);
         bufferBuilder.begin(VertexFormat.DrawMode.TRIANGLE_STRIP, VertexFormats.POSITION_COLOR);
         for (double r = 0; r < toRad1; r += Math.min(360 / segments1, (toRad1 - r))) {
             double rad1 = Math.toRadians(r);
@@ -66,7 +66,7 @@ public class ShowTntPrime extends Module {
             bufferBuilder.vertex(matrix, (float) (offX + sin * width), (float) (offY + cos * width), 0).color(g, h, k, f).next();
 
         }
-        BufferRenderer.drawWithShader(bufferBuilder.end());
+        BufferRenderer.drawWithGlobalProgram(bufferBuilder.end());
         RenderSystem.enableTexture();
         RenderSystem.disableBlend();
         stack.pop();
@@ -83,11 +83,11 @@ public class ShowTntPrime extends Module {
                 if (i2iamp.size() > 200) {
                     return;
                 }
-                if (p.getTrackedValues() == null || p.getTrackedValues().size() == 0) {
+                if (p.trackedValues() == null || p.trackedValues().size() == 0) {
                     return;
                 }
                 if (!i2iamp.containsKey(p.id())) {
-                    i2iamp.put(p.id(), Integer.parseInt(p.getTrackedValues().get(0).get() + ""));
+                    i2iamp.put(p.id(), Integer.parseInt(p.trackedValues().get(0).value() + ""));
                 }
             }
         }

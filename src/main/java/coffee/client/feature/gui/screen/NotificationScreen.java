@@ -73,7 +73,7 @@ public class NotificationScreen extends AAScreen {
         if (parent != null) {
             parent.render(matrices, mouseX, mouseY, delta);
         }
-        ShaderManager.BLUR.getEffect().setUniformValue("progress", (float) anim);
+        ShaderManager.BLUR.setUniformf("progress", (float) anim);
         ShaderManager.BLUR.render(delta);
         matrices.push();
         matrices.translate(this.width / 2d * (1 - anim), this.height / 2d * (1 - anim), 0);

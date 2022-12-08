@@ -17,8 +17,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.StringNbtReader;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -73,11 +73,11 @@ public class FakeItem extends Command {
                 return;
             }
 
-            if (!Registry.ITEM.containsId(idParsed)) {
+            if (!Registries.ITEM.containsId(idParsed)) {
                 error("Item not found");
                 return;
             }
-            Item item = Registry.ITEM.get(idParsed);
+            Item item = Registries.ITEM.get(idParsed);
             ItemStack stack = new ItemStack(item);
             if (args.length > 2) { // we got additional nbt
                 try {

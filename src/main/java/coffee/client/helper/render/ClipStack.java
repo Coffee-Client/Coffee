@@ -8,8 +8,8 @@ package coffee.client.helper.render;
 import coffee.client.mixin.render.IMatrixStackMixin;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Matrix4f;
-import net.minecraft.util.math.Vector4f;
+import org.joml.Matrix4f;
+import org.joml.Vector4f;
 
 import java.util.Deque;
 import java.util.Stack;
@@ -22,12 +22,12 @@ public class ClipStack {
         Matrix4f matrix = stack.peek().getPositionMatrix();
         Vector4f coord = new Vector4f((float) r1.getX(), (float) r1.getY(), 0, 1);
         Vector4f end = new Vector4f((float) r1.getX1(), (float) r1.getY1(), 0, 1);
-        coord.transform(matrix);
-        end.transform(matrix);
-        double x = coord.getX();
-        double y = coord.getY();
-        double endX = end.getX();
-        double endY = end.getY();
+        coord.mul(matrix);
+        end.mul(matrix);
+        double x = coord.x();
+        double y = coord.y();
+        double endX = end.x();
+        double endY = end.y();
         Rectangle r = new Rectangle(x, y, endX, endY);
         if (clipStack.empty()) {
             clipStack.push(new TransformationEntry(r, stack.peek()));

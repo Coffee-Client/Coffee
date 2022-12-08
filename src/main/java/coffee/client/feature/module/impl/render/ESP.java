@@ -233,7 +233,7 @@ public class ESP extends Module {
     }
 
     void renderCorner(BufferBuilder bb, float r, float g, float b, float a, float x, float y, float height, float topWidth, float xMul, float yMul) {
-        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+        RenderSystem.setShader(GameRenderer::getPositionColorProgram);
         bb.begin(VertexFormat.DrawMode.TRIANGLE_FAN, VertexFormats.POSITION_COLOR);
         float width = 1;
         /*
@@ -250,7 +250,7 @@ public class ESP extends Module {
         for (float[] vert : verts) {
             bb.vertex(x + vert[0] * xMul, y + vert[1] * yMul, 0f).color(r, g, b, a).next();
         }
-        BufferRenderer.drawWithShader(bb.end());
+        BufferRenderer.drawWithGlobalProgram(bb.end());
     }
 
     @Override

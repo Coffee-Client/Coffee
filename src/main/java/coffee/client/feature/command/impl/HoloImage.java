@@ -21,10 +21,10 @@ import coffee.client.helper.util.Utils;
 import com.google.common.collect.Lists;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.registry.Registries;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.registry.Registry;
 
 import javax.imageio.ImageIO;
 import java.awt.Color;
@@ -104,7 +104,7 @@ public class HoloImage extends Command {
                         IntStream.range(0, stacks.size())
                             .mapToObj(value -> new NbtObject("",
                                 new NbtProperty("Slot", (byte) value),
-                                new NbtProperty("id", Registry.ITEM.getId(Items.BAT_SPAWN_EGG).toString()),
+                                new NbtProperty("id", Registries.ITEM.getId(Items.BAT_SPAWN_EGG).toString()),
                                 new NbtProperty("Count", (byte) 1),
                                 new NbtObject("tag", stacks.get(value))))
                             .toArray(NbtElement[]::new))));
@@ -115,7 +115,7 @@ public class HoloImage extends Command {
                     IntStream.range(0, shulkers.size())
                         .mapToObj(value -> new NbtObject("",
                             new NbtProperty("Slot", (byte) value),
-                            new NbtProperty("id", Registry.ITEM.getId(Items.SHULKER_BOX).toString()),
+                            new NbtProperty("id", Registries.ITEM.getId(Items.SHULKER_BOX).toString()),
                             new NbtProperty("Count", (byte) 1),
                             new NbtObject("tag", shulkers.get(value))))
                         .toArray(NbtElement[]::new))));

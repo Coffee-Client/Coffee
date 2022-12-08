@@ -111,11 +111,11 @@ public class RangeSetting extends SettingBase<RangeSetting.Range> {
             return this;
         }
 
-        public Builder uniformMin(double min) {
+        public coffee.client.feature.config.RangeSetting.Builder uniformMin(double min) {
             return this.lowerMin(min).upperMin(min);
         }
 
-        public Builder uniformMax(double max) {
+        public coffee.client.feature.config.RangeSetting.Builder uniformMax(double max) {
             return this.lowerMax(max).upperMax(max);
         }
 

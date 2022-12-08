@@ -30,10 +30,10 @@ import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.Matrix4f;
+import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.RaycastContext;
+import org.joml.Matrix4f;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -55,13 +55,13 @@ public abstract class GameRendererMixin {
     protected abstract double getFov(Camera camera, float tickDelta, boolean changingFov);
 
     @Shadow
-    public abstract Matrix4f getBasicProjectionMatrix(double fov);
-
-    @Shadow
     protected abstract void bobViewWhenHurt(MatrixStack matrices, float tickDelta);
 
     @Shadow
     public abstract void loadProjectionMatrix(Matrix4f projectionMatrix);
+
+    @Shadow
+    public abstract Matrix4f getBasicProjectionMatrix(double fov);
 
     @Inject(at = @At(value = "FIELD", target = "Lnet/minecraft/client/render/GameRenderer;renderHand:Z", opcode = Opcodes.GETFIELD, ordinal = 0), method = "renderWorld")
     void coffee_dispatchWorldRender(float tickDelta, long limitTime, MatrixStack matrix, CallbackInfo ci) {
@@ -69,8 +69,8 @@ public abstract class GameRendererMixin {
         clearViewBobbing(tickDelta);
         MatrixStack ms = Renderer.R3D.getEmptyMatrixStack();
         ms.push();
-        ms.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
-        ms.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(camera.getYaw() + 180.0F));
+        ms.multiply(RotationAxis.POSITIVE_X.rotationDegrees(camera.getPitch()));
+        ms.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(camera.getYaw() + 180.0F));
         MSAAFramebuffer.use(() -> {
             for (Module module : ModuleRegistry.getModules()) {
                 if (module.isEnabled()) {
@@ -88,12 +88,12 @@ public abstract class GameRendererMixin {
     void clearViewBobbing(float tickDelta) {
         MatrixStack ms = Renderer.R3D.getEmptyMatrixStack();
         double d = this.getFov(camera, tickDelta, true);
-        ms.peek().getPositionMatrix().multiply(this.getBasicProjectionMatrix(d));
+        ms.peek().getPositionMatrix().mul(this.getBasicProjectionMatrix(d));
         this.bobViewWhenHurt(ms, tickDelta);
         loadProjectionMatrix(ms.peek().getPositionMatrix());
     }
 
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;render(Lnet/minecraft/client/util/math/MatrixStack;IIF)V"))
+    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;renderWithTooltip(Lnet/minecraft/client/util/math/MatrixStack;IIF)V"))
     void coffee_msaaScreenRender(Screen instance, MatrixStack matrices, int mouseX, int mouseY, float delta) {
         boolean shouldMsaa = false;
         for (Element child : instance.children()) {

@@ -63,7 +63,7 @@ public class Decimator extends Module {
                     pp.getX() + 2,
                     CoffeeMain.client.world.getTopY() - 1,
                     pp.getZ() + 2);
-                Objects.requireNonNull(CoffeeMain.client.player).sendCommand(chat);
+                client.getNetworkHandler().sendCommand(chat);
                 Utils.sleep((long) (delay.getValue() + 0));
             }
         }

@@ -21,8 +21,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Keyboard.class)
 public class KeyboardMixin {
-    @Shadow
-    private boolean repeatEvents;
 
     @Shadow
     @Final
@@ -40,11 +38,5 @@ public class KeyboardMixin {
             EventSystem.manager.send(ke);
             //            Events.fireEvent(EventType.KEYBOARD, new KeyboardEvent(key, action));
         }
-    }
-
-    @Inject(method = "setRepeatEvents", at = @At("HEAD"), cancellable = true)
-    void coffee_setRepeatEvents(boolean repeatEvents, CallbackInfo ci) {
-        this.repeatEvents = true;
-        ci.cancel();
     }
 }

@@ -40,14 +40,14 @@ public class SpotlightScreen extends ClientScreen implements FastTickable {
     static final List<StaticEntry> staticEntries = List.of(new StaticEntry("Gamemode change",
             "Switch to creative",
             "command.png",
-            () -> CoffeeMain.client.player.sendCommand("gamemode creative"),
+            () -> CoffeeMain.client.getNetworkHandler().sendCommand("gamemode creative"),
             "gmc",
             "creative",
             "gmcreative"),
         new StaticEntry("Gamemode change",
             "Switch to survival",
             "command.png",
-            () -> CoffeeMain.client.player.sendCommand("gamemode survival"),
+            () -> CoffeeMain.client.getNetworkHandler().sendCommand("gamemode survival"),
             "gms",
             "survival",
             "gmsurvival"));
@@ -137,7 +137,7 @@ public class SpotlightScreen extends ClientScreen implements FastTickable {
         if (anim == 0 && closing) {
             client.setScreen(null);
         }
-        ShaderManager.BLUR.getEffect().setUniformValue("progress", (float) anim);
+        ShaderManager.BLUR.setUniformf("progress", (float) anim);
         ShaderManager.BLUR.render(delta);
         super.render(matrices, mouseX, mouseY, delta);
     }

@@ -18,8 +18,8 @@ import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.math.Matrix4f;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.joml.Matrix4f;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -91,7 +91,7 @@ public class SpritesheetTextureSet implements Texture {
         float v0 = (float) (textureEntry.y / getBounds().getHeight());
         float u1 = (float) ((textureEntry.x + textureEntry.w) / getBounds().getWidth());
         float v1 = (float) ((textureEntry.y + textureEntry.h) / getBounds().getHeight());
-        RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
+        RenderSystem.setShader(GameRenderer::getPositionTexColorProgram);
         BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
         bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
         float v = Renderer.transformColor(255) / 255f;
@@ -99,7 +99,7 @@ public class SpritesheetTextureSet implements Texture {
         bufferBuilder.vertex(matrix, x1, y1, z).texture(u1, v1).color(1f, 1f, 1f, v).next();
         bufferBuilder.vertex(matrix, x1, y0, z).texture(u1, v0).color(1f, 1f, 1f, v).next();
         bufferBuilder.vertex(matrix, x0, y0, z).texture(u0, v0).color(1f, 1f, 1f, v).next();
-        BufferRenderer.drawWithShader(bufferBuilder.end());
+        BufferRenderer.drawWithGlobalProgram(bufferBuilder.end());
     }
 
     @Override

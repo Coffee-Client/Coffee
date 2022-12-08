@@ -14,8 +14,8 @@ import coffee.client.feature.command.coloring.StaticArgumentServer;
 import coffee.client.feature.command.exception.CommandException;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 public class ItemSpoof extends Command {
     public ItemSpoof() {
@@ -25,7 +25,7 @@ public class ItemSpoof extends Command {
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
         return StaticArgumentServer.serveFromStatic(index,
-            new PossibleArgument(ArgumentType.STRING, Registry.ITEM.stream().map(p -> Registry.ITEM.getId(p).toString()).toList().toArray(String[]::new)),
+            new PossibleArgument(ArgumentType.STRING, Registries.ITEM.stream().map(p -> Registries.ITEM.getId(p).toString()).toList().toArray(String[]::new)),
             new PossibleArgument(ArgumentType.NUMBER, "<amount>"));
     }
 
@@ -39,7 +39,7 @@ public class ItemSpoof extends Command {
         if (i == null) {
             throw new CommandException("Invalid name \"" + args[0] + "\"");
         }
-        Item item = Registry.ITEM.get(i);
+        Item item = Registries.ITEM.get(i);
         ItemStack stack = new ItemStack(item, amount);
         CoffeeMain.client.player.getInventory().armor.set(3, stack);
     }

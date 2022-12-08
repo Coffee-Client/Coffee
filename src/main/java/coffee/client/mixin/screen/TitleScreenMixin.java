@@ -8,6 +8,7 @@ package coffee.client.mixin.screen;
 import coffee.client.feature.gui.screen.HomeScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
+import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
@@ -23,6 +24,8 @@ public class TitleScreenMixin extends Screen {
 
     @Inject(method = "init", at = @At("RETURN"))
     void coffee_addCustomWidgets(CallbackInfo ci) {
-        this.addDrawableChild(new ButtonWidget(5, 5, 20, 20, Text.literal("<"), button -> client.setScreen(HomeScreen.instance())));
+        this.addDrawableChild(ButtonWidget.builder(Text.literal("<"), button -> client.setScreen(HomeScreen.instance()))
+            .dimensions(5, 5, 20, 20)
+            .tooltip(Tooltip.of(Text.literal("Go back to the coffee home screen"))).build());
     }
 }

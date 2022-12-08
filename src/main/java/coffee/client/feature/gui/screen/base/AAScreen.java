@@ -5,7 +5,6 @@
 
 package coffee.client.feature.gui.screen.base;
 
-import coffee.client.CoffeeMain;
 import coffee.client.feature.command.impl.SelfDestruct;
 import coffee.client.feature.gui.FastTickable;
 import coffee.client.feature.gui.HasSpecialCursor;
@@ -160,7 +159,6 @@ public class AAScreen extends Screen implements FastTickable {
 
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        CoffeeMain.client.keyboard.setRepeatEvents(true);
         if (samples != -1) {
             if (!MSAAFramebuffer.framebufferInUse()) {
                 MSAAFramebuffer.use(() -> renderInternal(matrices, mouseX, mouseY, delta));

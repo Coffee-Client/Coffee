@@ -25,7 +25,6 @@ import coffee.client.feature.module.impl.exploit.BoatCrash;
 import coffee.client.feature.module.impl.exploit.BrandSpoof;
 import coffee.client.feature.module.impl.exploit.CarpetBomb;
 import coffee.client.feature.module.impl.exploit.ChunkCrash;
-import coffee.client.feature.module.impl.exploit.Girlboss;
 import coffee.client.feature.module.impl.exploit.InstaBow;
 import coffee.client.feature.module.impl.exploit.LecternCrash;
 import coffee.client.feature.module.impl.exploit.OffhandCrash;
@@ -323,7 +322,6 @@ public class ModuleRegistry {
         registerModule(ElytraFly.class);
         registerModule(BoingBoing.class);
         registerModule(Slippy.class);
-        registerModule(Girlboss.class);
         registerModule(Waypoints.class);
         registerModule(NoMessageIndicators.class);
         registerModule(NoSlow.class);

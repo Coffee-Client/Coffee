@@ -133,7 +133,7 @@ public class AChatScreenMixin extends Screen {
         boolean changed = !previousCommand.equals(cmd);
         previousCommand = cmd;
         float cmdTWidth = CoffeeMain.client.textRenderer.getWidth(chatField.getText());
-        double cmdXS = chatField.x + 5 + cmdTWidth;
+        double cmdXS = chatField.getX() + 5 + cmdTWidth;
 
         List<String> suggestions = changed ? Util.make(getSuggestions(cmd), strings -> {
             if (strings.size() >= 20) {
@@ -148,7 +148,7 @@ public class AChatScreenMixin extends Screen {
             return;
         }
         double probableHeight = suggestions.size() * FontRenderers.getRenderer().getMarginHeight() + padding();
-        float yC = (float) (chatField.y - padding() - probableHeight);
+        float yC = (float) (chatField.getY() - padding() - probableHeight);
         double probableWidth = 0;
         for (String suggestion : suggestions) {
             probableWidth = Math.max(probableWidth, FontRenderers.getRenderer().getStringWidth(suggestion) + 1);

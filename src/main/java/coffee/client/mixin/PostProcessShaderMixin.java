@@ -6,12 +6,12 @@
 package coffee.client.mixin;
 
 import net.minecraft.client.gl.Framebuffer;
-import net.minecraft.client.gl.PostProcessShader;
+import net.minecraft.client.gl.PostEffectPass;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(PostProcessShader.class)
+@Mixin(PostEffectPass.class)
 public interface PostProcessShaderMixin {
     @Mutable
     @Accessor("input")

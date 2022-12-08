@@ -20,7 +20,7 @@ import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.mob.EndermanEntity;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.Quaternion;
+import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
 
 import java.awt.Color;
@@ -43,7 +43,7 @@ public class RadarElement extends HudElement {
             ClipStack.globalInstance.addWindow(stack, new Rectangle(0, 0, width, height));
             stack.push();
             stack.translate(width / 2d, height / 2d, 0);
-            stack.multiply(new Quaternion(0, 0, -CoffeeMain.client.player.getYaw() - 180, true));
+            stack.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(-CoffeeMain.client.player.getYaw() - 180));
             for (Entity entity : CoffeeMain.client.world.getEntities()) {
                 Vec3d epos = Utils.getInterpolatedEntityPosition(entity);
                 double entityX = epos.x;

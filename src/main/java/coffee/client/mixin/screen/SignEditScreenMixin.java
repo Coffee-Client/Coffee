@@ -8,7 +8,7 @@ package coffee.client.mixin.screen;
 import coffee.client.feature.module.ModuleRegistry;
 import coffee.client.feature.module.impl.world.AutoSign;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.ingame.SignEditScreen;
+import net.minecraft.client.gui.screen.ingame.AbstractSignEditScreen;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,13 +18,13 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(SignEditScreen.class)
+@Mixin(AbstractSignEditScreen.class)
 public abstract class SignEditScreenMixin extends Screen {
 
     @Mutable
     @Shadow
     @Final
-    private String[] text;
+    protected String[] text;
 
     protected SignEditScreenMixin(Text title) {
         super(title);

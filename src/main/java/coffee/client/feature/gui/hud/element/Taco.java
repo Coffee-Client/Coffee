@@ -33,7 +33,7 @@ public class Taco extends HudElement {
         RenderSystem.disableBlend();
         RenderSystem.setShaderTexture(0, current);
         RenderSystem.setShaderColor(1, 1, 1, 1);
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
         DrawableHelper.drawTexture(stack, 0, 0, 0, 0, 0, (int) width, (int) height, (int) width, (int) height);
     }
 }

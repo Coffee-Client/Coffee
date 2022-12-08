@@ -17,7 +17,7 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.ObjectSet;
-import net.minecraft.client.gl.ShaderEffect;
+import net.minecraft.client.gl.PostEffectProcessor;
 import net.minecraft.client.render.BlockBreakingInfo;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.util.math.MatrixStack;
@@ -42,8 +42,8 @@ public class WorldRendererMixin {
         return query.isModified() ? query.isShouldRender() : spectator; // only submit our value if we have a reason to
     }
 
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gl/ShaderEffect;render(F)V", ordinal = 0))
-    void coffee_replaceShader(ShaderEffect instance, float tickDelta) {
+    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gl/PostEffectProcessor;render(F)V", ordinal = 0))
+    void coffee_replaceShader(PostEffectProcessor instance, float tickDelta) {
         ESP byClass = ModuleRegistry.getByClass(ESP.class);
         if (byClass.isEnabled() && byClass.outlineMode == ESP.Mode.Shader) {
             ShaderManager.OUTLINE.render(tickDelta);

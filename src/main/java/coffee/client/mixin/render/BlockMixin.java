@@ -12,6 +12,7 @@ import coffee.client.feature.module.impl.world.XRAY;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -41,6 +42,9 @@ public abstract class BlockMixin extends AbstractBlock {
 
     @Inject(method = "isTranslucent", at = @At("HEAD"), cancellable = true)
     public void coffee_setTranslucent(BlockState state, BlockView world, BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
+        if (MinecraftClient.getInstance() == null) {
+            return; // somehow this can be called before we init????
+        }
         if (Objects.requireNonNull(ModuleRegistry.getByClass(XRAY.class)).isEnabled()) {
             cir.setReturnValue(!XRAY.blocks.contains(state.getBlock()));
         }

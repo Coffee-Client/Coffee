@@ -42,7 +42,7 @@ public class GameMenuScreenMixin extends Screen {
         addDrawableChild(new RoundButton(RoundButton.STANDARD, 5, 55, 60, 20, "Waypoints", () -> client.setScreen(new WaypointEditScreen())));
     }
 
-    @ModifyArg(method = "method_19836", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V"), index = 0)
+    @ModifyArg(method = "method_19845", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V"), index = 0)
     Screen modifySetScreen(Screen screen) {
         if (screen instanceof TitleScreen) {
             return HomeScreen.instance();

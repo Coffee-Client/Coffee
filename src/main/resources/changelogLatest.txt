@@ -1,2 +1,0 @@
-Fixed baritone bug
-Shader esp

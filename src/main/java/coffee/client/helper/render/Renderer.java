@@ -6,8 +6,6 @@
 package coffee.client.helper.render;
 
 import coffee.client.CoffeeMain;
-import coffee.client.helper.math.Matrix4x4;
-import coffee.client.helper.math.Vector3D;
 import com.mojang.blaze3d.systems.RenderSystem;
 import lombok.Getter;
 import net.minecraft.client.gl.ShaderProgram;
@@ -24,6 +22,7 @@ import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL40C;
@@ -744,21 +743,26 @@ public class Renderer {
         public static Vec3d getScreenSpaceCoordinate(Vec3d pos, MatrixStack stack) {
             Camera camera = CoffeeMain.client.getEntityRenderDispatcher().camera;
             Matrix4f matrix = stack.peek().getPositionMatrix();
-            double x = pos.x - camera.getPos().x;
-            double y = pos.y - camera.getPos().y;
-            double z = pos.z - camera.getPos().z;
-            Vector4f vector4f = new Vector4f((float) x, (float) y, (float) z, 1.f);
-            vector4f.mul(matrix);
             int displayHeight = CoffeeMain.client.getWindow().getHeight();
-            Vector3D screenCoords = new Vector3D();
             int[] viewport = new int[4];
+            Vector3f target = new Vector3f();
+
+            double deltaX = pos.x - camera.getPos().x;
+            double deltaY = pos.y - camera.getPos().y;
+            double deltaZ = pos.z - camera.getPos().z;
+
             GL11.glGetIntegerv(GL11.GL_VIEWPORT, viewport);
-            Matrix4x4 matrix4x4Proj = Matrix4x4.copyFromColumnMajor(RenderSystem.getProjectionMatrix());//no more joml :)
-            Matrix4x4 matrix4x4Model = Matrix4x4.copyFromColumnMajor(RenderSystem.getModelViewMatrix());//but I do the math myself now :( (heck math)
-            matrix4x4Proj.mul(matrix4x4Model).project(vector4f.x(), vector4f.y(), vector4f.z(), viewport, screenCoords);
-            return new Vec3d(screenCoords.x / CoffeeMain.client.getWindow().getScaleFactor(),
-                (displayHeight - screenCoords.y) / CoffeeMain.client.getWindow().getScaleFactor(),
-                screenCoords.z);
+
+            Vector4f transformedCoordinates = new Vector4f((float) deltaX, (float) deltaY, (float) deltaZ, 1.f).mul(matrix);
+
+            Matrix4f matrixProj = new Matrix4f(RenderSystem.getProjectionMatrix());
+            Matrix4f matrixModel = new Matrix4f(RenderSystem.getModelViewMatrix());
+
+            matrixProj.mul(matrixModel).project(transformedCoordinates.x(), transformedCoordinates.y(), transformedCoordinates.z(), viewport, target);
+
+            return new Vec3d(target.x / CoffeeMain.client.getWindow().getScaleFactor(),
+                (displayHeight - target.y) / CoffeeMain.client.getWindow().getScaleFactor(),
+                target.z);
         }
 
         public static Vec3d screenSpaceToWorldOffset(double x, double y, double z) {

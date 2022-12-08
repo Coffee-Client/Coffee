@@ -5,22 +5,42 @@
 
 package coffee.client.feature.module.impl.render;
 
-import coffee.client.CoffeeMain;
-import coffee.client.feature.config.BooleanSetting;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
 import coffee.client.helper.event.impl.RenderEvent;
 import coffee.client.helper.render.Renderer;
-import coffee.client.helper.util.Utils;
 import me.x150.jmessenger.MessageSubscription;
-import net.minecraft.block.*;
-import net.minecraft.block.entity.*;
+import net.minecraft.block.BarrelBlock;
+import net.minecraft.block.BlastFurnaceBlock;
+import net.minecraft.block.Block;
+import net.minecraft.block.BrewingStandBlock;
+import net.minecraft.block.ChestBlock;
+import net.minecraft.block.DispenserBlock;
+import net.minecraft.block.DropperBlock;
+import net.minecraft.block.EnderChestBlock;
+import net.minecraft.block.FurnaceBlock;
+import net.minecraft.block.HopperBlock;
+import net.minecraft.block.ShulkerBoxBlock;
+import net.minecraft.block.SmokerBlock;
+import net.minecraft.block.TrappedChestBlock;
+import net.minecraft.block.entity.BarrelBlockEntity;
+import net.minecraft.block.entity.BlastFurnaceBlockEntity;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BrewingStandBlockEntity;
+import net.minecraft.block.entity.ChestBlockEntity;
+import net.minecraft.block.entity.DispenserBlockEntity;
+import net.minecraft.block.entity.DropperBlockEntity;
+import net.minecraft.block.entity.EnderChestBlockEntity;
+import net.minecraft.block.entity.FurnaceBlockEntity;
+import net.minecraft.block.entity.HopperBlockEntity;
+import net.minecraft.block.entity.ShulkerBoxBlockEntity;
+import net.minecraft.block.entity.SmokerBlockEntity;
+import net.minecraft.block.entity.TrappedChestBlockEntity;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
-import java.awt.*;
-import java.util.Dictionary;
+import java.awt.Color;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -28,7 +48,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class StorageHighlighter extends Module {
     final List<BlockPos> positions = new CopyOnWriteArrayList<>();
 
-    final Hashtable<Class, Color> colors = new Hashtable<>();
+    final Hashtable<Class<?>, Color> colors = new Hashtable<>();
     private void loadColors() {
         colors.put(ChestBlock.class, new Color(0x003EAD));
         colors.put(ChestBlockEntity.class, new Color(0x003EAD));
@@ -68,33 +88,11 @@ public class StorageHighlighter extends Module {
     }
 
     private Boolean isStorage(Block block) {
-        return block instanceof ChestBlock
-                || block instanceof TrappedChestBlock
-                || block instanceof EnderChestBlock
-                || block instanceof BarrelBlock
-                || block instanceof ShulkerBoxBlock
-                || block instanceof HopperBlock
-                || block instanceof DropperBlock
-                || block instanceof DispenserBlock
-                || block instanceof BrewingStandBlock
-                || block instanceof FurnaceBlock
-                || block instanceof BlastFurnaceBlock
-                || block instanceof SmokerBlock;
+        return block instanceof ChestBlock || block instanceof EnderChestBlock || block instanceof BarrelBlock || block instanceof ShulkerBoxBlock || block instanceof HopperBlock || block instanceof DispenserBlock || block instanceof BrewingStandBlock || block instanceof FurnaceBlock || block instanceof BlastFurnaceBlock || block instanceof SmokerBlock;
     }
 
     private Boolean isStorage(BlockEntity block) {
-        return block instanceof ChestBlockEntity
-                || block instanceof TrappedChestBlockEntity
-                || block instanceof EnderChestBlockEntity
-                || block instanceof BarrelBlockEntity
-                || block instanceof ShulkerBoxBlockEntity
-                || block instanceof HopperBlockEntity
-                || block instanceof DropperBlockEntity
-                || block instanceof DispenserBlockEntity
-                || block instanceof BrewingStandBlockEntity
-                || block instanceof FurnaceBlockEntity
-                || block instanceof BlastFurnaceBlockEntity
-                || block instanceof SmokerBlockEntity;
+        return block instanceof ChestBlockEntity || block instanceof EnderChestBlockEntity || block instanceof BarrelBlockEntity || block instanceof ShulkerBoxBlockEntity || block instanceof HopperBlockEntity || block instanceof DispenserBlockEntity || block instanceof BrewingStandBlockEntity || block instanceof FurnaceBlockEntity || block instanceof BlastFurnaceBlockEntity || block instanceof SmokerBlockEntity;
     }
 
     public StorageHighlighter() {

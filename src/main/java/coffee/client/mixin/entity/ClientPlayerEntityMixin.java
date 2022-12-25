@@ -26,7 +26,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Objects;
 
-@Mixin(ClientPlayerEntity.class, priority = 900)
+@Mixin(value = ClientPlayerEntity.class, priority = 900)
 public class ClientPlayerEntityMixin {
     @Inject(method = "tick", at = @At("HEAD"))
     public void coffee_preTick(CallbackInfo ci) {

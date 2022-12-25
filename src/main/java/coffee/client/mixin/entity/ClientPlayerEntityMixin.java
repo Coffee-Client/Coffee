@@ -26,7 +26,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Objects;
 
-@Mixin(ClientPlayerEntity.class)
+@Mixin(ClientPlayerEntity.class, priority = 900)
 public class ClientPlayerEntityMixin {
     @Inject(method = "tick", at = @At("HEAD"))
     public void coffee_preTick(CallbackInfo ci) {
@@ -72,7 +72,7 @@ public class ClientPlayerEntityMixin {
         }
     }
 
-    @Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isUsingItem()Z"))
+    @Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isUsingItem()Z"), require = 0)
     boolean coffee_fakeIsUsingItem(ClientPlayerEntity instance) {
         NoSlow noSlow = ModuleRegistry.getByClass(NoSlow.class);
         if (this.equals(CoffeeMain.client.player) && noSlow.isEnabled() && noSlow.isEating()) {

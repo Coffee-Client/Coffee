@@ -26,6 +26,7 @@ public class TitleScreenMixin extends Screen {
     void coffee_addCustomWidgets(CallbackInfo ci) {
         this.addDrawableChild(ButtonWidget.builder(Text.literal("<"), button -> client.setScreen(HomeScreen.instance()))
             .dimensions(5, 5, 20, 20)
-            .tooltip(Tooltip.of(Text.literal("Go back to the coffee home screen"))).build());
+            .tooltip(Tooltip.of(Text.literal("Go back to the coffee home screen")))
+            .build());
     }
 }

@@ -49,6 +49,13 @@ public class StorageHighlighter extends Module {
     final List<BlockPos> positions = new CopyOnWriteArrayList<>();
 
     final Hashtable<Class<?>, Color> colors = new Hashtable<>();
+
+    public StorageHighlighter() {
+        super("StorageHighlighter", "Shows all the storage blocks in the area", ModuleType.RENDER);
+
+        loadColors();
+    }
+
     private void loadColors() {
         colors.put(ChestBlock.class, new Color(0x003EAD));
         colors.put(ChestBlockEntity.class, new Color(0x003EAD));
@@ -95,12 +102,6 @@ public class StorageHighlighter extends Module {
         return block instanceof ChestBlockEntity || block instanceof EnderChestBlockEntity || block instanceof BarrelBlockEntity || block instanceof ShulkerBoxBlockEntity || block instanceof HopperBlockEntity || block instanceof DispenserBlockEntity || block instanceof BrewingStandBlockEntity || block instanceof FurnaceBlockEntity || block instanceof BlastFurnaceBlockEntity || block instanceof SmokerBlockEntity;
     }
 
-    public StorageHighlighter() {
-        super("StorageHighlighter", "Shows all the storage blocks in the area", ModuleType.RENDER);
-
-        loadColors();
-    }
-
     void addIfNotExisting(BlockPos p) {
         if (positions.stream().noneMatch(blockPos -> blockPos.equals(p))) {
             positions.add(p);
@@ -113,9 +114,6 @@ public class StorageHighlighter extends Module {
             return;
         }
 
-//        if (be.getEntity() instanceof ChestBlockEntity) {
-//            addIfNotExisting(be.getEntity().getPos());
-//        }
         if (isStorage(be.getEntity())) {
             addIfNotExisting(be.getEntity().getPos());
         }
@@ -158,17 +156,9 @@ public class StorageHighlighter extends Module {
         for (BlockPos position : positions) {
             Block b = client.world.getBlockState(position).getBlock();
             BlockEntity be = client.world.getBlockEntity(position);
-            Color c = isStorage(b)
-                    ? colors.get(b.getClass())
-                    : (be != null && isStorage(be))
-                        ? colors.get(be.getClass())
-                        : null;
+            Color c = isStorage(b) ? colors.get(b.getClass()) : (be != null && isStorage(be)) ? colors.get(be.getClass()) : null;
             if (c != null) {
-                Renderer.R3D.renderFadingBlock(c,
-                        Renderer.Util.modify(c, -1, -1, -1, 100).darker(),
-                        Vec3d.of(position),
-                        new Vec3d(1, 1, 1),
-                        500);
+                Renderer.R3D.renderFadingBlock(c, Renderer.Util.modify(c, -1, -1, -1, 100).darker(), Vec3d.of(position), new Vec3d(1, 1, 1), 500);
             }
         }
     }

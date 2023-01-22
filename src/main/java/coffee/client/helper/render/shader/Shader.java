@@ -23,16 +23,19 @@ import java.util.function.Consumer;
 public class Shader {
     @Getter
     final PostEffectProcessor shader;
+    int previousWidth, previousHeight;
 
     @SneakyThrows
     private Shader(Identifier ident, Consumer<Shader> init) {
-//        this.effect = ShaderEffectManager.getInstance().manage(ident, init);
+        //        this.effect = ShaderEffectManager.getInstance().manage(ident, init);
         this.shader = new PostEffectProcessor(CoffeeMain.client.getTextureManager(), CoffeeMain.client.getResourceManager(), CoffeeMain.client.getFramebuffer(), ident);
         checkUpdateDimensions();
         init.accept(this);
     }
 
-    int previousWidth, previousHeight;
+    public static Shader create(String progName, Consumer<Shader> callback) {
+        return new Shader(new Identifier("coffee", String.format("shaders/post/%s.json", progName)), callback);
+    }
 
     void checkUpdateDimensions() {
         int currentWidth = CoffeeMain.client.getWindow().getFramebufferWidth();
@@ -42,10 +45,6 @@ public class Shader {
             previousWidth = currentWidth;
             previousHeight = currentHeight;
         }
-    }
-
-    public static Shader create(String progName, Consumer<Shader> callback) {
-        return new Shader(new Identifier("coffee", String.format("shaders/post/%s.json", progName)), callback);
     }
 
     public void setUniformf(String name, float value) {

@@ -15,8 +15,6 @@ import coffee.client.helper.CompatHelper;
 import coffee.client.helper.event.EventSystem;
 import coffee.client.helper.event.impl.WindowInitEvent;
 import coffee.client.helper.font.FontRenderers;
-import coffee.client.helper.font.adapter.impl.QuickFontAdapter;
-import coffee.client.helper.font.renderer.FontRenderer;
 import coffee.client.helper.manager.ConfigManager;
 import coffee.client.helper.util.Rotations;
 import coffee.client.helper.util.Utils;
@@ -30,10 +28,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.awt.Font;
-import java.awt.FontFormatException;
 import java.io.File;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -104,13 +99,7 @@ public class CoffeeMain implements ModInitializer {
     }
 
     void initFonts() {
-        try {
-            int fsize = 18 * 2;
-            FontRenderers.setRenderer(new QuickFontAdapter(new FontRenderer(Font.createFont(Font.TRUETYPE_FONT,
-                Objects.requireNonNull(CoffeeMain.class.getClassLoader().getResourceAsStream("Font.ttf"))).deriveFont(Font.PLAIN, fsize), fsize)));
-        } catch (FontFormatException | IOException e) {
-            e.printStackTrace();
-        }
+        FontRenderers.setRenderer(FontRenderers.getCustomSize(18f));
     }
 
     void tickModulesNWC() {

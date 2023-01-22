@@ -1,1 +1,3 @@
-Updated to 1.19.3
+Fixed a few bugs
+Made renderer more performant
+Fixed M$ accounts

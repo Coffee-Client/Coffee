@@ -81,7 +81,6 @@ import coffee.client.feature.module.impl.movement.Swing;
 import coffee.client.feature.module.impl.movement.VanillaSpeed;
 import coffee.client.feature.module.impl.render.BlockHighlighting;
 import coffee.client.feature.module.impl.render.CaveMapper;
-import coffee.client.feature.module.impl.render.StorageHighlighter;
 import coffee.client.feature.module.impl.render.ClickGUI;
 import coffee.client.feature.module.impl.render.ESP;
 import coffee.client.feature.module.impl.render.FakeHacker;
@@ -98,11 +97,13 @@ import coffee.client.feature.module.impl.render.NoMessageIndicators;
 import coffee.client.feature.module.impl.render.Radar;
 import coffee.client.feature.module.impl.render.ShowTntPrime;
 import coffee.client.feature.module.impl.render.Spotlight;
+import coffee.client.feature.module.impl.render.StorageHighlighter;
 import coffee.client.feature.module.impl.render.SuperheroFX;
 import coffee.client.feature.module.impl.render.TabGui;
 import coffee.client.feature.module.impl.render.TargetHud;
 import coffee.client.feature.module.impl.render.Tracers;
 import coffee.client.feature.module.impl.render.Trail;
+import coffee.client.feature.module.impl.render.UnfocusedCpu;
 import coffee.client.feature.module.impl.render.Waypoints;
 import coffee.client.feature.module.impl.render.Zoom;
 import coffee.client.feature.module.impl.world.AirPlace;
@@ -334,6 +335,7 @@ public class ModuleRegistry {
         registerModule(ChestIndexer.class);
         registerModule(KnockbackPlus.class);
         registerModule(Angryman.class);
+        registerModule(UnfocusedCpu.class);
 
         rebuildSharedModuleList();
 

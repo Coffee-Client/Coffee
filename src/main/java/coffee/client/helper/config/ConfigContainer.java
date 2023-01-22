@@ -55,8 +55,6 @@ public class ConfigContainer {
             for (int i = 0; i < firstFourBits.length; i++) {
                 firstFourBits[i] = Byte.toUnsignedInt(sig[i]);
             }
-            System.out.println(Arrays.toString(firstFourBits));
-            System.out.println(Arrays.toString(EXPECTED_SIGNATURE));
             if (!Arrays.equals(firstFourBits, EXPECTED_SIGNATURE)) {
                 return new String(data); // probably legacy format
             }
@@ -113,7 +111,6 @@ public class ConfigContainer {
         try {
             byte[] t = FileUtils.readFileToByteArray(path);
             String p = decompress(t);
-            System.out.println(p);
             if (p == null) {
                 throw new IllegalStateException("Invalid data format");
             }

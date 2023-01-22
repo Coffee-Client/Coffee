@@ -21,7 +21,7 @@ import coffee.client.feature.gui.screen.base.AAScreen;
 import coffee.client.feature.gui.screen.base.CenterOverlayScreen;
 import coffee.client.feature.module.impl.render.Waypoints;
 import coffee.client.helper.font.FontRenderers;
-import coffee.client.helper.font.adapter.impl.QuickFontAdapter;
+import coffee.client.helper.font.adapter.impl.RendererFontAdapter;
 import coffee.client.helper.render.Cursor;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.render.textures.Texture;
@@ -265,7 +265,7 @@ public class WaypointEditScreen extends AAScreen {
                 getPositionY() + getHeight(),
                 5,
                 20);
-            QuickFontAdapter customSize = FontRenderers.getCustomSize(20);
+            RendererFontAdapter customSize = FontRenderers.getCustomSize(20);
             String t = Utils.capAtLength(wayp.getName(), getWidth() - 10 - this.delete.getWidth(), customSize);
             customSize.drawString(stack, t, getPositionX() + 5, getPositionY() + 5, 0xFFFFFF);
             this.actions.render(stack, mouseX, mouseY);

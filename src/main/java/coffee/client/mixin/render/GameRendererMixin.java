@@ -14,6 +14,7 @@ import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleRegistry;
 import coffee.client.feature.module.impl.render.FreeLook;
 import coffee.client.feature.module.impl.render.LSD;
+import coffee.client.feature.module.impl.render.UnfocusedCpu;
 import coffee.client.feature.module.impl.render.Zoom;
 import coffee.client.helper.event.EventSystem;
 import coffee.client.helper.event.impl.RenderEvent;
@@ -23,6 +24,7 @@ import coffee.client.helper.util.AccurateFrameRateCounter;
 import coffee.client.helper.util.Rotations;
 import coffee.client.helper.util.Utils;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.render.Camera;
@@ -50,6 +52,9 @@ public abstract class GameRendererMixin {
     @Shadow
     @Final
     private Camera camera;
+    @Shadow
+    @Final
+    private MinecraftClient client;
 
     @Shadow
     protected abstract double getFov(Camera camera, float tickDelta, boolean changingFov);
@@ -160,6 +165,13 @@ public abstract class GameRendererMixin {
         LSD byClass = ModuleRegistry.getByClass(LSD.class);
         if (byClass.isEnabled()) {
             byClass.draw();
+        }
+    }
+
+    @Inject(method = "render", at = @At("HEAD"), cancellable = true)
+    void coffee_beforeRender(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
+        if (ModuleRegistry.getByClass(UnfocusedCpu.class).isEnabled() && !this.client.isWindowFocused()) {
+            ci.cancel(); // don't render
         }
     }
 }

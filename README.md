@@ -3,6 +3,13 @@ A very based 1.19.3 build with some of the best visuals currently on the market.
 
 ![](https://komarev.com/ghpvc/?username=Coffee-Client&style=for-the-badge&label=Views)
 
+## Warning
+I have entirely given up on microsoft's platform, and by proxy, the game too. Updates won't happen that often, if they even happen at all.
+
+The client partially uses outdated techniques, and some features don't work anymore. I cannot be fucked to fix them.
+
+Use at your own risk, and do not come crying to me when shit doesn't work. Go back to meteor if you want an updated client.
+
 ## Installing
 ### You will need:
 - Minecraft: Java Edition

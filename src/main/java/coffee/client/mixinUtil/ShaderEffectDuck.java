@@ -12,5 +12,6 @@ import java.util.List;
 
 public interface ShaderEffectDuck {
     void addFakeTarget(String name, Framebuffer buffer);
+
     List<PostEffectPass> getPasses();
 }

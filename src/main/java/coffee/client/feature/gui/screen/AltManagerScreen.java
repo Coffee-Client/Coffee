@@ -22,6 +22,7 @@ import coffee.client.helper.render.Rectangle;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.render.Texture;
 import coffee.client.helper.util.Transitions;
+import coffee.client.login.MicrosoftLogin;
 import coffee.client.login.mojang.MinecraftAuthenticator;
 import coffee.client.login.mojang.MinecraftToken;
 import coffee.client.login.mojang.profile.MinecraftProfile;
@@ -118,7 +119,7 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
             if (spl.length > 2) {
                 acType = AddScreenOverlay.AccountType.valueOf(spl[2].toUpperCase());
             }
-            AltStorage as = new AltStorage("Unknown", mail, pass, UUID.randomUUID(), acType, "");
+            AltStorage as = new AltStorage(null, "Unknown", mail, pass, UUID.randomUUID(), acType, "");
             AltContainer ac = new AltContainer(-1, -1, 0, as);
             ac.renderX = -1;
             ac.renderY = -1;
@@ -149,7 +150,7 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
         for (AltContainer alt1 : alts) {
             AltStorage alt = alt1.storage;
             List<String> parsedTags = Arrays.stream(alt.tags.split(",")).map(String::trim).filter(s -> !s.isEmpty()).toList();
-            ConfigAltEntry e = new ConfigAltEntry(alt.email, alt.password, alt.cachedName, alt.type, alt.cachedUuid, alt.valid, String.join(",", parsedTags));
+            ConfigAltEntry e = new ConfigAltEntry(alt.email, alt.password, alt.cachedName, alt.refr, alt.type, alt.cachedUuid, alt.valid, String.join(",", parsedTags));
             altl.add(e);
         }
         CONFIG_CONTAINER.set(altl);
@@ -169,7 +170,8 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
         JsonArray asJsonArray = CONFIG_CONTAINER.getValue().getAsJsonArray();
         for (JsonElement jsonElement : asJsonArray) {
             ConfigAltEntry configAltEntry = GsonSupplier.getGson().fromJson(jsonElement, ConfigAltEntry.class);
-            AltStorage container = new AltStorage(configAltEntry.cachedUsername,
+            AltStorage container = new AltStorage(configAltEntry.refreshToken,
+                configAltEntry.cachedUsername,
                 configAltEntry.email,
                 configAltEntry.password,
                 configAltEntry.cachedUUID,
@@ -524,7 +526,7 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
     @AllArgsConstructor
     @Data
     static class ConfigAltEntry {
-        public String email, password, cachedUsername;
+        public String email, password, cachedUsername, refreshToken;
         public AddScreenOverlay.AccountType type;
         public UUID cachedUUID;
         public boolean valid;
@@ -532,17 +534,19 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
     }
 
     static class AltStorage {
-        final String email;
         final String password;
         final AddScreenOverlay.AccountType type;
+        String email;
         String tags;
         String cachedName;
         String accessToken;
+        String refr;
         UUID cachedUuid;
         boolean valid = true;
         boolean didSuccessfulLogin = false;
 
-        public AltStorage(String n, String e, String p, UUID u, AddScreenOverlay.AccountType type, String tags) {
+        public AltStorage(String refreshToken, String n, String e, String p, UUID u, AddScreenOverlay.AccountType type, String tags) {
+            this.refr = refreshToken;
             this.cachedName = n;
             this.email = e;
             this.password = p;
@@ -811,16 +815,32 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
         }
 
         void add() {
-            AltStorage as = new AltStorage("Unknown", email.getText(), passwd.getText(), UUID.randomUUID(), AccountType.values()[accountTypeI], "");
-            AltContainer ac = new AltContainer(-1, -1, 0, as);
-            ac.renderX = -1;
-            ac.renderY = -1;
-            alts.add(ac);
-            Objects.requireNonNull(client).setScreen(parent);
+            AccountType value = AccountType.values()[accountTypeI];
+            if (value == AccountType.MICROSOFT) {
+                MicrosoftLogin.getRefreshToken(s -> {
+                    //                    MicrosoftLogin.LoginData login1 = MicrosoftLogin.login(s);
+                    AltStorage as = new AltStorage(s, "Unknown", "unknown@microsoft", "<Microsoft account>", UUID.randomUUID(), value, "");
+                    AltContainer ac = new AltContainer(-1, -1, 0, as);
+                    ac.renderX = -1;
+                    ac.renderY = -1;
+                    alts.add(ac);
+                    client.execute(() -> Objects.requireNonNull(client).setScreen(parent));
+                });
+            } else {
+                AltStorage as = new AltStorage(null, "Unknown", email.getText(), passwd.getText(), UUID.randomUUID(), value, "");
+                AltContainer ac = new AltContainer(-1, -1, 0, as);
+                ac.renderX = -1;
+                ac.renderY = -1;
+                alts.add(ac);
+                Objects.requireNonNull(client).setScreen(parent);
+            }
         }
 
         boolean isAddApplicable() {
-            if (AccountType.values()[accountTypeI] == AccountType.CRACKED && !email.getText().isEmpty()) {
+            AccountType value = AccountType.values()[accountTypeI];
+            if (value == AccountType.CRACKED && !email.getText().isEmpty()) {
+                return true;
+            } else if (value == AccountType.MICROSOFT) { // we're gonna do a little trolling with this anyways
                 return true;
             } else {
                 return !email.getText().isEmpty() && !passwd.getText().isEmpty();
@@ -832,7 +852,8 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
             if (accountTypeI >= AccountType.values().length) {
                 accountTypeI = 0;
             }
-            type.setText("Type: " + AccountType.values()[accountTypeI].s);
+            AccountType value = AccountType.values()[accountTypeI];
+            type.setText("Type: " + value.s);
         }
 
         @Override
@@ -965,26 +986,56 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
                 return;
             }
             try {
-                MinecraftAuthenticator auth = new MinecraftAuthenticator();
-                MinecraftToken token = switch (storage.type) {
-                    case MOJANG -> auth.login(storage.email, storage.password);
-                    case MICROSOFT -> auth.loginWithMicrosoft(storage.email, storage.password);
-                    case CRACKED -> null;
-                };
-                if (token == null && storage.password.equals("")) {
-                    storage.valid = true;
-                    storage.cachedUuid = UUID.randomUUID();
-                    storage.cachedName = storage.email;
-                    storage.accessToken = "coffeelmao";
-                    return;
+                switch (storage.type) {
+                    case MOJANG -> {
+                        MinecraftAuthenticator auth = new MinecraftAuthenticator();
+                        MinecraftToken token = auth.login(storage.email, storage.password);
+                        storage.accessToken = token.accessToken();
+                        MinecraftProfile gameProfile = auth.getGameProfile(token);
+                        storage.cachedName = gameProfile.username();
+                        storage.cachedUuid = gameProfile.uuid();
+                    }
+                    case MICROSOFT -> {
+                        MicrosoftLogin.LoginData login1 = MicrosoftLogin.login(storage.refr);
+                        if (!login1.isGood()) {
+                            throw new IllegalStateException("Data is not good: " + login1);
+                        }
+                        storage.accessToken = login1.mcToken;
+                        storage.cachedName = login1.username;
+                        storage.email = login1.username + "@microsoft";
+                        storage.cachedUuid = login1.uuid.contains("-") ? UUID.fromString(login1.uuid) : UUID.fromString(login1.uuid.replaceFirst(
+                            "(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)",
+                            "$1-$2-$3-$4-$5"));
+                    }
+                    case CRACKED -> {
+                        storage.cachedUuid = UUID.randomUUID();
+                        storage.cachedName = storage.email;
+                        storage.accessToken = "coffeelmao";
+                    }
                 }
-                if (token == null) {
-                    throw new NullPointerException();
-                }
-                storage.accessToken = token.accessToken();
-                MinecraftProfile profile = auth.getGameProfile(token);
-                storage.cachedName = profile.username();
-                storage.cachedUuid = profile.uuid();
+                //                MinecraftAuthenticator auth = new MinecraftAuthenticator();
+                //                MinecraftToken token = switch (storage.type) {
+                //                    case MOJANG -> auth.login(storage.email, storage.password);
+                //                    case MICROSOFT -> auth.loginWithMicrosoft(storage.email, storage.password);
+                //                    case CRACKED -> null;
+                //                };
+                //                if (token == null && storage.password.equals("")) {
+                //                    storage.valid = true;
+                //                    storage.cachedUuid = UUID.randomUUID();
+                //                    storage.cachedName = storage.email;
+                //                    storage.accessToken = "coffeelmao";
+                //                    return;
+                //                }
+                //                if (token == null) {
+                //                    throw new NullPointerException();
+                //                }
+                //                storage.accessToken = token.accessToken();
+                //                MinecraftProfile profile = auth.getGameProfile(token);
+                //                storage.cachedName = profile.username();
+                //                storage.cachedUuid = profile.uuid();
+                //                downloadTexture();
+                //                storage.valid = true;
+                //                storage.didSuccessfulLogin = true;
                 downloadTexture();
                 storage.valid = true;
                 storage.didSuccessfulLogin = true;

@@ -9,7 +9,7 @@ import coffee.client.feature.gui.clickgui.ClickGUI;
 import coffee.client.feature.gui.element.Element;
 import coffee.client.feature.module.Module;
 import coffee.client.helper.font.FontRenderers;
-import coffee.client.helper.font.adapter.impl.QuickFontAdapter;
+import coffee.client.helper.font.adapter.impl.RendererFontAdapter;
 import coffee.client.helper.font.renderer.ColoredTextSegment;
 import coffee.client.helper.render.ClipStack;
 import coffee.client.helper.render.Rectangle;
@@ -176,11 +176,10 @@ public class ModuleDisplay extends Element {
             cachedSegment = null;
         }
         if (cachedSegment != null) {
-            ((QuickFontAdapter) FontRenderers.getRenderer()).getRenderer()
-                .drawString(stack,
-                    cachedSegment,
-                    (float) getPositionX() + 6,
-                    (float) (getPositionY() + bruhHeight / 2d - FontRenderers.getRenderer().getFontHeight() / 2d));
+            ((RendererFontAdapter) FontRenderers.getRenderer()).drawString(stack,
+                cachedSegment,
+                (float) getPositionX() + 6,
+                (float) (getPositionY() + bruhHeight / 2d - FontRenderers.getRenderer().getFontHeight() / 2d));
         } else {
             FontRenderers.getRenderer()
                 .drawString(stack,

@@ -82,8 +82,8 @@ public class ForEach extends Command {
                         .equals(Objects.requireNonNull(CoffeeMain.client.player).getUuid())) {
                         runner.execute(() -> {
                             try {
-                                client.getNetworkHandler().sendChatMessage(String.join(" ", Arrays.copyOfRange(args, 2, args.length))
-                                    .replaceAll("%s", playerListEntry.getProfile().getName()));
+                                client.getNetworkHandler()
+                                    .sendChatMessage(String.join(" ", Arrays.copyOfRange(args, 2, args.length)).replaceAll("%s", playerListEntry.getProfile().getName()));
                                 Thread.sleep(delay);
                             } catch (Exception ignored) {
                             }

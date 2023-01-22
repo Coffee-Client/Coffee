@@ -8,7 +8,7 @@ package coffee.client.mixin.screen;
 import coffee.client.feature.gui.FastTickable;
 import coffee.client.helper.DirectConnectScreenVariables;
 import coffee.client.helper.font.FontRenderers;
-import coffee.client.helper.font.adapter.impl.QuickFontAdapter;
+import coffee.client.helper.font.adapter.impl.RendererFontAdapter;
 import coffee.client.helper.font.renderer.ColoredTextSegment;
 import coffee.client.helper.render.AlphaOverride;
 import coffee.client.helper.render.ClipStack;
@@ -222,12 +222,12 @@ public abstract class DirectConnectScreenMixin extends Screen implements FastTic
             ClipStack.globalInstance.addWindow(ms, new Rectangle(originX, originY, originX + width, originY + height));
             double statsX = originX + minWidth;
             List<OrderedText> orderedTexts = this.client.textRenderer.wrapLines(latestResponse.getDescription(), (int) (maxWidth - innerPadding - minWidth));
-            QuickFontAdapter fa = (QuickFontAdapter) FontRenderers.getRenderer();
+            RendererFontAdapter fa = (RendererFontAdapter) FontRenderers.getRenderer();
             AlphaOverride.pushAlphaMul((float) v);
             for (int i = 0; i < Math.min(orderedTexts.size(), 2); i++) {
                 OrderedText orderedText = orderedTexts.get(i);
                 ColoredTextSegment content = Utils.getContent(orderedText, true, false);
-                fa.getRenderer().drawString(ms, content, (float) statsX, (float) (originY + innerPadding + fa.getFontHeight() * i));
+                fa.drawString(ms, content, (float) statsX, (float) (originY + innerPadding + fa.getFontHeight() * i));
             }
             AlphaOverride.popAlphaMul();
 

@@ -13,7 +13,7 @@ import coffee.client.feature.gui.screen.base.ClientScreen;
 import coffee.client.feature.gui.widget.RoundButton;
 import coffee.client.helper.font.FontRenderers;
 import coffee.client.helper.font.adapter.FontAdapter;
-import coffee.client.helper.font.adapter.impl.QuickFontAdapter;
+import coffee.client.helper.font.adapter.impl.RendererFontAdapter;
 import coffee.client.helper.render.ClipStack;
 import coffee.client.helper.render.Rectangle;
 import coffee.client.helper.render.Renderer;
@@ -112,8 +112,8 @@ public class AddonManagerScreen extends ClientScreen implements FastTickable {
         double xRoot = width / 2d - WIDGET_WIDTH / 2d + 5;
         double yRoot = height / 2d - WIDGET_HEIGHT / 2d + 5;
         if (viewerList.isEmpty()) {
-            QuickFontAdapter customSize = FontRenderers.getCustomSize(40);
-            QuickFontAdapter customSize1 = FontRenderers.getCustomSize(30);
+            RendererFontAdapter customSize = FontRenderers.getCustomSize(40);
+            RendererFontAdapter customSize1 = FontRenderers.getCustomSize(30);
             customSize.drawCenteredString(stack, "No addons", width / 2d, height / 2d - customSize.getFontHeight(), 0xAAAAAA);
             customSize1.drawCenteredString(stack, "Drag some in to load them", width / 2d, height / 2d, 0xAAAAAA);
         }

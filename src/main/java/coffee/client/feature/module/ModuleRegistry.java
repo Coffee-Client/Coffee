@@ -381,7 +381,8 @@ public class ModuleRegistry {
                 return (T) module;
             }
         }
-        throw new IllegalStateException("Unregistered module: " + clazz.getName());
+//        throw new IllegalStateException("Unregistered module: " + clazz.getName());
+        return null;
     }
 
     public static Module getByName(String n) {

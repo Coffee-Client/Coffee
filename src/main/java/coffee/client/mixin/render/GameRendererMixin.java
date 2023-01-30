@@ -170,7 +170,8 @@ public abstract class GameRendererMixin {
 
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
     void coffee_beforeRender(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
-        if (ModuleRegistry.getByClass(UnfocusedCpu.class).isEnabled() && !this.client.isWindowFocused()) {
+        UnfocusedCpu byClass = ModuleRegistry.getByClass(UnfocusedCpu.class);
+        if (byClass != null && byClass.isEnabled() && !this.client.isWindowFocused()) {
             ci.cancel(); // don't render
         }
     }

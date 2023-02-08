@@ -63,7 +63,7 @@ dependencies {
 	libImpl(name: "NetMC-1.0.0")
 	libImpl(project(":Authlib"))
 	libImpl(project(":Eventlib"))
-	modImpl("com.github.0x3C50:Renderer:044558f035")
+	modImpl("com.github.0x3C50:Renderer:f450a9f121")
 
 //	modImpl(group: "io.github.ladysnake", name: "satin", version: "1.9.0") {
 //		transitive = false

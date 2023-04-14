@@ -16,8 +16,6 @@ public class CodecMapper {
         };
     }
     public static <T>JsonDeserializer<T> createDeserializer(Codec<T> v) {
-        return (jsonElement, type, jsonDeserializationContext) -> {
-            return Util.getResult(v.parse(JsonOps.INSTANCE, jsonElement), RuntimeException::new);
-        };
+        return (jsonElement, type, jsonDeserializationContext) -> Util.getResult(v.parse(JsonOps.INSTANCE, jsonElement), RuntimeException::new);
     }
 }

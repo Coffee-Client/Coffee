@@ -60,7 +60,7 @@ dependencies {
 
 	// 3rd party
 	libImpl(group: "meteordevelopment", name: "discord-ipc", version: "1.1")
-	libImpl(name: "NetMC-1.0.0")
+	libImpl(name: "NetMC-1.0.1")
 	libImpl(project(":Authlib"))
 	libImpl(project(":Eventlib"))
 	modImpl("com.github.0x3C50:Renderer:master-SNAPSHOT")

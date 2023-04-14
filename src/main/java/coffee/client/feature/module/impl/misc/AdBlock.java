@@ -45,7 +45,7 @@ public class AdBlock extends Module {
 
     @Override
     public String getContext() {
-        return blocked + "";
+        return String.valueOf(blocked);
     }
 
     @Override

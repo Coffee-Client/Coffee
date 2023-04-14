@@ -75,7 +75,7 @@ public class Flattener extends Module {
                 if (actual.distanceTo(eyep) > Objects.requireNonNull(client.interactionManager).getReachDistance()) {
                     continue;
                 }
-                BlockPos c = new BlockPos(actual);
+                BlockPos c = BlockPos.ofFloored(actual);
                 BlockState state = Objects.requireNonNull(client.world).getBlockState(c);
                 if (state.getMaterial().isReplaceable()) {
                     toPlace.add(c);

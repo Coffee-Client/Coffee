@@ -40,7 +40,7 @@ public abstract class BlockMixin extends AbstractBlock {
         }
     }
 
-    @Inject(method = "isTranslucent", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "isTransparent", at = @At("HEAD"), cancellable = true)
     public void coffee_setTranslucent(BlockState state, BlockView world, BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
         if (MinecraftClient.getInstance() == null) {
             return; // somehow this can be called before we init????

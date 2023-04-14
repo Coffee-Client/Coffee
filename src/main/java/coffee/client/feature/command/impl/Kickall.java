@@ -68,8 +68,8 @@ public class Kickall extends Command {
                 }
 
                 @Override
-                public ClientConnection getConnection() {
-                    return null;
+                public boolean isConnectionOpen() {
+                    return false;
                 }
             });
             conn.send(new HandshakeC2SPacket(sa.getHostName(), sa.getPort(), NetworkState.LOGIN));

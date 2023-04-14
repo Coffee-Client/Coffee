@@ -26,7 +26,7 @@ public class Step extends Module {
         if (CoffeeMain.client.player == null || CoffeeMain.client.getNetworkHandler() == null) {
             return;
         }
-        CoffeeMain.client.player.stepHeight = (float) (height.getValue() + 0);
+        CoffeeMain.client.player.setStepHeight((float) (height.getValue() + 0));
     }
 
     @Override
@@ -39,7 +39,7 @@ public class Step extends Module {
         if (CoffeeMain.client.player == null || CoffeeMain.client.getNetworkHandler() == null) {
             return;
         }
-        Objects.requireNonNull(client.player).stepHeight = 0.6f;
+        Objects.requireNonNull(client.player).setStepHeight(0.6f);
     }
 
     @Override

@@ -56,7 +56,6 @@ public class Shader {
         checkUpdateDimensions();
         RenderSystem.disableBlend();
         RenderSystem.disableDepthTest();
-        RenderSystem.enableTexture();
         RenderSystem.resetTextureMatrix();
         shader.render(delta);
         MinecraftClient.getInstance().getFramebuffer().beginWrite(true);

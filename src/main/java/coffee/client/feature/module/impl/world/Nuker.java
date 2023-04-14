@@ -61,7 +61,7 @@ public class Nuker extends Module {
     public void tick() {
         switch (modeSetting.getValue()) {
             case Packet -> iterateOverRange(client.interactionManager.getReachDistance(), vec3d -> {
-                BlockPos bp = new BlockPos(vec3d);
+                BlockPos bp = BlockPos.ofFloored(vec3d);
                 BlockState bs = client.world.getBlockState(bp);
                 if (bs.isAir()) {
                     return;
@@ -79,7 +79,7 @@ public class Nuker extends Module {
                     500);
             });
             case Griefing -> iterateOverRange(client.interactionManager.getReachDistance(), vec3d -> {
-                BlockPos bp = new BlockPos(vec3d);
+                BlockPos bp = BlockPos.ofFloored(vec3d);
                 BlockState bs = client.world.getBlockState(bp);
                 if (bs.isAir()) {
                     return;
@@ -95,7 +95,7 @@ public class Nuker extends Module {
                 }
             });
             case Interaction -> iterateOverRange(client.interactionManager.getReachDistance(), vec3d -> {
-                BlockPos bp = new BlockPos(vec3d);
+                BlockPos bp = BlockPos.ofFloored(vec3d);
                 BlockState bs = client.world.getBlockState(bp);
                 if (bs.isAir()) {
                     return;

@@ -55,7 +55,7 @@ public class AutoIgnite extends Module {
                     if (vPos.distanceTo(CoffeeMain.client.player.getEyePos()) > CoffeeMain.client.interactionManager.getReachDistance()) {
                         continue;
                     }
-                    BlockPos bp = new BlockPos(vPos);
+                    BlockPos bp = BlockPos.ofFloored(vPos);
                     BlockState bs = CoffeeMain.client.world.getBlockState(bp);
                     if (bs.getBlock() == Blocks.TNT) {
                         blocksToIgnite.add(bp);

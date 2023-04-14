@@ -172,7 +172,7 @@ public class Hud extends Module {
         }
 
         if (this.tps.getValue()) {
-            String tStr = currentTps + "";
+            String tStr = String.valueOf(currentTps);
             String[] dotS = tStr.split("\\.");
             String tpsString = dotS[0];
             if (!dotS[1].equalsIgnoreCase("0")) {
@@ -183,7 +183,7 @@ public class Hud extends Module {
         if (this.ping.getValue()) {
             PlayerListEntry ple = Objects.requireNonNull(CoffeeMain.client.getNetworkHandler())
                 .getPlayerListEntry(Objects.requireNonNull(CoffeeMain.client.player).getUuid());
-            values.add((ple == null || ple.getLatency() == 0 ? "?" : ple.getLatency() + "") + " ms");
+            values.add((ple == null || ple.getLatency() == 0 ? "?" : String.valueOf(ple.getLatency())) + " ms");
         }
         if (this.coords.getValue()) {
             BlockPos bp = Objects.requireNonNull(CoffeeMain.client.player).getBlockPos();

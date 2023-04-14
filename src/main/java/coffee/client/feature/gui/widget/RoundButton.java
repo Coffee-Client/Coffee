@@ -174,4 +174,14 @@ public class RoundButton implements Element, Drawable, Selectable, FastTickable,
         }
         return false;
     }
+
+    @Override
+    public void setFocused(boolean focused) {
+
+    }
+
+    @Override
+    public boolean isFocused() {
+        return false;
+    }
 }

@@ -55,10 +55,10 @@ public class AutoTrap extends Module {
 
     boolean isTrappedAlready(Entity entity) {
         Vec3d entityPos = entity.getPos();
-        BlockPos bp = new BlockPos(entityPos);
+        BlockPos bp = BlockPos.ofFloored(entityPos);
 
         boolean smallMatches = Arrays.stream(buildOffsetsSmall).allMatch(ints -> {
-            BlockPos a = bp.add(ints[0], ints[1], ints[2]);
+            BlockPos a = bp.add((int) ints[0], (int) ints[1], (int) ints[2]);
             return Objects.requireNonNull(CoffeeMain.client.world).getBlockState(a).getMaterial().blocksMovement();
         });
         if (smallMatches) {
@@ -69,7 +69,7 @@ public class AutoTrap extends Module {
         for (double[] ints : possibleOffsetsHome) {
             Vec3d potentialHome = entityPos.add(ints[0], ints[1], ints[2]);
             boolean matches = Arrays.stream(buildOffsetsBig).allMatch(ints1 -> {
-                BlockPos a = new BlockPos(potentialHome.add(ints1[0], ints1[1], ints1[2]));
+                BlockPos a = BlockPos.ofFloored(potentialHome.add(ints1[0], ints1[1], ints1[2]));
                 return CoffeeMain.client.world.getBlockState(a).getMaterial().blocksMovement();
             });
             if (matches) {
@@ -93,10 +93,10 @@ public class AutoTrap extends Module {
                 continue;
             }
             Vec3d pos = player.getPos();
-            BlockPos bp = new BlockPos(pos);
+            BlockPos bp = BlockPos.ofFloored(pos);
             double eWidth = player.getWidth();
-            BlockPos corner = new BlockPos(pos.subtract(eWidth / 2, 0, eWidth / 2));
-            BlockPos otherCorner = new BlockPos(pos.add(eWidth / 2, 0, eWidth / 2));
+            BlockPos corner = BlockPos.ofFloored(pos.subtract(eWidth / 2, 0, eWidth / 2));
+            BlockPos otherCorner = BlockPos.ofFloored(pos.add(eWidth / 2, 0, eWidth / 2));
             double[][] planToUse;
             if (corner.getX() == bp.getX() && corner.getZ() == bp.getZ() && otherCorner.getX() == bp.getX() && otherCorner.getZ() == bp.getZ()) {
                 planToUse = buildOffsetsSmall;
@@ -128,7 +128,7 @@ public class AutoTrap extends Module {
                 int selSlot = CoffeeMain.client.player.getInventory().selectedSlot;
                 CoffeeMain.client.player.getInventory().selectedSlot = finalSlot;
                 for (double[] ints : filteredPlan) {
-                    BlockPos current = new BlockPos(pos.add(ints[0], ints[1], ints[2]));
+                    BlockPos current = BlockPos.ofFloored(pos.add(ints[0], ints[1], ints[2]));
                     if (!CoffeeMain.client.world.getBlockState(current).isAir()) {
                         continue;
                     }

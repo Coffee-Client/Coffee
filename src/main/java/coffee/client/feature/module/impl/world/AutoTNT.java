@@ -71,7 +71,7 @@ public class AutoTNT extends Module {
 
                 for (int y = Objects.requireNonNull(CoffeeMain.client.world).getTopY(); y > CoffeeMain.client.world.getBottomY(); y--) {
                     Vec3d currentOffset = new Vec3d(x, y, z);
-                    BlockPos bp = new BlockPos(new Vec3d(ppos.x + currentOffset.x, y, ppos.z + currentOffset.z));
+                    BlockPos bp = BlockPos.ofFloored(new Vec3d(ppos.x + currentOffset.x, y, ppos.z + currentOffset.z));
                     BlockState bs = CoffeeMain.client.world.getBlockState(bp);
                     double dist = Vec3d.of(bp).distanceTo(ppos);
                     if (bs.getMaterial().isReplaceable()) {
@@ -135,7 +135,7 @@ public class AutoTNT extends Module {
 
                 for (int y = Objects.requireNonNull(CoffeeMain.client.world).getTopY(); y > CoffeeMain.client.world.getBottomY(); y--) {
                     Vec3d currentOffset = new Vec3d(x, y, z);
-                    BlockPos bp = new BlockPos(new Vec3d(ppos.x + currentOffset.x, y, ppos.z + currentOffset.z));
+                    BlockPos bp = BlockPos.ofFloored(new Vec3d(ppos.x + currentOffset.x, y, ppos.z + currentOffset.z));
                     BlockState bs = CoffeeMain.client.world.getBlockState(bp);
                     double dist = Vec3d.of(bp).distanceTo(ppos);
                     if (bs.getMaterial().isReplaceable()) {

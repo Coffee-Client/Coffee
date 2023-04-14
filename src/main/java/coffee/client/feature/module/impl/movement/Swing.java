@@ -43,7 +43,7 @@ public class Swing extends Module {
         if (me.getButton() == 0 && me.getType() == MouseEvent.Type.CLICK) {
             try {
                 HitResult hit = Objects.requireNonNull(CoffeeMain.client.player).raycast(200, CoffeeMain.client.getTickDelta(), true);
-                swinging = new BlockPos(hit.getPos());
+                swinging = BlockPos.ofFloored(hit.getPos());
             } catch (Exception ignored) {
             }
         }

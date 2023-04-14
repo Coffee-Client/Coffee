@@ -6,6 +6,7 @@
 package coffee.client.mixin.screen;
 
 import coffee.client.feature.gui.FastTickable;
+import coffee.client.helper.CodecMapper;
 import coffee.client.helper.DirectConnectScreenVariables;
 import coffee.client.helper.font.FontRenderers;
 import coffee.client.helper.font.adapter.impl.RendererFontAdapter;
@@ -25,12 +26,12 @@ import me.x150.C2SPacket;
 import me.x150.PacketInputStream;
 import me.x150.PacketOutputStream;
 import me.x150.S2CPacket;
+import me.x150.renderer.util.RendererUtils;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.gui.screen.DirectConnectScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.network.ServerAddress;
-import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.server.ServerMetadata;
 import net.minecraft.text.OrderedText;
@@ -48,11 +49,14 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import javax.imageio.ImageIO;
 import java.awt.Color;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static coffee.client.helper.DirectConnectScreenVariables.*;
@@ -60,9 +64,9 @@ import static coffee.client.helper.DirectConnectScreenVariables.*;
 @Debug(export = true)
 @Mixin(DirectConnectScreen.class)
 public abstract class DirectConnectScreenMixin extends Screen implements FastTickable {
-    private static final Gson GSON = (new GsonBuilder()).registerTypeAdapter(ServerMetadata.Version.class, new ServerMetadata.Version.Serializer())
-        .registerTypeAdapter(ServerMetadata.Players.class, new ServerMetadata.Players.Deserializer())
-        .registerTypeAdapter(ServerMetadata.class, new ServerMetadata.Deserializer())
+    private static final Gson GSON = (new GsonBuilder()).registerTypeAdapter(ServerMetadata.Version.class, CodecMapper.createSerializer(ServerMetadata.Version.CODEC))
+        .registerTypeAdapter(ServerMetadata.Players.class, CodecMapper.createDeserializer(ServerMetadata.Players.CODEC))
+        .registerTypeAdapter(ServerMetadata.class, CodecMapper.createDeserializer(ServerMetadata.CODEC))
         .registerTypeHierarchyAdapter(Text.class, new Text.Serializer())
         .registerTypeHierarchyAdapter(Style.class, new Style.Serializer())
         .registerTypeAdapterFactory(new LowercaseEnumTypeAdapterFactory())
@@ -144,18 +148,32 @@ public abstract class DirectConnectScreenMixin extends Screen implements FastTic
                 pos.close();
                 String s = read.getPacketReader().readString();
                 DirectConnectScreenVariables.latestResponse = JsonHelper.deserialize(GSON, s, ServerMetadata.class);
-                String favicon = DirectConnectScreenVariables.latestResponse.getFavicon() == null ? "" : DirectConnectScreenVariables.latestResponse.getFavicon();
-                if (favicon.isEmpty()) {
+                Optional<ServerMetadata.Favicon> favicon1 = latestResponse.favicon();
+                if (favicon1.isEmpty()) {
                     serverTextureKnown = false;
                 } else {
                     try {
-                        favicon = ServerInfo.parseFavicon(favicon);
-                        Utils.registerBase64StringTexture(SERVER_ICON, favicon);
+                        byte[] bytes = favicon1.get().iconBytes();
+                        RendererUtils.registerBufferedImageTexture(SERVER_ICON, ImageIO.read(new ByteArrayInputStream(bytes)));
+                        //                        favicon = ServerInfo.parseFavicon(favicon);
+//                        Utils.registerBase64StringTexture(SERVER_ICON, favicon);
                         serverTextureKnown = true;
                     } catch (Exception ignored) {
                         serverTextureKnown = false;
                     }
                 }
+//                String favicon = favicon1.;
+//                if (favicon.isEmpty()) {
+//                    serverTextureKnown = false;
+//                } else {
+//                    try {
+//                        favicon = ServerInfo.parseFavicon(favicon);
+//                        Utils.registerBase64StringTexture(SERVER_ICON, favicon);
+//                        serverTextureKnown = true;
+//                    } catch (Exception ignored) {
+//                        serverTextureKnown = false;
+//                    }
+//                }
                 show = true;
             } catch (Exception e) {
                 //                e.printStackTrace();
@@ -221,7 +239,7 @@ public abstract class DirectConnectScreenMixin extends Screen implements FastTic
         if (latestResponse != null) {
             ClipStack.globalInstance.addWindow(ms, new Rectangle(originX, originY, originX + width, originY + height));
             double statsX = originX + minWidth;
-            List<OrderedText> orderedTexts = this.client.textRenderer.wrapLines(latestResponse.getDescription(), (int) (maxWidth - innerPadding - minWidth));
+            List<OrderedText> orderedTexts = this.client.textRenderer.wrapLines(latestResponse.description(), (int) (maxWidth - innerPadding - minWidth));
             RendererFontAdapter fa = (RendererFontAdapter) FontRenderers.getRenderer();
             AlphaOverride.pushAlphaMul((float) v);
             for (int i = 0; i < Math.min(orderedTexts.size(), 2); i++) {
@@ -231,7 +249,7 @@ public abstract class DirectConnectScreenMixin extends Screen implements FastTic
             }
             AlphaOverride.popAlphaMul();
 
-            String format = String.format("%s / %s", latestResponse.getPlayers().getOnlinePlayerCount(), latestResponse.getPlayers().getPlayerLimit());
+            String format = String.format("%s / %s", latestResponse.players().orElseThrow().online(), latestResponse.players().orElseThrow().max());
             fa.drawString(ms, format, originX + maxWidth - innerPadding - fa.getStringWidth(format), originY + innerPadding, 0xBBBBBB);
             ClipStack.globalInstance.popWindow();
         }

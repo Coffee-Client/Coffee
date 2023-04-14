@@ -71,7 +71,7 @@ public class InstantBreak extends Module {
             positions.remove(0);
             return;
         }
-        BlockPos bp = new BlockPos(latest);
+        BlockPos bp = BlockPos.ofFloored(latest);
         if (Objects.requireNonNull(client.world).getBlockState(bp).isAir()) {
             positions.remove(0);
             return;

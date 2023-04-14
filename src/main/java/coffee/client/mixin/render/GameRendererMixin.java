@@ -54,19 +54,18 @@ public abstract class GameRendererMixin {
     private Camera camera;
     @Shadow
     @Final
-    private MinecraftClient client;
+    MinecraftClient client;
 
     @Shadow
     protected abstract double getFov(Camera camera, float tickDelta, boolean changingFov);
-
-    @Shadow
-    protected abstract void bobViewWhenHurt(MatrixStack matrices, float tickDelta);
 
     @Shadow
     public abstract void loadProjectionMatrix(Matrix4f projectionMatrix);
 
     @Shadow
     public abstract Matrix4f getBasicProjectionMatrix(double fov);
+
+    @Shadow protected abstract void bobView(MatrixStack matrices, float tickDelta);
 
     @Inject(at = @At(value = "FIELD", target = "Lnet/minecraft/client/render/GameRenderer;renderHand:Z", opcode = Opcodes.GETFIELD, ordinal = 0), method = "renderWorld")
     void coffee_dispatchWorldRender(float tickDelta, long limitTime, MatrixStack matrix, CallbackInfo ci) {
@@ -94,7 +93,6 @@ public abstract class GameRendererMixin {
         MatrixStack ms = Renderer.R3D.getEmptyMatrixStack();
         double d = this.getFov(camera, tickDelta, true);
         ms.peek().getPositionMatrix().mul(this.getBasicProjectionMatrix(d));
-        this.bobViewWhenHurt(ms, tickDelta);
         loadProjectionMatrix(ms.peek().getPositionMatrix());
     }
 
@@ -114,7 +112,7 @@ public abstract class GameRendererMixin {
         }
     }
 
-    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiler/Profiler;pop()V", shift = At.Shift.BEFORE), method = "render")
+    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiler/Profiler;pop()V", shift = At.Shift.BEFORE,ordinal = 0), method = "render")
     void coffee_postHudRenderNoCheck(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
         AccurateFrameRateCounter.globalInstance.recordFrame();
         MSAAFramebuffer.use(() -> {

@@ -52,10 +52,10 @@ public class Tracers extends Module {
         if (CoffeeMain.client.world == null || CoffeeMain.client.player == null) {
             return null;
         }
-        return StreamSupport.stream(CoffeeMain.client.world.getEntities().spliterator(), false)
+        return String.valueOf(StreamSupport.stream(CoffeeMain.client.world.getEntities().spliterator(), false)
             .filter(entity -> entity.squaredDistanceTo(CoffeeMain.client.player) < 4096 && entity.getUuid() != CoffeeMain.client.player.getUuid() && isEntityApplicable(
                 entity))
-            .count() + "";
+            .count());
     }
 
     @Override

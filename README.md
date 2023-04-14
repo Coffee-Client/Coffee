@@ -3,13 +3,6 @@ A very based 1.19.3 build with some of the best visuals currently on the market.
 
 ![](https://komarev.com/ghpvc/?username=Coffee-Client&style=for-the-badge&label=Views)
 
-## Warning
-I have entirely given up on microsoft's platform, and by proxy, the game too. Updates won't happen that often, if they even happen at all.
-
-The client partially uses outdated techniques, and some features don't work anymore. I cannot be fucked to fix them.
-
-Use at your own risk, and do not come crying to me when shit doesn't work. Go back to meteor if you want an updated client.
-
 ## Installing
 ### You will need:
 - Minecraft: Java Edition
@@ -37,7 +30,7 @@ Note that you have to be logged in to download artifacts.
 ## Using
 The ClickGUI is **not** bound by default. To bind it, run `.bind ClickGUI` and press the desired hotkey to bind to.
 
-To search inside of the ClickGUI, just type in the module name. The current search term will appear at the bottom right. Use `esc` to clear your search query
+To search inside the ClickGUI, just type in the module name. The current search term will appear at the bottom right. Use `esc` to clear your search query
 
 ## Reporting bugs:
 Go to the issues page and open an issue. Make sure to attach anything related. Describe the bug as precisely as possible, and attach related crash report/log files, if available.

@@ -10,7 +10,7 @@ import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
 import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.network.Packet;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.c2s.play.KeepAliveC2SPacket;
 
 import java.util.ArrayList;
@@ -62,7 +62,7 @@ public class Blink extends Module {
 
     @Override
     public String getContext() {
-        return queue.size() + "";
+        return String.valueOf(queue.size());
     }
 
     @Override

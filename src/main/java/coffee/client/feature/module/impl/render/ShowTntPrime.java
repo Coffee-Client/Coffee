@@ -53,7 +53,7 @@ public class ShowTntPrime extends Module {
         float k = (float) (color & 255) / 255.0F;
         BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
         RenderSystem.enableBlend();
-        RenderSystem.disableTexture();
+
         RenderSystem.setShader(GameRenderer::getPositionColorProgram);
         bufferBuilder.begin(VertexFormat.DrawMode.TRIANGLE_STRIP, VertexFormats.POSITION_COLOR);
         for (double r = 0; r < toRad1; r += Math.min(360 / segments1, (toRad1 - r))) {
@@ -67,7 +67,7 @@ public class ShowTntPrime extends Module {
 
         }
         BufferRenderer.drawWithGlobalProgram(bufferBuilder.end());
-        RenderSystem.enableTexture();
+
         RenderSystem.disableBlend();
         stack.pop();
     }
@@ -87,7 +87,7 @@ public class ShowTntPrime extends Module {
                     return;
                 }
                 if (!i2iamp.containsKey(p.id())) {
-                    i2iamp.put(p.id(), Integer.parseInt(p.trackedValues().get(0).value() + ""));
+                    i2iamp.put(p.id(), Integer.parseInt(String.valueOf(p.trackedValues().get(0).value())));
                 }
             }
         }
@@ -109,7 +109,7 @@ public class ShowTntPrime extends Module {
 
     @Override
     public String getContext() {
-        return (i2iamp.size() + "");
+        return (String.valueOf(i2iamp.size()));
     }
 
     @Override
@@ -139,7 +139,7 @@ public class ShowTntPrime extends Module {
         double cHeight = 30;
         MatrixStack nothing = Renderer.R3D.getEmptyMatrixStack();
         Vec2f root = Renderer.R2D.renderTooltip(nothing, new Color(20, 20, 20), screenSpacePos.x, screenSpacePos.y, 30, 30, true);
-        String txt = Utils.Math.roundToDecimal(entity.getFuse() / 20d, 1) + "";
+        String txt = String.valueOf(Utils.Math.roundToDecimal(entity.getFuse() / 20d, 1));
         FontRenderers.getRenderer()
             .drawString(nothing,
                 txt,

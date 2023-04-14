@@ -42,7 +42,7 @@ public class Annihilator extends Module {
         }
         HitResult hr = Objects.requireNonNull(client.player).raycast(200d, 0f, true);
         Vec3d pos1 = hr.getPos();
-        BlockPos pos = new BlockPos(pos1);
+        BlockPos pos = BlockPos.ofFloored(pos1);
         int startY = MathHelper.clamp(r(pos.getY() - range.getValue()), Objects.requireNonNull(CoffeeMain.client.world).getBottomY(), CoffeeMain.client.world.getTopY());
         int endY = MathHelper.clamp(r(pos.getY() + range.getValue()), CoffeeMain.client.world.getBottomY(), CoffeeMain.client.world.getTopY());
         String cmd = "fill " + r(pos.getX() - range.getValue()) + " " + startY + " " + r(pos.getZ() - range.getValue()) + " " + r(pos.getX() + range.getValue()) + " " + endY + " " + r(

@@ -63,13 +63,13 @@ dependencies {
 	libImpl(name: "NetMC-1.0.0")
 	libImpl(project(":Authlib"))
 	libImpl(project(":Eventlib"))
-	modImpl("com.github.0x3C50:Renderer:f450a9f121")
+	modImpl("com.github.0x3C50:Renderer:master-SNAPSHOT")
 
 //	modImpl(group: "io.github.ladysnake", name: "satin", version: "1.9.0") {
 //		transitive = false
 //	}
 
-	modImpl(name: "baritone-unoptimized-1.19.3")
+	modImpl(name: "baritone-unoptimized-fabric-1.9.3")
 
 	configurations.libImpl.dependencies.each {
 		implementation(it)

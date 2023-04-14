@@ -104,7 +104,7 @@ public class NbtFormatter implements NbtElementVisitor {
         byte[] bs = element.getByteArray();
 
         for (int i = 0; i < bs.length; ++i) {
-            stringBuilder.append(" ").append(bs[i] + "", NUMBER_COLOR).append("B", TYPE_SUFFIX_COLOR);
+            stringBuilder.append(" ").append(String.valueOf(bs[i]), NUMBER_COLOR).append("B", TYPE_SUFFIX_COLOR);
             if (i != bs.length - 1) {
                 stringBuilder.append(ENTRY_SEPARATOR);
             }
@@ -119,7 +119,7 @@ public class NbtFormatter implements NbtElementVisitor {
         int[] is = element.getIntArray();
 
         for (int i = 0; i < is.length; ++i) {
-            stringBuilder.append(" ").append(is[i] + "", NUMBER_COLOR);
+            stringBuilder.append(" ").append(String.valueOf(is[i]), NUMBER_COLOR);
             if (i != is.length - 1) {
                 stringBuilder.append(ENTRY_SEPARATOR);
             }
@@ -134,7 +134,7 @@ public class NbtFormatter implements NbtElementVisitor {
         long[] ls = element.getLongArray();
 
         for (int i = 0; i < ls.length; ++i) {
-            stringBuilder.append(" ").append(ls[i] + "", NUMBER_COLOR).append("L", TYPE_SUFFIX_COLOR);
+            stringBuilder.append(" ").append(String.valueOf(ls[i]), NUMBER_COLOR).append("L", TYPE_SUFFIX_COLOR);
             if (i != ls.length - 1) {
                 stringBuilder.append(ENTRY_SEPARATOR);
             }

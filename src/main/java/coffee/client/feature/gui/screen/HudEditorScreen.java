@@ -12,4 +12,8 @@ import coffee.client.feature.gui.screen.base.ClientScreen;
  * Placeholder class with no elements, used for instanceof in {@link HudRenderer#render()}
  */
 public class HudEditorScreen extends ClientScreen {
+    @Override
+    public boolean shouldPause() {
+        return false;
+    }
 }

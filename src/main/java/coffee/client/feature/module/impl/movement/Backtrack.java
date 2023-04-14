@@ -100,7 +100,7 @@ public class Backtrack extends Module {
 
     @Override
     public String getContext() {
-        return entries.size() + "";
+        return String.valueOf(entries.size());
     }
 
     @Override

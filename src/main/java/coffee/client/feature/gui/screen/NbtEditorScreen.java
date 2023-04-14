@@ -190,7 +190,7 @@ public class NbtEditorScreen extends ClientScreen implements FastTickable {
                 break;
             }
         }
-        if (isSuffix && index > 0 && isNumber(total.charAt(index - 1) + "")) {
+        if (isSuffix && index > 0 && isNumber(String.valueOf(total.charAt(index - 1)))) {
             return 0xFF5555;
         }
         return 0xFFFFFF;
@@ -423,10 +423,10 @@ public class NbtEditorScreen extends ClientScreen implements FastTickable {
                 }
                 for (int i = 0; i < s.toCharArray().length; i++) {
                     char c = s.charAt(i);
-                    double cw = FontRenderers.getMono().getStringWidth(c + "");
+                    double cw = FontRenderers.getMono().getStringWidth(String.valueOf(c));
                     if (x > 5 - cw && x < width - 5) {
                         int color = getColor(s, i, c);
-                        FontRenderers.getMono().drawString(stack, c + "", x, y, color);
+                        FontRenderers.getMono().drawString(stack, String.valueOf(c), x, y, color);
                     } else if (x > width - 5) {
                         break;
                     }

@@ -15,6 +15,7 @@ import coffee.client.mixin.IRenderTickCounterMixin;
 import coffee.client.mixinUtil.ChatHudDuck;
 import lombok.Cleanup;
 import lombok.SneakyThrows;
+import me.x150.renderer.util.RendererUtils;
 import net.minecraft.client.network.PendingUpdateManager;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.texture.NativeImageBackedTexture;
@@ -24,7 +25,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.StringNbtReader;
-import net.minecraft.network.Packet;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket;
 import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.text.MutableText;
@@ -46,14 +47,18 @@ import org.lwjgl.BufferUtils;
 import javax.imageio.ImageIO;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.AbstractMap;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.BitSet;
 import java.util.List;
 import java.util.Map;
@@ -296,12 +301,17 @@ public class Utils {
     }
 
     public static void registerBase64StringTexture(Texture i, String b64) {
-        try {
-            NativeImageBackedTexture tex = new NativeImageBackedTexture(NativeImage.read(b64));
-            CoffeeMain.client.execute(() -> CoffeeMain.client.getTextureManager().registerTexture(i, tex));
-        } catch (Exception e) {
-            e.printStackTrace();
+        try(InputStream is = Base64.getDecoder().wrap(new ByteArrayInputStream(b64.getBytes(StandardCharsets.UTF_8)))) {
+            RendererUtils.registerBufferedImageTexture(i, ImageIO.read(is));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+        //        try {
+//            NativeImageBackedTexture tex = new NativeImageBackedTexture(NativeImage.read(b64));
+//            CoffeeMain.client.execute(() -> CoffeeMain.client.getTextureManager().registerTexture(i, tex));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
     public static void registerTexture(Texture i, byte[] content) {
@@ -478,7 +488,7 @@ public class Utils {
             String valid = "abcdefghijklmnopqrstuvwxyz0123456789_";
             boolean isValidEntityName = true;
             for (char c : name.toLowerCase().toCharArray()) {
-                if (!valid.contains(c + "")) {
+                if (!valid.contains(String.valueOf(c))) {
                     isValidEntityName = false;
                     break;
                 }

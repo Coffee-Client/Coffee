@@ -14,7 +14,7 @@ import coffee.client.feature.module.ModuleType;
 import coffee.client.helper.util.Utils;
 import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.network.Packet;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerInteractItemC2SPacket;
@@ -92,7 +92,7 @@ public class MassUse extends Module {
                     Random random = new Random();
 
                     for (int i = 0; i < uses.getValue(); i++) {
-                        BlockPos pos = new BlockPos(client.player.getPos()).add(random.nextInt(13) - 6, random.nextInt(13) - 6, random.nextInt(13) - 6);
+                        BlockPos pos = BlockPos.ofFloored(client.player.getPos()).add(random.nextInt(13) - 6, random.nextInt(13) - 6, random.nextInt(13) - 6);
                         PlayerInteractBlockC2SPacket pp = Utils.Packets.generatePlace(pos);
                         dontRepeat.add(pp);
                         client.player.networkHandler.sendPacket(pp);

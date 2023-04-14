@@ -98,7 +98,7 @@ public class SurvivalNuker extends Module {
         for (double y = range.getValue(); y > -range.getValue() - 1; y--) {
             for (double x = -range.getValue(); x < range.getValue() + 1; x++) {
                 for (double z = -range.getValue(); z < range.getValue() + 1; z++) {
-                    BlockPos vp = new BlockPos(x, y, z);
+                    BlockPos vp = BlockPos.ofFloored(x, y, z);
                     BlockPos np = ppos1.add(vp);
                     Vec3d vp1 = Vec3d.of(np).add(.5, .5, .5);
                     if (vp1.distanceTo(client.player.getEyePos()) >= client.interactionManager.getReachDistance()) {

@@ -27,7 +27,7 @@ public class ColorSetting extends SettingBase<Color> {
 
     @Override
     public String getConfigSave() {
-        return this.value.getRGB() + "";
+        return String.valueOf(this.value.getRGB());
     }
 
     @Override

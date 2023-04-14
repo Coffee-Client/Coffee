@@ -54,7 +54,7 @@ public class Decimator extends Module {
                     return;
                 }
                 Vec3d root = startPos.add(ox, 0, oz);
-                BlockPos pp = new BlockPos(root);
+                BlockPos pp = BlockPos.ofFloored(root);
                 latest = Vec3d.of(pp);
                 String chat = String.format("fill %d %d %d %d %d %d minecraft:air",
                     pp.getX() - 2,

@@ -25,10 +25,13 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
+import net.minecraft.client.gui.navigation.GuiNavigation;
+import net.minecraft.client.gui.navigation.GuiNavigationPath;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
 import org.apache.commons.lang3.SystemUtils;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
 import java.awt.Color;
@@ -310,6 +313,12 @@ public class SpotlightScreen extends ClientScreen implements FastTickable {
             this.width = width;
             this.height = height;
             this.suggestion = text;
+        }
+
+        @Nullable
+        @Override
+        public GuiNavigationPath getNavigationPath(GuiNavigation navigation) {
+            return GuiNavigationPath.of(this);
         }
 
         protected double maxTextWidth() {
@@ -747,10 +756,16 @@ public class SpotlightScreen extends ClientScreen implements FastTickable {
             cursorChanged();
         }
 
+        @Override
         public void setFocused(boolean focused) {
             this.focused = focused;
 
             resetSelection();
+        }
+
+        @Override
+        public boolean isFocused() {
+            return focused;
         }
 
         public void setCursorMax() {

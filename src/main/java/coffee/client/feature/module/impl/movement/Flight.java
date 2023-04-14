@@ -19,7 +19,7 @@ import coffee.client.mixin.network.IPlayerMoveC2SPacketMixin;
 import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.network.Packet;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
 import net.minecraft.network.packet.c2s.play.KeepAliveC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
@@ -290,7 +290,7 @@ public class Flight extends Module {
 
     @Override
     public String getContext() {
-        return mode.getValue() + "";
+        return String.valueOf(mode.getValue());
     }
 
     @Override

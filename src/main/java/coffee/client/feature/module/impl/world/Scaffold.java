@@ -78,7 +78,7 @@ public class Scaffold extends Module {
     @Override
     public void onFastTick() {
         Vec3d ppos = Objects.requireNonNull(client.player).getPos().add(0, -1, 0);
-        BlockPos bp = new BlockPos(ppos);
+        BlockPos bp = BlockPos.ofFloored(ppos);
         int selIndex = client.player.getInventory().selectedSlot;
         if (!(client.player.getInventory().getStack(selIndex).getItem() instanceof BlockItem)) {
             for (int i = 0; i < 9; i++) {
@@ -113,7 +113,7 @@ public class Scaffold extends Module {
                     if (sneaking) {
                         v = v.add(0, -1, 0);
                     }
-                    BlockPos bp1 = new BlockPos(v);
+                    BlockPos bp1 = BlockPos.ofFloored(v);
                     client.execute(() -> placeBlockWithSlot(finalSelIndex, bp1));
                 }
 

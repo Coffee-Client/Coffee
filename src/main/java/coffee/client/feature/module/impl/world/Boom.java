@@ -76,7 +76,7 @@ public class Boom extends Module {
         ItemStack stack = Utils.generateItemStackWithMeta(nbt, Items.BAT_SPAWN_EGG);
         ItemStack air = CoffeeMain.client.player.getInventory().getMainHandStack().copy();
         Vec3d a = CoffeeMain.client.player.getEyePos();
-        BlockHitResult bhr = new BlockHitResult(a, Direction.DOWN, new BlockPos(a), false);
+        BlockHitResult bhr = new BlockHitResult(a, Direction.DOWN, BlockPos.ofFloored(a), false);
         CreativeInventoryActionC2SPacket u1 = new CreativeInventoryActionC2SPacket(Utils.Inventory.slotIndexToId(CoffeeMain.client.player.getInventory().selectedSlot),
             stack);
         CreativeInventoryActionC2SPacket u2 = new CreativeInventoryActionC2SPacket(Utils.Inventory.slotIndexToId(CoffeeMain.client.player.getInventory().selectedSlot),
@@ -101,7 +101,7 @@ public class Boom extends Module {
         ItemStack stack = Utils.generateItemStackWithMeta(nbt, Items.BAT_SPAWN_EGG);
         ItemStack air = CoffeeMain.client.player.getInventory().getMainHandStack().copy();
         Vec3d a = CoffeeMain.client.player.getEyePos();
-        BlockHitResult bhr = new BlockHitResult(a, Direction.DOWN, new BlockPos(a), false);
+        BlockHitResult bhr = new BlockHitResult(a, Direction.DOWN, BlockPos.ofFloored(a), false);
         CreativeInventoryActionC2SPacket u1 = new CreativeInventoryActionC2SPacket(Utils.Inventory.slotIndexToId(CoffeeMain.client.player.getInventory().selectedSlot),
             stack);
         CreativeInventoryActionC2SPacket u2 = new CreativeInventoryActionC2SPacket(Utils.Inventory.slotIndexToId(CoffeeMain.client.player.getInventory().selectedSlot),

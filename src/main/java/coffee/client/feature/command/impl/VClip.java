@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2022 Coffee Client, 0x150 and contributors.
- * Some rights reserved, refer to LICENSE file.
+ * vclip funny
+ * fixxed
  */
 
 package coffee.client.feature.command.impl;
@@ -16,7 +16,7 @@ import net.minecraft.client.network.ClientPlayerEntity;
 
 public class VClip extends Command {
     public VClip() {
-        super("VClip", "Teleport vertically", "vclip");
+        super("vclip", "Teleport vertically", "vclip <amount>");
     }
 
     @Override
@@ -28,7 +28,14 @@ public class VClip extends Command {
     public void onExecute(String[] args) throws CommandException {
         validateArgumentsLength(args, 1, "Provide height");
 
-        ClientPlayerEntity player = CoffeeMain.client.player;
-        player.updatePosition(player.getX(), player.getY() + new DoubleArgumentParser().parse(args[0]), player.getZ());
+        double amount = new DoubleArgumentParser().parse(args[0]);
+
+        ClientPlayerEntity player = MinecraftClient.getInstance().player;
+        if (player != null) {
+            player.updatePosition(player.getX(), player.getY() + amount, player.getZ());
+        } else {
+            throw new CommandException("Player not found");
+        }
     }
 }
+

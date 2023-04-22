@@ -14,25 +14,32 @@ import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleRegistry;
 
 public class Toggle extends Command {
-
     public Toggle() {
         super("Toggle", "Toggles a module", "toggle", "t");
     }
 
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
-        return StaticArgumentServer.serveFromStatic(index,
-            new PossibleArgument(ArgumentType.STRING, ModuleRegistry.getModules().stream().map(Module::getName).toList().toArray(String[]::new)));
+        List<String> moduleNames = ModuleRegistry.getModules().stream().map(Module::getName).toList();
+        return StaticArgumentServer.serveFromStatic(index, new PossibleArgument(ArgumentType.STRING, moduleNames.toArray(new String[0])));
     }
 
     @Override
     public void onExecute(String[] args) throws CommandException {
         validateArgumentsLength(args, 1, "Provide module name");
-        Module m = ModuleRegistry.getByName(String.join(" ", args));
-        if (m == null) {
-            throw new CommandException("Module not found");
+        String moduleName = String.join(" ", args);
+        Module module = ModuleRegistry.getByName(moduleName);
+        if (module == null) {
+            throw new CommandException("Module not found: " + moduleName);
         } else {
-            m.toggle();
+            module.toggle();
+            String status = module.isEnabled() ? "enabled" : "disabled";
+            String message = String.format("%s has been %s", module.getName(), status);
+            sendMessageToPlayer(message);
         }
+    }
+    
+    private void sendMessageToPlayer(String message) {
+        MinecraftClient.getInstance().player.sendMessage(new LiteralText(message), false);
     }
 }

@@ -39,7 +39,7 @@ public class Kickall extends Command {
             conn.setPacketListener(new ClientLoginPacketListener() {
                 @Override
                 public void onHello(LoginHelloS2CPacket packet) {
-                    conn.disconnect(Text.of("your mother"));
+                    conn.disconnect(Text.translatable("disconnect.disconnected"));
                 }
 
                 @Override

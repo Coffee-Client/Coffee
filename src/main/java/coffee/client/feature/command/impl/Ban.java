@@ -33,11 +33,11 @@ public class Ban extends Command {
             return new PossibleArgument(
                 ArgumentType.PLAYER,
                 Objects.requireNonNull(CoffeeMain.client.world)
-                       .getPlayers()
-                       .stream()
-                       .map(abstractClientPlayerEntity -> abstractClientPlayerEntity.getGameProfile().getName())
-                       .toList()
-                       .toArray(String[]::new)
+                    .getPlayers()
+                    .stream()
+                    .map(abstractClientPlayerEntity -> abstractClientPlayerEntity.getGameProfile().getName())
+                    .toList()
+                    .toArray(String[]::new)
             );
         }
         return super.getSuggestionsWithType(index, args);
@@ -59,8 +59,8 @@ public class Ban extends Command {
         message("Created Ban Stand for " + playerN.getGameProfile().getName());
         try {
             ban.setNbt(StringNbtReader.parse("{EntityTag:{UUID:[I;" + playerUuid[0] + "," + playerUuid[1] + "," + playerUuid[2] + "," + playerUuid[3] +
-                                             "],ArmorItems:[{},{},{},{id:\"minecraft:player_head\",Count:1b,tag:{SkullOwner:\"" + playerN.getGameProfile()
-                                                                                                                                         .getName() + "\"}}]}}"));
+                "],ArmorItems:[{},{},{},{id:\"minecraft:player_head\",Count:1b,tag:{SkullOwner:\"" + playerN.getGameProfile()
+                .getName() + "\"}}]}}"));
         } catch (Exception ignored) {
         }
         ban.setCustomName(Text.of(playerN.getGameProfile().getName()));

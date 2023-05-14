@@ -184,7 +184,7 @@ public class Hud extends Module {
         }
         if (this.ping.getValue()) {
             PlayerListEntry ple = Objects.requireNonNull(CoffeeMain.client.getNetworkHandler())
-                                         .getPlayerListEntry(Objects.requireNonNull(CoffeeMain.client.player).getUuid());
+                .getPlayerListEntry(Objects.requireNonNull(CoffeeMain.client.player).getUuid());
             values.add((ple == null || ple.getLatency() == 0 ? "?" : String.valueOf(ple.getLatency())) + " ms");
         }
         if (this.coords.getValue()) {
@@ -214,9 +214,9 @@ public class Hud extends Module {
         double width = CoffeeMain.client.getWindow().getScaledWidth();
         double y = 0;
         for (Map.Entry<Module, ModuleEntry> moduleEntry : this.entryList.entrySet()
-                                                                        .stream()
-                                                                        .sorted(Comparator.comparingDouble(value -> -value.getValue().getRenderWidth()))
-                                                                        .toList()) {
+            .stream()
+            .sorted(Comparator.comparingDouble(value -> -value.getValue().getRenderWidth()))
+            .toList()) {
             double prog = moduleEntry.getValue().getAnimProg() * 2;
             if (prog == 0) {
                 continue;

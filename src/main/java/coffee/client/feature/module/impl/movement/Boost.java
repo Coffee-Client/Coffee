@@ -18,11 +18,11 @@ import net.minecraft.util.math.Vec3d;
 public class Boost extends Module {
 
     final DoubleSetting strength = this.config.create(new DoubleSetting.Builder(3).name("Strength")
-                                                                                  .description("How much to boost you with")
-                                                                                  .min(0.1)
-                                                                                  .max(10)
-                                                                                  .precision(1)
-                                                                                  .get());
+        .description("How much to boost you with")
+        .min(0.1)
+        .max(10)
+        .precision(1)
+        .get());
     final EnumSetting<Mode> mode = this.config.create(new EnumSetting.Builder<>(Mode.Add).name("Mode").description("How to boost you").get());
 
     public Boost() {

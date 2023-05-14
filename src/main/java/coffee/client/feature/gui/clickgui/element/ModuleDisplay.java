@@ -190,16 +190,16 @@ public class ModuleDisplay extends Element {
             );
         } else {
             FontRenderers.getRenderer()
-                         .drawString(
-                             stack,
-                             module.getName(),
-                             (float) getPositionX() + 6,
-                             (float) (getPositionY() + bruhHeight / 2d - FontRenderers.getRenderer().getFontHeight() / 2d),
-                             1f,
-                             1f,
-                             1f,
-                             module.isDisabled() ? 0.4f : 1f
-                         );
+                .drawString(
+                    stack,
+                    module.getName(),
+                    (float) getPositionX() + 6,
+                    (float) (getPositionY() + bruhHeight / 2d - FontRenderers.getRenderer().getFontHeight() / 2d),
+                    1f,
+                    1f,
+                    1f,
+                    module.isDisabled() ? 0.4f : 1f
+                );
         }
         this.cfd.setPositionX(getPositionX());
         this.cfd.setPositionY(getPositionY() + actualHeight + margin);

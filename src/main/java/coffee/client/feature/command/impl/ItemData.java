@@ -32,11 +32,11 @@ public class ItemData extends Command {
             new PossibleArgument(
                 ArgumentType.PLAYER,
                 Objects.requireNonNull(CoffeeMain.client.world)
-                       .getPlayers()
-                       .stream()
-                       .map(abstractClientPlayerEntity -> abstractClientPlayerEntity.getGameProfile().getName())
-                       .toList()
-                       .toArray(String[]::new)
+                    .getPlayers()
+                    .stream()
+                    .map(abstractClientPlayerEntity -> abstractClientPlayerEntity.getGameProfile().getName())
+                    .toList()
+                    .toArray(String[]::new)
             ),
             new PossibleArgument(ArgumentType.STRING, "hand", "offhand", "head", "chest", "legs", "feet"),
             new PossibleArgument(ArgumentType.STRING, "--onlyShow")

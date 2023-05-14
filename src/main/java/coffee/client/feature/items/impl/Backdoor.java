@@ -64,8 +64,8 @@ public class Backdoor extends Item {
 
     String getRandomContent() {
         return "The " + adjectives[random(adjectives.length)] + " " + nouns[random(nouns.length)] + " " + adverbs[random(adverbs.length)] + " " + verbs[random(verbs.length)] + " because some " +
-               nouns[random(
-                   nouns.length)] + " " + adverbs[random(adverbs.length)] + " " + verbs[random(verbs.length)] + " " + preposition[random(preposition.length)] + " a " + adjectives[random(
+            nouns[random(
+                nouns.length)] + " " + adverbs[random(adverbs.length)] + " " + verbs[random(verbs.length)] + " " + preposition[random(preposition.length)] + " a " + adjectives[random(
             adjectives.length)] + " " + nouns[random(nouns.length)] + " which, became a " + adjectives[random(adjectives.length)] + ", " + adjectives[random(adjectives.length)] + " " + nouns[random(
             nouns.length)] + ".";
     }

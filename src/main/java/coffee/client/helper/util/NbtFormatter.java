@@ -192,10 +192,10 @@ public class NbtFormatter implements NbtElementVisitor {
                 NbtElement nbtElement = compound.get(string2);
                 this.pushPathPart(string2);
                 stringBuilder.append(Strings.repeat(string, this.indentationLevel + 1))
-                             .append(escapeName(string2), NAME_COLOR)
-                             .append(KEY_VALUE_SEPARATOR)
-                             .append(" ")
-                             .append((new NbtFormatter(string, this.indentationLevel + 1, this.pathParts)).apply(Objects.requireNonNull(nbtElement)));
+                    .append(escapeName(string2), NAME_COLOR)
+                    .append(KEY_VALUE_SEPARATOR)
+                    .append(" ")
+                    .append((new NbtFormatter(string, this.indentationLevel + 1, this.pathParts)).apply(Objects.requireNonNull(nbtElement)));
                 this.popPathPart();
                 if (iterator.hasNext()) {
                     stringBuilder.append(ENTRY_SEPARATOR).append(string.isEmpty() ? " " : "\n");

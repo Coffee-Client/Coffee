@@ -20,8 +20,8 @@ public class Blink extends Module {
 
     final List<Packet<?>> queue = new ArrayList<>();
     final EnumSetting<Mode> mode = this.config.create(new EnumSetting.Builder<>(Mode.Delay).name("Mode")
-                                                                                           .description("Whether to delay or remove the packets being sent")
-                                                                                           .get());
+        .description("Whether to delay or remove the packets being sent")
+        .get());
 
     public Blink() {
         super("Blink", "Delay or cancel outgoing packets", ModuleType.MOVEMENT);

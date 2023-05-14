@@ -65,12 +65,12 @@ import static coffee.client.helper.DirectConnectScreenVariables.*;
 @Mixin(DirectConnectScreen.class)
 public abstract class DirectConnectScreenMixin extends Screen implements FastTickable {
     private static final Gson GSON = (new GsonBuilder()).registerTypeAdapter(ServerMetadata.Version.class, CodecMapper.createSerializer(ServerMetadata.Version.CODEC))
-                                                        .registerTypeAdapter(ServerMetadata.Players.class, CodecMapper.createDeserializer(ServerMetadata.Players.CODEC))
-                                                        .registerTypeAdapter(ServerMetadata.class, CodecMapper.createDeserializer(ServerMetadata.CODEC))
-                                                        .registerTypeHierarchyAdapter(Text.class, new Text.Serializer())
-                                                        .registerTypeHierarchyAdapter(Style.class, new Style.Serializer())
-                                                        .registerTypeAdapterFactory(new LowercaseEnumTypeAdapterFactory())
-                                                        .create();
+        .registerTypeAdapter(ServerMetadata.Players.class, CodecMapper.createDeserializer(ServerMetadata.Players.CODEC))
+        .registerTypeAdapter(ServerMetadata.class, CodecMapper.createDeserializer(ServerMetadata.CODEC))
+        .registerTypeHierarchyAdapter(Text.class, new Text.Serializer())
+        .registerTypeHierarchyAdapter(Style.class, new Style.Serializer())
+        .registerTypeAdapterFactory(new LowercaseEnumTypeAdapterFactory())
+        .create();
     private static final Texture SERVER_ICON = new Texture("dynamic/directConnectServerIcon");
     private static final Identifier UNKNOWN_SERVER_ICON = new Identifier("textures/misc/unknown_server.png");
     private static final AtomicBoolean alreadyRefreshing = new AtomicBoolean(false);
@@ -141,10 +141,10 @@ public abstract class DirectConnectScreenMixin extends Screen implements FastTic
                 PacketInputStream pis = new PacketInputStream(socket.getInputStream(), true, pos::setCompressionEnabled);
                 int protocolVersion = SharedConstants.getProtocolVersion();
                 pos.write(new C2SPacket(0x00, packetWriter -> packetWriter // Handshake
-                                                                           .writeVarInt(protocolVersion) // Version
-                                                                           .writeString(address) // Connecting address
-                                                                           .writeShort(port) // Connecting port
-                                                                           .writeVarInt(1))); // Next state: Status
+                    .writeVarInt(protocolVersion) // Version
+                    .writeString(address) // Connecting address
+                    .writeShort(port) // Connecting port
+                    .writeVarInt(1))); // Next state: Status
                 pos.write(new C2SPacket(0x00)); // Status
                 S2CPacket read = pis.read();
                 pis.close();

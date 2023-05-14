@@ -71,12 +71,12 @@ public class WorldRendererMixin {
         }
         Object2IntMap<EntityType<?>> entityTypeCount = new Object2IntArrayMap<>();
         return StreamSupport.stream(entities.spliterator(), false)
-                            .sorted(Comparator.comparingDouble(value -> value.distanceTo(CoffeeMain.client.cameraEntity)))
-                            .filter(entity -> {
-                                int oldCount = entityTypeCount.getOrDefault(entity.getType(), 0);
-                                entityTypeCount.put(entity.getType(), oldCount + 1);
-                                return oldCount < inst.getMassEntityAmount().getValue();
-                            })
-                            .toList();
+            .sorted(Comparator.comparingDouble(value -> value.distanceTo(CoffeeMain.client.cameraEntity)))
+            .filter(entity -> {
+                int oldCount = entityTypeCount.getOrDefault(entity.getType(), 0);
+                entityTypeCount.put(entity.getType(), oldCount + 1);
+                return oldCount < inst.getMassEntityAmount().getValue();
+            })
+            .toList();
     }
 }

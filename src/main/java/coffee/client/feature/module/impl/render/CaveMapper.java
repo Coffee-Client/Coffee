@@ -59,17 +59,17 @@ public class CaveMapper extends Module {
     final BooleanSetting debris = this.config.create(new BooleanSetting.Builder(true).name("Ancient debris").description("Whether to show ancient debris").get());
     final BooleanSetting showScanned = this.config.create(new BooleanSetting.Builder(true).name("Show scanned").description("Whether to show the scanned area").get());
     final BooleanSetting showEntire = this.config.create(new BooleanSetting.Builder(false).name("Show entire area")
-                                                                                          .description("Whether to show the entire scanned area (VERY performance intensive)")
-                                                                                          .get());
+        .description("Whether to show the entire scanned area (VERY performance intensive)")
+        .get());
     final DoubleSetting cacheSize = this.config.create(new DoubleSetting.Builder(10000).precision(0)
-                                                                                       .name("Cache size")
-                                                                                       .description("How big the cache should be (bigger = more time + more memory)")
-                                                                                       .min(5000)
-                                                                                       .max(30000)
-                                                                                       .get());
+        .name("Cache size")
+        .description("How big the cache should be (bigger = more time + more memory)")
+        .min(5000)
+        .max(30000)
+        .get());
     final BooleanSetting includeTranslucent = this.config.create(new BooleanSetting.Builder(true).name("Scan transparent")
-                                                                                                 .description("Scan through transparent blocks as well")
-                                                                                                 .get());
+        .description("Scan through transparent blocks as well")
+        .get());
     BlockPos start = null;
     boolean scanned = false;
 
@@ -245,10 +245,10 @@ public class CaveMapper extends Module {
 
     boolean shouldRenderOre(Block b) {
         return (b == Blocks.COAL_ORE || b == Blocks.DEEPSLATE_COAL_ORE) && coal.getValue() || (b == Blocks.IRON_ORE || b == Blocks.DEEPSLATE_IRON_ORE) && iron.getValue() ||
-               (b == Blocks.GOLD_ORE || b == Blocks.DEEPSLATE_GOLD_ORE) && gold.getValue() || (b == Blocks.REDSTONE_ORE || b == Blocks.DEEPSLATE_REDSTONE_ORE) && redstone.getValue() ||
-               (b == Blocks.DIAMOND_ORE || b == Blocks.DEEPSLATE_DIAMOND_ORE) && diamond.getValue() || (b == Blocks.LAPIS_ORE || b == Blocks.DEEPSLATE_LAPIS_ORE) && lapis.getValue() ||
-               (b == Blocks.COPPER_ORE || b == Blocks.DEEPSLATE_COPPER_ORE) && copper.getValue() || (b == Blocks.EMERALD_ORE || b == Blocks.DEEPSLATE_EMERALD_ORE) && emerald.getValue() ||
-               b == Blocks.NETHER_QUARTZ_ORE && quartz.getValue() || b == Blocks.ANCIENT_DEBRIS && debris.getValue();
+            (b == Blocks.GOLD_ORE || b == Blocks.DEEPSLATE_GOLD_ORE) && gold.getValue() || (b == Blocks.REDSTONE_ORE || b == Blocks.DEEPSLATE_REDSTONE_ORE) && redstone.getValue() ||
+            (b == Blocks.DIAMOND_ORE || b == Blocks.DEEPSLATE_DIAMOND_ORE) && diamond.getValue() || (b == Blocks.LAPIS_ORE || b == Blocks.DEEPSLATE_LAPIS_ORE) && lapis.getValue() ||
+            (b == Blocks.COPPER_ORE || b == Blocks.DEEPSLATE_COPPER_ORE) && copper.getValue() || (b == Blocks.EMERALD_ORE || b == Blocks.DEEPSLATE_EMERALD_ORE) && emerald.getValue() ||
+            b == Blocks.NETHER_QUARTZ_ORE && quartz.getValue() || b == Blocks.ANCIENT_DEBRIS && debris.getValue();
 
     }
 
@@ -274,14 +274,14 @@ public class CaveMapper extends Module {
     @Override
     public String getContext() {
         return scannedBlocks.size() + "S|" + new ArrayList<>(this.ores).stream()
-                                                                       .filter(blockPos -> shouldRenderOre(Objects.requireNonNull(CoffeeMain.client.world).getBlockState(blockPos).getBlock()))
-                                                                       .count() + "F|" + Utils.Math.roundToDecimal((double) new ArrayList<>(this.ores).stream()
-                                                                                                                                                      .filter(blockPos -> shouldRenderOre(Objects.requireNonNull(
-                                                                                                                                                                                                     CoffeeMain.client.world)
-                                                                                                                                                                                                 .getBlockState(
-                                                                                                                                                                                                     blockPos)
-                                                                                                                                                                                                 .getBlock()))
-                                                                                                                                                      .count() / scannedBlocks.size() * 100, 2) + "%D";
+            .filter(blockPos -> shouldRenderOre(Objects.requireNonNull(CoffeeMain.client.world).getBlockState(blockPos).getBlock()))
+            .count() + "F|" + Utils.Math.roundToDecimal((double) new ArrayList<>(this.ores).stream()
+            .filter(blockPos -> shouldRenderOre(Objects.requireNonNull(
+                    CoffeeMain.client.world)
+                .getBlockState(
+                    blockPos)
+                .getBlock()))
+            .count() / scannedBlocks.size() * 100, 2) + "%D";
     }
 
     @Override
@@ -319,7 +319,7 @@ public class CaveMapper extends Module {
                     continue;
                 }
                 double dist = new Vec3d(entry.getKey().getX(), entry.getKey().getY(), entry.getKey().getZ()).distanceTo(Objects.requireNonNull(CoffeeMain.client.player)
-                                                                                                                               .getPos());
+                    .getPos());
                 dist = (1 - MathHelper.clamp(dist, 0, 15) / 15d) * 3d;
                 dist = Math.round(dist);
                 dist /= 3;
@@ -365,7 +365,7 @@ public class CaveMapper extends Module {
                 matrices,
                 Renderer.Util.modify(
                     oreColors.containsKey(t) ? oreColors.get(t) : new Color(CoffeeMain.client.world.getBlockState(ore)
-                                                                                                   .getMapColor(CoffeeMain.client.world, ore).color),
+                        .getMapColor(CoffeeMain.client.world, ore).color),
                     -1,
                     -1,
                     -1,

@@ -42,11 +42,11 @@ public class Kill extends Command {
             new PossibleArgument(
                 ArgumentType.STRING,
                 () -> Objects.requireNonNull(CoffeeMain.client.world)
-                             .getPlayers()
-                             .stream()
-                             .map(abstractClientPlayerEntity -> abstractClientPlayerEntity.getGameProfile().getName())
-                             .toList()
-                             .toArray(String[]::new)
+                    .getPlayers()
+                    .stream()
+                    .map(abstractClientPlayerEntity -> abstractClientPlayerEntity.getGameProfile().getName())
+                    .toList()
+                    .toArray(String[]::new)
             )
         );
     }

@@ -240,23 +240,23 @@ public class Killaura extends Module {
 
     List<LivingEntity> selectTargets() {
         List<LivingEntity> entities = new ArrayList<>(StreamSupport.stream(client.world.getEntities().spliterator(), false)
-                                                                   .filter(entity -> !entity.equals(client.player)) // filter our player out
-                                                                   .filter(Entity::isAlive)
-                                                                   .filter(Entity::isAttackable) // filter all entities we can't attack out
-                                                                   .filter(entity -> entity instanceof LivingEntity) // filter all "entities" that aren't actual entities out
-                                                                   .map(entity -> (LivingEntity) entity) // cast all entities to actual entities
-                                                                   .filter(this::isEntityApplicable)
-                                                                   .filter(entity -> Arrays.stream(getHitboxPoints(entity))
-                                                                                           .anyMatch(this::isInRange)) // filter all entities that are outside our range out
-                                                                   .filter(livingEntity -> {
-                                                                       if (matrixAntibot) {
-                                                                           return Antibot.MATRIX.computeConfidence(livingEntity) <
-                                                                                  matrixConfidence; // true = include, required confidence must be above current confidence
-                                                                       } else {
-                                                                           return true;
-                                                                       }
-                                                                   })
-                                                                   .toList());
+            .filter(entity -> !entity.equals(client.player)) // filter our player out
+            .filter(Entity::isAlive)
+            .filter(Entity::isAttackable) // filter all entities we can't attack out
+            .filter(entity -> entity instanceof LivingEntity) // filter all "entities" that aren't actual entities out
+            .map(entity -> (LivingEntity) entity) // cast all entities to actual entities
+            .filter(this::isEntityApplicable)
+            .filter(entity -> Arrays.stream(getHitboxPoints(entity))
+                .anyMatch(this::isInRange)) // filter all entities that are outside our range out
+            .filter(livingEntity -> {
+                if (matrixAntibot) {
+                    return Antibot.MATRIX.computeConfidence(livingEntity) <
+                        matrixConfidence; // true = include, required confidence must be above current confidence
+                } else {
+                    return true;
+                }
+            })
+            .toList());
         switch (selectMode) {
             case Distance -> entities.sort(Comparator.comparingDouble(value -> value.distanceTo(client.player))); // low distance first
             case LowHealthFirst -> entities.sort(Comparator.comparingDouble(LivingEntity::getHealth)); // low health first

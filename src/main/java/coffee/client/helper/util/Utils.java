@@ -98,10 +98,10 @@ public class Utils {
         Spliterator<Entity> spliterator = CoffeeMain.client.world.getEntities().spliterator();
 
         return StreamSupport.stream(spliterator, false)
-                            .filter(entity -> !entity.equals(CoffeeMain.client.player))
-                            .filter(entity -> entity instanceof LivingEntity)
-                            .map(entity -> (LivingEntity) entity)
-                            .filter(requirement);
+            .filter(entity -> !entity.equals(CoffeeMain.client.player))
+            .filter(entity -> entity instanceof LivingEntity)
+            .map(entity -> (LivingEntity) entity)
+            .filter(requirement);
     }
 
     public static boolean isABFree(Vec3d a, Vec3d b) {
@@ -395,18 +395,18 @@ public class Utils {
         public static void drop(int index) {
             int translatedSlotId = slotIndexToId(index);
             Objects.requireNonNull(CoffeeMain.client.interactionManager)
-                   .clickSlot(
-                       Objects.requireNonNull(CoffeeMain.client.player).currentScreenHandler.syncId,
-                       translatedSlotId,
-                       1,
-                       SlotActionType.THROW,
-                       CoffeeMain.client.player
-                   );
+                .clickSlot(
+                    Objects.requireNonNull(CoffeeMain.client.player).currentScreenHandler.syncId,
+                    translatedSlotId,
+                    1,
+                    SlotActionType.THROW,
+                    CoffeeMain.client.player
+                );
         }
 
         public static void moveStackToOther(int slotIdFrom, int slotIdTo) {
             Objects.requireNonNull(CoffeeMain.client.interactionManager)
-                   .clickSlot(0, slotIdFrom, 0, SlotActionType.PICKUP, CoffeeMain.client.player); // pick up item from stack
+                .clickSlot(0, slotIdFrom, 0, SlotActionType.PICKUP, CoffeeMain.client.player); // pick up item from stack
             CoffeeMain.client.interactionManager.clickSlot(0, slotIdTo, 0, SlotActionType.PICKUP, CoffeeMain.client.player); // put item to target
             CoffeeMain.client.interactionManager.clickSlot(
                 0,
@@ -517,11 +517,11 @@ public class Utils {
 
         public static int sendMessage(Text t) {
             MutableText append = Text.empty()
-                                     .append(Text.literal("[").styled(style -> style.withColor(0x454545)))
-                                     .append(Text.literal("Coffee").styled(style -> style.withColor(0x3AD99D)))
-                                     .append(Text.literal("]").styled(style -> style.withColor(0x454545)))
-                                     .append(" ")
-                                     .append(t);
+                .append(Text.literal("[").styled(style -> style.withColor(0x454545)))
+                .append(Text.literal("Coffee").styled(style -> style.withColor(0x3AD99D)))
+                .append(Text.literal("]").styled(style -> style.withColor(0x454545)))
+                .append(" ")
+                .append(t);
             return ((ChatHudDuck) CoffeeMain.client.inGameHud.getChatHud()).coffee_addChatMessage(append);
         }
 

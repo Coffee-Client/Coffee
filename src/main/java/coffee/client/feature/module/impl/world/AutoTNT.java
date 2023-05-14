@@ -33,11 +33,11 @@ import java.util.stream.Collectors;
 
 public class AutoTNT extends Module {
     final DoubleSetting placeDistance = this.config.create(new DoubleSetting.Builder(4).name("Place distance")
-                                                                                       .description("How far to place the blocks apart")
-                                                                                       .min(1)
-                                                                                       .max(4)
-                                                                                       .precision(0)
-                                                                                       .get());
+        .description("How far to place the blocks apart")
+        .min(1)
+        .max(4)
+        .precision(0)
+        .get());
     boolean missingTntAck = false;
 
     public AutoTNT() {
@@ -79,8 +79,8 @@ public class AutoTNT extends Module {
                     }
                 }
                 airs = airs.stream()
-                           .filter(blockPosDoubleEntry -> CoffeeMain.client.world.getBlockState(blockPosDoubleEntry.getKey().down()).getMaterial().blocksMovement())
-                           .collect(Collectors.toList());
+                    .filter(blockPosDoubleEntry -> CoffeeMain.client.world.getBlockState(blockPosDoubleEntry.getKey().down()).getMaterial().blocksMovement())
+                    .collect(Collectors.toList());
                 Map.Entry<BlockPos, Double> best1 = airs.stream().min(Comparator.comparingDouble(Map.Entry::getValue)).orElse(null);
                 if (best1 == null) {
                     continue; // just void here, cancel
@@ -143,8 +143,8 @@ public class AutoTNT extends Module {
                     }
                 }
                 airs = airs.stream()
-                           .filter(blockPosDoubleEntry -> CoffeeMain.client.world.getBlockState(blockPosDoubleEntry.getKey().down()).getMaterial().blocksMovement())
-                           .collect(Collectors.toList());
+                    .filter(blockPosDoubleEntry -> CoffeeMain.client.world.getBlockState(blockPosDoubleEntry.getKey().down()).getMaterial().blocksMovement())
+                    .collect(Collectors.toList());
                 Map.Entry<BlockPos, Double> best1 = airs.stream().min(Comparator.comparingDouble(Map.Entry::getValue)).orElse(null);
                 if (best1 == null) {
                     continue; // just void here, cancel

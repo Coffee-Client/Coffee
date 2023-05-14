@@ -20,11 +20,11 @@ import java.util.Objects;
 
 public class SpinAutism extends Module {
     final DoubleSetting speed = this.config.create(new DoubleSetting.Builder(5).name("Delay")
-                                                                               .description("How much to wait when spinning")
-                                                                               .min(0)
-                                                                               .max(100)
-                                                                               .precision(0)
-                                                                               .get());
+        .description("How much to wait when spinning")
+        .min(0)
+        .max(100)
+        .precision(0)
+        .get());
     int timeout = 0;
 
     public SpinAutism() {

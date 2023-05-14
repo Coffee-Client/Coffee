@@ -33,11 +33,11 @@ public class MassUse extends Module {
     final List<Packet<?>> dontRepeat = new ArrayList<>();
     final EnumSetting<Mode> mode = this.config.create(new EnumSetting.Builder<>(Mode.Interact).name("Mode").description("How to use the item").get());
     final DoubleSetting uses = this.config.create(new DoubleSetting.Builder(3).name("Uses")
-                                                                              .description("How many times to use the item")
-                                                                              .min(1)
-                                                                              .max(100)
-                                                                              .precision(0)
-                                                                              .get());
+        .description("How many times to use the item")
+        .min(1)
+        .max(100)
+        .precision(0)
+        .get());
 
     public MassUse() {
         super("MassUse", "Uses an item or block several times", ModuleType.WORLD);

@@ -147,8 +147,8 @@ public class FlexLayoutElement extends Element {
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
         return iterateOverChildren(element -> element.getPositionY() + scroller.getScroll() <= getPositionY() + getHeight() &&
-                                              element.getPositionY() + element.getHeight() + scroller.getScroll() >= getPositionY() && element.getPositionX() >= getPositionX() &&
-                                              element.getPositionX() <= getPositionX() + getWidth() && element.mouseReleased(
+            element.getPositionY() + element.getHeight() + scroller.getScroll() >= getPositionY() && element.getPositionX() >= getPositionX() &&
+            element.getPositionX() <= getPositionX() + getWidth() && element.mouseReleased(
             mouseX,
             mouseY - scroller.getScroll(),
             button
@@ -158,8 +158,8 @@ public class FlexLayoutElement extends Element {
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, double deltaX, double deltaY, int button) {
         return iterateOverChildren(element -> element.getPositionY() + scroller.getScroll() <= getPositionY() + getHeight() &&
-                                              element.getPositionY() + element.getHeight() + scroller.getScroll() >= getPositionY() && element.getPositionX() >= getPositionX() &&
-                                              element.getPositionX() <= getPositionX() + getWidth() && element.mouseDragged(
+            element.getPositionY() + element.getHeight() + scroller.getScroll() >= getPositionY() && element.getPositionX() >= getPositionX() &&
+            element.getPositionX() <= getPositionX() + getWidth() && element.mouseDragged(
             mouseX,
             mouseY - scroller.getScroll(),
             deltaX,
@@ -171,8 +171,8 @@ public class FlexLayoutElement extends Element {
     @Override
     public boolean charTyped(char chr, int modifiers) {
         return iterateOverChildren(element -> element.getPositionY() + scroller.getScroll() <= getPositionY() + getHeight() &&
-                                              element.getPositionY() + element.getHeight() + scroller.getScroll() >= getPositionY() && element.getPositionX() >= getPositionX() &&
-                                              element.getPositionX() <= getPositionX() + getWidth() && element.charTyped(
+            element.getPositionY() + element.getHeight() + scroller.getScroll() >= getPositionY() && element.getPositionX() >= getPositionX() &&
+            element.getPositionX() <= getPositionX() + getWidth() && element.charTyped(
             chr,
             modifiers
         ));
@@ -181,8 +181,8 @@ public class FlexLayoutElement extends Element {
     @Override
     public boolean keyPressed(int keyCode, int modifiers) {
         return iterateOverChildren(element -> element.getPositionY() + scroller.getScroll() <= getPositionY() + getHeight() &&
-                                              element.getPositionY() + element.getHeight() + scroller.getScroll() >= getPositionY() && element.getPositionX() >= getPositionX() &&
-                                              element.getPositionX() <= getPositionX() + getWidth() && element.keyPressed(
+            element.getPositionY() + element.getHeight() + scroller.getScroll() >= getPositionY() && element.getPositionX() >= getPositionX() &&
+            element.getPositionX() <= getPositionX() + getWidth() && element.keyPressed(
             keyCode,
             modifiers
         ));
@@ -191,8 +191,8 @@ public class FlexLayoutElement extends Element {
     @Override
     public boolean keyReleased(int keyCode, int modifiers) {
         return iterateOverChildren(element -> element.getPositionY() + scroller.getScroll() <= getPositionY() + getHeight() &&
-                                              element.getPositionY() + element.getHeight() + scroller.getScroll() >= getPositionY() && element.getPositionX() >= getPositionX() &&
-                                              element.getPositionX() <= getPositionX() + getWidth() && element.keyReleased(
+            element.getPositionY() + element.getHeight() + scroller.getScroll() >= getPositionY() && element.getPositionX() >= getPositionX() &&
+            element.getPositionX() <= getPositionX() + getWidth() && element.keyReleased(
             keyCode,
             modifiers
         ));
@@ -201,8 +201,8 @@ public class FlexLayoutElement extends Element {
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
         if (iterateOverChildren(element -> element.getPositionY() + scroller.getScroll() <= getPositionY() + getHeight() &&
-                                           element.getPositionY() + element.getHeight() + scroller.getScroll() >= getPositionY() && element.getPositionX() >= getPositionX() &&
-                                           element.getPositionX() <= getPositionX() + getWidth() && element.mouseScrolled(
+            element.getPositionY() + element.getHeight() + scroller.getScroll() >= getPositionY() && element.getPositionX() >= getPositionX() &&
+            element.getPositionX() <= getPositionX() + getWidth() && element.mouseScrolled(
             mouseX,
             mouseY,
             amount

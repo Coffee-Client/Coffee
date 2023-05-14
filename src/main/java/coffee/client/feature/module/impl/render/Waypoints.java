@@ -100,53 +100,53 @@ public class Waypoints extends Module {
     public void onWorldRender(MatrixStack matrices) {
         double fadeDistancePlayer = 10;
         waypoints.stream()
-                 .sorted(Comparator.comparingDouble(value -> -value.position.distanceTo(CoffeeMain.client.gameRenderer.getCamera().getPos())))
-                 .forEachOrdered(waypoint -> {
-                     if (tracers) {
-                         Renderer.R3D.renderLine(matrices, waypoint.color, Renderer.R3D.getCrosshairVector(), waypoint.position);
-                     }
+            .sorted(Comparator.comparingDouble(value -> -value.position.distanceTo(CoffeeMain.client.gameRenderer.getCamera().getPos())))
+            .forEachOrdered(waypoint -> {
+                if (tracers) {
+                    Renderer.R3D.renderLine(matrices, waypoint.color, Renderer.R3D.getCrosshairVector(), waypoint.position);
+                }
 
-                     //                double distancePlayer = waypoint.position.distanceTo(Utils.getInterpolatedEntityPosition(client.player));
-                     Vec3d interpolatedEntityPosition = Utils.getInterpolatedEntityPosition(client.player);
-                     double distancePlayer = Utils.dist(waypoint.position.x, waypoint.position.z, interpolatedEntityPosition.x, interpolatedEntityPosition.z);
-                     double subbed1 = (fadeDistancePlayer - distancePlayer) / fadeDistancePlayer;
-                     subbed1 = MathHelper.clamp(subbed1, 0, 1);
-                     subbed1 = 1 - subbed1;
-                     Renderer.R3D.renderFilled(
-                         matrices,
-                         Renderer.Util.modify(waypoint.color, -1, -1, -1, (int) (subbed1 * 255)),
-                         new Vec3d(waypoint.position.x - .2, CoffeeMain.client.world.getBottomY(), waypoint.position.z - .2),
-                         new Vec3d(.4, CoffeeMain.client.world.getHeight(), .4)
-                     );
-                     Vec3d screenSpaceCoordinate = Renderer.R2D.getScreenSpaceCoordinate(waypoint.position, matrices);
-                     if (Renderer.R2D.isOnScreen(screenSpaceCoordinate)) {
-                         real.add(() -> {
-                             String t = waypoint.getName();
-                             float width = FontRenderers.getRenderer().getStringWidth(t) + 4;
-                             Renderer.R2D.renderRoundedQuad(
-                                 Renderer.R3D.getEmptyMatrixStack(),
-                                 new Color(20, 20, 20, 255),
-                                 screenSpaceCoordinate.x - width / 2d,
-                                 screenSpaceCoordinate.y - FontRenderers.getRenderer().getFontHeight() / 2d - 2,
-                                 screenSpaceCoordinate.x + width / 2d,
-                                 screenSpaceCoordinate.y + FontRenderers.getRenderer().getFontHeight() / 2d + 2,
-                                 5,
-                                 10
-                             );
-                             FontRenderers.getRenderer()
-                                          .drawCenteredString(
-                                              Renderer.R3D.getEmptyMatrixStack(),
-                                              t,
-                                              screenSpaceCoordinate.x,
-                                              screenSpaceCoordinate.y - FontRenderers.getRenderer().getFontHeight() / 2d,
-                                              1f,
-                                              1f,
-                                              1f,
-                                              1f
-                                          );
-                         });
-                     }
-                 });
+                //                double distancePlayer = waypoint.position.distanceTo(Utils.getInterpolatedEntityPosition(client.player));
+                Vec3d interpolatedEntityPosition = Utils.getInterpolatedEntityPosition(client.player);
+                double distancePlayer = Utils.dist(waypoint.position.x, waypoint.position.z, interpolatedEntityPosition.x, interpolatedEntityPosition.z);
+                double subbed1 = (fadeDistancePlayer - distancePlayer) / fadeDistancePlayer;
+                subbed1 = MathHelper.clamp(subbed1, 0, 1);
+                subbed1 = 1 - subbed1;
+                Renderer.R3D.renderFilled(
+                    matrices,
+                    Renderer.Util.modify(waypoint.color, -1, -1, -1, (int) (subbed1 * 255)),
+                    new Vec3d(waypoint.position.x - .2, CoffeeMain.client.world.getBottomY(), waypoint.position.z - .2),
+                    new Vec3d(.4, CoffeeMain.client.world.getHeight(), .4)
+                );
+                Vec3d screenSpaceCoordinate = Renderer.R2D.getScreenSpaceCoordinate(waypoint.position, matrices);
+                if (Renderer.R2D.isOnScreen(screenSpaceCoordinate)) {
+                    real.add(() -> {
+                        String t = waypoint.getName();
+                        float width = FontRenderers.getRenderer().getStringWidth(t) + 4;
+                        Renderer.R2D.renderRoundedQuad(
+                            Renderer.R3D.getEmptyMatrixStack(),
+                            new Color(20, 20, 20, 255),
+                            screenSpaceCoordinate.x - width / 2d,
+                            screenSpaceCoordinate.y - FontRenderers.getRenderer().getFontHeight() / 2d - 2,
+                            screenSpaceCoordinate.x + width / 2d,
+                            screenSpaceCoordinate.y + FontRenderers.getRenderer().getFontHeight() / 2d + 2,
+                            5,
+                            10
+                        );
+                        FontRenderers.getRenderer()
+                            .drawCenteredString(
+                                Renderer.R3D.getEmptyMatrixStack(),
+                                t,
+                                screenSpaceCoordinate.x,
+                                screenSpaceCoordinate.y - FontRenderers.getRenderer().getFontHeight() / 2d,
+                                1f,
+                                1f,
+                                1f,
+                                1f
+                            );
+                    });
+                }
+            });
     }
 
     @Override

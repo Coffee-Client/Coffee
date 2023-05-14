@@ -253,7 +253,7 @@ public class ClickGUI extends AAScreen {
                 10
             );
             FontRenderers.getRenderer()
-                         .drawString(stack, oldSearchTerm, width - pad - pad - textWid, height - pad - pad - FontRenderers.getRenderer().getFontHeight(), 0xFFFFFF);
+                .drawString(stack, oldSearchTerm, width - pad - pad - textWid, height - pad - pad - FontRenderers.getRenderer().getFontHeight(), 0xFFFFFF);
             stack.pop();
         }
         if (tooltipContent != null) {

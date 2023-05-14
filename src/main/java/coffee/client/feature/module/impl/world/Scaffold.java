@@ -30,11 +30,11 @@ import java.util.Objects;
 
 public class Scaffold extends Module {
     final DoubleSetting extend = this.config.create(new DoubleSetting.Builder(0).name("Extend")
-                                                                                .description("How many blocks to extend outwards")
-                                                                                .min(0)
-                                                                                .max(5)
-                                                                                .precision(1)
-                                                                                .get());
+        .description("How many blocks to extend outwards")
+        .min(0)
+        .max(5)
+        .precision(1)
+        .get());
 
     public Scaffold() {
         super("Scaffold", "Places blocks below you as you walk", ModuleType.WORLD);

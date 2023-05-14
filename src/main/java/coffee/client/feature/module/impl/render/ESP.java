@@ -41,11 +41,11 @@ import java.util.List;
 public class ESP extends Module {
     static DumpVertexProvider provider;
     final DoubleSetting range = this.config.create(new DoubleSetting.Builder(64).name("Range")
-                                                                                .description("How far to render the entities")
-                                                                                .min(32)
-                                                                                .max(128)
-                                                                                .precision(1)
-                                                                                .get());
+        .description("How far to render the entities")
+        .min(32)
+        .max(128)
+        .precision(1)
+        .get());
     @Setting(name = "Outline mode", description = "How to render the outline")
     public Mode outlineMode = Mode.Shader;
     @Setting(name = "Rect mode", description = "How to render the rect outline")

@@ -104,9 +104,9 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
 
     public List<AltContainer> getAlts() {
         return alts.stream()
-                   .filter(altContainer -> altContainer.storage.cachedName.toLowerCase().startsWith(search.get().toLowerCase()) || Arrays.stream(altContainer.storage.tags.split(
-                       ",")).map(String::trim).filter(s -> !s.isEmpty()).anyMatch(s -> s.toLowerCase().startsWith(search.get().toLowerCase())))
-                   .collect(Collectors.toList());
+            .filter(altContainer -> altContainer.storage.cachedName.toLowerCase().startsWith(search.get().toLowerCase()) || Arrays.stream(altContainer.storage.tags.split(
+                ",")).map(String::trim).filter(s -> !s.isEmpty()).anyMatch(s -> s.toLowerCase().startsWith(search.get().toLowerCase())))
+            .collect(Collectors.toList());
     }
 
     void tryParseAltsFile(String txt) {
@@ -666,7 +666,7 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
             double originY = height / 2d - widgetHei / 2d;
             title.drawString(stack, "Edit session", (float) (originX + padding), (float) (originY + padding), 0xFFFFFF, false);
             FontRenderers.getRenderer()
-                         .drawString(stack, "Edit your user session here", (float) (originX + padding), (float) (originY + padding + title.getMarginHeight()), 0xAAAAAA, false);
+                .drawString(stack, "Edit your user session here", (float) (originX + padding), (float) (originY + padding + title.getMarginHeight()), 0xAAAAAA, false);
             stack.pop();
             super.renderInternal(stack, mouseX, mouseY, delta);
         }
@@ -931,7 +931,7 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
             double originY = height / 2d - widgetHei / 2d;
             title.drawString(stack, "Add account", (float) (originX + padding), (float) (originY + padding), 0xFFFFFF, false);
             FontRenderers.getRenderer()
-                         .drawString(stack, "Add another account here", (float) (originX + padding), (float) (originY + padding + title.getMarginHeight()), 0xAAAAAA, false);
+                .drawString(stack, "Add another account here", (float) (originX + padding), (float) (originY + padding + title.getMarginHeight()), 0xAAAAAA, false);
             email.setX(originX + padding);
             email.setY(originY + padding + title.getMarginHeight() + FontRenderers.getRenderer().getMarginHeight() + padding);
             email.setWidth(widgetWid - padding * 2);
@@ -942,15 +942,15 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
             passwd.render(stack, mouseX, mouseY, 0);
             type.setX(originX + padding);
             type.setY(originY + padding + title.getMarginHeight() + FontRenderers.getRenderer()
-                                                                                 .getMarginHeight() + padding + email.getHeight() + padding + passwd.getHeight() + padding);
+                .getMarginHeight() + padding + email.getHeight() + padding + passwd.getHeight() + padding);
             type.render(stack, mouseX, mouseY, delta);
             add.setX(originX + padding + type.getWidth() + padding);
             add.setY(originY + padding + title.getMarginHeight() + FontRenderers.getRenderer()
-                                                                                .getMarginHeight() + padding + email.getHeight() + padding + passwd.getHeight() + padding);
+                .getMarginHeight() + padding + email.getHeight() + padding + passwd.getHeight() + padding);
             add.setEnabled(isAddApplicable());
             add.render(stack, mouseX, mouseY, delta);
             widgetHei = padding + title.getMarginHeight() + FontRenderers.getRenderer()
-                                                                         .getMarginHeight() + padding + email.getHeight() + padding + passwd.getHeight() + padding + type.getHeight() + padding;
+                .getMarginHeight() + padding + email.getHeight() + padding + passwd.getHeight() + padding + type.getHeight() + padding;
             stack.pop();
         }
 
@@ -1166,13 +1166,13 @@ public class AltManagerScreen extends ClientScreen implements FastTickable {
                     10
                 );
                 FontRenderers.getRenderer()
-                             .drawString(
-                                 stack,
-                                 v,
-                                 originX + padding + texWidth + padding + xOff + pad,
-                                 originY + getHeight() - pad - FontRenderers.getRenderer().getMarginHeight() - padding,
-                                 0xFFFFFF
-                             );
+                    .drawString(
+                        stack,
+                        v,
+                        originX + padding + texWidth + padding + xOff + pad,
+                        originY + getHeight() - pad - FontRenderers.getRenderer().getMarginHeight() - padding,
+                        0xFFFFFF
+                    );
                 xOff += w + 2;
             }
 

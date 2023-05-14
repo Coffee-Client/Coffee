@@ -43,7 +43,7 @@ public class Rename extends Command {
             warn("You dont have creative mode; the item will only be renamed client side");
         } else {
             CoffeeMain.client.getNetworkHandler()
-                             .sendPacket(new CreativeInventoryActionC2SPacket(Utils.Inventory.slotIndexToId(CoffeeMain.client.player.getInventory().selectedSlot), iStack));
+                .sendPacket(new CreativeInventoryActionC2SPacket(Utils.Inventory.slotIndexToId(CoffeeMain.client.player.getInventory().selectedSlot), iStack));
         }
     }
 }

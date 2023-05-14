@@ -22,17 +22,17 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Decimator extends Module {
     final DoubleSetting radius = this.config.create(new DoubleSetting.Builder(100).precision(0)
-                                                                                  .name("Radius")
-                                                                                  .description("How much to erase on X and Z")
-                                                                                  .min(20)
-                                                                                  .max(500)
-                                                                                  .get());
+        .name("Radius")
+        .description("How much to erase on X and Z")
+        .min(20)
+        .max(500)
+        .get());
     final DoubleSetting delay = this.config.create(new DoubleSetting.Builder(30).precision(0)
-                                                                                .name("Delay")
-                                                                                .description("How much delay to use while erasing")
-                                                                                .min(0)
-                                                                                .max(1000)
-                                                                                .get());
+        .name("Delay")
+        .description("How much delay to use while erasing")
+        .min(0)
+        .max(1000)
+        .get());
     final AtomicBoolean cancel = new AtomicBoolean(false);
     Thread runner;
     Vec3d startPos = null;

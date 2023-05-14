@@ -45,11 +45,11 @@ public class ApplyEffect extends Command {
             new PossibleArgument(
                 ArgumentType.STRING,
                 () -> Objects.requireNonNull(CoffeeMain.client.world)
-                             .getPlayers()
-                             .stream()
-                             .map(abstractClientPlayerEntity -> abstractClientPlayerEntity.getGameProfile().getName())
-                             .toList()
-                             .toArray(String[]::new)
+                    .getPlayers()
+                    .stream()
+                    .map(abstractClientPlayerEntity -> abstractClientPlayerEntity.getGameProfile().getName())
+                    .toList()
+                    .toArray(String[]::new)
             ),
             new PossibleArgument(ArgumentType.STRING, Registries.STATUS_EFFECT.getIds().stream().map(Identifier::toString).toArray(String[]::new)),
             new PossibleArgument(ArgumentType.NUMBER, "<amplifier>"),

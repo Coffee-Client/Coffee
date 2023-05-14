@@ -43,11 +43,11 @@ public class SocketKick extends Command {
             new PossibleArgument(
                 ArgumentType.PLAYER,
                 () -> Objects.requireNonNull(CoffeeMain.client.world)
-                             .getPlayers()
-                             .stream()
-                             .map(abstractClientPlayerEntity -> abstractClientPlayerEntity.getGameProfile().getName())
-                             .toList()
-                             .toArray(String[]::new)
+                    .getPlayers()
+                    .stream()
+                    .map(abstractClientPlayerEntity -> abstractClientPlayerEntity.getGameProfile().getName())
+                    .toList()
+                    .toArray(String[]::new)
             )
         );
     }

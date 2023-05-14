@@ -193,7 +193,7 @@ public class SpotlightScreen extends ClientScreen implements FastTickable {
             suggestionsEntry.wid = command.width - 4;
             if (!useSelectingIndex) {
                 suggestionsEntry.selected = mouseX >= suggestionsEntry.x && mouseX <= suggestionsEntry.x + suggestionsEntry.wid && mouseY + smoothScroll >= suggestionsEntry.y &&
-                                            mouseY + smoothScroll <= suggestionsEntry.y + suggestionsEntry.height();
+                    mouseY + smoothScroll <= suggestionsEntry.y + suggestionsEntry.height();
             } else {
                 suggestionsEntry.selected = index == selectingIndex;
             }
@@ -855,7 +855,7 @@ public class SpotlightScreen extends ClientScreen implements FastTickable {
             Texture.ACTION_TYPES.bindAndDraw(stack, x + padUpDown, yCenter - contentSize / 2d, contentSize, contentSize, icon);
             FontRenderers.getRenderer().drawString(stack, title, x + padUpDown + contentSize + padUpDown, yCenter - contentSize / 2d, 0xAAAAAA);
             FontRenderers.getRenderer()
-                         .drawString(stack, text, x + padUpDown + contentSize + padUpDown, yCenter - contentSize / 2d + FontRenderers.getRenderer().getMarginHeight(), 0xFFFFFF);
+                .drawString(stack, text, x + padUpDown + contentSize + padUpDown, yCenter - contentSize / 2d + FontRenderers.getRenderer().getMarginHeight(), 0xFFFFFF);
         }
 
         public double height() {

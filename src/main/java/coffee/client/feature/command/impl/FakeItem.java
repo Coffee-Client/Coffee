@@ -39,11 +39,11 @@ public class FakeItem extends Command {
             case 0 -> new PossibleArgument(
                 ArgumentType.STRING,
                 Objects.requireNonNull(CoffeeMain.client.world)
-                       .getPlayers()
-                       .stream()
-                       .map(abstractClientPlayerEntity -> abstractClientPlayerEntity.getGameProfile().getName())
-                       .toList()
-                       .toArray(String[]::new)
+                    .getPlayers()
+                    .stream()
+                    .map(abstractClientPlayerEntity -> abstractClientPlayerEntity.getGameProfile().getName())
+                    .toList()
+                    .toArray(String[]::new)
             );
             case 1 -> new PossibleArgument(ArgumentType.STRING, "hand", "custom:<item id>");
             case 2 -> {

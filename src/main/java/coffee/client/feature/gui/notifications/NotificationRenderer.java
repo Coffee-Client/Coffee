@@ -110,13 +110,13 @@ public class NotificationRenderer {
                 notification.renderPosY + height
             );
             FontRenderers.getRenderer()
-                         .drawCenteredString(
-                             ms,
-                             contents,
-                             notification.renderPosX,
-                             notification.renderPosY + height / 2f - FontRenderers.getRenderer().getFontHeight() / 2f,
-                             0xFFFFFF
-                         );
+                .drawCenteredString(
+                    ms,
+                    contents,
+                    notification.renderPosX,
+                    notification.renderPosY + height / 2f - FontRenderers.getRenderer().getFontHeight() / 2f,
+                    0xFFFFFF
+                );
             double timeRemainingInv = 1 - timeRemaining;
             if (!notification.shouldDoAnimation && notification.animationProgress == 0 && notificationExpired) {
                 timeRemainingInv = 1;

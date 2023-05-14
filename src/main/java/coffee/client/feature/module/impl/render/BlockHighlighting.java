@@ -96,7 +96,7 @@ public class BlockHighlighting extends Module {
     @Override
     public void onWorldRender(MatrixStack matrices) {
         for (Long2ObjectMap.Entry<SortedSet<BlockBreakingInfo>> sortedSetEntry : ((IWorldRendererMixin) CoffeeMain.client.worldRenderer).getBlockBreakingProgressions()
-                                                                                                                                        .long2ObjectEntrySet()) {
+            .long2ObjectEntrySet()) {
             renderEntry(matrices, sortedSetEntry);
         }
     }

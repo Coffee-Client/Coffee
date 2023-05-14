@@ -82,11 +82,11 @@ public class Hologram extends Command {
         message("  Is marker: " + (marker ? "Yes" : "No"));
         message("  Pos: " + displayable.getX() + ", " + displayable.getY() + ", " + displayable.getZ());
         HologramManager.Hologram h = HologramManager.generateDefault(text, pos)
-                                                    .isEgg(generateAsEgg)
-                                                    .isSmall(generateAsBaby)
-                                                    .hasGravity(makeGravity)
-                                                    .isVisible(makeVisible)
-                                                    .isMarker(marker);
+            .isEgg(generateAsEgg)
+            .isSmall(generateAsBaby)
+            .hasGravity(makeGravity)
+            .isVisible(makeVisible)
+            .isMarker(marker);
         ItemStack stack = h.generate();
         message("Dont forget to open your inventory before placing");
         CoffeeMain.client.player.getInventory().addPickBlock(stack);

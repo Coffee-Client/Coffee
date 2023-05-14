@@ -106,14 +106,14 @@ public class HoloImage extends Command {
                     new NbtList(
                         "Items",
                         IntStream.range(0, stacks.size())
-                                 .mapToObj(value -> new NbtObject(
-                                     "",
-                                     new NbtProperty("Slot", (byte) value),
-                                     new NbtProperty("id", Registries.ITEM.getId(Items.BAT_SPAWN_EGG).toString()),
-                                     new NbtProperty("Count", (byte) 1),
-                                     new NbtObject("tag", stacks.get(value))
-                                 ))
-                                 .toArray(NbtElement[]::new)
+                            .mapToObj(value -> new NbtObject(
+                                "",
+                                new NbtProperty("Slot", (byte) value),
+                                new NbtProperty("id", Registries.ITEM.getId(Items.BAT_SPAWN_EGG).toString()),
+                                new NbtProperty("Count", (byte) 1),
+                                new NbtObject("tag", stacks.get(value))
+                            ))
+                            .toArray(NbtElement[]::new)
                     )
                 ));
             }
@@ -123,14 +123,14 @@ public class HoloImage extends Command {
                 new NbtList(
                     "Items",
                     IntStream.range(0, shulkers.size())
-                             .mapToObj(value -> new NbtObject(
-                                 "",
-                                 new NbtProperty("Slot", (byte) value),
-                                 new NbtProperty("id", Registries.ITEM.getId(Items.SHULKER_BOX).toString()),
-                                 new NbtProperty("Count", (byte) 1),
-                                 new NbtObject("tag", shulkers.get(value))
-                             ))
-                             .toArray(NbtElement[]::new)
+                        .mapToObj(value -> new NbtObject(
+                            "",
+                            new NbtProperty("Slot", (byte) value),
+                            new NbtProperty("id", Registries.ITEM.getId(Items.SHULKER_BOX).toString()),
+                            new NbtProperty("Count", (byte) 1),
+                            new NbtObject("tag", shulkers.get(value))
+                        ))
+                        .toArray(NbtElement[]::new)
                 )
             ));
             chest.setNbt(ng.toCompound());

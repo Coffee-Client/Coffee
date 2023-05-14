@@ -20,9 +20,9 @@ public class DumpVertexProvider implements VertexConsumerProvider {
 
     public List<DumpVertexConsumer> getBuffers() {
         return new ArrayList<>(dumps.values()).stream()
-                                              .filter(vertexConsumer -> vertexConsumer instanceof DumpVertexConsumer)
-                                              .map(vertexConsumer -> (DumpVertexConsumer) vertexConsumer)
-                                              .toList();
+            .filter(vertexConsumer -> vertexConsumer instanceof DumpVertexConsumer)
+            .map(vertexConsumer -> (DumpVertexConsumer) vertexConsumer)
+            .toList();
     }
 
     @Override

@@ -153,13 +153,13 @@ public class TabGui extends Module {
             }
             for (GuiEntry entry : tabPane.entries) {
                 FontRenderers.getRenderer()
-                             .drawString(
-                                 stack,
-                                 entry.text,
-                                 scrollerWidth + padOuter + 2 + (entry.isEnabled.getAsBoolean() ? scrollerWidth : 0),
-                                 yOffset,
-                                 entry.isEnabled.getAsBoolean() ? 0xFFFFFF : 0xBBBBBB
-                             );
+                    .drawString(
+                        stack,
+                        entry.text,
+                        scrollerWidth + padOuter + 2 + (entry.isEnabled.getAsBoolean() ? scrollerWidth : 0),
+                        yOffset,
+                        entry.isEnabled.getAsBoolean() ? 0xFFFFFF : 0xBBBBBB
+                    );
                 yOffset += oneHeight;
             }
             stack.translate(width + 5, 0, 0); // x offset

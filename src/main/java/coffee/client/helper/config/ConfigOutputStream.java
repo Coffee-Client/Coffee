@@ -36,8 +36,8 @@ public class ConfigOutputStream extends DataOutputStream {
         writeUTF(module.getName());
         writeBoolean(module.isEnabled());
         List<SettingBase<?>> settings = new ArrayList<>(module.config.getSettings()).stream()
-                                                                                    .filter(settingBase -> !settingBase.getValue().equals(settingBase.getDefaultValue()))
-                                                                                    .toList();
+            .filter(settingBase -> !settingBase.getValue().equals(settingBase.getDefaultValue()))
+            .toList();
         int size = settings.size();
         writeInt(size);
         for (SettingBase<?> setting : settings) {

@@ -35,8 +35,8 @@ public class Flight extends Module {
 
     final EnumSetting<FlightMode> mode = this.config.create(new EnumSetting.Builder<>(FlightMode.Vanilla).name("Mode").description("How you fly").get());
     final BooleanSetting bypassVanillaAc = this.config.create(new BooleanSetting.Builder(true).name("Bypass vanilla AC")
-                                                                                              .description("Whether to bypass the vanilla anticheat")
-                                                                                              .get());
+        .description("Whether to bypass the vanilla anticheat")
+        .get());
     final DoubleSetting speed = this.config.create(new DoubleSetting.Builder(2).name("Speed").description("How fast you fly").min(0).max(10).get());
     final List<Packet<?>> queue = new ArrayList<>();
     final Timer lag = new Timer();
@@ -254,7 +254,7 @@ public class Flight extends Module {
         flewBefore = Objects.requireNonNull(CoffeeMain.client.player).getAbilities().flying;
         CoffeeMain.client.player.setOnGround(false);
         Objects.requireNonNull(CoffeeMain.client.getNetworkHandler())
-               .sendPacket(new ClientCommandC2SPacket(CoffeeMain.client.player, ClientCommandC2SPacket.Mode.RELEASE_SHIFT_KEY));
+            .sendPacket(new ClientCommandC2SPacket(CoffeeMain.client.player, ClientCommandC2SPacket.Mode.RELEASE_SHIFT_KEY));
     }
 
     @MessageSubscription

@@ -80,12 +80,12 @@ public class ForEach extends Command {
             case "player" -> {
                 for (PlayerListEntry playerListEntry : Objects.requireNonNull(CoffeeMain.client.getNetworkHandler()).getPlayerList()) {
                     if (Utils.Players.isPlayerNameValid(playerListEntry.getProfile().getName()) && !playerListEntry.getProfile()
-                                                                                                                   .getId()
-                                                                                                                   .equals(Objects.requireNonNull(CoffeeMain.client.player).getUuid())) {
+                        .getId()
+                        .equals(Objects.requireNonNull(CoffeeMain.client.player).getUuid())) {
                         runner.execute(() -> {
                             try {
                                 client.getNetworkHandler()
-                                      .sendChatMessage(String.join(" ", Arrays.copyOfRange(args, 2, args.length)).replaceAll("%s", playerListEntry.getProfile().getName()));
+                                    .sendChatMessage(String.join(" ", Arrays.copyOfRange(args, 2, args.length)).replaceAll("%s", playerListEntry.getProfile().getName()));
                                 Thread.sleep(delay);
                             } catch (Exception ignored) {
                             }

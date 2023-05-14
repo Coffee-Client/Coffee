@@ -90,14 +90,14 @@ public class ButtonElement extends Element implements HasSpecialCursor {
             );
         }
         FontRenderers.getRenderer()
-                     .drawString(
-                         matrices,
-                         text,
-                         -(FontRenderers.getRenderer().getStringWidth(text)) / 2f,
-                         -FontRenderers.getRenderer().getMarginHeight() / 2f,
-                         isEnabled() ? textColor.getRGB() : 0xAAAAAA,
-                         false
-                     );
+            .drawString(
+                matrices,
+                text,
+                -(FontRenderers.getRenderer().getStringWidth(text)) / 2f,
+                -FontRenderers.getRenderer().getMarginHeight() / 2f,
+                isEnabled() ? textColor.getRGB() : 0xAAAAAA,
+                false
+            );
         matrices.pop();
     }
 

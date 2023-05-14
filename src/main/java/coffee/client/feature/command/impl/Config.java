@@ -38,11 +38,11 @@ public class Config extends Command {
                     yield new PossibleArgument(
                         ArgumentType.STRING,
                         Objects.requireNonNull(ModuleRegistry.getByName(args[0].replaceAll("-", " "))).config.getSettings()
-                                                                                                             .stream()
-                                                                                                             .map(SettingBase::getName)
-                                                                                                             .map(s -> s.replaceAll(" ", "-"))
-                                                                                                             .toList()
-                                                                                                             .toArray(String[]::new)
+                            .stream()
+                            .map(SettingBase::getName)
+                            .map(s -> s.replaceAll(" ", "-"))
+                            .toList()
+                            .toArray(String[]::new)
                     );
                 } else {
                     yield super.getSuggestionsWithType(index, args);

@@ -7,7 +7,7 @@ package coffee.client.helper;
 
 import net.minecraft.server.ServerMetadata;
 
-// For some reason, mixin shits the bed when i define these directly in the mixin, so they have to be moved here..?
+// For some reason, mixin shits the bed when I define these directly in the mixin, so they have to be moved here..?
 public class DirectConnectScreenVariables {
     public static ServerMetadata latestResponse;
     public static String lastIp;

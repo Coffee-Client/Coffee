@@ -179,8 +179,10 @@ public class NbtEditorScreen extends ClientScreen implements FastTickable {
         }
         // if the index of the next : from where we are right now is smaller than the index of the last , or the last , is beyond where we are now
         // and the next : from where we are right now is beyond where we are right now, mark it
-        if ((total.indexOf(':', index) < total.lastIndexOf(',') || total.lastIndexOf(',') < index) && total.indexOf(' ', index) > total.indexOf(':',
-            index) && total.indexOf(':', index) > index) {
+        if ((total.indexOf(':', index) < total.lastIndexOf(',') || total.lastIndexOf(',') < index) && total.indexOf(' ', index) > total.indexOf(
+            ':',
+            index
+        ) && total.indexOf(':', index) > index) {
             return 0x55FFFF;
         }
         boolean isSuffix = false;
@@ -410,14 +412,16 @@ public class NbtEditorScreen extends ClientScreen implements FastTickable {
                     while (currentResult >= 0) {
                         double paddingX = FontRenderers.getMono().getStringWidth(s.substring(0, currentResult)) + 7 - smoothScrollX;
                         double markedTextWidth = FontRenderers.getMono().getStringWidth(s.substring(currentResult, currentResult + searchLen)) + 2;
-                        Renderer.R2D.renderRoundedQuad(stack,
+                        Renderer.R2D.renderRoundedQuad(
+                            stack,
                             new Color(0xAB5907),
                             paddingX,
                             y,
                             paddingX + markedTextWidth,
                             y + FontRenderers.getMono().getMarginHeight(),
                             2,
-                            10);
+                            10
+                        );
                         currentResult = s.toLowerCase().indexOf(search.get().toLowerCase(), currentResult + 1);
                     }
                 }

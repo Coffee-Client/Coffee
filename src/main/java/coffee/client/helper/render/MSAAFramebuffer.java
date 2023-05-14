@@ -61,7 +61,8 @@ public class MSAAFramebuffer extends Framebuffer {
 
         GlStateManager._glBindFramebuffer(GL30C.GL_READ_FRAMEBUFFER, mainBuffer.fbo);
         GlStateManager._glBindFramebuffer(GL30C.GL_DRAW_FRAMEBUFFER, msaaBuffer.fbo);
-        GlStateManager._glBlitFrameBuffer(0,
+        GlStateManager._glBlitFrameBuffer(
+            0,
             0,
             msaaBuffer.textureWidth,
             msaaBuffer.textureHeight,
@@ -70,7 +71,8 @@ public class MSAAFramebuffer extends Framebuffer {
             msaaBuffer.textureWidth,
             msaaBuffer.textureHeight,
             GL30C.GL_COLOR_BUFFER_BIT,
-            GL30C.GL_LINEAR);
+            GL30C.GL_LINEAR
+        );
 
         msaaBuffer.beginWrite(true);
         drawAction.run();
@@ -78,7 +80,8 @@ public class MSAAFramebuffer extends Framebuffer {
 
         GlStateManager._glBindFramebuffer(GL30C.GL_READ_FRAMEBUFFER, msaaBuffer.fbo);
         GlStateManager._glBindFramebuffer(GL30C.GL_DRAW_FRAMEBUFFER, mainBuffer.fbo);
-        GlStateManager._glBlitFrameBuffer(0,
+        GlStateManager._glBlitFrameBuffer(
+            0,
             0,
             msaaBuffer.textureWidth,
             msaaBuffer.textureHeight,
@@ -87,7 +90,8 @@ public class MSAAFramebuffer extends Framebuffer {
             msaaBuffer.textureWidth,
             msaaBuffer.textureHeight,
             GL30C.GL_COLOR_BUFFER_BIT,
-            GL30C.GL_LINEAR);
+            GL30C.GL_LINEAR
+        );
 
         msaaBuffer.clear(true);
         mainBuffer.beginWrite(false);

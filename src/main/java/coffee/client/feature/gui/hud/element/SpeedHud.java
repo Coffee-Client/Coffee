@@ -53,12 +53,14 @@ public class SpeedHud extends HudElement {
                 double prog = ((aDouble - min) / max);
                 double y = height - prog * height;
 
-                Renderer.R2D.renderLine(stack,
+                Renderer.R2D.renderLine(
+                    stack,
                     Renderer.Util.lerp(ThemeManager.getMainTheme().getActive(), ThemeManager.getMainTheme().getAccent(), ppr),
                     x - incrX,
                     previous,
                     x,
-                    y);
+                    y
+                );
 
                 x += incrX;
                 previous = y;

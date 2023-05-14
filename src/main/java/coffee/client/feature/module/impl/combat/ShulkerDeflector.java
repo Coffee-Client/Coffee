@@ -17,8 +17,8 @@ import java.util.Objects;
 
 public class ShulkerDeflector extends Module {
     final BooleanSetting checkOwner = this.config.create(new BooleanSetting.Builder(true).name("Check owner")
-        .description("Check if you own the projectile, else hit it")
-        .get());
+                                                                                         .description("Check if you own the projectile, else hit it")
+                                                                                         .get());
 
     public ShulkerDeflector() {
         super("ShulkerDeflector", "Automatically reflects shulker's projectiles", ModuleType.COMBAT);
@@ -31,7 +31,7 @@ public class ShulkerDeflector extends Module {
 
     boolean inHitRange(Entity attacker, Entity target) {
         return attacker.getCameraPosVec(1f).distanceTo(target.getPos().add(0, target.getHeight() / 2, 0)) <= Objects.requireNonNull(CoffeeMain.client.interactionManager)
-            .getReachDistance();
+                                                                                                                    .getReachDistance();
     }
 
     @Override

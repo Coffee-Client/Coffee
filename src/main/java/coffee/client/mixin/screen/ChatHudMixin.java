@@ -14,7 +14,8 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
 @Mixin(ChatHud.class)
 public abstract class ChatHudMixin {
-    @ModifyConstant(method = "addMessage(Lnet/minecraft/text/Text;Lnet/minecraft/network/message/MessageSignatureData;ILnet/minecraft/client/gui/hud/MessageIndicator;Z)V", constant = @Constant(intValue = 100), require = 0)
+    @ModifyConstant(method = "addMessage(Lnet/minecraft/text/Text;Lnet/minecraft/network/message/MessageSignatureData;ILnet/minecraft/client/gui/hud/MessageIndicator;Z)V",
+                    constant = @Constant(intValue = 100), require = 0)
     int coffee_increaseHistorySize(int constant) {
         MoreChatHistory hist = ModuleRegistry.getByClass(MoreChatHistory.class);
         if (hist.isEnabled()) {

@@ -61,39 +61,47 @@ public class ListSettingEditor extends SettingEditor<ListSetting<?>> {
         fa.drawString(stack, configValue.name, getPositionX() + headerPad / 2d, getPositionY() + headerHeight() / 2d - fa.getFontHeight() / 2d, 0xFFFFFF);
         float delta = (float) Transitions.easeOutExpo(expandProg);
         double rD = 6 + delta * 2;
-        Renderer.R2D.renderCheckmark(stack,
+        Renderer.R2D.renderCheckmark(
+            stack,
             Color.WHITE,
             getPositionX() + getWidth() - headerPad / 2d - rD / 2d,
             getPositionY() + headerHeight() / 2d - delta * 1.5,
             5,
             5,
             .5f,
-            MathHelper.lerp(delta, 45, -45));
+            MathHelper.lerp(delta, 45, -45)
+        );
         if (expandProg != 0) {
 
-            ClipStack.globalInstance.addWindow(stack,
-                new Rectangle(getPositionX(), getPositionY() + headerHeight() - 1, getPositionX() + getWidth(), getPositionY() + getHeight()));
+            ClipStack.globalInstance.addWindow(
+                stack,
+                new Rectangle(getPositionX(), getPositionY() + headerHeight() - 1, getPositionX() + getWidth(), getPositionY() + getHeight())
+            );
 
             double offsetY = 1;
             double indicatorWid = fa.getFontHeight();
             for (Enum<?> enumSettingEntry : ese) {
-                Renderer.R2D.renderRoundedQuad(stack,
+                Renderer.R2D.renderRoundedQuad(
+                    stack,
                     new Color(40, 40, 40),
                     getPositionX() + 1,
                     getPositionY() + headerHeight() + offsetY,
                     getPositionX() + 1 + indicatorWid,
                     getPositionY() + headerHeight() + offsetY + fa.getFontHeight(),
                     2,
-                    5);
+                    5
+                );
                 if (configValue.getValue().getChecked().contains(enumSettingEntry)) {
-                    Renderer.R2D.renderCheckmark(stack,
+                    Renderer.R2D.renderCheckmark(
+                        stack,
                         new Color(9, 162, 104),
                         getPositionX() + 1 + indicatorWid / 2,
                         getPositionY() + headerHeight() + offsetY + fa.getFontHeight() / 2d - .5,
                         3,
                         5,
                         1f,
-                        -45);
+                        -45
+                    );
                 }
                 fa.drawString(stack, enumSettingEntry.name(), getPositionX() + indicatorWid + 4, getPositionY() + headerHeight() + offsetY, 0xFFFFFF);
                 offsetY += fa.getFontHeight() + 2;

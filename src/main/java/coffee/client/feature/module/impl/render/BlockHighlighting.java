@@ -34,11 +34,13 @@ public class BlockHighlighting extends Module {
     void onP(coffee.client.helper.event.impl.PacketEvent.Received event) {
         if (event.getPacket() instanceof BlockUpdateS2CPacket packet) {
             BlockPos real = packet.getPos();
-            Renderer.R3D.renderFadingBlock(Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 255),
+            Renderer.R3D.renderFadingBlock(
+                Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 255),
                 Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 100).darker(),
                 Vec3d.of(real),
                 new Vec3d(1, 1, 1),
-                1000);
+                1000
+            );
         }
     }
 
@@ -94,7 +96,7 @@ public class BlockHighlighting extends Module {
     @Override
     public void onWorldRender(MatrixStack matrices) {
         for (Long2ObjectMap.Entry<SortedSet<BlockBreakingInfo>> sortedSetEntry : ((IWorldRendererMixin) CoffeeMain.client.worldRenderer).getBlockBreakingProgressions()
-            .long2ObjectEntrySet()) {
+                                                                                                                                        .long2ObjectEntrySet()) {
             renderEntry(matrices, sortedSetEntry);
         }
     }

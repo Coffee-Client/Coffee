@@ -52,12 +52,14 @@ public class TabGui extends Module {
                         if (module.getModuleType() != value) {
                             continue;
                         }
-                        GuiEntry ge1 = new GuiEntry(module.getName(),
+                        GuiEntry ge1 = new GuiEntry(
+                            module.getName(),
                             module::isEnabled,
                             module::toggle,
                             tabStack::pop,
                             FontRenderers.getRenderer().getStringWidth(module.getName()),
-                            FontRenderers.getRenderer().getMarginHeight());
+                            FontRenderers.getRenderer().getMarginHeight()
+                        );
                         modules.entries.add(ge1);
                     }
                     if (modules.entries.isEmpty()) {
@@ -133,14 +135,16 @@ public class TabGui extends Module {
                     lastEnabledStackHeight += oneHeight;
                 } else {
                     if (lastEnabledStackHeight != 0) {
-                        Renderer.R2D.renderRoundedQuad(stack,
+                        Renderer.R2D.renderRoundedQuad(
+                            stack,
                             ThemeManager.getMainTheme().getAccent(),
                             scrollerWidth + padOuter,
                             lastEnabledStackY + 1,
                             scrollerWidth + 1.5 + padOuter,
                             lastEnabledStackY + lastEnabledStackHeight - 1,
                             0.75,
-                            5);
+                            5
+                        );
                     }
                     lastEnabledStackHeight = 0;
                     lastEnabledStackY = 0;
@@ -149,11 +153,13 @@ public class TabGui extends Module {
             }
             for (GuiEntry entry : tabPane.entries) {
                 FontRenderers.getRenderer()
-                    .drawString(stack,
-                        entry.text,
-                        scrollerWidth + padOuter + 2 + (entry.isEnabled.getAsBoolean() ? scrollerWidth : 0),
-                        yOffset,
-                        entry.isEnabled.getAsBoolean() ? 0xFFFFFF : 0xBBBBBB);
+                             .drawString(
+                                 stack,
+                                 entry.text,
+                                 scrollerWidth + padOuter + 2 + (entry.isEnabled.getAsBoolean() ? scrollerWidth : 0),
+                                 yOffset,
+                                 entry.isEnabled.getAsBoolean() ? 0xFFFFFF : 0xBBBBBB
+                             );
                 yOffset += oneHeight;
             }
             stack.translate(width + 5, 0, 0); // x offset

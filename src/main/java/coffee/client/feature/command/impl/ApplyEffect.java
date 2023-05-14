@@ -40,17 +40,21 @@ public class ApplyEffect extends Command {
 
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
-        return StaticArgumentServer.serveFromStatic(index,
-            new PossibleArgument(ArgumentType.STRING,
+        return StaticArgumentServer.serveFromStatic(
+            index,
+            new PossibleArgument(
+                ArgumentType.STRING,
                 () -> Objects.requireNonNull(CoffeeMain.client.world)
-                    .getPlayers()
-                    .stream()
-                    .map(abstractClientPlayerEntity -> abstractClientPlayerEntity.getGameProfile().getName())
-                    .toList()
-                    .toArray(String[]::new)),
+                             .getPlayers()
+                             .stream()
+                             .map(abstractClientPlayerEntity -> abstractClientPlayerEntity.getGameProfile().getName())
+                             .toList()
+                             .toArray(String[]::new)
+            ),
             new PossibleArgument(ArgumentType.STRING, Registries.STATUS_EFFECT.getIds().stream().map(Identifier::toString).toArray(String[]::new)),
             new PossibleArgument(ArgumentType.NUMBER, "<amplifier>"),
-            new PossibleArgument(ArgumentType.NUMBER, "<duration ticks>"));
+            new PossibleArgument(ArgumentType.NUMBER, "<duration ticks>")
+        );
     }
 
     @Override
@@ -72,13 +76,15 @@ public class ApplyEffect extends Command {
         ItemStack previous = client.player.getMainHandStack();
 
         ItemStack newStack = new ItemStack(Items.BAT_SPAWN_EGG);
-        NbtGroup group = new NbtGroup(new NbtObject("EntityTag",
+        NbtGroup group = new NbtGroup(new NbtObject(
+            "EntityTag",
             new NbtProperty("Duration", 5),
             new NbtList("Effects", new NbtObject("", new NbtProperty("Amplifier", amp), new NbtProperty("Duration", dur), new NbtProperty("Id", rawId))),
             new NbtProperty("Radius", 10),
             new NbtProperty("WaitTime", 1),
             new NbtProperty("id", "minecraft:area_effect_cloud"),
-            new NbtList("Pos", new NbtProperty(pos.x), new NbtProperty(pos.y + 1), new NbtProperty(pos.z))));
+            new NbtList("Pos", new NbtProperty(pos.x), new NbtProperty(pos.y + 1), new NbtProperty(pos.z))
+        ));
         newStack.setNbt(group.toCompound());
 
         BlockHitResult bhr = new BlockHitResult(pos, Direction.DOWN, BlockPos.ofFloored(pos), false);

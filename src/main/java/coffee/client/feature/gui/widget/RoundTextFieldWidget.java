@@ -376,12 +376,14 @@ public class RoundTextFieldWidget implements Element, Drawable, Selectable, Does
         ClipStack.globalInstance.popWindow();
         boolean renderCursor = (System.currentTimeMillis() % 1000) / 500d > 1;
         if (focused && renderCursor) {
-            Renderer.R2D.renderQuad(stack,
+            Renderer.R2D.renderQuad(
+                stack,
                 Color.WHITE,
                 x + pad + getTextWidth(cursor) - overflowWidth,
                 centerY,
                 x + pad + getTextWidth(cursor) - overflowWidth + 1,
-                centerY + FontRenderers.getRenderer().getMarginHeight());
+                centerY + FontRenderers.getRenderer().getMarginHeight()
+            );
         }
 
     }
@@ -439,9 +441,7 @@ public class RoundTextFieldWidget implements Element, Drawable, Selectable, Does
 
     private void runAction() {
         cursorChanged();
-        if (changeListener != null) {
-            changeListener.run();
-        }
+        changeListener.run();
     }
 
     private double textWidth() {

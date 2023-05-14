@@ -22,7 +22,7 @@ public class AntiOffhandCrash extends Module {
     @MessageSubscription
     void on(coffee.client.helper.event.impl.PacketEvent.Received event) {
         if (event.getPacket() instanceof PlaySoundS2CPacket) {
-            if (((PlaySoundS2CPacket) event.getPacket()).getSound() == SoundEvents.ITEM_ARMOR_EQUIP_GENERIC) {
+            if (((PlaySoundS2CPacket) event.getPacket()).getSound().value() == SoundEvents.ITEM_ARMOR_EQUIP_GENERIC) {
                 event.setCancelled(true);
             }
         }

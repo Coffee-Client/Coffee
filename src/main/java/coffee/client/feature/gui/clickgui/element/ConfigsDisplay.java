@@ -64,7 +64,7 @@ public class ConfigsDisplay extends Element {
         });
         ButtonElement addButton = new ButtonElement(ButtonElement.STANDARD, 0, 0, 16, 16, "+", () -> {
             try (FileOutputStream fos = new FileOutputStream(new File(ConfigUtils.CONFIG_STORAGE, el.get().hashCode() + ".cconf"));
-                ConfigOutputStream cos = new ConfigOutputStream(fos, el.get())) {
+                 ConfigOutputStream cos = new ConfigOutputStream(fos, el.get())) {
                 cos.write();
                 reinit();
             } catch (Exception e) {
@@ -78,13 +78,15 @@ public class ConfigsDisplay extends Element {
         the.add(fe);
         int clientVersion = CoffeeMain.getClientVersion();
         for (ConfigInputFile configFile : ConfigUtils.getConfigFiles()) {
-            SavedConfigDisplay scd = new SavedConfigDisplay(getPositionX(),
+            SavedConfigDisplay scd = new SavedConfigDisplay(
+                getPositionX(),
                 getPositionY(),
                 width - 4,
                 configFile.getFile(),
                 configFile.getName(),
                 configFile.getVersion() != clientVersion,
-                this);
+                this
+            );
             the.add(scd);
         }
         layout.setElements(the);
@@ -112,27 +114,31 @@ public class ConfigsDisplay extends Element {
         }
         setHeight(nh);
         layout.updateScroller();
-        Renderer.R2D.renderRoundedQuadWithShadow(stack,
+        Renderer.R2D.renderRoundedQuadWithShadow(
+            stack,
             new Color(20, 20, 20),
             getPositionX(),
             getPositionY(),
             getPositionX() + getWidth(),
             getPositionY() + getHeight(),
             3,
-            10);
+            10
+        );
         double iconPad = 4;
         double iconDims = headerHeight() - iconPad * 2;
         RenderSystem.enableBlend();
         Texture.MODULE_TYPES.bindAndDraw(stack, getPositionX() + iconPad, getPositionY() + iconPad, iconDims, iconDims, "configs.png");
 
-        titleRenderer.drawString(stack,
+        titleRenderer.drawString(
+            stack,
             "Configs",
             (float) (getPositionX() + iconDims + iconPad * 2),
             (float) (getPositionY() + headerHeight() / 2d - Math.round(titleRenderer.getFontHeight()) / 2d),
             1f,
             1f,
             1f,
-            1f);
+            1f
+        );
         layout.setPositionX(getPositionX() + 2);
         layout.setPositionY(getPositionY() + headerHeight());
         layout.render(stack, mouseX, mouseY);

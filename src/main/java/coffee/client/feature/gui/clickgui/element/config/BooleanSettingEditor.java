@@ -45,14 +45,16 @@ public class BooleanSettingEditor extends SettingEditor<BooleanSetting> {
         double ballXEnd = getPositionX() + getWidth() - ballDim - 1;
         double d = Transitions.easeOutExpo(anim);
         double ballX = MathHelper.lerp(d, ballXStart, ballXEnd);
-        Renderer.R2D.renderRoundedQuad(stack,
+        Renderer.R2D.renderRoundedQuad(
+            stack,
             Renderer.Util.lerp(new Color(50, 50, 50), new Color(2, 2, 2), d),
             getPositionX() + getWidth() - bruhWidth,
             getPositionY() + getHeight() / 2d - bruhHeight,
             getPositionX() + getWidth(),
             getPositionY() + getHeight() / 2d + bruhHeight,
             bruhHeight,
-            15);
+            15
+        );
         Renderer.R2D.renderCircle(stack, new Color(9, 162, 104), ballX, getPositionY() + getHeight() / 2d, ballDim, 20);
     }
 

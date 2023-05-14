@@ -6,7 +6,6 @@
 package coffee.client.feature.command.impl;
 
 import coffee.client.feature.command.Command;
-import coffee.client.feature.command.exception.CommandException;
 
 public class Test extends Command {
     public Test() {
@@ -14,7 +13,7 @@ public class Test extends Command {
     }
 
     @Override
-    public void onExecute(String[] args) throws CommandException {
+    public void onExecute(String[] args) {
 
     }
 }

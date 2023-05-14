@@ -71,19 +71,13 @@ public class TextFieldElement extends Element implements HasSpecialCursor {
 
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
-        //        int preSelectionCursor = 0;
-        //        if (selectionStart < preSelectionCursor && preSelectionCursor == selectionEnd) {
-        //            cursor = selectionStart;
-        //        } else if (selectionEnd > preSelectionCursor && preSelectionCursor == selectionStart) {
-        //            cursor = selectionEnd;
-        //        }
 
         return false;
     }
 
     @Override
     public boolean mouseDragged(double x, double y, double xDelta, double yDelta, int button) {
-        if (button == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
+        if (inBounds(x, y) && button == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
             double overflowWidth = getOverflowWidthForRender();
             double start = getPositionX() + 2 - overflowWidth;
             double currentWidth = 0;
@@ -380,7 +374,8 @@ public class TextFieldElement extends Element implements HasSpecialCursor {
 
         Renderer.R2D.renderRoundedQuad(stack, new Color(40, 40, 40), getPositionX(), getPositionY(), getPositionX() + width, getPositionY() + height, radius, 10);
         if (isInvalid()) {
-            Renderer.R2D.renderRoundedOutline(stack,
+            Renderer.R2D.renderRoundedOutline(
+                stack,
                 Color.RED,
                 getPositionX() + .5,
                 getPositionY() + .5,
@@ -391,7 +386,8 @@ public class TextFieldElement extends Element implements HasSpecialCursor {
                 5,
                 5,
                 .5,
-                20);
+                20
+            );
         }
 
         ClipStack.globalInstance.addWindow(stack, new Rectangle(getPositionX() + pad, getPositionY(), getPositionX() + width - pad, getPositionY() + height));
@@ -411,12 +407,14 @@ public class TextFieldElement extends Element implements HasSpecialCursor {
         ClipStack.globalInstance.popWindow();
         boolean renderCursor = (System.currentTimeMillis() % 1000) / 500d > 1;
         if (focused && renderCursor) {
-            Renderer.R2D.renderQuad(stack,
+            Renderer.R2D.renderQuad(
+                stack,
                 Color.WHITE,
                 getPositionX() + pad + getTextWidth(cursor) - overflowWidth,
                 centerY,
                 getPositionX() + pad + getTextWidth(cursor) - overflowWidth + 1,
-                centerY + FontRenderers.getRenderer().getMarginHeight());
+                centerY + FontRenderers.getRenderer().getMarginHeight()
+            );
         }
 
     }

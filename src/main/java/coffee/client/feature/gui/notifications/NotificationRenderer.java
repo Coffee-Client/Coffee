@@ -91,24 +91,32 @@ public class NotificationRenderer {
             float width = FontRenderers.getRenderer().getStringWidth(contents) + 5;
             width = width / 2f;
             width = Math.max(minWidth, width);
-            ClipStack.globalInstance.addWindow(Renderer.R3D.getEmptyMatrixStack(),
-                new Rectangle(notification.renderPosX - width * notification.animationProgress,
+            ClipStack.globalInstance.addWindow(
+                Renderer.R3D.getEmptyMatrixStack(),
+                new Rectangle(
+                    notification.renderPosX - width * notification.animationProgress,
                     notification.renderPosY,
                     notification.renderPosX + width * notification.animationProgress + 1,
-                    notification.renderPosY + height + 1));
+                    notification.renderPosY + height + 1
+                )
+            );
             //Renderer.R2D.beginScissor(Renderer.R3D.getEmptyMatrixStack(), notification.renderPosX - width * notification.animationProgress, notification.renderPosY, notification.renderPosX + width * notification.animationProgress + 1, notification.renderPosY + height + 1);
-            Renderer.R2D.renderQuad(ms,
+            Renderer.R2D.renderQuad(
+                ms,
                 topBg,
                 notification.renderPosX - width,
                 notification.renderPosY,
                 notification.renderPosX + width + 1,
-                notification.renderPosY + height);
+                notification.renderPosY + height
+            );
             FontRenderers.getRenderer()
-                .drawCenteredString(ms,
-                    contents,
-                    notification.renderPosX,
-                    notification.renderPosY + height / 2f - FontRenderers.getRenderer().getFontHeight() / 2f,
-                    0xFFFFFF);
+                         .drawCenteredString(
+                             ms,
+                             contents,
+                             notification.renderPosX,
+                             notification.renderPosY + height / 2f - FontRenderers.getRenderer().getFontHeight() / 2f,
+                             0xFFFFFF
+                         );
             double timeRemainingInv = 1 - timeRemaining;
             if (!notification.shouldDoAnimation && notification.animationProgress == 0 && notificationExpired) {
                 timeRemainingInv = 1;
@@ -118,27 +126,33 @@ public class NotificationRenderer {
                 double seed = Math.abs((Math.sin(Math.toRadians(seedR * 360)) + 1) / 2);
                 Color start = Renderer.Util.lerp(ThemeManager.getMainTheme().getActive(), ThemeManager.getMainTheme().getAccent(), seed);
                 Color end = Renderer.Util.lerp(ThemeManager.getMainTheme().getActive(), ThemeManager.getMainTheme().getAccent(), 1 - seed);
-                Renderer.R2D.renderQuadGradient(ms,
+                Renderer.R2D.renderQuadGradient(
+                    ms,
                     end,
                     start,
                     notification.renderPosX - width,
                     notification.renderPosY + height - 1,
                     notification.renderPosX + width + 1,
                     notification.renderPosY + height,
-                    false);
+                    false
+                );
             } else {
-                Renderer.R2D.renderQuad(ms,
+                Renderer.R2D.renderQuad(
+                    ms,
                     ThemeManager.getMainTheme().getActive(),
                     notification.renderPosX - width,
                     notification.renderPosY + height - 1,
                     notification.renderPosX + width + 1,
-                    notification.renderPosY + height);
-                Renderer.R2D.renderQuad(ms,
+                    notification.renderPosY + height
+                );
+                Renderer.R2D.renderQuad(
+                    ms,
                     ThemeManager.getMainTheme().getAccent(),
                     notification.renderPosX - width,
                     notification.renderPosY + height - 1,
                     notification.renderPosX - width + ((width + 1) * 2 * timeRemainingInv),
-                    notification.renderPosY + height);
+                    notification.renderPosY + height
+                );
             }
             ClipStack.globalInstance.popWindow();
             //Renderer.R2D.endScissor();
@@ -182,21 +196,26 @@ public class NotificationRenderer {
 
 
             double notificationHeight = Math.max(iconDimensions, contentHeight) + texPadding * 2d; // always have padding at the outside no matter what
-            double notificationWidth = texPadding + iconDimensions + texPadding + Math.max(minWidth,
-                contentWidth) + texPadding; // take padding for the icon into account as well
+            double notificationWidth = texPadding + iconDimensions + texPadding + Math.max(
+                minWidth,
+                contentWidth
+            ) + texPadding; // take padding for the icon into account as well
             double notificationX = notification.posX = bottomRightStartX - notificationWidth;
             double notificationY = bottomRightStartY - notificationHeight - yOffset;
             double interpolatedAnimProgress = Transitions.easeOutExpo(notification.animationProgress);
-            Renderer.R2D.renderRoundedQuad(ms,
+            Renderer.R2D.renderRoundedQuad(
+                ms,
                 new Color(20, 20, 20, (int) Math.min(255, 255 * interpolatedAnimProgress)),
                 notificationX,
                 notificationY,
                 notificationX + notificationWidth,
                 notificationY + notificationHeight,
                 5,
-                10);
+                10
+            );
             Color notifTheme = notification.type.getC();
-            Renderer.R2D.renderRoundedOutline(ms,
+            Renderer.R2D.renderRoundedOutline(
+                ms,
                 Renderer.Util.modify(notifTheme, -1, -1, -1, (int) Math.min(255, 255 * interpolatedAnimProgress)),
                 notificationX,
                 notificationY,
@@ -207,28 +226,33 @@ public class NotificationRenderer {
                 5,
                 5,
                 1,
-                10);
+                10
+            );
             Renderer.setupRender();
             RenderSystem.setShaderColor(notifTheme.getRed() / 255f, notifTheme.getGreen() / 255f, notifTheme.getBlue() / 255f, (float) interpolatedAnimProgress);
-            Texture.NOTIFICATION_TYPES.bindAndDraw(ms,
+            Texture.NOTIFICATION_TYPES.bindAndDraw(
+                ms,
                 notificationX + texPadding,
                 notificationY + texPadding/* - iconDimensions / 2d*/,
                 iconDimensions,
                 iconDimensions,
-                notification.type.getSpriteName());
+                notification.type.getSpriteName()
+            );
             RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
             Renderer.endRender();
 
             double contentHeightAbsolved = 0;
             for (String s : content) {
-                fontRenderer.drawString(ms,
+                fontRenderer.drawString(
+                    ms,
                     s,
                     (float) (notificationX + texPadding + iconDimensions + texPadding),
                     (float) (notificationY + notificationHeight / 2d - contentHeight / 2d + contentHeightAbsolved),
                     1f,
                     1f,
                     1f,
-                    (float) interpolatedAnimProgress);
+                    (float) interpolatedAnimProgress
+                );
                 contentHeightAbsolved += fontRenderer.getFontHeight();
             }
 

@@ -50,9 +50,11 @@ public class ElytraFly extends Module {
             if (CoffeeMain.client.player.isFallFlying()) {
 
                 float angle = (float) Math.toRadians(CoffeeMain.client.player.getYaw());
-                Vec3d acceleration = new Vec3d(-MathHelper.sin(angle) * (this.acceleration.getValue() / 100),
+                Vec3d acceleration = new Vec3d(
+                    -MathHelper.sin(angle) * (this.acceleration.getValue() / 100),
                     0,
-                    MathHelper.cos(angle) * (this.acceleration.getValue() / 100));
+                    MathHelper.cos(angle) * (this.acceleration.getValue() / 100)
+                );
 
                 Vec3d vec = CoffeeMain.client.player.getVelocity();
 

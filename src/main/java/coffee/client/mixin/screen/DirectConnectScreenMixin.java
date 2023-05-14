@@ -65,12 +65,12 @@ import static coffee.client.helper.DirectConnectScreenVariables.*;
 @Mixin(DirectConnectScreen.class)
 public abstract class DirectConnectScreenMixin extends Screen implements FastTickable {
     private static final Gson GSON = (new GsonBuilder()).registerTypeAdapter(ServerMetadata.Version.class, CodecMapper.createSerializer(ServerMetadata.Version.CODEC))
-        .registerTypeAdapter(ServerMetadata.Players.class, CodecMapper.createDeserializer(ServerMetadata.Players.CODEC))
-        .registerTypeAdapter(ServerMetadata.class, CodecMapper.createDeserializer(ServerMetadata.CODEC))
-        .registerTypeHierarchyAdapter(Text.class, new Text.Serializer())
-        .registerTypeHierarchyAdapter(Style.class, new Style.Serializer())
-        .registerTypeAdapterFactory(new LowercaseEnumTypeAdapterFactory())
-        .create();
+                                                        .registerTypeAdapter(ServerMetadata.Players.class, CodecMapper.createDeserializer(ServerMetadata.Players.CODEC))
+                                                        .registerTypeAdapter(ServerMetadata.class, CodecMapper.createDeserializer(ServerMetadata.CODEC))
+                                                        .registerTypeHierarchyAdapter(Text.class, new Text.Serializer())
+                                                        .registerTypeHierarchyAdapter(Style.class, new Style.Serializer())
+                                                        .registerTypeAdapterFactory(new LowercaseEnumTypeAdapterFactory())
+                                                        .create();
     private static final Texture SERVER_ICON = new Texture("dynamic/directConnectServerIcon");
     private static final Identifier UNKNOWN_SERVER_ICON = new Identifier("textures/misc/unknown_server.png");
     private static final AtomicBoolean alreadyRefreshing = new AtomicBoolean(false);
@@ -85,7 +85,8 @@ public abstract class DirectConnectScreenMixin extends Screen implements FastTic
     @Shadow
     protected abstract void onAddressFieldChanged();
 
-    @ModifyArg(method = "init", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/TextFieldWidget;<init>(Lnet/minecraft/client/font/TextRenderer;IIIILnet/minecraft/text/Text;)V"), index = 2)
+    @ModifyArg(method = "init", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/TextFieldWidget;<init>(Lnet/minecraft/client/font/TextRenderer;IIIILnet/minecraft/text/Text;)V"),
+               index = 2)
     int coffee_modifyY(int y) {
         return this.height / 4 + 96 + 12 - 30;
     }
@@ -103,7 +104,9 @@ public abstract class DirectConnectScreenMixin extends Screen implements FastTic
         });
     }
 
-    @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/DirectConnectScreen;drawTextWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/Text;III)V"), index = 4)
+    @ModifyArg(method = "render", at = @At(value = "INVOKE",
+                                           target = "Lnet/minecraft/client/gui/screen/DirectConnectScreen;drawTextWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/Text;III)V"),
+               index = 4)
     int coffee_modifyYOfText(int par4) {
         return this.height / 4 + 96 + 12 - 30 - 16;
     }
@@ -138,10 +141,10 @@ public abstract class DirectConnectScreenMixin extends Screen implements FastTic
                 PacketInputStream pis = new PacketInputStream(socket.getInputStream(), true, pos::setCompressionEnabled);
                 int protocolVersion = SharedConstants.getProtocolVersion();
                 pos.write(new C2SPacket(0x00, packetWriter -> packetWriter // Handshake
-                    .writeVarInt(protocolVersion) // Version
-                    .writeString(address) // Connecting address
-                    .writeShort(port) // Connecting port
-                    .writeVarInt(1))); // Next state: Status
+                                                                           .writeVarInt(protocolVersion) // Version
+                                                                           .writeString(address) // Connecting address
+                                                                           .writeShort(port) // Connecting port
+                                                                           .writeVarInt(1))); // Next state: Status
                 pos.write(new C2SPacket(0x00)); // Status
                 S2CPacket read = pis.read();
                 pis.close();
@@ -155,28 +158,13 @@ public abstract class DirectConnectScreenMixin extends Screen implements FastTic
                     try {
                         byte[] bytes = favicon1.get().iconBytes();
                         RendererUtils.registerBufferedImageTexture(SERVER_ICON, ImageIO.read(new ByteArrayInputStream(bytes)));
-                        //                        favicon = ServerInfo.parseFavicon(favicon);
-//                        Utils.registerBase64StringTexture(SERVER_ICON, favicon);
                         serverTextureKnown = true;
                     } catch (Exception ignored) {
                         serverTextureKnown = false;
                     }
                 }
-//                String favicon = favicon1.;
-//                if (favicon.isEmpty()) {
-//                    serverTextureKnown = false;
-//                } else {
-//                    try {
-//                        favicon = ServerInfo.parseFavicon(favicon);
-//                        Utils.registerBase64StringTexture(SERVER_ICON, favicon);
-//                        serverTextureKnown = true;
-//                    } catch (Exception ignored) {
-//                        serverTextureKnown = false;
-//                    }
-//                }
                 show = true;
             } catch (Exception e) {
-                //                e.printStackTrace();
                 show = false;
             } finally {
                 alreadyRefreshing.set(false);
@@ -221,7 +209,8 @@ public abstract class DirectConnectScreenMixin extends Screen implements FastTic
 
         RenderSystem.setShaderTexture(0, serverTextureKnown ? SERVER_ICON : UNKNOWN_SERVER_ICON);
 
-        Renderer.R2D.runWithinBlendMask(() -> Renderer.R2D.renderRoundedQuadInternal(ms.peek().getPositionMatrix(),
+        Renderer.R2D.runWithinBlendMask(() -> Renderer.R2D.renderRoundedQuadInternal(
+            ms.peek().getPositionMatrix(),
             0f,
             0f,
             0f,
@@ -231,7 +220,8 @@ public abstract class DirectConnectScreenMixin extends Screen implements FastTic
             originX + minWidth - innerPadding,
             originY + height - innerPadding,
             5,
-            10), () -> {
+            10
+        ), () -> {
             double w = minWidth - innerPadding * 2;
             Renderer.R2D.renderTexture(ms, originX + innerPadding, originY + innerPadding, w, w, 0, 0, w, w, w, w);
         });

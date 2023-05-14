@@ -88,7 +88,9 @@ public class BowAimbot extends Module {
 
     private LivingEntity select(MatrixStack renderStack) {
         Optional<LivingEntity> max = Utils.findEntities(livingEntity -> livingEntity.isAttackable() && livingEntity.isAlive() && livingEntity.getPos()
-            .distanceTo(client.player.getCameraPosVec(client.getTickDelta())) < maxRange).max(Comparator.comparingDouble(value -> computePriority(renderStack, value)));
+                                                                                                                                             .distanceTo(client.player.getCameraPosVec(client.getTickDelta())) <
+                                                                                                                                 maxRange)
+                                          .max(Comparator.comparingDouble(value -> computePriority(renderStack, value)));
         return max.orElse(null);
     }
 

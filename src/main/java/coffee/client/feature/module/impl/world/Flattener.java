@@ -36,20 +36,20 @@ public class Flattener extends Module {
     final List<RenderEntry> renders = new ArrayList<>();
     final double range = 8;
     final BooleanSetting makeSame = this.config.create(new BooleanSetting.Builder(false).name("Make same")
-        .description("Makes the floor the same material you're holding")
-        .get());
+                                                                                        .description("Makes the floor the same material you're holding")
+                                                                                        .get());
     final BooleanSetting asyncPlaceBreak = this.config.create(new BooleanSetting.Builder(true).name("Async place / break")
-        .description("Does block breaking and placing at the same time")
-        .get());
+                                                                                              .description("Does block breaking and placing at the same time")
+                                                                                              .get());
     final BooleanSetting breakSides = this.config.create(new BooleanSetting.Builder(true).name("Break sides")
-        .description("Clears the area 3 blocks up so you can walk into it")
-        .get());
+                                                                                         .description("Clears the area 3 blocks up so you can walk into it")
+                                                                                         .get());
     final DoubleSetting amountPerTick = this.config.create(new DoubleSetting.Builder(3).name("Amount per tick")
-        .description("How many actions to do per tick")
-        .min(1)
-        .max(20)
-        .precision(0)
-        .get());
+                                                                                       .description("How many actions to do per tick")
+                                                                                       .min(1)
+                                                                                       .max(20)
+                                                                                       .precision(0)
+                                                                                       .get());
     Vec3d origin = null;
     int prevSlot = -1;
     boolean toBreakEmptyBefore = false;
@@ -130,7 +130,7 @@ public class Flattener extends Module {
                 Vec3d actual = Vec3d.of(blockPos).add(.5, .5, .5);
                 Rotations.lookAtV3(actual);
                 Objects.requireNonNull(client.interactionManager)
-                    .interactBlock(client.player, Hand.MAIN_HAND, new BlockHitResult(actual, Direction.DOWN, blockPos, false));
+                       .interactBlock(client.player, Hand.MAIN_HAND, new BlockHitResult(actual, Direction.DOWN, blockPos, false));
             }
             done++;
             if (done > amountPerTick.getValue()) {

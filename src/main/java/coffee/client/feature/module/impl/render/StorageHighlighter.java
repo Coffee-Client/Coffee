@@ -95,11 +95,14 @@ public class StorageHighlighter extends Module {
     }
 
     private Boolean isStorage(Block block) {
-        return block instanceof ChestBlock || block instanceof EnderChestBlock || block instanceof BarrelBlock || block instanceof ShulkerBoxBlock || block instanceof HopperBlock || block instanceof DispenserBlock || block instanceof BrewingStandBlock || block instanceof FurnaceBlock || block instanceof BlastFurnaceBlock || block instanceof SmokerBlock;
+        return block instanceof ChestBlock || block instanceof EnderChestBlock || block instanceof BarrelBlock || block instanceof ShulkerBoxBlock || block instanceof HopperBlock ||
+               block instanceof DispenserBlock || block instanceof BrewingStandBlock || block instanceof FurnaceBlock || block instanceof BlastFurnaceBlock || block instanceof SmokerBlock;
     }
 
     private Boolean isStorage(BlockEntity block) {
-        return block instanceof ChestBlockEntity || block instanceof EnderChestBlockEntity || block instanceof BarrelBlockEntity || block instanceof ShulkerBoxBlockEntity || block instanceof HopperBlockEntity || block instanceof DispenserBlockEntity || block instanceof BrewingStandBlockEntity || block instanceof FurnaceBlockEntity || block instanceof BlastFurnaceBlockEntity || block instanceof SmokerBlockEntity;
+        return block instanceof ChestBlockEntity || block instanceof EnderChestBlockEntity || block instanceof BarrelBlockEntity || block instanceof ShulkerBoxBlockEntity ||
+               block instanceof HopperBlockEntity || block instanceof DispenserBlockEntity || block instanceof BrewingStandBlockEntity || block instanceof FurnaceBlockEntity ||
+               block instanceof BlastFurnaceBlockEntity || block instanceof SmokerBlockEntity;
     }
 
     void addIfNotExisting(BlockPos p) {

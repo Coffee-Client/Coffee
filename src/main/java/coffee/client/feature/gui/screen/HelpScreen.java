@@ -38,7 +38,8 @@ public class HelpScreen extends AAScreen {
         TextElement hello = new TextElement(FontRenderers.getRenderer(), "Welcome to Coffee!", Color.WHITE, false, 0, 0);
         SpacerElement spacer = new SpacerElement(0, 0, 0, 10);
         TextElement intro = constructDefault("Coffee is an extremely versatile client, suited for a lot of things.");
-        FlexLayoutElement element = new FlexLayoutElement(FlexLayoutElement.LayoutDirection.DOWN,
+        FlexLayoutElement element = new FlexLayoutElement(
+            FlexLayoutElement.LayoutDirection.DOWN,
             5,
             5,
             width - 10,
@@ -54,9 +55,15 @@ public class HelpScreen extends AAScreen {
             constructDefault("To configure the client, use the 'ClientSettings' module settings"),
             constructDefault("To search for modules, just type in the search term when the clickgui is open"),
             new SpacerElement(0, 0, 0, 5),
-            new ClickableTextElement(0, 0, "If you have more questions, click here to join the discord", FontRenderers.getRenderer(), () -> {
-                Util.getOperatingSystem().open("https://discord.gg/yxEbQCdDus");
-            }, 0xFFFFFF));
+            new ClickableTextElement(
+                0,
+                0,
+                "If you have more questions, click here to join the discord",
+                FontRenderers.getRenderer(),
+                () -> Util.getOperatingSystem().open("https://discord.gg/yxEbQCdDus"),
+                0xFFFFFF
+            )
+        );
         addChild(element);
         ButtonElement be = new ButtonElement(ButtonElement.DANGER, width - 5 - 20, 5, 20, 20, "X", this::close);
         addChild(be);

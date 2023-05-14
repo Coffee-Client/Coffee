@@ -96,8 +96,10 @@ public class Search extends Command {
                 }
             }
             if (foundAt.isEmpty()) {
-                error(String.format("Didn't find item anywhere. %s",
-                    omitted > 0 ? String.format("Note that %s container%s were omitted because of distance", omitted, omitted != 1 ? "s" : "") : ""));
+                error(String.format(
+                    "Didn't find item anywhere. %s",
+                    omitted > 0 ? String.format("Note that %s container%s were omitted because of distance", omitted, omitted != 1 ? "s" : "") : ""
+                ));
             } else {
                 message("Found " + searchFor.getName().getString() + " at:");
                 for (BlockPos item : foundAt.keySet().stream().sorted(Comparator.comparingInt(value -> foundAt.getOrDefault(value, 0))).toList()) {

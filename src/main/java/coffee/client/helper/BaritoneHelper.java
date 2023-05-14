@@ -60,7 +60,7 @@ public class BaritoneHelper {
         if (idsWhoWantPause.isEmpty()) {
             ((ChatHudDuck) CoffeeMain.client.inGameHud.getChatHud()).coffee_removeChatMessage(lastMessageId);
             lastMessageId = ((ChatHudDuck) CoffeeMain.client.inGameHud.getChatHud()).coffee_addChatMessage(Text.literal("Pausing baritone...")
-                .styled(style -> style.withColor(TextColor.fromRgb(Color.YELLOW.getRGB()))));
+                                                                                                               .styled(style -> style.withColor(TextColor.fromRgb(Color.YELLOW.getRGB()))));
         }
         if (!idsWhoWantPause.contains(id)) {
             idsWhoWantPause.add(id);
@@ -76,7 +76,7 @@ public class BaritoneHelper {
         if (idsWhoWantPause.isEmpty()) {
             ((ChatHudDuck) CoffeeMain.client.inGameHud.getChatHud()).coffee_removeChatMessage(lastMessageId);
             lastMessageId = ((ChatHudDuck) CoffeeMain.client.inGameHud.getChatHud()).coffee_addChatMessage(Text.literal("Resuming baritone...")
-                .styled(style -> style.withColor(TextColor.fromRgb(new Color(65, 217, 101).getRGB()))));
+                                                                                                               .styled(style -> style.withColor(TextColor.fromRgb(new Color(65, 217, 101).getRGB()))));
         }
     }
 }

@@ -48,10 +48,12 @@ public class GamemodeAlert extends Module {
                 GameMode gameMode = seen.get(id);
                 if (gameMode != gm) {
                     String dName = playerListEntry.getDisplayName() != null ? playerListEntry.getDisplayName().getString() : playerListEntry.getProfile().getName();
-                    Utils.Logging.warn(String.format("[Gamemode change] %s§r just changed their gamemode: %s -> %s",
+                    Utils.Logging.warn(String.format(
+                        "[Gamemode change] %s§r just changed their gamemode: %s -> %s",
                         dName,
                         StringUtil.capitalize(gameMode.getName()),
-                        StringUtil.capitalize(gm.getName())));
+                        StringUtil.capitalize(gm.getName())
+                    ));
                     seen.put(id, gm);
                 }
             }

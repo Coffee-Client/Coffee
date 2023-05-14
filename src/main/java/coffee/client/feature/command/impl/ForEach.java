@@ -64,10 +64,12 @@ public class ForEach extends Command {
 
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
-        return StaticArgumentServer.serveFromStatic(index,
+        return StaticArgumentServer.serveFromStatic(
+            index,
             new PossibleArgument(ArgumentType.STRING, "player", "tab"),
             new PossibleArgument(ArgumentType.NUMBER, "<delay>"),
-            new PossibleArgument(ArgumentType.NUMBER, "<message>"));
+            new PossibleArgument(ArgumentType.NUMBER, "<message>")
+        );
     }
 
     @Override
@@ -78,12 +80,12 @@ public class ForEach extends Command {
             case "player" -> {
                 for (PlayerListEntry playerListEntry : Objects.requireNonNull(CoffeeMain.client.getNetworkHandler()).getPlayerList()) {
                     if (Utils.Players.isPlayerNameValid(playerListEntry.getProfile().getName()) && !playerListEntry.getProfile()
-                        .getId()
-                        .equals(Objects.requireNonNull(CoffeeMain.client.player).getUuid())) {
+                                                                                                                   .getId()
+                                                                                                                   .equals(Objects.requireNonNull(CoffeeMain.client.player).getUuid())) {
                         runner.execute(() -> {
                             try {
                                 client.getNetworkHandler()
-                                    .sendChatMessage(String.join(" ", Arrays.copyOfRange(args, 2, args.length)).replaceAll("%s", playerListEntry.getProfile().getName()));
+                                      .sendChatMessage(String.join(" ", Arrays.copyOfRange(args, 2, args.length)).replaceAll("%s", playerListEntry.getProfile().getName()));
                                 Thread.sleep(delay);
                             } catch (Exception ignored) {
                             }

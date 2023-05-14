@@ -29,8 +29,8 @@ public class Angryman extends Module {
         if (updater.hasExpired(1000)) {
             updater.reset();
             nextTarget = Utils.findEntities(livingEntity -> livingEntity instanceof EndermanEntity e && client.player.canSee(e) && !e.isProvoked())
-                .min(Comparator.comparingDouble(value -> value.distanceTo(client.player)))
-                .orElse(null);
+                              .min(Comparator.comparingDouble(value -> value.distanceTo(client.player)))
+                              .orElse(null);
         }
         if (nextTarget != null) {
             Rotations.lookAtV3(nextTarget.getEyePos());

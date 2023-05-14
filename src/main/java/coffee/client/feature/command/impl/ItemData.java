@@ -27,16 +27,20 @@ public class ItemData extends Command {
 
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
-        return StaticArgumentServer.serveFromStatic(index,
-            new PossibleArgument(ArgumentType.PLAYER,
+        return StaticArgumentServer.serveFromStatic(
+            index,
+            new PossibleArgument(
+                ArgumentType.PLAYER,
                 Objects.requireNonNull(CoffeeMain.client.world)
-                    .getPlayers()
-                    .stream()
-                    .map(abstractClientPlayerEntity -> abstractClientPlayerEntity.getGameProfile().getName())
-                    .toList()
-                    .toArray(String[]::new)),
+                       .getPlayers()
+                       .stream()
+                       .map(abstractClientPlayerEntity -> abstractClientPlayerEntity.getGameProfile().getName())
+                       .toList()
+                       .toArray(String[]::new)
+            ),
             new PossibleArgument(ArgumentType.STRING, "hand", "offhand", "head", "chest", "legs", "feet"),
-            new PossibleArgument(ArgumentType.STRING, "--onlyShow"));
+            new PossibleArgument(ArgumentType.STRING, "--onlyShow")
+        );
     }
 
     @Override
@@ -62,29 +66,18 @@ public class ItemData extends Command {
     }
 
     private ItemStack getItem(PlayerEntity player, String slot) {
-        switch (slot.toLowerCase()) {
-            case "hand":
-                return player.getInventory().getMainHandStack();
-
-            case "offhand":
-                return player.getInventory().getStack(PlayerInventory.OFF_HAND_SLOT);
-
-            case "head":
-                return player.getInventory().getArmorStack(3);
-
-            case "chest":
-                return player.getInventory().getArmorStack(2);
-
-            case "legs":
-                return player.getInventory().getArmorStack(1);
-
-            case "feet":
-                return player.getInventory().getArmorStack(0);
-
-            default:
+        return switch (slot.toLowerCase()) {
+            case "hand" -> player.getInventory().getMainHandStack();
+            case "offhand" -> player.getInventory().getStack(PlayerInventory.OFF_HAND_SLOT);
+            case "head" -> player.getInventory().getArmorStack(3);
+            case "chest" -> player.getInventory().getArmorStack(2);
+            case "legs" -> player.getInventory().getArmorStack(1);
+            case "feet" -> player.getInventory().getArmorStack(0);
+            default -> {
                 message("Invalid slot");
-                return null;
-        }
+                yield null;
+            }
+        };
     }
 
     private void giveItem(ItemStack stack) {

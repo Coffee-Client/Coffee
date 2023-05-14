@@ -81,12 +81,14 @@ public class ClickGUI extends AAScreen {
 
     @Override
     protected void initInternal() {
-        help = new ClickableTextElement(5,
+        help = new ClickableTextElement(
+            5,
             client.getWindow().getScaledHeight() - FontRenderers.getRenderer().getFontHeight() - 5,
             "Click me for help",
             FontRenderers.getRenderer(),
             () -> client.setScreen(new HelpScreen(this)),
-            0xCCCCCC);
+            0xCCCCCC
+        );
         closing = false;
         if (initialized) {
             return;
@@ -237,7 +239,8 @@ public class ClickGUI extends AAScreen {
             double hei = pad + FontRenderers.getRenderer().getFontHeight() + pad;
             stack.translate(0, (hei + pad) * (1 - Transitions.easeOutExpo(searchAnim)), 0);
             double textWid = FontRenderers.getRenderer().getStringWidth(oldSearchTerm);
-            Renderer.R2D.renderRoundedQuad(stack,
+            Renderer.R2D.renderRoundedQuad(
+                stack,
                 new Color(20, 20, 20),
                 width - pad - pad - textWid - pad,
                 height - pad - hei,
@@ -247,9 +250,10 @@ public class ClickGUI extends AAScreen {
                 2,
                 2,
                 2,
-                10);
+                10
+            );
             FontRenderers.getRenderer()
-                .drawString(stack, oldSearchTerm, width - pad - pad - textWid, height - pad - pad - FontRenderers.getRenderer().getFontHeight(), 0xFFFFFF);
+                         .drawString(stack, oldSearchTerm, width - pad - pad - textWid, height - pad - pad - FontRenderers.getRenderer().getFontHeight(), 0xFFFFFF);
             stack.pop();
         }
         if (tooltipContent != null) {

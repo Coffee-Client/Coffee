@@ -51,10 +51,10 @@ public abstract class GameRendererMixin {
 
     @Shadow
     @Final
-    private Camera camera;
+    MinecraftClient client;
     @Shadow
     @Final
-    MinecraftClient client;
+    private Camera camera;
 
     @Shadow
     protected abstract double getFov(Camera camera, float tickDelta, boolean changingFov);
@@ -65,7 +65,8 @@ public abstract class GameRendererMixin {
     @Shadow
     public abstract Matrix4f getBasicProjectionMatrix(double fov);
 
-    @Shadow protected abstract void bobView(MatrixStack matrices, float tickDelta);
+    @Shadow
+    protected abstract void bobView(MatrixStack matrices, float tickDelta);
 
     @Inject(at = @At(value = "FIELD", target = "Lnet/minecraft/client/render/GameRenderer;renderHand:Z", opcode = Opcodes.GETFIELD, ordinal = 0), method = "renderWorld")
     void coffee_dispatchWorldRender(float tickDelta, long limitTime, MatrixStack matrix, CallbackInfo ci) {
@@ -112,7 +113,7 @@ public abstract class GameRendererMixin {
         }
     }
 
-    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiler/Profiler;pop()V", shift = At.Shift.BEFORE,ordinal = 0), method = "render")
+    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiler/Profiler;pop()V", shift = At.Shift.BEFORE, ordinal = 0), method = "render")
     void coffee_postHudRenderNoCheck(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
         AccurateFrameRateCounter.globalInstance.recordFrame();
         MSAAFramebuffer.use(() -> {
@@ -134,11 +135,13 @@ public abstract class GameRendererMixin {
             Vec3d vec3d = instance.getCameraPosVec(tickDelta);
             Vec3d vec3d2 = Utils.Math.getRotationVector(Rotations.getClientPitch(), Rotations.getClientYaw());
             Vec3d vec3d3 = vec3d.add(vec3d2.x * maxDistance, vec3d2.y * maxDistance, vec3d2.z * maxDistance);
-            return instance.world.raycast(new RaycastContext(vec3d,
+            return instance.world.raycast(new RaycastContext(
+                vec3d,
                 vec3d3,
                 RaycastContext.ShapeType.OUTLINE,
                 includeFluids ? RaycastContext.FluidHandling.ANY : RaycastContext.FluidHandling.NONE,
-                instance));
+                instance
+            ));
         } else {
             return instance.raycast(maxDistance, tickDelta, includeFluids);
         }

@@ -83,12 +83,12 @@ public class PathFinder {
 
     List<Entry> getFreeNeighbours(Entry e) {
         return new ArrayList<>(Arrays.stream(offsetsToTry)
-            .map(ints -> e.pos.add(ints[0], ints[1], ints[2]))
-            .filter(entry -> !visited.contains(entry))
-            .filter(blockPos -> !isObstructed(Vec3d.of(e.pos).add(.5, 0, .5), Vec3d.of(blockPos).add(.5, 0, .5)))
-            .map(vec3d -> new Entry(vec3d, (float) vec3d.getSquaredDistance(end), null, e))
-            .filter(Entry::canTraverse)
-            .toList());
+                                     .map(ints -> e.pos.add(ints[0], ints[1], ints[2]))
+                                     .filter(entry -> !visited.contains(entry))
+                                     .filter(blockPos -> !isObstructed(Vec3d.of(e.pos).add(.5, 0, .5), Vec3d.of(blockPos).add(.5, 0, .5)))
+                                     .map(vec3d -> new Entry(vec3d, (float) vec3d.getSquaredDistance(end), null, e))
+                                     .filter(Entry::canTraverse)
+                                     .toList());
     }
 
     public boolean find() {

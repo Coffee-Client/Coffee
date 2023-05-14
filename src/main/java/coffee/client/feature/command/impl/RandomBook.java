@@ -28,9 +28,11 @@ public class RandomBook extends Command {
 
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
-        return StaticArgumentServer.serveFromStatic(index,
+        return StaticArgumentServer.serveFromStatic(
+            index,
             new PossibleArgument(ArgumentType.STRING, "ascii", "raw", "unicode"),
-            new PossibleArgument(ArgumentType.NUMBER, "<pages>"));
+            new PossibleArgument(ArgumentType.NUMBER, "<pages>")
+        );
     }
 
     @Override
@@ -66,7 +68,7 @@ public class RandomBook extends Command {
 
             case "unicode" -> {
                 IntStream chars = new Random().ints(0, 0x10FFFF + 1);
-                String text = chars.limit(210L * Math.round(size)).mapToObj(i -> String.valueOf((char) i)).collect(Collectors.joining());
+                String text = chars.limit(210L * size).mapToObj(i -> String.valueOf((char) i)).collect(Collectors.joining());
                 List<String> title2 = new ArrayList<>();
                 Optional<String> pages2 = Optional.of("Unicode");
 

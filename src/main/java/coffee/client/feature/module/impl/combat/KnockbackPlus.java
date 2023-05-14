@@ -33,7 +33,7 @@ public class KnockbackPlus extends Module {
         if (pe.getPacket() instanceof PlayerInteractEntityC2SPacket && this.isEnabled()) {
             Vec3d a = Objects.requireNonNull(CoffeeMain.client.player).getPos().subtract(0, 1e-10, 0);
             Objects.requireNonNull(CoffeeMain.client.getNetworkHandler())
-                .sendPacket(new ClientCommandC2SPacket(CoffeeMain.client.player, ClientCommandC2SPacket.Mode.START_SPRINTING));
+                   .sendPacket(new ClientCommandC2SPacket(CoffeeMain.client.player, ClientCommandC2SPacket.Mode.START_SPRINTING));
             PlayerMoveC2SPacket p = new PlayerMoveC2SPacket.PositionAndOnGround(a.x, a.y, a.z, true);
             CoffeeMain.client.getNetworkHandler().sendPacket(p);
         }

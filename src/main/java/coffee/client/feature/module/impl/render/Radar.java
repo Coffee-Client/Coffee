@@ -13,11 +13,11 @@ import net.minecraft.client.util.math.MatrixStack;
 
 public class Radar extends Module {
     final DoubleSetting scale = this.config.create(new DoubleSetting.Builder(3).name("Scale")
-        .description("How much area to show around you")
-        .min(0.1)
-        .max(10)
-        .precision(1)
-        .get());
+                                                                               .description("How much area to show around you")
+                                                                               .min(0.1)
+                                                                               .max(10)
+                                                                               .precision(1)
+                                                                               .get());
     public double iScale = 0;
 
     public Radar() {

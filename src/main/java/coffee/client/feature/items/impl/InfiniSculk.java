@@ -44,12 +44,14 @@ public class InfiniSculk extends Item {
             return null;
         }
         ItemStack stack = new ItemStack(Items.SCULK_CATALYST);
-        NbtObject catalyst = new NbtObject("",
+        NbtObject catalyst = new NbtObject(
+            "",
             new NbtProperty("charge", strength.getValue()),
             new NbtProperty("decay_delay", 1),
             new NbtList("facings"),
             NbtArray.create("pos", origin.getX(), origin.getY(), origin.getZ()),
-            new NbtProperty("update_delay", 1));
+            new NbtProperty("update_delay", 1)
+        );
         NbtObject[] l = new NbtObject[32];
         Arrays.fill(l, catalyst);
         NbtGroup root = new NbtGroup(new NbtObject("BlockEntityTag", new NbtList("cursors", l), new NbtProperty("id", "minecraft:sculk_catalyst")));

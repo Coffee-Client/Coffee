@@ -153,7 +153,7 @@ public class CommandRegistry {
         }
         String[] spl = command.split(" +");
         if (spl.length == 0) {
-            return; // this shouldnt happen in theory
+            return; // this shouldn't happen in theory
         }
         String cmd = spl[0].toLowerCase();
         String[] args = Arrays.copyOfRange(spl, 1, spl.length);

@@ -121,7 +121,8 @@ public class FlexLayoutElement extends Element {
             }
             element.setPositionX(getPositionX() + posX * direction.mulX);
             element.setPositionY(getPositionY() + posY * direction.mulY + actualOffsetY);
-            if (element.getPositionY() + scroller.getScroll() <= getPositionY() + getHeight() && element.getPositionY() + element.getHeight() + scroller.getScroll() >= getPositionY() && element.getPositionX() >= getPositionX() && element.getPositionX() <= getPositionX() + getWidth()) {
+            if (element.getPositionY() + scroller.getScroll() <= getPositionY() + getHeight() && element.getPositionY() + element.getHeight() + scroller.getScroll() >= getPositionY() &&
+                element.getPositionX() >= getPositionX() && element.getPositionX() <= getPositionX() + getWidth()) {
                 element.render(stack, mouseX, mouseY - scroller.getScroll());
             }
             posX += element.getWidth() + padding;
@@ -134,7 +135,8 @@ public class FlexLayoutElement extends Element {
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         return iterateOverChildren(element -> {
-            if (element.getPositionY() + scroller.getScroll() <= getPositionY() + getHeight() && element.getPositionY() + element.getHeight() + scroller.getScroll() >= getPositionY() && element.getPositionX() >= getPositionX() && element.getPositionX() <= getPositionX() + getWidth()) {
+            if (element.getPositionY() + scroller.getScroll() <= getPositionY() + getHeight() && element.getPositionY() + element.getHeight() + scroller.getScroll() >= getPositionY() &&
+                element.getPositionX() >= getPositionX() && element.getPositionX() <= getPositionX() + getWidth()) {
                 return element.mouseClicked(mouseX, mouseY - scroller.getScroll(), button);
             } else {
                 return false;
@@ -144,49 +146,67 @@ public class FlexLayoutElement extends Element {
 
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
-        return iterateOverChildren(element -> element.getPositionY() + scroller.getScroll() <= getPositionY() + getHeight() && element.getPositionY() + element.getHeight() + scroller.getScroll() >= getPositionY() && element.getPositionX() >= getPositionX() && element.getPositionX() <= getPositionX() + getWidth() && element.mouseReleased(
+        return iterateOverChildren(element -> element.getPositionY() + scroller.getScroll() <= getPositionY() + getHeight() &&
+                                              element.getPositionY() + element.getHeight() + scroller.getScroll() >= getPositionY() && element.getPositionX() >= getPositionX() &&
+                                              element.getPositionX() <= getPositionX() + getWidth() && element.mouseReleased(
             mouseX,
             mouseY - scroller.getScroll(),
-            button));
+            button
+        ));
     }
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, double deltaX, double deltaY, int button) {
-        return iterateOverChildren(element -> element.getPositionY() + scroller.getScroll() <= getPositionY() + getHeight() && element.getPositionY() + element.getHeight() + scroller.getScroll() >= getPositionY() && element.getPositionX() >= getPositionX() && element.getPositionX() <= getPositionX() + getWidth() && element.mouseDragged(
+        return iterateOverChildren(element -> element.getPositionY() + scroller.getScroll() <= getPositionY() + getHeight() &&
+                                              element.getPositionY() + element.getHeight() + scroller.getScroll() >= getPositionY() && element.getPositionX() >= getPositionX() &&
+                                              element.getPositionX() <= getPositionX() + getWidth() && element.mouseDragged(
             mouseX,
             mouseY - scroller.getScroll(),
             deltaX,
             deltaY,
-            button));
+            button
+        ));
     }
 
     @Override
     public boolean charTyped(char chr, int modifiers) {
-        return iterateOverChildren(element -> element.getPositionY() + scroller.getScroll() <= getPositionY() + getHeight() && element.getPositionY() + element.getHeight() + scroller.getScroll() >= getPositionY() && element.getPositionX() >= getPositionX() && element.getPositionX() <= getPositionX() + getWidth() && element.charTyped(
+        return iterateOverChildren(element -> element.getPositionY() + scroller.getScroll() <= getPositionY() + getHeight() &&
+                                              element.getPositionY() + element.getHeight() + scroller.getScroll() >= getPositionY() && element.getPositionX() >= getPositionX() &&
+                                              element.getPositionX() <= getPositionX() + getWidth() && element.charTyped(
             chr,
-            modifiers));
+            modifiers
+        ));
     }
 
     @Override
     public boolean keyPressed(int keyCode, int modifiers) {
-        return iterateOverChildren(element -> element.getPositionY() + scroller.getScroll() <= getPositionY() + getHeight() && element.getPositionY() + element.getHeight() + scroller.getScroll() >= getPositionY() && element.getPositionX() >= getPositionX() && element.getPositionX() <= getPositionX() + getWidth() && element.keyPressed(
+        return iterateOverChildren(element -> element.getPositionY() + scroller.getScroll() <= getPositionY() + getHeight() &&
+                                              element.getPositionY() + element.getHeight() + scroller.getScroll() >= getPositionY() && element.getPositionX() >= getPositionX() &&
+                                              element.getPositionX() <= getPositionX() + getWidth() && element.keyPressed(
             keyCode,
-            modifiers));
+            modifiers
+        ));
     }
 
     @Override
     public boolean keyReleased(int keyCode, int modifiers) {
-        return iterateOverChildren(element -> element.getPositionY() + scroller.getScroll() <= getPositionY() + getHeight() && element.getPositionY() + element.getHeight() + scroller.getScroll() >= getPositionY() && element.getPositionX() >= getPositionX() && element.getPositionX() <= getPositionX() + getWidth() && element.keyReleased(
+        return iterateOverChildren(element -> element.getPositionY() + scroller.getScroll() <= getPositionY() + getHeight() &&
+                                              element.getPositionY() + element.getHeight() + scroller.getScroll() >= getPositionY() && element.getPositionX() >= getPositionX() &&
+                                              element.getPositionX() <= getPositionX() + getWidth() && element.keyReleased(
             keyCode,
-            modifiers));
+            modifiers
+        ));
     }
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
-        if (iterateOverChildren(element -> element.getPositionY() + scroller.getScroll() <= getPositionY() + getHeight() && element.getPositionY() + element.getHeight() + scroller.getScroll() >= getPositionY() && element.getPositionX() >= getPositionX() && element.getPositionX() <= getPositionX() + getWidth() && element.mouseScrolled(
+        if (iterateOverChildren(element -> element.getPositionY() + scroller.getScroll() <= getPositionY() + getHeight() &&
+                                           element.getPositionY() + element.getHeight() + scroller.getScroll() >= getPositionY() && element.getPositionX() >= getPositionX() &&
+                                           element.getPositionX() <= getPositionX() + getWidth() && element.mouseScrolled(
             mouseX,
             mouseY,
-            amount))) {
+            amount
+        ))) {
             return true;
         }
         if (inBounds(mouseX, mouseY)) {

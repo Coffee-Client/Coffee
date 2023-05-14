@@ -118,10 +118,10 @@ public class AChatScreenMixin extends Screen {
         }
         String[] finalArgs = args;
         return args.length > 0 ? a.stream()
-            .filter(s -> s.startsWith("<") || !Utils.searchMatches(s, finalArgs[finalArgs.length - 1]).isEmpty())
-            .distinct()
-            .limit(20)
-            .collect(Collectors.toList()) : a;
+                                  .filter(s -> s.startsWith("<") || !Utils.searchMatches(s, finalArgs[finalArgs.length - 1]).isEmpty())
+                                  .distinct()
+                                  .limit(20)
+                                  .collect(Collectors.toList()) : a;
     }
 
     void renderSuggestions(MatrixStack stack) {
@@ -168,8 +168,8 @@ public class AChatScreenMixin extends Screen {
             return;
         }
         List<String> suggestions = getSuggestions(cmd).stream().map(s -> s.split("<")[0]) // strip everything after the first <
-            .filter(s -> !s.isEmpty()) // filter empty suggestions
-            .toList();
+                                                      .filter(s -> !s.isEmpty()) // filter empty suggestions
+                                                      .toList();
         if (suggestions.isEmpty()) {
             return;
         }

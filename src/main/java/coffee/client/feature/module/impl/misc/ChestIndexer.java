@@ -93,7 +93,7 @@ public class ChestIndexer extends Module {
             this.stacks.putIfAbsent(this.currentPosClicked, new Int2ObjectArrayMap<>());
             Int2ObjectMap<ItemStack> itemStackInt2ObjectMap = this.stacks.get(this.currentPosClicked);
             itemStackInt2ObjectMap.clear();
-            int contentLength = contents.size() - 9 * 4; // this one includes the actual inventory so we remove it from the index
+            int contentLength = contents.size() - 9 * 4; // this one includes the actual inventory, so we remove it from the index
             for (int i = 0; i < contentLength; i++) {
                 ItemStack copy = contents.get(i).copy();
                 if (copy.isEmpty()) {
@@ -142,7 +142,7 @@ public class ChestIndexer extends Module {
                 if (bs.contains(ChestBlock.CHEST_TYPE)) {
                     ChestType chestType = bs.get(ChestBlock.CHEST_TYPE);
                     if (chestType == ChestType.SINGLE) {
-                        return; // single chest anyways, doesn't matter
+                        return; // single chest anyway, doesn't matter
                     }
                     Direction direction = bs.get(ChestBlock.FACING);
                     float currentRot = direction.asRotation();
@@ -160,10 +160,12 @@ public class ChestIndexer extends Module {
                         stacks.remove(secondPos); // if the neighbour was already indexed, remove him and use this pos instead
                         childrenMap.computeIfAbsent(lastPos, blockPos -> new ArrayList<>()).add(secondPos);
                     } else {
-                        CoffeeMain.LOGGER.warn("Lol pos {} has an invalid chest neighbor {} of type {}",
+                        CoffeeMain.LOGGER.warn(
+                            "Lol pos {} has an invalid chest neighbor {} of type {}",
                             lastPos.toShortString(),
                             secondPos.toShortString(),
-                            bs1.getBlock().getName().getString());
+                            bs1.getBlock().getName().getString()
+                        );
                     }
                 }
             }
@@ -177,7 +179,7 @@ public class ChestIndexer extends Module {
             this.stacks.putIfAbsent(this.currentPosClicked, new Int2ObjectArrayMap<>());
             Int2ObjectMap<ItemStack> itemStackInt2ObjectMap = this.stacks.get(this.currentPosClicked);
             DefaultedList<Slot> slots = client.player.currentScreenHandler.slots;
-            int contentLength = slots.size() - 9 * 4; // this one includes the actual inventory so we remove it from the index
+            int contentLength = slots.size() - 9 * 4; // this one includes the actual inventory, so we remove it from the index
             for (int i = 0; i < contentLength; i++) {
                 Slot slot = slots.get(i);
                 ItemStack stack = slot.inventory.getStack(slot.id);
@@ -195,7 +197,7 @@ public class ChestIndexer extends Module {
         if (updateTimer.hasExpired(5_000)) {
             for (BlockPos blockPos : new ArrayList<>(stacks.keySet())) {
                 if (!blockPos.isWithinDistance(client.player.getBlockPos(), 64)) {
-                    continue; // dont update this one we have no fucking idea whats in it
+                    continue; // don't update this one we have no fucking idea what's in it
                 }
                 BlockState bs = client.world.getBlockState(blockPos);
                 if (!Arrays.asList(ALLOW_LIST).contains(bs.getBlock())) {

@@ -61,8 +61,10 @@ public class HomeScreen extends AAScreen {
     void load() {
         loaded = true;
         try {
-            HomeScreen.changelog = IOUtils.toString(Objects.requireNonNull(HomeScreen.class.getClassLoader().getResourceAsStream("changelogLatest.txt")),
-                StandardCharsets.UTF_8);
+            HomeScreen.changelog = IOUtils.toString(
+                Objects.requireNonNull(HomeScreen.class.getClassLoader().getResourceAsStream("changelogLatest.txt")),
+                StandardCharsets.UTF_8
+            );
             updateCurrentAccount(() -> {
 
             });
@@ -85,7 +87,8 @@ public class HomeScreen extends AAScreen {
         double endX = width - padding * 2;
         double weHave = endX - startX;
         entireWidth = Math.min(entireWidth, weHave);
-        ButtonGroupElement bge = new ButtonGroupElement(startX,
+        ButtonGroupElement bge = new ButtonGroupElement(
+            startX,
             this.height - padding * 2 - 20,
             entireWidth,
             20,
@@ -96,7 +99,8 @@ public class HomeScreen extends AAScreen {
             new ButtonGroupElement.ButtonEntry("Alts", () -> CoffeeMain.client.setScreen(AltManagerScreen.instance(this))),
             new ButtonGroupElement.ButtonEntry("Options", () -> CoffeeMain.client.setScreen(new OptionsScreen(this, CoffeeMain.client.options))),
             new ButtonGroupElement.ButtonEntry("Vanilla", () -> CoffeeMain.client.setScreen(new TitleScreen(false))),
-            new ButtonGroupElement.ButtonEntry("Quit", CoffeeMain.client::scheduleStop));
+            new ButtonGroupElement.ButtonEntry("Quit", CoffeeMain.client::scheduleStop)
+        );
         addChild(bge);
     }
 
@@ -104,10 +108,12 @@ public class HomeScreen extends AAScreen {
     protected void initInternal() {
         if (CompatHelper.wereAnyFound() && !showedCompatWarn && client.currentScreen == this) {
             showedCompatWarn = true;
-            client.setScreen(new NotificationScreen(Notification.Type.WARNING,
+            client.setScreen(new NotificationScreen(
+                Notification.Type.WARNING,
                 "Compatability",
                 "Compatibility issues found, some features might not be available",
-                this));
+                this
+            ));
         }
         initWidgets();
         if (loaded) {
@@ -151,14 +157,16 @@ public class HomeScreen extends AAScreen {
         double newH = 20;
         double per = newH / origH;
         double newW = origW * per;
-        Renderer.R2D.renderRoundedQuadWithShadow(stack,
+        Renderer.R2D.renderRoundedQuadWithShadow(
+            stack,
             new Color(0, 0, 10, 200),
             padding,
             height - padding - padding - 20 - padding,
             width - padding,
             height - padding,
             10,
-            20);
+            20
+        );
         coffee.client.helper.render.textures.Texture.ICON.bind();
         Renderer.R2D.renderTexture(stack, padding * 2, height - padding * 2 - newH, newW, newH, 0, 0, newW, newH, newW, newH);
         super.renderInternal(stack, mouseX, mouseY, delta); // render bottom row widgets

@@ -23,7 +23,8 @@ public class Sprint extends Module {
         if (CoffeeMain.client.player == null || CoffeeMain.client.getNetworkHandler() == null) {
             return;
         }
-        if (CoffeeMain.client.options.forwardKey.isPressed() && !CoffeeMain.client.options.backKey.isPressed() && !CoffeeMain.client.player.isSneaking() && !CoffeeMain.client.player.horizontalCollision) {
+        if (CoffeeMain.client.options.forwardKey.isPressed() && !CoffeeMain.client.options.backKey.isPressed() && !CoffeeMain.client.player.isSneaking() &&
+            !CoffeeMain.client.player.horizontalCollision) {
             Objects.requireNonNull(client.player).setSprinting(true);
         }
     }

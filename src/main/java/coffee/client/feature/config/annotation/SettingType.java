@@ -48,10 +48,10 @@ public enum SettingType {
             maxB = maxA;
         }
         return new RangeSetting.Builder((RangeSetting.Range) inputField.get(declaringClass)).lowerMin(minA)
-            .lowerMax(maxA)
-            .upperMin(minB)
-            .upperMax(maxB)
-            .precision(setting.precision());
+                                                                                            .lowerMax(maxA)
+                                                                                            .upperMin(minB)
+                                                                                            .upperMax(maxB)
+                                                                                            .precision(setting.precision());
     }),
     MULTIVALUE(ListSetting.FlagSet.class, (setting, inputField, declaringClass) -> new ListSetting.Builder<>(((ListSetting.FlagSet<?>) inputField.get(declaringClass))));
     @Getter

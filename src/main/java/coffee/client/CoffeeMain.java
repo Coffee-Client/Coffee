@@ -52,8 +52,10 @@ public class CoffeeMain implements ModInitializer {
     public static int getClientVersion() {
         if (CLIENT_VERSION == -1) {
             try {
-                CLIENT_VERSION = Integer.parseInt(IOUtils.toString(Objects.requireNonNull(CoffeeMain.class.getClassLoader().getResourceAsStream("version.txt")),
-                    StandardCharsets.UTF_8));
+                CLIENT_VERSION = Integer.parseInt(IOUtils.toString(
+                    Objects.requireNonNull(CoffeeMain.class.getClassLoader().getResourceAsStream("version.txt")),
+                    StandardCharsets.UTF_8
+                ));
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

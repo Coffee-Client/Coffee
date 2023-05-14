@@ -49,7 +49,7 @@ public class ClientPlayerEntityMixin {
     @Inject(method = "pushOutOfBlocks", at = @At("HEAD"), cancellable = true)
     public void coffee_preventPush(double x, double z, CallbackInfo ci) {
         if (Objects.requireNonNull(ModuleRegistry.getByClass(Freecam.class)).isEnabled() || Objects.requireNonNull(ModuleRegistry.getByClass(NoPush.class))
-            .isEnabled() || Objects.requireNonNull(ModuleRegistry.getByClass(Phase.class)).isEnabled()) {
+                                                                                                   .isEnabled() || Objects.requireNonNull(ModuleRegistry.getByClass(Phase.class)).isEnabled()) {
             ci.cancel();
         }
     }

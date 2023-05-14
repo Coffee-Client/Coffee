@@ -100,7 +100,7 @@ public class NotificationScreen extends AAScreen {
         Texture.NOTIFICATION_TYPES.bindAndDraw(stack, startX + pad, startY + pad + (headheight) / 2d - texDims / 2d, texDims, texDims, icon.getSpriteName());
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
         FontRenderers.getRenderer()
-            .drawString(stack, title, startX + pad + texDims + pad, startY + pad + (headheight) / 2d - FontRenderers.getRenderer().getFontHeight() / 2d, 0xCCCCCC);
+                     .drawString(stack, title, startX + pad + texDims + pad, startY + pad + (headheight) / 2d - FontRenderers.getRenderer().getFontHeight() / 2d, 0xCCCCCC);
         double yOffset = 0;
         for (String s : contentSplit) {
             FontRenderers.getRenderer().drawString(stack, s, startX + pad, startY + FontRenderers.getRenderer().getFontHeight() + pad * 2 + yOffset, 0xFFFFFF);

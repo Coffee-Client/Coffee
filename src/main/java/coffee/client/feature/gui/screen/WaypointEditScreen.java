@@ -147,14 +147,16 @@ public class WaypointEditScreen extends AAScreen {
         public void render(MatrixStack stack, double mouseX, double mouseY) {
             mouseOver = inBounds(mouseX, mouseY);
             double expand = Transitions.easeOutExpo(this.expand);
-            Renderer.R2D.renderRoundedQuad(stack,
+            Renderer.R2D.renderRoundedQuad(
+                stack,
                 new Color(20, 20, 20),
                 getPositionX(),
                 getPositionY(),
                 getPositionX() + getWidth(),
                 getPositionY() + getHeight(),
                 5,
-                20);
+                20
+            );
             renderPlusIcon(stack, getPositionX() + getWidth() / 2d, getPositionY() + getHeight() / 2d, 10 + 2 * expand);
         }
 
@@ -216,20 +218,24 @@ public class WaypointEditScreen extends AAScreen {
         public WaypointVis(double x, double y, Waypoints.Waypoint wayp) {
             super(x, y, 120, 60);
             this.wayp = wayp;
-            this.actions = new ButtonGroupElement(0,
+            this.actions = new ButtonGroupElement(
+                0,
                 0,
                 getWidth() - 10,
                 20,
                 ButtonGroupElement.LayoutDirection.RIGHT,
                 new ButtonGroupElement.ButtonEntry("Edit", this::edit),
-                new ButtonGroupElement.ButtonEntry("Go here", this::go));
-            this.delete = new TexturedButtonElement(new Color(255, 70, 70),
+                new ButtonGroupElement.ButtonEntry("Go here", this::go)
+            );
+            this.delete = new TexturedButtonElement(
+                new Color(255, 70, 70),
                 0,
                 0,
                 16,
                 16,
                 this::delete,
-                TexturedButtonElement.IconRenderer.fromSpritesheet(Texture.MODULE_TYPES, "delete.png"));
+                TexturedButtonElement.IconRenderer.fromSpritesheet(Texture.MODULE_TYPES, "delete.png")
+            );
         }
 
         void edit() {
@@ -257,14 +263,16 @@ public class WaypointEditScreen extends AAScreen {
             this.actions.setPositionY(getPositionY() + getHeight() - 20 - 5);
             this.delete.setPositionX(getPositionX() + getWidth() - 5 - this.delete.getWidth());
             this.delete.setPositionY(getPositionY() + 5);
-            Renderer.R2D.renderRoundedQuad(stack,
+            Renderer.R2D.renderRoundedQuad(
+                stack,
                 new Color(20, 20, 20),
                 getPositionX(),
                 getPositionY(),
                 getPositionX() + getWidth(),
                 getPositionY() + getHeight(),
                 5,
-                20);
+                20
+            );
             RendererFontAdapter customSize = FontRenderers.getCustomSize(20);
             String t = Utils.capAtLength(wayp.getName(), getWidth() - 10 - this.delete.getWidth(), customSize);
             customSize.drawString(stack, t, getPositionX() + 5, getPositionY() + 5, 0xFFFFFF);

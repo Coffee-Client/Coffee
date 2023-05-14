@@ -49,17 +49,20 @@ public class ProxyManagerScreen extends CenterOverlayScreen {
         double padding = 5;
         double entireWidth = oneWidth * 2 + padding;
         TextElement mode = new TextElement(FontRenderers.getRenderer(), "Type: " + (isSocks4 ? "SOCKS4" : "SOCKS5"), Color.WHITE, false, 0, 0);
-        TextElement conn = new TextElement(FontRenderers.getRenderer(),
+        TextElement conn = new TextElement(
+            FontRenderers.getRenderer(),
             currentProxy == null ? "Not connected" : String.format("Connected to %s:%s", currentProxy.address, currentProxy.port),
             Color.WHITE,
             false,
             0,
-            0);
+            0
+        );
         ip = new TextFieldElement(0, 0, oneWidth, 20, "IP");
         port = new TextFieldElement(0, 0, oneWidth, 20, "Port");
         TextFieldElement username = new TextFieldElement(0, 0, oneWidth, 20, "Username (opt.)");
         TextFieldElement password = new TextFieldElement(0, 0, oneWidth, 20, "Password (opt.)");
-        ButtonGroupElement bg = new ButtonGroupElement(0,
+        ButtonGroupElement bg = new ButtonGroupElement(
+            0,
             0,
             entireWidth,
             20,
@@ -80,7 +83,8 @@ public class ProxyManagerScreen extends CenterOverlayScreen {
                 currentProxy = null;
                 conn.setText("Not connected");
             }),
-            new ButtonGroupElement.ButtonEntry("Close", this::close));
+            new ButtonGroupElement.ButtonEntry("Close", this::close)
+        );
         FlexLayoutElement top = new FlexLayoutElement(FlexLayoutElement.LayoutDirection.RIGHT, 0, 0, padding, ip, port);
         FlexLayoutElement middle = new FlexLayoutElement(FlexLayoutElement.LayoutDirection.RIGHT, 0, 0, padding, username, password);
         FlexLayoutElement entire = new FlexLayoutElement(FlexLayoutElement.LayoutDirection.DOWN, 0, 0, padding, mode, conn, top, middle, bg);

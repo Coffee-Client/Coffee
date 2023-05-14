@@ -88,37 +88,51 @@ public class HoloImage extends Command {
             for (List<MutableText> mutableTexts : partition) {
                 List<NbtObject> stacks = new ArrayList<>();
                 for (MutableText mutableText : mutableTexts) {
-                    stacks.add(new NbtObject("EntityTag",
+                    stacks.add(new NbtObject(
+                        "EntityTag",
                         new NbtProperty("id", "minecraft:armor_stand"),
                         new NbtProperty("NoGravity", true),
                         new NbtProperty("Invisible", true),
                         new NbtProperty("Marker", true),
                         new NbtList("Pos", new NbtProperty(pos.x), new NbtProperty(pos.y + yOffset), new NbtProperty(pos.z)),
                         new NbtProperty("CustomNameVisible", true),
-                        new NbtProperty("CustomName", Text.Serializer.toJson(mutableText))));
+                        new NbtProperty("CustomName", Text.Serializer.toJson(mutableText))
+                    ));
                     total++;
                     yOffset -= 1 / 4.5f;
                 }
-                shulkers.add(new NbtObject("BlockEntityTag",
-                    new NbtList("Items",
+                shulkers.add(new NbtObject(
+                    "BlockEntityTag",
+                    new NbtList(
+                        "Items",
                         IntStream.range(0, stacks.size())
-                            .mapToObj(value -> new NbtObject("",
-                                new NbtProperty("Slot", (byte) value),
-                                new NbtProperty("id", Registries.ITEM.getId(Items.BAT_SPAWN_EGG).toString()),
-                                new NbtProperty("Count", (byte) 1),
-                                new NbtObject("tag", stacks.get(value))))
-                            .toArray(NbtElement[]::new))));
+                                 .mapToObj(value -> new NbtObject(
+                                     "",
+                                     new NbtProperty("Slot", (byte) value),
+                                     new NbtProperty("id", Registries.ITEM.getId(Items.BAT_SPAWN_EGG).toString()),
+                                     new NbtProperty("Count", (byte) 1),
+                                     new NbtObject("tag", stacks.get(value))
+                                 ))
+                                 .toArray(NbtElement[]::new)
+                    )
+                ));
             }
             ItemStack chest = new ItemStack(Items.CHEST);
-            NbtGroup ng = new NbtGroup(new NbtObject("BlockEntityTag",
-                new NbtList("Items",
+            NbtGroup ng = new NbtGroup(new NbtObject(
+                "BlockEntityTag",
+                new NbtList(
+                    "Items",
                     IntStream.range(0, shulkers.size())
-                        .mapToObj(value -> new NbtObject("",
-                            new NbtProperty("Slot", (byte) value),
-                            new NbtProperty("id", Registries.ITEM.getId(Items.SHULKER_BOX).toString()),
-                            new NbtProperty("Count", (byte) 1),
-                            new NbtObject("tag", shulkers.get(value))))
-                        .toArray(NbtElement[]::new))));
+                             .mapToObj(value -> new NbtObject(
+                                 "",
+                                 new NbtProperty("Slot", (byte) value),
+                                 new NbtProperty("id", Registries.ITEM.getId(Items.SHULKER_BOX).toString()),
+                                 new NbtProperty("Count", (byte) 1),
+                                 new NbtObject("tag", shulkers.get(value))
+                             ))
+                             .toArray(NbtElement[]::new)
+                )
+            ));
             chest.setNbt(ng.toCompound());
             CoffeeMain.client.interactionManager.clickCreativeStack(chest, Utils.Inventory.slotIndexToId(CoffeeMain.client.player.getInventory().selectedSlot));
             success("Gave you a chest with all the spawn eggs");
@@ -142,9 +156,11 @@ public class HoloImage extends Command {
 
     @Override
     public PossibleArgument getSuggestionsWithType(int index, String[] args) {
-        return StaticArgumentServer.serveFromStatic(index,
+        return StaticArgumentServer.serveFromStatic(
+            index,
             new PossibleArgument(ArgumentType.STRING, "<url>"),
-            new PossibleArgument(ArgumentType.NUMBER, "<image width>"));
+            new PossibleArgument(ArgumentType.NUMBER, "<image width>")
+        );
     }
 
     @Override

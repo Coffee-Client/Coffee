@@ -46,14 +46,16 @@ public class DoubleSettingEditor extends SettingEditor<DoubleSetting> {
         real.drawString(matrices, t, actualX + actualWidth - real.getStringWidth(t), getPositionY(), 0xFFFFFF);
         double remainingH = getPositionY() + real.getFontHeight() + 2;
         Renderer.R2D.renderRoundedQuad(matrices, new Color(50, 50, 50), actualX, remainingH, actualX + actualWidth, remainingH + 1.5, 1.5 / 2, 5);
-        Renderer.R2D.renderRoundedQuad(matrices,
+        Renderer.R2D.renderRoundedQuad(
+            matrices,
             new Color(9, 162, 104),
             actualX,
             remainingH,
             actualX + Math.max(actualWidth * getPer(), 1.5),
             remainingH + 1.5,
             1.5 / 2,
-            5);
+            5
+        );
     }
 
     @Override

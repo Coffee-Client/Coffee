@@ -98,10 +98,10 @@ public class Utils {
         Spliterator<Entity> spliterator = CoffeeMain.client.world.getEntities().spliterator();
 
         return StreamSupport.stream(spliterator, false)
-            .filter(entity -> !entity.equals(CoffeeMain.client.player))
-            .filter(entity -> entity instanceof LivingEntity)
-            .map(entity -> (LivingEntity) entity)
-            .filter(requirement);
+                            .filter(entity -> !entity.equals(CoffeeMain.client.player))
+                            .filter(entity -> entity instanceof LivingEntity)
+                            .map(entity -> (LivingEntity) entity)
+                            .filter(requirement);
     }
 
     public static boolean isABFree(Vec3d a, Vec3d b) {
@@ -254,12 +254,14 @@ public class Utils {
         text.visit((style, asString) -> {
             TextColor color = style.getColor();
             Color rgb = new Color(color == null ? 0xFFFFFF : color.getRgb());
-            segments.add(new ColoredTextSegment(new ColoredTextSegment[0],
+            segments.add(new ColoredTextSegment(
+                new ColoredTextSegment[0],
                 asString,
                 rgb.getRed() / 255f,
                 rgb.getGreen() / 255f,
                 rgb.getBlue() / 255f,
-                rgb.getAlpha() / 255f));
+                rgb.getAlpha() / 255f
+            ));
             return Optional.empty();
         }, Style.EMPTY);
         return new ColoredTextSegment(segments.toArray(ColoredTextSegment[]::new), "", 1f, 1f, 1f, 1f);
@@ -290,28 +292,24 @@ public class Utils {
         for (Map.Entry<String, Style> stringStyleEntry : l) {
             TextColor color = stringStyleEntry.getValue().getColor();
             Color c = new Color(color != null ? color.getRgb() : 0xFFFFFF);
-            children.add(new ColoredTextSegment(new ColoredTextSegment[0],
+            children.add(new ColoredTextSegment(
+                new ColoredTextSegment[0],
                 stringStyleEntry.getKey(),
                 c.getRed() / 255f,
                 c.getGreen() / 255f,
                 c.getBlue() / 255f,
-                c.getAlpha() / 255f));
+                c.getAlpha() / 255f
+            ));
         }
         return new ColoredTextSegment(children.toArray(ColoredTextSegment[]::new), "", 1f, 1f, 1f, 1f);
     }
 
     public static void registerBase64StringTexture(Texture i, String b64) {
-        try(InputStream is = Base64.getDecoder().wrap(new ByteArrayInputStream(b64.getBytes(StandardCharsets.UTF_8)))) {
+        try (InputStream is = Base64.getDecoder().wrap(new ByteArrayInputStream(b64.getBytes(StandardCharsets.UTF_8)))) {
             RendererUtils.registerBufferedImageTexture(i, ImageIO.read(is));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        //        try {
-//            NativeImageBackedTexture tex = new NativeImageBackedTexture(NativeImage.read(b64));
-//            CoffeeMain.client.execute(() -> CoffeeMain.client.getTextureManager().registerTexture(i, tex));
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
     }
 
     public static void registerTexture(Texture i, byte[] content) {
@@ -397,22 +395,26 @@ public class Utils {
         public static void drop(int index) {
             int translatedSlotId = slotIndexToId(index);
             Objects.requireNonNull(CoffeeMain.client.interactionManager)
-                .clickSlot(Objects.requireNonNull(CoffeeMain.client.player).currentScreenHandler.syncId,
-                    translatedSlotId,
-                    1,
-                    SlotActionType.THROW,
-                    CoffeeMain.client.player);
+                   .clickSlot(
+                       Objects.requireNonNull(CoffeeMain.client.player).currentScreenHandler.syncId,
+                       translatedSlotId,
+                       1,
+                       SlotActionType.THROW,
+                       CoffeeMain.client.player
+                   );
         }
 
         public static void moveStackToOther(int slotIdFrom, int slotIdTo) {
             Objects.requireNonNull(CoffeeMain.client.interactionManager)
-                .clickSlot(0, slotIdFrom, 0, SlotActionType.PICKUP, CoffeeMain.client.player); // pick up item from stack
+                   .clickSlot(0, slotIdFrom, 0, SlotActionType.PICKUP, CoffeeMain.client.player); // pick up item from stack
             CoffeeMain.client.interactionManager.clickSlot(0, slotIdTo, 0, SlotActionType.PICKUP, CoffeeMain.client.player); // put item to target
-            CoffeeMain.client.interactionManager.clickSlot(0,
+            CoffeeMain.client.interactionManager.clickSlot(
+                0,
                 slotIdFrom,
                 0,
                 SlotActionType.PICKUP,
-                CoffeeMain.client.player); // (in case target slot had item) put item from target back to from
+                CoffeeMain.client.player
+            ); // (in case target slot had item) put item from target back to from
         }
     }
 
@@ -468,9 +470,11 @@ public class Utils {
         public static PlayerInteractBlockC2SPacket generatePlace(BlockPos pos) {
             PendingUpdateManager pendingUpdateManager = getUpdateManager(CoffeeMain.client.world).incrementSequence();
 
-            var packet = new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND,
+            var packet = new PlayerInteractBlockC2SPacket(
+                Hand.MAIN_HAND,
                 new BlockHitResult(new Vec3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5), Direction.UP, pos, false),
-                pendingUpdateManager.getSequence());
+                pendingUpdateManager.getSequence()
+            );
 
             pendingUpdateManager.close();
 
@@ -513,11 +517,11 @@ public class Utils {
 
         public static int sendMessage(Text t) {
             MutableText append = Text.empty()
-                .append(Text.literal("[").styled(style -> style.withColor(0x454545)))
-                .append(Text.literal("Coffee").styled(style -> style.withColor(0x3AD99D)))
-                .append(Text.literal("]").styled(style -> style.withColor(0x454545)))
-                .append(" ")
-                .append(t);
+                                     .append(Text.literal("[").styled(style -> style.withColor(0x454545)))
+                                     .append(Text.literal("Coffee").styled(style -> style.withColor(0x3AD99D)))
+                                     .append(Text.literal("]").styled(style -> style.withColor(0x454545)))
+                                     .append(" ")
+                                     .append(t);
             return ((ChatHudDuck) CoffeeMain.client.inGameHud.getChatHud()).coffee_addChatMessage(append);
         }
 

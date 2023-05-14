@@ -76,27 +76,31 @@ public class CategoryDisplay extends Element {
         }
         setHeight(nh);
         layout.updateScroller();
-        Renderer.R2D.renderRoundedQuadWithShadow(stack,
+        Renderer.R2D.renderRoundedQuadWithShadow(
+            stack,
             new Color(20, 20, 20),
             getPositionX(),
             getPositionY(),
             getPositionX() + getWidth(),
             getPositionY() + getHeight(),
             3,
-            10);
+            10
+        );
         double iconPad = 4;
         double iconDims = headerHeight() - iconPad * 2;
         RenderSystem.enableBlend();
         Texture.MODULE_TYPES.bindAndDraw(stack, getPositionX() + iconPad, getPositionY() + iconPad, iconDims, iconDims, type.getTex());
 
-        titleRenderer.drawString(stack,
+        titleRenderer.drawString(
+            stack,
             type.getName(),
             (float) (getPositionX() + iconDims + iconPad * 2),
             (float) (getPositionY() + headerHeight() / 2d - Math.round(titleRenderer.getFontHeight()) / 2d),
             1f,
             1f,
             1f,
-            1f);
+            1f
+        );
         layout.setPositionX(getPositionX() + 2);
         layout.setPositionY(getPositionY() + headerHeight());
         layout.render(stack, mouseX, mouseY);

@@ -92,7 +92,9 @@ public abstract class MinecraftClientMixin {
         return obtain(screen);
     }
 
-    @ModifyArg(method = "method_45026", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/ConnectScreen;connect(Lnet/minecraft/client/gui/screen/Screen;Lnet/minecraft/client/MinecraftClient;Lnet/minecraft/client/network/ServerAddress;Lnet/minecraft/client/network/ServerInfo;)V"), index = 0)
+    @ModifyArg(method = "method_45026", at = @At(value = "INVOKE",
+                                                 target = "Lnet/minecraft/client/gui/screen/ConnectScreen;connect(Lnet/minecraft/client/gui/screen/Screen;Lnet/minecraft/client/MinecraftClient;Lnet/minecraft/client/network/ServerAddress;Lnet/minecraft/client/network/ServerInfo;)V"),
+               index = 0)
     Screen coffee_replaceTitleScreenDirectConnect(Screen screen) {
         return obtain(screen);
     }

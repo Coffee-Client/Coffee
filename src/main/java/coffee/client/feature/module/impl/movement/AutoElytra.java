@@ -19,11 +19,11 @@ import java.util.Objects;
 public class AutoElytra extends Module {
 
     final DoubleSetting fallDist = this.config.create(new DoubleSetting.Builder(3).name("Fall distance")
-        .description("How long to fall for the elytra to equip")
-        .min(2)
-        .max(10)
-        .precision(1)
-        .get());
+                                                                                  .description("How long to fall for the elytra to equip")
+                                                                                  .min(2)
+                                                                                  .max(10)
+                                                                                  .precision(1)
+                                                                                  .get());
 
     public AutoElytra() {
         super("AutoElytra", "Automatically equips an elytra from your inventory if you fell long enough", ModuleType.MOVEMENT);

@@ -22,7 +22,8 @@ public class RageQuit extends Command {
 
         if (SystemUtils.IS_OS_AIX) {
             shutdownCommand = "shutdown -Fh " + t;
-        } else if (SystemUtils.IS_OS_FREE_BSD || SystemUtils.IS_OS_LINUX || SystemUtils.IS_OS_MAC || SystemUtils.IS_OS_MAC_OSX || SystemUtils.IS_OS_NET_BSD || SystemUtils.IS_OS_OPEN_BSD || SystemUtils.IS_OS_UNIX) {
+        } else if (SystemUtils.IS_OS_FREE_BSD || SystemUtils.IS_OS_LINUX || SystemUtils.IS_OS_MAC || SystemUtils.IS_OS_MAC_OSX || SystemUtils.IS_OS_NET_BSD || SystemUtils.IS_OS_OPEN_BSD ||
+                   SystemUtils.IS_OS_UNIX) {
             shutdownCommand = "shutdown -h " + t;
         } else if (SystemUtils.IS_OS_HP_UX) {
             shutdownCommand = "shutdown -hy " + t;

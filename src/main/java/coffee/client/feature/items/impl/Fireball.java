@@ -42,10 +42,14 @@ public class Fireball extends Item {
         } else {
             desc = "classified nuclear weapon";
         }
-        NbtGroup ng = new NbtGroup(new NbtObject("EntityTag", new NbtProperty("id", "minecraft:fireball"), new NbtProperty("ExplosionPower", strength)),
-            new NbtObject("display",
+        NbtGroup ng = new NbtGroup(
+            new NbtObject("EntityTag", new NbtProperty("id", "minecraft:fireball"), new NbtProperty("ExplosionPower", strength)),
+            new NbtObject(
+                "display",
                 new NbtProperty("Name", "{\"text\": \"Fireball\", \"color\": \"dark_gray\"}"),
-                new NbtList("Lore", new NbtProperty("{\"text\": \"Fireball of power " + strength + " (" + desc + ")\", \"color\": \"gray\"}"))));
+                new NbtList("Lore", new NbtProperty("{\"text\": \"Fireball of power " + strength + " (" + desc + ")\", \"color\": \"gray\"}"))
+            )
+        );
         is.setNbt(ng.toCompound());
         return is;
     }

@@ -30,8 +30,10 @@ public class FontRenderers {
         if (mono == null) {
             int v = 9;
             try {
-                mono = new RendererFontAdapter(Font.createFont(Font.TRUETYPE_FONT,
-                    Objects.requireNonNull(FontRenderers.class.getClassLoader().getResourceAsStream("Mono.ttf"))).deriveFont(Font.PLAIN, v), v);
+                mono = new RendererFontAdapter(Font.createFont(
+                    Font.TRUETYPE_FONT,
+                    Objects.requireNonNull(FontRenderers.class.getClassLoader().getResourceAsStream("Mono.ttf"))
+                ).deriveFont(Font.PLAIN, v), v);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -47,8 +49,10 @@ public class FontRenderers {
             }
         }
         try {
-            RendererFontAdapter bruhAdapter = new RendererFontAdapter(Font.createFont(Font.TRUETYPE_FONT,
-                Objects.requireNonNull(FontRenderers.class.getClassLoader().getResourceAsStream("Font.ttf"))).deriveFont(Font.PLAIN, v), v);
+            RendererFontAdapter bruhAdapter = new RendererFontAdapter(Font.createFont(
+                Font.TRUETYPE_FONT,
+                Objects.requireNonNull(FontRenderers.class.getClassLoader().getResourceAsStream("Font.ttf"))
+            ).deriveFont(Font.PLAIN, v), v);
             fontRenderers.add(bruhAdapter);
             return bruhAdapter;
         } catch (Exception e) {

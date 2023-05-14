@@ -57,8 +57,10 @@ public class ConfigUtils extends Command {
             return new PossibleArgument(ArgumentType.STRING, "load", "save");
         }
         if (args[0].equals("load") && index == 1) {
-            return new PossibleArgument(ArgumentType.STRING,
-                Arrays.stream(Objects.requireNonNull(CONFIG_STORAGE.listFiles())).map(File::getName).toList().toArray(String[]::new));
+            return new PossibleArgument(
+                ArgumentType.STRING,
+                Arrays.stream(Objects.requireNonNull(CONFIG_STORAGE.listFiles())).map(File::getName).toList().toArray(String[]::new)
+            );
         } else if (args[0].equals("save") && index >= 1) {
             return new PossibleArgument(ArgumentType.STRING, "<file name>");
         }
@@ -111,7 +113,7 @@ public class ConfigUtils extends Command {
                     }
                     MutableText t = Text.literal("Saved config! Click to open");
                     Style s = Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.of("Click to open")))
-                        .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, out.getAbsolutePath()));
+                                         .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, out.getAbsolutePath()));
                     t.setStyle(s);
                     Objects.requireNonNull(CoffeeMain.client.player).sendMessage(t, false);
                 } catch (Exception e) {

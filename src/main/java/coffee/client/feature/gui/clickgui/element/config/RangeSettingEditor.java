@@ -124,7 +124,7 @@ public class RangeSettingEditor extends SettingEditor<RangeSetting> {
             double t = x - getPositionX();
             if (clickedA) {
                 handleClickA(t);
-            } else if (clickedB) {
+            } else {
                 handleClickB(t);
             }
             return true;

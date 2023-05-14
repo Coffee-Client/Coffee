@@ -20,7 +20,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class EntityRenderDispatcherMixin {
 
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
-    public <E extends Entity> void coffee_dispatchRender(E entity, double x, double y, double z, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
+    public <E extends Entity> void coffee_dispatchRender(E entity, double x, double y, double z, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light,
+                                                         CallbackInfo ci) {
         RenderEvent re = new RenderEvent.Entity(matrices, entity);
         EventSystem.manager.send(re);
         if (re.isCancelled()) {

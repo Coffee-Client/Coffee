@@ -51,7 +51,10 @@ public class ConfigContainer {
 
             int[] firstFourBits = new int[4];
             byte[] sig = new byte[4];
-            bais.read(sig, 0, 4);
+            int readSigB = bais.read(sig, 0, 4);
+            if (readSigB < 4) {
+                return new String(data);
+            }
             for (int i = 0; i < firstFourBits.length; i++) {
                 firstFourBits[i] = Byte.toUnsignedInt(sig[i]);
             }

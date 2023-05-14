@@ -240,21 +240,23 @@ public class Killaura extends Module {
 
     List<LivingEntity> selectTargets() {
         List<LivingEntity> entities = new ArrayList<>(StreamSupport.stream(client.world.getEntities().spliterator(), false)
-            .filter(entity -> !entity.equals(client.player)) // filter our player out
-            .filter(Entity::isAlive)
-            .filter(Entity::isAttackable) // filter all entities we can't attack out
-            .filter(entity -> entity instanceof LivingEntity) // filter all "entities" that aren't actual entities out
-            .map(entity -> (LivingEntity) entity) // cast all entities to actual entities
-            .filter(this::isEntityApplicable)
-            .filter(entity -> Arrays.stream(getHitboxPoints(entity)).anyMatch(this::isInRange)) // filter all entities that are outside our range out
-            .filter(livingEntity -> {
-                if (matrixAntibot) {
-                    return Antibot.MATRIX.computeConfidence(livingEntity) < matrixConfidence; // true = include, required confidence must be above current confidence
-                } else {
-                    return true;
-                }
-            })
-            .toList());
+                                                                   .filter(entity -> !entity.equals(client.player)) // filter our player out
+                                                                   .filter(Entity::isAlive)
+                                                                   .filter(Entity::isAttackable) // filter all entities we can't attack out
+                                                                   .filter(entity -> entity instanceof LivingEntity) // filter all "entities" that aren't actual entities out
+                                                                   .map(entity -> (LivingEntity) entity) // cast all entities to actual entities
+                                                                   .filter(this::isEntityApplicable)
+                                                                   .filter(entity -> Arrays.stream(getHitboxPoints(entity))
+                                                                                           .anyMatch(this::isInRange)) // filter all entities that are outside our range out
+                                                                   .filter(livingEntity -> {
+                                                                       if (matrixAntibot) {
+                                                                           return Antibot.MATRIX.computeConfidence(livingEntity) <
+                                                                                  matrixConfidence; // true = include, required confidence must be above current confidence
+                                                                       } else {
+                                                                           return true;
+                                                                       }
+                                                                   })
+                                                                   .toList());
         switch (selectMode) {
             case Distance -> entities.sort(Comparator.comparingDouble(value -> value.distanceTo(client.player))); // low distance first
             case LowHealthFirst -> entities.sort(Comparator.comparingDouble(LivingEntity::getHealth)); // low health first
@@ -294,12 +296,14 @@ public class Killaura extends Module {
             LivingEntity target = targets.get(0);
             Vec3d ranged = Rotations.getRotationVector(Rotations.getClientPitch(), Rotations.getClientYaw()).multiply(getRange());
             Box allowed = client.player.getBoundingBox().stretch(ranged).expand(1, 1, 1);
-            EntityHitResult ehr = ProjectileUtil.raycast(CoffeeMain.client.player,
+            EntityHitResult ehr = ProjectileUtil.raycast(
+                CoffeeMain.client.player,
                 CoffeeMain.client.player.getCameraPosVec(0),
                 CoffeeMain.client.player.getCameraPosVec(0).add(ranged),
                 allowed,
                 Entity::isAttackable,
-                getRange() * getRange());
+                getRange() * getRange()
+            );
             if (ehr != null && ehr.getEntity().equals(target)) {
                 attack(target);
                 pickNextRandomDelay();
@@ -334,8 +338,10 @@ public class Killaura extends Module {
         boolean smooth = smoothLook && attackMode == AttackMode.Single;
         if (smooth && !targets.isEmpty()) {
             LivingEntity le = targets.get(0);
-            Rotations.lookAtPositionSmoothServerSide(Utils.getInterpolatedEntityPosition(le).add(0, le.getHeight() / 2d, 0),
-                random.nextDouble(smoothLookRange.getMin(), smoothLookRange.getMax()));
+            Rotations.lookAtPositionSmoothServerSide(
+                Utils.getInterpolatedEntityPosition(le).add(0, le.getHeight() / 2d, 0),
+                random.nextDouble(smoothLookRange.getMin(), smoothLookRange.getMax())
+            );
         }
     }
 
@@ -384,7 +390,8 @@ public class Killaura extends Module {
     }
 
     public static class Antibot {
-        public static AntibotEntry MATRIX = new AntibotEntry("Matrix",
+        public static AntibotEntry MATRIX = new AntibotEntry(
+            "Matrix",
             AntibotCheck.from("NameLowercase", 0.3, e -> StringUtils.isAllLowerCase(e.getEntityName())),
             AntibotCheck.from("NoVelocity", 0.1, e -> e.getVelocity().equals(Vec3d.ZERO)),
             AntibotCheck.from("DefaultSkin", 0.1, e -> {
@@ -409,7 +416,8 @@ public class Killaura extends Module {
                 double diff = Math.abs(Math.acos(lookDir.z) - Math.acos(positionDiff1.z));
                 return diff >= 0.9; // illegal angle at which to be sprinting
             }),
-            AntibotCheck.from("SpawnedAndStayedWithinRange", 0.3, e -> playersWhoHaveSpawnedAndStayedInOurRange.containsKey(e.getId())));
+            AntibotCheck.from("SpawnedAndStayedWithinRange", 0.3, e -> playersWhoHaveSpawnedAndStayedInOurRange.containsKey(e.getId()))
+        );
 
         public interface Testable {
             boolean violates(LivingEntity e);

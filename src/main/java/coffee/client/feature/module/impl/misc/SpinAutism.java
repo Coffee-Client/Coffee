@@ -20,11 +20,11 @@ import java.util.Objects;
 
 public class SpinAutism extends Module {
     final DoubleSetting speed = this.config.create(new DoubleSetting.Builder(5).name("Delay")
-        .description("How much to wait when spinning")
-        .min(0)
-        .max(100)
-        .precision(0)
-        .get());
+                                                                               .description("How much to wait when spinning")
+                                                                               .min(0)
+                                                                               .max(100)
+                                                                               .precision(0)
+                                                                               .get());
     int timeout = 0;
 
     public SpinAutism() {
@@ -65,9 +65,11 @@ public class SpinAutism extends Module {
         Rotations.setClientYaw((float) (Math.random() * 360));
         PlayerInteractItemC2SPacket p = new PlayerInteractItemC2SPacket(Hand.MAIN_HAND, Utils.increaseAndCloseUpdateManager(CoffeeMain.client.world));
         Objects.requireNonNull(CoffeeMain.client.getNetworkHandler()).sendPacket(p);
-        PlayerMoveC2SPacket p1 = new PlayerMoveC2SPacket.LookAndOnGround(Rotations.getClientYaw(),
+        PlayerMoveC2SPacket p1 = new PlayerMoveC2SPacket.LookAndOnGround(
+            Rotations.getClientYaw(),
             Rotations.getClientPitch(),
-            Objects.requireNonNull(CoffeeMain.client.player).isOnGround());
+            Objects.requireNonNull(CoffeeMain.client.player).isOnGround()
+        );
         CoffeeMain.client.getNetworkHandler().sendPacket(p1);
     }
 

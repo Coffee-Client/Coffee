@@ -47,12 +47,14 @@ public class AnyPlacer extends Module {
             if (sex.getItem() instanceof SpawnEggItem) {
                 me.setCancelled(true);
                 Vec3d rotationVector = Rotations.getRotationVector(Rotations.getClientPitch(), Rotations.getClientYaw());
-                EntityHitResult raycast = ProjectileUtil.raycast(client.player,
+                EntityHitResult raycast = ProjectileUtil.raycast(
+                    client.player,
                     CoffeeMain.client.player.getCameraPosVec(0),
                     CoffeeMain.client.player.getCameraPosVec(0).add(rotationVector.multiply(500)),
                     client.player.getBoundingBox().stretch(rotationVector.multiply(500)).expand(1, 1, 1),
                     Entity::isAttackable,
-                    500 * 500);
+                    500 * 500
+                );
                 Vec3d spawnPos;
                 if (raycast != null && raycast.getEntity() != null) {
                     spawnPos = raycast.getPos();
@@ -67,8 +69,10 @@ public class AnyPlacer extends Module {
                 nl.add(NbtDouble.of(spawnPos.y));
                 nl.add(NbtDouble.of(spawnPos.z));
                 entityTag.put("Pos", nl);
-                CreativeInventoryActionC2SPacket a = new CreativeInventoryActionC2SPacket(Utils.Inventory.slotIndexToId(CoffeeMain.client.player.getInventory().selectedSlot),
-                    sex);
+                CreativeInventoryActionC2SPacket a = new CreativeInventoryActionC2SPacket(
+                    Utils.Inventory.slotIndexToId(CoffeeMain.client.player.getInventory().selectedSlot),
+                    sex
+                );
                 Objects.requireNonNull(CoffeeMain.client.getNetworkHandler()).sendPacket(a);
                 BlockHitResult bhr = new BlockHitResult(CoffeeMain.client.player.getPos(), Direction.DOWN, BlockPos.ofFloored(CoffeeMain.client.player.getPos()), false);
                 PlayerInteractBlockC2SPacket ib = new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, bhr, Utils.increaseAndCloseUpdateManager(CoffeeMain.client.world));

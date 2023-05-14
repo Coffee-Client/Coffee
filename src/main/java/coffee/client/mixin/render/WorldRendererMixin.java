@@ -35,7 +35,8 @@ import java.util.stream.StreamSupport;
 
 @Mixin(WorldRenderer.class)
 public class WorldRendererMixin {
-    @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/WorldRenderer;setupTerrain(Lnet/minecraft/client/render/Camera;Lnet/minecraft/client/render/Frustum;ZZ)V"), index = 3)
+    @ModifyArg(method = "render",
+               at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/WorldRenderer;setupTerrain(Lnet/minecraft/client/render/Camera;Lnet/minecraft/client/render/Frustum;ZZ)V"), index = 3)
     private boolean coffee_renderEverything(boolean spectator) {
         ChunkRenderQuery query = new ChunkRenderQuery();
         EventSystem.manager.send(query);
@@ -51,11 +52,6 @@ public class WorldRendererMixin {
             instance.render(tickDelta);
         }
     }
-
-    //    @Redirect(method="drawEntityOutlinesFramebuffer", at=@At(value = "INVOKE",target = "Lnet/minecraft/client/gl/Framebuffer;draw(IIZ)V"))
-    //    void coffee_boxMsaa(Framebuffer instance, int width, int height, boolean disableBlend) {
-    //        MSAAFramebuffer.use(() -> instance.draw(width, height, disableBlend));
-    //    }
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lit/unimi/dsi/fastutil/longs/Long2ObjectMap;long2ObjectEntrySet()Lit/unimi/dsi/fastutil/objects/ObjectSet;"))
     ObjectSet<Long2ObjectMap.Entry<SortedSet<BlockBreakingInfo>>> coffee_highlightBlocks(Long2ObjectMap<SortedSet<BlockBreakingInfo>> instance, MatrixStack matrices) {
@@ -75,12 +71,12 @@ public class WorldRendererMixin {
         }
         Object2IntMap<EntityType<?>> entityTypeCount = new Object2IntArrayMap<>();
         return StreamSupport.stream(entities.spliterator(), false)
-            .sorted(Comparator.comparingDouble(value -> value.distanceTo(CoffeeMain.client.cameraEntity)))
-            .filter(entity -> {
-                int oldCount = entityTypeCount.getOrDefault(entity.getType(), 0);
-                entityTypeCount.put(entity.getType(), oldCount + 1);
-                return oldCount < inst.getMassEntityAmount().getValue();
-            })
-            .toList();
+                            .sorted(Comparator.comparingDouble(value -> value.distanceTo(CoffeeMain.client.cameraEntity)))
+                            .filter(entity -> {
+                                int oldCount = entityTypeCount.getOrDefault(entity.getType(), 0);
+                                entityTypeCount.put(entity.getType(), oldCount + 1);
+                                return oldCount < inst.getMassEntityAmount().getValue();
+                            })
+                            .toList();
     }
 }

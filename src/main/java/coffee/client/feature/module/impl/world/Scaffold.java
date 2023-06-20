@@ -62,7 +62,6 @@ public class Scaffold extends Module {
 
     @Override
     public void onWorldRender(MatrixStack matrices) {
-        //        client.options.sneakKey.setPressed(false);
     }
 
     @Override
@@ -123,7 +122,7 @@ public class Scaffold extends Module {
 
     void placeBlockWithSlot(int s, BlockPos bp) {
         BlockState st = Objects.requireNonNull(client.world).getBlockState(bp);
-        if (!st.getMaterial().isReplaceable()) {
+        if (!st.isReplaceable()) {
             return;
         }
         Rotation py = Rotations.getPitchYaw(new Vec3d(bp.getX() + .5, bp.getY() + .5, bp.getZ() + .5));

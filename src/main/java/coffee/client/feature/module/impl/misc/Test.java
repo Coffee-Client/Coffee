@@ -49,7 +49,6 @@ public class Test extends Module {
         PathFinder.Entry entry = pf.startEntry;
         while (entry != null && entry.next != null) {
             Renderer.R3D.renderLine(matrices, Color.GREEN, Vec3d.of(entry.pos).add(.5, .5, .5), Vec3d.of(entry.next.pos).add(.5, .5, .5));
-            //            Renderer.R3D.renderLine(matrices, Color.RED, entry.pos, entry.next.pos);
             entry = entry.next;
         }
 

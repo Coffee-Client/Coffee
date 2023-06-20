@@ -42,7 +42,7 @@ public class SpeedHud extends HudElement {
 
             double previous;
             if (speeds.size() > 0) {
-                previous = height - ((speeds.get(0) - min) / max) * height;
+                previous = height - (speeds.get(0) - min) / max * height;
             } else {
                 previous = 0;
             }
@@ -50,7 +50,7 @@ public class SpeedHud extends HudElement {
                 double ppr = Math.sin(Math.toRadians(((double) i / speeds.size() + (System.currentTimeMillis() % 3000) / -3000d) * 360 * 3)) + 1;
                 ppr /= 2d;
                 double aDouble = speeds.get(i);
-                double prog = ((aDouble - min) / max);
+                double prog = (aDouble - min) / max;
                 double y = height - prog * height;
 
                 Renderer.R2D.renderLine(

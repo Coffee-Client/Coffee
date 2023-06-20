@@ -10,6 +10,7 @@ import coffee.client.feature.config.DoubleSetting;
 import coffee.client.feature.config.EnumSetting;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
+import coffee.client.helper.event.impl.PacketEvent;
 import coffee.client.mixin.network.IEntityVelocityUpdateS2CPacketMixin;
 import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.client.util.math.MatrixStack;
@@ -38,7 +39,7 @@ public class Velocity extends Module {
     }
 
     @MessageSubscription
-    void onA(coffee.client.helper.event.impl.PacketEvent.Received pe) {
+    void onA(PacketEvent.Received pe) {
         if (CoffeeMain.client.player == null) {
             return;
         }

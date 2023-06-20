@@ -54,7 +54,7 @@ public class Socks4ServerDecoder extends ReplayingDecoder<Socks4ServerDecoder.St
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) {
         try {
             switch (state()) {
-                case START: {
+                case START:
                     final int version = in.readUnsignedByte();
                     if (version != SocksVersion.SOCKS4a.byteValue()) {
                         throw new DecoderException("unsupported protocol version: " + version);
@@ -64,30 +64,25 @@ public class Socks4ServerDecoder extends ReplayingDecoder<Socks4ServerDecoder.St
                     dstPort = in.readUnsignedShort();
                     dstAddr = NetUtil.intToIpAddress(in.readInt());
                     checkpoint(State.READ_USERID);
-                }
-                case READ_USERID: {
+                case READ_USERID:
                     userId = readString("userid", in);
                     checkpoint(State.READ_DOMAIN);
-                }
-                case READ_DOMAIN: {
+                case READ_DOMAIN:
                     // Check for Socks4a protocol marker 0.0.0.x
                     if (!"0.0.0.0".equals(dstAddr) && dstAddr.startsWith("0.0.0.")) {
                         dstAddr = readString("dstAddr", in);
                     }
                     out.add(new DefaultSocks4CommandRequest(type, dstAddr, dstPort, userId));
                     checkpoint(State.SUCCESS);
-                }
-                case SUCCESS: {
+                case SUCCESS:
                     int readableBytes = actualReadableBytes();
                     if (readableBytes > 0) {
                         out.add(in.readRetainedSlice(readableBytes));
                     }
                     break;
-                }
-                case FAILURE: {
+                case FAILURE:
                     in.skipBytes(actualReadableBytes());
                     break;
-                }
             }
         } catch (Exception e) {
             fail(out, e);

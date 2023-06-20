@@ -18,6 +18,7 @@ import coffee.client.helper.render.MSAAFramebuffer;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.Utils;
 import lombok.val;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ChatInputSuggestor;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.screen.Screen;
@@ -153,7 +154,7 @@ public class AChatScreenMixin extends Screen {
         for (String suggestion : suggestions) {
             probableWidth = Math.max(probableWidth, FontRenderers.getRenderer().getStringWidth(suggestion) + 1);
         }
-        float xC = (float) (cmdXS);
+        float xC = (float) cmdXS;
         Renderer.R2D.renderRoundedQuad(stack, new Color(30, 30, 30, 255), xC - padding(), yC - padding(), xC + probableWidth + padding(), yC + probableHeight, 5, 20);
         for (String suggestion : suggestions) {
             FontRenderers.getRenderer().drawString(stack, suggestion, xC, yC, 0xFFFFFF, false);
@@ -186,11 +187,11 @@ public class AChatScreenMixin extends Screen {
     }
 
     @Inject(method = "render", at = @At("RETURN"))
-    void coffee_renderSuggestions(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    void coffee_renderSuggestions(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         String p = getPrefix();
         String t = chatField.getText();
         if (t.startsWith(p) && !SelfDestruct.shouldSelfDestruct()) {
-            MSAAFramebuffer.use(() -> renderSuggestions(matrices));
+            MSAAFramebuffer.use(() -> renderSuggestions(context.getMatrices()));
         }
     }
 
@@ -212,7 +213,7 @@ public class AChatScreenMixin extends Screen {
         if (SelfDestruct.shouldSelfDestruct()) {
             return;
         }
-        chatField.setMaxLength((ModuleRegistry.getByClass(InfChatLength.class).isEnabled()) ? Integer.MAX_VALUE : 256);
+        chatField.setMaxLength(ModuleRegistry.getByClass(InfChatLength.class).isEnabled() ? Integer.MAX_VALUE : 256);
         chatField.setRenderTextProvider((s, integer) -> {
             String t;
             if (integer == 0) {

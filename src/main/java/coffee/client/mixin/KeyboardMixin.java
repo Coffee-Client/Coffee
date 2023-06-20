@@ -37,7 +37,6 @@ public class KeyboardMixin {
             KeybindingManager.updateSingle(key, action);
             KeyboardEvent ke = new KeyboardEvent(key, KeyboardEvent.Type.of(action));
             EventSystem.manager.send(ke);
-            //            Events.fireEvent(EventType.KEYBOARD, new KeyboardEvent(key, action));
         }
     }
 }

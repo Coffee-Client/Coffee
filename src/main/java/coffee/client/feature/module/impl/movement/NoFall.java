@@ -9,6 +9,7 @@ import coffee.client.feature.config.DoubleSetting;
 import coffee.client.feature.config.EnumSetting;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
+import coffee.client.helper.event.impl.PacketEvent;
 import coffee.client.mixin.network.IPlayerMoveC2SPacketMixin;
 import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.client.util.math.MatrixStack;
@@ -37,7 +38,7 @@ public class NoFall extends Module {
     }
 
     @MessageSubscription
-    void onPacket(coffee.client.helper.event.impl.PacketEvent.Sent event) {
+    void onPacket(PacketEvent.Sent event) {
         if (event.getPacket() instanceof PlayerMoveC2SPacket) {
             if (mode.getValue() == Mode.OnGround) {
                 if (enabled) {

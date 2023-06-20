@@ -26,14 +26,13 @@ public class SocksInitRequestDecoder extends ReplayingDecoder<SocksInitRequestDe
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf byteBuf, List<Object> out) {
         switch (state()) {
-            case CHECK_PROTOCOL_VERSION: {
+            case CHECK_PROTOCOL_VERSION:
                 if (byteBuf.readByte() != SocksProtocolVersion.SOCKS5.byteValue()) {
                     out.add(SocksCommonUtils.UNKNOWN_SOCKS_REQUEST);
                     break;
                 }
                 checkpoint(State.READ_AUTH_SCHEMES);
-            }
-            case READ_AUTH_SCHEMES: {
+            case READ_AUTH_SCHEMES:
                 final byte authSchemeNum = byteBuf.readByte();
                 final List<SocksAuthScheme> authSchemes;
                 if (authSchemeNum > 0) {
@@ -46,10 +45,8 @@ public class SocksInitRequestDecoder extends ReplayingDecoder<SocksInitRequestDe
                 }
                 out.add(new SocksInitRequest(authSchemes));
                 break;
-            }
-            default: {
+            default:
                 throw new Error();
-            }
         }
         ctx.pipeline().remove(this);
     }

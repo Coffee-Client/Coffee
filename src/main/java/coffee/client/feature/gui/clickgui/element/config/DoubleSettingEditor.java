@@ -30,8 +30,8 @@ public class DoubleSettingEditor extends SettingEditor<DoubleSetting> {
     }
 
     void handleClick(double x) {
-        double translated = x - (this.getPositionX());
-        double perIn = MathHelper.clamp(translated / (width), 0, 1);
+        double translated = x - this.getPositionX();
+        double perIn = MathHelper.clamp(translated / width, 0, 1);
         configValue.setValue(Utils.Math.roundToDecimal(perIn * (configValue.getMax() - configValue.getMin()) + configValue.getMin(), configValue.getPrecision()));
     }
 

@@ -30,7 +30,7 @@ public class ButtonGroupElement extends Element {
         double heightForOneButton = getHeight() / e.length;
         for (int i = 0; i < e.length; i++) {
             boolean isFirst = i == 0;
-            boolean isLast = i == (e.length - 1);
+            boolean isLast = i == e.length - 1;
             ButtonEntry be = e[i];
             double rad1, rad2, rad3, rad4;
             if (isFirst) {

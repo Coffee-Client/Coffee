@@ -21,6 +21,7 @@ import coffee.client.helper.render.Scroller;
 import coffee.client.helper.render.textures.Texture;
 import coffee.client.helper.util.Timer;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
@@ -97,10 +98,10 @@ public class AddonManagerScreen extends ClientScreen implements FastTickable {
     }
 
     @Override
-    public void renderInternal(MatrixStack stack, int mouseX, int mouseY, float delta) {
+    public void renderInternal(DrawContext stack, int mouseX, int mouseY, float delta) {
         renderBackground(stack);
         Renderer.R2D.renderRoundedQuad(
-            stack,
+            stack.getMatrices(),
             new Color(20, 20, 20),
             width / 2d - WIDGET_WIDTH / 2d,
             height / 2d - WIDGET_HEIGHT / 2d,
@@ -110,7 +111,7 @@ public class AddonManagerScreen extends ClientScreen implements FastTickable {
             20
         );
         ClipStack.globalInstance.addWindow(
-            stack,
+            stack.getMatrices(),
             new Rectangle(width / 2d - WIDGET_WIDTH / 2d, height / 2d - WIDGET_HEIGHT / 2d, width / 2d + WIDGET_WIDTH / 2d, height / 2d + WIDGET_HEIGHT / 2d)
         );
         double yOffset = 0;
@@ -119,8 +120,8 @@ public class AddonManagerScreen extends ClientScreen implements FastTickable {
         if (viewerList.isEmpty()) {
             RendererFontAdapter customSize = FontRenderers.getCustomSize(40);
             RendererFontAdapter customSize1 = FontRenderers.getCustomSize(30);
-            customSize.drawCenteredString(stack, "No addons", width / 2d, height / 2d - customSize.getFontHeight(), 0xAAAAAA);
-            customSize1.drawCenteredString(stack, "Drag some in to load them", width / 2d, height / 2d, 0xAAAAAA);
+            customSize.drawCenteredString(stack.getMatrices(), "No addons", width / 2d, height / 2d - customSize.getFontHeight(), 0xAAAAAA);
+            customSize1.drawCenteredString(stack.getMatrices(), "Drag some in to load them", width / 2d, height / 2d, 0xAAAAAA);
         }
         for (AddonViewer addonViewer : new ArrayList<>(viewerList)) {
             addonViewer.render(stack, xRoot, yRoot + yOffset + scroller.getScroll(), mouseX, mouseY);
@@ -170,8 +171,8 @@ public class AddonManagerScreen extends ClientScreen implements FastTickable {
             });
         }
 
-        public void render(MatrixStack stack, double x, double y, int mouseX, int mouseY) {
-
+        public void render(DrawContext stack2, double x, double y, int mouseX, int mouseY) {
+MatrixStack stack = stack2.getMatrices();
             Color background = new Color(25, 25, 25);
             Renderer.R2D.renderRoundedQuad(stack, background, x, y, x + width, y + getHeight(), 5, 20);
             RenderSystem.enableBlend();
@@ -262,10 +263,10 @@ public class AddonManagerScreen extends ClientScreen implements FastTickable {
 
             disable.setX(x + width - disable.getWidth() - padding);
             disable.setY(y + getHeight() / 2d - buttonRowHeight / 2d);
-            disable.render(stack, mouseX, mouseY, 0);
+            disable.render(stack2, mouseX, mouseY, 0);
             reload.setX(x + width - disable.getWidth() - padding);
             reload.setY(y + getHeight() / 2d - buttonRowHeight / 2d + disable.getHeight() + padding);
-            reload.render(stack, mouseX, mouseY, 0);
+            reload.render(stack2, mouseX, mouseY, 0);
         }
 
         public void clicked(double mouseX, double mouseY, int button) {

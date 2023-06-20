@@ -35,10 +35,10 @@ public class BooleanSetting extends SettingBase<Boolean> {
 
     @Override
     public Boolean parse(String value) {
-        return (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("1"));
+        return value.equalsIgnoreCase("true") || value.equalsIgnoreCase("1");
     }
 
-    public static class Builder extends SettingBase.Builder<coffee.client.feature.config.BooleanSetting.Builder, Boolean, BooleanSetting> {
+    public static class Builder extends SettingBase.Builder<BooleanSetting.Builder, Boolean, BooleanSetting> {
 
         public Builder(Boolean defaultValue) {
             super(defaultValue);

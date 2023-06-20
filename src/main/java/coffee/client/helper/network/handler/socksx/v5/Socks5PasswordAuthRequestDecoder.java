@@ -31,7 +31,7 @@ public class Socks5PasswordAuthRequestDecoder extends ReplayingDecoder<Socks5Pas
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) {
         try {
             switch (state()) {
-                case INIT: {
+                case INIT:
                     final int startOffset = in.readerIndex();
                     final byte version = in.getByte(startOffset);
                     if (version != 1) {
@@ -49,18 +49,15 @@ public class Socks5PasswordAuthRequestDecoder extends ReplayingDecoder<Socks5Pas
                     ));
 
                     checkpoint(State.SUCCESS);
-                }
-                case SUCCESS: {
+                case SUCCESS:
                     int readableBytes = actualReadableBytes();
                     if (readableBytes > 0) {
                         out.add(in.readRetainedSlice(readableBytes));
                     }
                     break;
-                }
-                case FAILURE: {
+                case FAILURE:
                     in.skipBytes(actualReadableBytes());
                     break;
-                }
             }
         } catch (Exception e) {
             fail(out, e);

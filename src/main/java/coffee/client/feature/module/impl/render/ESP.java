@@ -214,7 +214,6 @@ public class ESP extends Module {
         Vec3d finalMostX = mostX;
         Vec3d finalMostY = mostY;
         Utils.TickManager.runOnNextRender(() -> {
-            //Renderer.R2D.renderRoundedQuad(Renderer.R3D.getEmptyMatrixStack(),new Color(255,255,255,100),finalLeastX.x,finalLeastY.y,finalMostX.x,finalMostY.y,5,20);
             float x1 = (float) finalLeastX.x;
             float y1 = (float) finalLeastY.y;
             float x2 = (float) finalMostX.x;
@@ -250,7 +249,6 @@ public class ESP extends Module {
         |    |
         3----2
         */
-        //matrix.multiply(new Quaternion(0,0,(float) rotation,true));
         float[][] verts = new float[][] { new float[] { 0, 0 }, new float[] { 0, height }, new float[] { -width, height }, new float[] { -width, -width },
             new float[] { topWidth, -width }, new float[] { topWidth, 0 }, new float[] { 0, 0 } };
         for (float[] vert : verts) {

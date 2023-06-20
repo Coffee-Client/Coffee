@@ -11,6 +11,7 @@ import coffee.client.feature.config.DoubleSetting;
 import coffee.client.feature.config.EnumSetting;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
+import coffee.client.helper.event.impl.PacketEvent;
 import coffee.client.helper.util.Utils;
 import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.client.util.math.MatrixStack;
@@ -44,7 +45,7 @@ public class MassUse extends Module {
     }
 
     @MessageSubscription
-    void onP(coffee.client.helper.event.impl.PacketEvent.Sent pe) {
+    void onP(PacketEvent.Sent pe) {
         if (dontRepeat.contains(pe.getPacket())) {
             dontRepeat.remove(pe.getPacket());
             return;

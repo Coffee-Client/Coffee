@@ -28,20 +28,18 @@ public class SocksCmdRequestDecoder extends ReplayingDecoder<SocksCmdRequestDeco
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf byteBuf, List<Object> out) {
         switch (state()) {
-            case CHECK_PROTOCOL_VERSION: {
+            case CHECK_PROTOCOL_VERSION:
                 if (byteBuf.readByte() != SocksProtocolVersion.SOCKS5.byteValue()) {
                     out.add(SocksCommonUtils.UNKNOWN_SOCKS_REQUEST);
                     break;
                 }
                 checkpoint(State.READ_CMD_HEADER);
-            }
-            case READ_CMD_HEADER: {
+            case READ_CMD_HEADER:
                 cmdType = SocksCmdType.valueOf(byteBuf.readByte());
                 byteBuf.skipBytes(1); // reserved
                 addressType = SocksAddressType.valueOf(byteBuf.readByte());
                 checkpoint(State.READ_CMD_ADDRESS);
-            }
-            case READ_CMD_ADDRESS: {
+            case READ_CMD_ADDRESS:
                 switch (addressType) {
                     case IPv4 -> {
                         String host = NetUtil.intToIpAddress(byteBuf.readInt());
@@ -65,10 +63,8 @@ public class SocksCmdRequestDecoder extends ReplayingDecoder<SocksCmdRequestDeco
                     default -> throw new Error();
                 }
                 break;
-            }
-            default: {
+            default:
                 throw new Error();
-            }
         }
         ctx.pipeline().remove(this);
     }

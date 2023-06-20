@@ -15,6 +15,7 @@ import coffee.client.feature.gui.hud.element.TargetHUD;
 import coffee.client.feature.gui.screen.HudEditorScreen;
 import coffee.client.helper.event.EventSystem;
 import coffee.client.helper.event.impl.ConfigSaveEvent;
+import coffee.client.helper.event.impl.MouseEvent;
 import coffee.client.helper.util.Utils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -64,11 +65,11 @@ public class HudRenderer {
     }
 
     @MessageSubscription
-    void onMouse(coffee.client.helper.event.impl.MouseEvent me) {
+    void onMouse(MouseEvent me) {
         if (!isEditing) {
             return;
         }
-        if (me.getType() == coffee.client.helper.event.impl.MouseEvent.Type.CLICK) {
+        if (me.getType() == MouseEvent.Type.CLICK) {
             mouseHeldDown = true;
             prevX = Utils.Mouse.getMouseX();
             prevY = Utils.Mouse.getMouseY();
@@ -77,7 +78,7 @@ public class HudRenderer {
                     break;
                 }
             }
-        } else if (me.getType() == coffee.client.helper.event.impl.MouseEvent.Type.LIFT) {
+        } else if (me.getType() == MouseEvent.Type.LIFT) {
             mouseHeldDown = false;
             for (HudElement element : elements) {
                 element.mouseReleased();

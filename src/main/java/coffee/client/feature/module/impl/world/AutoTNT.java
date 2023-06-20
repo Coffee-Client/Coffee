@@ -74,12 +74,12 @@ public class AutoTNT extends Module {
                     BlockPos bp = BlockPos.ofFloored(new Vec3d(ppos.x + currentOffset.x, y, ppos.z + currentOffset.z));
                     BlockState bs = CoffeeMain.client.world.getBlockState(bp);
                     double dist = Vec3d.of(bp).distanceTo(ppos);
-                    if (bs.getMaterial().isReplaceable()) {
+                    if (bs.isReplaceable()) {
                         airs.add(new AbstractMap.SimpleEntry<>(bp, dist));
                     }
                 }
                 airs = airs.stream()
-                    .filter(blockPosDoubleEntry -> CoffeeMain.client.world.getBlockState(blockPosDoubleEntry.getKey().down()).getMaterial().blocksMovement())
+                    .filter(blockPosDoubleEntry -> CoffeeMain.client.world.getBlockState(blockPosDoubleEntry.getKey().down()).blocksMovement())
                     .collect(Collectors.toList());
                 Map.Entry<BlockPos, Double> best1 = airs.stream().min(Comparator.comparingDouble(Map.Entry::getValue)).orElse(null);
                 if (best1 == null) {
@@ -122,7 +122,7 @@ public class AutoTNT extends Module {
     }
 
     boolean shouldPlace(BlockPos b) {
-        return b.getX() % ((int) Math.floor(placeDistance.getValue())) == 0 && b.getZ() % ((int) Math.floor(placeDistance.getValue())) == 0;
+        return b.getX() % (int) Math.floor(placeDistance.getValue()) == 0 && b.getZ() % (int) Math.floor(placeDistance.getValue()) == 0;
     }
 
     @Override
@@ -138,12 +138,12 @@ public class AutoTNT extends Module {
                     BlockPos bp = BlockPos.ofFloored(new Vec3d(ppos.x + currentOffset.x, y, ppos.z + currentOffset.z));
                     BlockState bs = CoffeeMain.client.world.getBlockState(bp);
                     double dist = Vec3d.of(bp).distanceTo(ppos);
-                    if (bs.getMaterial().isReplaceable()) {
+                    if (bs.isReplaceable()) {
                         airs.add(new AbstractMap.SimpleEntry<>(bp, dist));
                     }
                 }
                 airs = airs.stream()
-                    .filter(blockPosDoubleEntry -> CoffeeMain.client.world.getBlockState(blockPosDoubleEntry.getKey().down()).getMaterial().blocksMovement())
+                    .filter(blockPosDoubleEntry -> CoffeeMain.client.world.getBlockState(blockPosDoubleEntry.getKey().down()).blocksMovement())
                     .collect(Collectors.toList());
                 Map.Entry<BlockPos, Double> best1 = airs.stream().min(Comparator.comparingDouble(Map.Entry::getValue)).orElse(null);
                 if (best1 == null) {

@@ -93,7 +93,7 @@ public class ButtonElement extends Element implements HasSpecialCursor {
             .drawString(
                 matrices,
                 text,
-                -(FontRenderers.getRenderer().getStringWidth(text)) / 2f,
+                -FontRenderers.getRenderer().getStringWidth(text) / 2f,
                 -FontRenderers.getRenderer().getMarginHeight() / 2f,
                 isEnabled() ? textColor.getRGB() : 0xAAAAAA,
                 false

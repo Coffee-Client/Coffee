@@ -28,7 +28,7 @@ public class AirPlace extends Module {
     }
 
     @MessageSubscription
-    void on(coffee.client.helper.event.impl.MouseEvent event) {
+    void on(MouseEvent event) {
         if (enabled && event.getButton() == 1 && event.getType() == MouseEvent.Type.CLICK) {
             if (CoffeeMain.client.currentScreen != null) {
                 return;
@@ -42,7 +42,7 @@ public class AirPlace extends Module {
                     (BlockHitResult) CoffeeMain.client.crosshairTarget,
                     Utils.increaseAndCloseUpdateManager(CoffeeMain.client.world)
                 ));
-                if ((client.player.getMainHandStack().getItem() instanceof BlockItem)) {
+                if (client.player.getMainHandStack().getItem() instanceof BlockItem) {
                     Renderer.R3D.renderFadingBlock(
                         Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 255),
                         Renderer.Util.modify(Utils.getCurrentRGB(), -1, -1, -1, 100).darker(),

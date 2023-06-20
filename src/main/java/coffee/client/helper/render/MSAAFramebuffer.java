@@ -34,7 +34,7 @@ public class MSAAFramebuffer extends Framebuffer {
         if (samples < MIN_SAMPLES || samples > MAX_SAMPLES) {
             throw new IllegalArgumentException(String.format("The number of samples should be >= %s and <= %s, got %s.", MIN_SAMPLES, MAX_SAMPLES, samples));
         }
-        if ((samples & (samples - 1)) != 0) {
+        if ((samples & samples - 1) != 0) {
             throw new IllegalArgumentException("The number of samples must be a power of two.");
         }
 

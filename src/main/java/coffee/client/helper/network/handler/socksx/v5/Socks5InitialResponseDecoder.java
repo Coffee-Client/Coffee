@@ -31,7 +31,7 @@ public class Socks5InitialResponseDecoder extends ReplayingDecoder<Socks5Initial
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) {
         try {
             switch (state()) {
-                case INIT: {
+                case INIT:
                     final byte version = in.readByte();
                     if (version != SocksVersion.SOCKS5.byteValue()) {
                         throw new DecoderException("unsupported version: " + version + " (expected: " + SocksVersion.SOCKS5.byteValue() + ')');
@@ -40,18 +40,15 @@ public class Socks5InitialResponseDecoder extends ReplayingDecoder<Socks5Initial
                     final Socks5AuthMethod authMethod = Socks5AuthMethod.valueOf(in.readByte());
                     out.add(new DefaultSocks5InitialResponse(authMethod));
                     checkpoint(State.SUCCESS);
-                }
-                case SUCCESS: {
+                case SUCCESS:
                     int readableBytes = actualReadableBytes();
                     if (readableBytes > 0) {
                         out.add(in.readRetainedSlice(readableBytes));
                     }
                     break;
-                }
-                case FAILURE: {
+                case FAILURE:
                     in.skipBytes(actualReadableBytes());
                     break;
-                }
             }
         } catch (Exception e) {
             fail(out, e);

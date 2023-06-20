@@ -92,10 +92,10 @@ public class TexturedButtonElement extends Element {
         }
 
         static IconRenderer fromTexture(Texture texture) {
-            return ((stack, x, y, width1, height1) -> {
+            return (stack, x, y, width1, height1) -> {
                 texture.bind();
                 Renderer.R2D.renderTexture(stack, x, y, width1, height1, 0, 0, width1, height1, width1, height1);
-            });
+            };
         }
 
         static IconRenderer fromIdentifier(Identifier ident) {

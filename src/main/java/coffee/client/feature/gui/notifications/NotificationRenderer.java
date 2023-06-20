@@ -100,7 +100,6 @@ public class NotificationRenderer {
                     notification.renderPosY + height + 1
                 )
             );
-            //Renderer.R2D.beginScissor(Renderer.R3D.getEmptyMatrixStack(), notification.renderPosX - width * notification.animationProgress, notification.renderPosY, notification.renderPosX + width * notification.animationProgress + 1, notification.renderPosY + height + 1);
             Renderer.R2D.renderQuad(
                 ms,
                 topBg,
@@ -150,12 +149,11 @@ public class NotificationRenderer {
                     ThemeManager.getMainTheme().getAccent(),
                     notification.renderPosX - width,
                     notification.renderPosY + height - 1,
-                    notification.renderPosX - width + ((width + 1) * 2 * timeRemainingInv),
+                    notification.renderPosX - width + (width + 1) * 2 * timeRemainingInv,
                     notification.renderPosY + height
                 );
             }
             ClipStack.globalInstance.popWindow();
-            //Renderer.R2D.endScissor();
             currentYOffset += height + 3;
         }
     }

@@ -77,7 +77,7 @@ public class RangeSetting extends SettingBase<RangeSetting.Range> {
         double min, max;
     }
 
-    public static class Builder extends SettingBase.Builder<coffee.client.feature.config.RangeSetting.Builder, Range, RangeSetting> {
+    public static class Builder extends SettingBase.Builder<RangeSetting.Builder, Range, RangeSetting> {
         double min = Double.NEGATIVE_INFINITY, max = Double.POSITIVE_INFINITY;
         double min1 = Double.NEGATIVE_INFINITY, max1 = Double.POSITIVE_INFINITY;
         int precision = 2;
@@ -86,17 +86,17 @@ public class RangeSetting extends SettingBase<RangeSetting.Range> {
             super(defaultValue);
         }
 
-        public coffee.client.feature.config.RangeSetting.Builder precision(int precision) {
+        public RangeSetting.Builder precision(int precision) {
             this.precision = precision;
             return this;
         }
 
-        public coffee.client.feature.config.RangeSetting.Builder lowerMin(double min) {
+        public RangeSetting.Builder lowerMin(double min) {
             this.min = min;
             return this;
         }
 
-        public coffee.client.feature.config.RangeSetting.Builder lowerMax(double max) {
+        public RangeSetting.Builder lowerMax(double max) {
             this.max = max;
             return this;
         }
@@ -111,11 +111,11 @@ public class RangeSetting extends SettingBase<RangeSetting.Range> {
             return this;
         }
 
-        public coffee.client.feature.config.RangeSetting.Builder uniformMin(double min) {
+        public RangeSetting.Builder uniformMin(double min) {
             return this.lowerMin(min).upperMin(min);
         }
 
-        public coffee.client.feature.config.RangeSetting.Builder uniformMax(double max) {
+        public RangeSetting.Builder uniformMax(double max) {
             return this.lowerMax(max).upperMax(max);
         }
 

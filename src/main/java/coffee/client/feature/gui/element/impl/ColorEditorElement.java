@@ -36,7 +36,7 @@ public class ColorEditorElement extends Element {
         float[] floats = Color.RGBtoHSB(this.color.getRed(), this.color.getGreen(), this.color.getBlue(), null);
         this.slider = new HueSlider(x, y, width, 6, floats[0]);
         this.x = floats[1];
-        this.y = (1 - floats[2]);
+        this.y = 1 - floats[2];
     }
 
     @Override
@@ -72,7 +72,7 @@ public class ColorEditorElement extends Element {
         renderColorWheel(stack, getPositionX(), getPositionY(), getWidth(), getHeight() - slider.getHeight() - 1, Color.HSBtoRGB((float) slider.value, 1f, 1f));
         Color value = getValue();
         Color inverted = new Color(255 - value.getRed(), 255 - value.getGreen(), 255 - value.getBlue());
-        double totalHeight = (getHeight() - slider.getHeight() - 1);
+        double totalHeight = getHeight() - slider.getHeight() - 1;
         Renderer.R2D.renderCircle(
             stack,
             inverted,
@@ -88,9 +88,9 @@ public class ColorEditorElement extends Element {
     }
 
     void handleClick(double x, double y) {
-        double translated = x - (this.getPositionX());
+        double translated = x - this.getPositionX();
         double translatedY = y - this.getPositionY();
-        double perX = MathHelper.clamp(translated / (width), 0, 1);
+        double perX = MathHelper.clamp(translated / width, 0, 1);
         double perY = MathHelper.clamp(translatedY / (height - slider.getHeight() - 1), 0, 1);
         this.x = perX;
         this.y = perY;
@@ -215,8 +215,8 @@ public class ColorEditorElement extends Element {
         }
 
         void handleClick(double x) {
-            double translated = x - (this.getPositionX());
-            this.value = MathHelper.clamp(translated / (width), 0, 1);
+            double translated = x - this.getPositionX();
+            this.value = MathHelper.clamp(translated / width, 0, 1);
 
         }
 

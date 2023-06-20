@@ -47,9 +47,9 @@ public class GsonSupplier {
             } else {
                 // 0xAARRGGBB
                 int asInt = jsonElement.getAsInt();
-                int a = asInt >> (8 * 3) & 0xFF;
-                int r = asInt >> (8 * 2) & 0xFF;
-                int g = asInt >> (8) & 0xFF;
+                int a = asInt >> 8 * 3 & 0xFF;
+                int r = asInt >> 8 * 2 & 0xFF;
+                int g = asInt >> 8 & 0xFF;
                 int b = asInt & 0xFF;
                 return new Color(r, g, b, a);
             }
@@ -59,7 +59,7 @@ public class GsonSupplier {
             int green = color.getGreen();
             int blue = color.getBlue();
             int alpha = color.getAlpha();
-            int val = alpha << (8 * 3) | red << (8 * 2) | green << (8) | blue;
+            int val = alpha << 8 * 3 | red << 8 * 2 | green << 8 | blue;
             return new JsonPrimitive(val);
         };
         builder.registerTypeAdapter(Color.class, colorDeser);

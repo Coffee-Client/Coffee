@@ -67,7 +67,6 @@ public class AddonManager {
         initializeAddons();
 
         EventSystem.manager.registerSubscribers(this);
-        //        Events.registerEventHandlerClass(this);
     }
 
     public static void init() {

@@ -6,6 +6,7 @@
 package coffee.client.feature.gui.screen.base;
 
 import coffee.client.helper.render.MSAAFramebuffer;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
@@ -22,12 +23,12 @@ public class ClientScreen extends Screen {
         this(MSAAFramebuffer.MAX_SAMPLES);
     }
 
-    public void renderInternal(MatrixStack stack, int mouseX, int mouseY, float delta) {
+    public void renderInternal(DrawContext stack, int mouseX, int mouseY, float delta) {
         super.render(stack, mouseX, mouseY, delta);
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+    public void render(DrawContext matrices, int mouseX, int mouseY, float delta) {
         if (samples != -1) {
             if (!MSAAFramebuffer.framebufferInUse()) {
                 MSAAFramebuffer.use(() -> renderInternal(matrices, mouseX, mouseY, delta));

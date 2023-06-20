@@ -129,7 +129,6 @@ public class MicrosoftLogin {
             server = HttpServer.create(new InetSocketAddress("127.0.0.1", PORT), 0);
 
             server.createContext("/", new Handler());
-            //            server.setExecutor(MeteorExecutor.executor);
             server.start();
         } catch (IOException e) {
             e.printStackTrace();

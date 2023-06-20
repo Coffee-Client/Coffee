@@ -126,13 +126,10 @@ public class Killaura extends Module {
         if (le instanceof PlayerEntity) {
             return attackFilter.isSet(AttackFilter.Players);
         } else if (le instanceof Monster) {
-            //            return attackHostile;
             return attackFilter.isSet(AttackFilter.Hostile);
         } else if (le instanceof PassiveEntity) {
             return attackFilter.isSet(AttackFilter.Passive);
-            //            return attackPassive;
         }
-        //        return attackAll;
         return attackFilter.isSet(AttackFilter.EverythingElse);
     }
 
@@ -189,7 +186,7 @@ public class Killaura extends Module {
             return 0;
         }
         if (!automaticDelay) {
-            return (int) (delay);
+            return (int) delay;
         } else {
             ItemStack hand = CoffeeMain.client.player.getMainHandStack();
             if (hand == null) {

@@ -123,12 +123,10 @@ public abstract class Module {
             }
         }
         if (this.enabled) {
-            //            Events.registerEventHandlerClass(this);
             EventSystem.manager.registerSubscribers(this);
             this.enable();
         } else {
             this.disable();
-            //            Events.unregisterEventHandlerClass(this);
             EventSystem.manager.unregister(this);
         }
     }

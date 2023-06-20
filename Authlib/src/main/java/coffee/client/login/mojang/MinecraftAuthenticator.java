@@ -46,7 +46,6 @@ public class MinecraftAuthenticator extends Authenticator<MinecraftToken> {
 
             httpURLConnection.setFixedLengthStreamingMode(requestBody.length());
             httpURLConnection.setRequestProperty("Content-Type", "application/json");
-            // httpURLConnection.setRequestProperty("Host", "authserver.mojang.com");
             httpURLConnection.connect();
 
             OutputStream outputStream = httpURLConnection.getOutputStream();

@@ -24,21 +24,18 @@ public class SocksInitResponseDecoder extends ReplayingDecoder<SocksInitResponse
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf byteBuf, List<Object> out) {
         switch (state()) {
-            case CHECK_PROTOCOL_VERSION: {
+            case CHECK_PROTOCOL_VERSION:
                 if (byteBuf.readByte() != SocksProtocolVersion.SOCKS5.byteValue()) {
                     out.add(SocksCommonUtils.UNKNOWN_SOCKS_RESPONSE);
                     break;
                 }
                 checkpoint(State.READ_PREFERRED_AUTH_TYPE);
-            }
-            case READ_PREFERRED_AUTH_TYPE: {
+            case READ_PREFERRED_AUTH_TYPE:
                 SocksAuthScheme authScheme = SocksAuthScheme.valueOf(byteBuf.readByte());
                 out.add(new SocksInitResponse(authScheme));
                 break;
-            }
-            default: {
+            default:
                 throw new Error();
-            }
         }
         ctx.pipeline().remove(this);
     }

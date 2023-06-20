@@ -51,7 +51,7 @@ public abstract class Command extends Utils.Logging {
 
     protected void validateArgumentsLength(String[] args, int requiredLength, String message) throws CommandException {
         if (args.length < requiredLength) {
-            throw new CommandException(message == null ? ("Invalid number of arguments: " + requiredLength + " arguments required") : message);
+            throw new CommandException(message == null ? "Invalid number of arguments: " + requiredLength + " arguments required" : message);
         }
     }
 

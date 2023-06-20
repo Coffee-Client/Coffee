@@ -38,7 +38,6 @@ import java.util.function.Supplier;
 public class Renderer {
     public static void setupRender() {
         RenderSystem.enableBlend();
-        //        RenderSystem.defaultBlendFunc();
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
     }
 
@@ -73,7 +72,6 @@ public class Renderer {
                 double progress = lifetimeLeft / (double) fade.lifeTime;
                 progress = MathHelper.clamp(progress, 0, 1);
                 double ip = 1 - progress;
-                //                stack.push();
                 Color out = Util.modify(fade.outline, -1, -1, -1, (int) (fade.outline.getAlpha() * progress));
                 Color fill = Util.modify(fade.fill, -1, -1, -1, (int) (fade.fill.getAlpha() * progress));
                 Renderer.R3D.renderEdged(
@@ -83,7 +81,6 @@ public class Renderer {
                     fade.start.add(new Vec3d(0.2, 0.2, 0.2).multiply(ip)),
                     fade.dimensions.subtract(new Vec3d(.4, .4, .4).multiply(ip))
                 );
-                //                stack.pop();
             }
         }
 
@@ -124,7 +121,7 @@ public class Renderer {
                 @Override
                 void draw() {
                     useBuffer(VertexFormat.DrawMode.TRIANGLE_STRIP, VertexFormats.POSITION_COLOR, GameRenderer::getPositionColorProgram, bufferBuilder1 -> {
-                        for (double r = 0; r < 360; r += (360 / segments1)) {
+                        for (double r = 0; r < 360; r += 360 / segments1) {
                             double rad1 = Math.toRadians(r);
                             double sin = Math.sin(rad1);
                             double cos = Math.cos(rad1);
@@ -293,7 +290,6 @@ public class Renderer {
             float green = color.getGreen() / 255f;
             float blue = color.getBlue() / 255f;
             float alpha = transformColor(color.getAlpha() / 255f);
-            //            stack.push();
             Vec3d vec3d = transformVec3d(start);
             Vec3d end = vec3d.add(dimensions);
             float x1 = (float) vec3d.x;
@@ -303,7 +299,6 @@ public class Renderer {
             float y2 = (float) end.y;
             float z2 = (float) end.z;
             useBuffer(mode, format, shader, bufferBuilder -> action.run(bufferBuilder, x1, y1, z1, x2, y2, z2, red, green, blue, alpha, stack));
-            //            stack.pop();
         }
 
         public static void renderFilled(MatrixStack stack, Color color, Vec3d start, Vec3d dimensions) {
@@ -415,7 +410,7 @@ public class Renderer {
 
         record FadingBlock(Color outline, Color fill, Vec3d start, Vec3d dimensions, long created, long lifeTime) {
             long getLifeTimeLeft() {
-                return Math.max(0, (created - System.currentTimeMillis()) + lifeTime);
+                return Math.max(0, created - System.currentTimeMillis() + lifeTime);
             }
 
             boolean isDead() {
@@ -538,7 +533,7 @@ public class Renderer {
             double width = maxX - minX;
             double height = maxY - minY;
 
-            return new float[] { (float) (minX), (float) (minY), (float) (maxX), (float) (maxY), (float) (width), (float) (height) };
+            return new float[] { (float) minX, (float) minY, (float) maxX, (float) maxY, (float) width, (float) height };
         }
 
         public static void renderCheckmark(MatrixStack matrices, Color color, double x, double y, float firstPart, float secondPart, float width, float angle) {
@@ -547,10 +542,10 @@ public class Renderer {
             matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(angle));
             matrices.translate(-secondPart / 2, firstPart / 2, 0);
             Matrix4f matrix = matrices.peek().getPositionMatrix();
-            float a = transformColor((float) (color.getAlpha()) / 255.0F);
-            float r = (float) (color.getRed()) / 255.0F;
-            float g = (float) (color.getGreen()) / 255.0F;
-            float b = (float) (color.getBlue()) / 255.0F;
+            float a = transformColor((float) color.getAlpha() / 255.0F);
+            float r = (float) color.getRed() / 255.0F;
+            float g = (float) color.getGreen() / 255.0F;
+            float b = (float) color.getBlue() / 255.0F;
             BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
             setupRender();
             RenderSystem.setShader(GameRenderer::getPositionColorProgram);
@@ -628,7 +623,7 @@ public class Renderer {
                 new double[] { fromX1, toY1 } };
             for (int i = 0; i < map.length; i++) {
                 double[] current = map[i];
-                for (double r = i * 90d; r < (360 / 4d + i * 90d); r += (90 / samples)) {
+                for (double r = i * 90d; r < 360 / 4d + i * 90d; r += 90 / samples) {
                     float rad1 = (float) Math.toRadians(r);
                     float sin = (float) (Math.sin(rad1) * rad);
                     float cos = (float) (Math.cos(rad1) * rad);
@@ -638,16 +633,14 @@ public class Renderer {
                     bufferBuilder.vertex(matrix, (float) current[0] + sin1, (float) current[1] + cos1, 0.0F).color(cr, cg, cb, 0f).next();
                 }
             }
-            {
-                double[] current = map[0];
-                float rad1 = (float) Math.toRadians(0);
-                float sin = (float) (Math.sin(rad1) * rad);
-                float cos = (float) (Math.cos(rad1) * rad);
-                bufferBuilder.vertex(matrix, (float) current[0] + sin, (float) current[1] + cos, 0.0F).color(cr, cg, cb, ca).next();
-                float sin1 = (float) (sin + Math.sin(rad1) * wid);
-                float cos1 = (float) (cos + Math.cos(rad1) * wid);
-                bufferBuilder.vertex(matrix, (float) current[0] + sin1, (float) current[1] + cos1, 0.0F).color(cr, cg, cb, 0f).next();
-            }
+            double[] current = map[0];
+            float rad1 = (float) Math.toRadians(0);
+            float sin = (float) (Math.sin(rad1) * rad);
+            float cos = (float) (Math.cos(rad1) * rad);
+            bufferBuilder.vertex(matrix, (float) current[0] + sin, (float) current[1] + cos, 0.0F).color(cr, cg, cb, ca).next();
+            float sin1 = (float) (sin + Math.sin(rad1) * wid);
+            float cos1 = (float) (cos + Math.cos(rad1) * wid);
+            bufferBuilder.vertex(matrix, (float) current[0] + sin1, (float) current[1] + cos1, 0.0F).color(cr, cg, cb, 0f).next();
             BufferRenderer.drawWithGlobalProgram(bufferBuilder.end());
         }
 
@@ -679,7 +672,7 @@ public class Renderer {
             setupRender();
             RenderSystem.setShader(GameRenderer::getPositionColorProgram);
             bufferBuilder.begin(VertexFormat.DrawMode.TRIANGLE_STRIP, VertexFormats.POSITION_COLOR);
-            for (double r = 0; r < 90; r += (90 / segments1)) {
+            for (double r = 0; r < 90; r += 90 / segments1) {
                 double rad1 = Math.toRadians(r);
                 double sin = Math.sin(rad1);
                 double cos = Math.cos(rad1);
@@ -742,7 +735,7 @@ public class Renderer {
             setupRender();
             RenderSystem.setShader(GameRenderer::getPositionColorProgram);
             bufferBuilder.begin(VertexFormat.DrawMode.TRIANGLE_FAN, VertexFormats.POSITION_COLOR);
-            for (int i = 0; i < 360; i += Math.min((360 / segments1), 360 - i)) {
+            for (int i = 0; i < 360; i += Math.min(360 / segments1, 360 - i)) {
                 double radians = Math.toRadians(i);
                 double sin = Math.sin(radians) * rad;
                 double cos = Math.cos(radians) * rad;
@@ -752,7 +745,7 @@ public class Renderer {
         }
 
         public static boolean isOnScreen(Vec3d pos) {
-            return pos != null && (pos.z > -1 && pos.z < 1);
+            return pos != null && pos.z > -1 && pos.z < 1;
         }
 
         public static Vec3d getScreenSpaceCoordinate(Vec3d pos, MatrixStack stack) {
@@ -898,13 +891,13 @@ public class Renderer {
             for (int i = 0; i < 4; i++) {
                 double[] current = map[i];
                 double rad = current[2];
-                for (double r = i * 90d; r < (360 / 4d + i * 90d); r += (90 / samples)) {
+                for (double r = i * 90d; r < 360 / 4d + i * 90d; r += 90 / samples) {
                     float rad1 = (float) Math.toRadians(r);
                     float sin = (float) (Math.sin(rad1) * rad);
                     float cos = (float) (Math.cos(rad1) * rad);
                     bufferBuilder.vertex(matrix, (float) current[0] + sin, (float) current[1] + cos, 0.0F).color(cr, cg, cb, ca).next();
                 }
-                float rad1 = (float) Math.toRadians((360 / 4d + i * 90d));
+                float rad1 = (float) Math.toRadians(360 / 4d + i * 90d);
                 float sin = (float) (Math.sin(rad1) * rad);
                 float cos = (float) (Math.cos(rad1) * rad);
                 bufferBuilder.vertex(matrix, (float) current[0] + sin, (float) current[1] + cos, 0.0F).color(cr, cg, cb, ca).next();
@@ -957,7 +950,7 @@ public class Renderer {
             for (int i = 0; i < 4; i++) {
                 double[] current = map[i];
                 double rad = current[2];
-                for (double r = i * 90d; r < (360 / 4d + i * 90d); r += (90 / samples)) {
+                for (double r = i * 90d; r < 360 / 4d + i * 90d; r += 90 / samples) {
                     float rad1 = (float) Math.toRadians(r);
                     double sin1 = Math.sin(rad1);
                     float sin = (float) (sin1 * rad);
@@ -966,7 +959,7 @@ public class Renderer {
                     bufferBuilder.vertex(matrix, (float) current[0] + sin, (float) current[1] + cos, 0.0F).color(cr, cg, cb, ca).next();
                     bufferBuilder.vertex(matrix, (float) (current[0] + sin + sin1 * width), (float) (current[1] + cos + cos1 * width), 0.0F).color(cr, cg, cb, ca).next();
                 }
-                float rad1 = (float) Math.toRadians((360 / 4d + i * 90d));
+                float rad1 = (float) Math.toRadians(360 / 4d + i * 90d);
                 double sin1 = Math.sin(rad1);
                 float sin = (float) (sin1 * rad);
                 double cos1 = Math.cos(rad1);
@@ -977,9 +970,9 @@ public class Renderer {
             int i = 0;
             double[] current = map[i];
             double rad = current[2];
-            float cos = (float) (rad);
+            float cos = (float) rad;
             bufferBuilder.vertex(matrix, (float) current[0], (float) current[1] + cos, 0.0F).color(cr, cg, cb, ca).next();
-            bufferBuilder.vertex(matrix, (float) (current[0]), (float) (current[1] + cos + width), 0.0F).color(cr, cg, cb, ca).next();
+            bufferBuilder.vertex(matrix, (float) current[0], (float) (current[1] + cos + width), 0.0F).color(cr, cg, cb, ca).next();
             BufferRenderer.drawWithGlobalProgram(bufferBuilder.end());
         }
 
@@ -1023,7 +1016,7 @@ public class Renderer {
         }
 
         public static double lerp(double i, double o, double p) {
-            return (i + (o - i) * MathHelper.clamp(p, 0, 1));
+            return i + (o - i) * MathHelper.clamp(p, 0, 1);
         }
 
         public static Color lerp(Color a, Color b, double c) {

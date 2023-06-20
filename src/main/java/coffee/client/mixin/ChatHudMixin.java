@@ -104,7 +104,6 @@ public abstract class ChatHudMixin implements ChatHudDuck {
                 break;
             }
         }
-        //        if (indexFound == -1) indexFound = this.idToHudLineMap.size();
         this.idToHudLineMap.put(indexFound, new Pair<>(element1, element));
 
         while (this.messages.size() > history) {

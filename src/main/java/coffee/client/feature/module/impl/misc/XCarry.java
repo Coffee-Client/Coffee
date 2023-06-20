@@ -7,6 +7,7 @@ package coffee.client.feature.module.impl.misc;
 
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
+import coffee.client.helper.event.impl.PacketEvent;
 import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.packet.c2s.play.CloseHandledScreenC2SPacket;
@@ -18,7 +19,7 @@ public class XCarry extends Module {
     }
 
     @MessageSubscription
-    void a(coffee.client.helper.event.impl.PacketEvent pe) {
+    void a(PacketEvent pe) {
         if (pe.getPacket() instanceof CloseHandledScreenC2SPacket) {
             pe.setCancelled(true);
         }

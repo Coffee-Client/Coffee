@@ -24,21 +24,18 @@ public class SocksAuthResponseDecoder extends ReplayingDecoder<SocksAuthResponse
     @Override
     protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> out) {
         switch (state()) {
-            case CHECK_PROTOCOL_VERSION: {
+            case CHECK_PROTOCOL_VERSION:
                 if (byteBuf.readByte() != SocksSubnegotiationVersion.AUTH_PASSWORD.byteValue()) {
                     out.add(SocksCommonUtils.UNKNOWN_SOCKS_RESPONSE);
                     break;
                 }
                 checkpoint(State.READ_AUTH_RESPONSE);
-            }
-            case READ_AUTH_RESPONSE: {
+            case READ_AUTH_RESPONSE:
                 SocksAuthStatus authStatus = SocksAuthStatus.valueOf(byteBuf.readByte());
                 out.add(new SocksAuthResponse(authStatus));
                 break;
-            }
-            default: {
+            default:
                 throw new Error();
-            }
         }
         channelHandlerContext.pipeline().remove(this);
     }

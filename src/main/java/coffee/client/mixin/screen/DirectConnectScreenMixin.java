@@ -28,6 +28,7 @@ import me.x150.netmc.PacketOutputStream;
 import me.x150.netmc.S2CPacket;
 import me.x150.renderer.util.RendererUtils;
 import net.minecraft.SharedConstants;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.DirectConnectScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -64,7 +65,7 @@ import static coffee.client.helper.DirectConnectScreenVariables.*;
 @Debug(export = true)
 @Mixin(DirectConnectScreen.class)
 public abstract class DirectConnectScreenMixin extends Screen implements FastTickable {
-    private static final Gson GSON = (new GsonBuilder()).registerTypeAdapter(ServerMetadata.Version.class, CodecMapper.createSerializer(ServerMetadata.Version.CODEC))
+    private static final Gson GSON = new GsonBuilder().registerTypeAdapter(ServerMetadata.Version.class, CodecMapper.createSerializer(ServerMetadata.Version.CODEC))
         .registerTypeAdapter(ServerMetadata.Players.class, CodecMapper.createDeserializer(ServerMetadata.Players.CODEC))
         .registerTypeAdapter(ServerMetadata.class, CodecMapper.createDeserializer(ServerMetadata.CODEC))
         .registerTypeHierarchyAdapter(Text.class, new Text.Serializer())
@@ -105,7 +106,7 @@ public abstract class DirectConnectScreenMixin extends Screen implements FastTic
     }
 
     @ModifyArg(method = "render", at = @At(value = "INVOKE",
-                                           target = "Lnet/minecraft/client/gui/screen/DirectConnectScreen;drawTextWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/Text;III)V"),
+                                           target = "Lnet/minecraft/client/gui/DrawContext;drawTextWithShadow(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/Text;III)I"),
                index = 4)
     int coffee_modifyYOfText(int par4) {
         return this.height / 4 + 96 + 12 - 30 - 16;
@@ -181,8 +182,8 @@ public abstract class DirectConnectScreenMixin extends Screen implements FastTic
     }
 
     @Inject(method = "render", at = @At("RETURN"))
-    void coffee_postRender(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        MSAAFramebuffer.use(() -> coffee_innerRender(matrices));
+    void coffee_postRender(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+        MSAAFramebuffer.use(() -> coffee_innerRender(context.getMatrices()));
     }
 
     @Override
@@ -214,7 +215,7 @@ public abstract class DirectConnectScreenMixin extends Screen implements FastTic
             0f,
             0f,
             0f,
-            (float) (v),
+            (float) v,
             originX + innerPadding,
             originY + innerPadding,
             originX + minWidth - innerPadding,

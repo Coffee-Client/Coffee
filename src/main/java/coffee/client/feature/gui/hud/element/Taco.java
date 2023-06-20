@@ -9,7 +9,8 @@ import coffee.client.CoffeeMain;
 import coffee.client.helper.font.FontRenderers;
 import coffee.client.helper.render.Texture;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.gui.DrawableHelper;
+//import net.minecraft.client.gui.DrawableHelper;
+import me.x150.renderer.render.Renderer2d;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 
@@ -30,10 +31,9 @@ public class Taco extends HudElement {
         }
         Texture current = frame.getI();
 
-        RenderSystem.disableBlend();
         RenderSystem.setShaderTexture(0, current);
         RenderSystem.setShaderColor(1, 1, 1, 1);
-        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
-        DrawableHelper.drawTexture(stack, 0, 0, 0, 0, 0, (int) width, (int) height, (int) width, (int) height);
+        Renderer2d.renderTexture(stack, current, 0, 0, width, height);
+//        DrawableHelper.drawTexture(stack, 0, 0, 0, 0, 0, (int) width, (int) height, (int) width, (int) height);
     }
 }

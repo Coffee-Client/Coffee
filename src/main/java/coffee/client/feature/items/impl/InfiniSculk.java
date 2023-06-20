@@ -39,7 +39,7 @@ public class InfiniSculk extends Item {
         }
         BlockPos origin = bhr1.getBlockPos();
         BlockState bs = CoffeeMain.client.world.getBlockState(origin);
-        if (!bs.getMaterial().blocksMovement()) {
+        if (!bs.blocksMovement()) {
             Utils.Logging.error("Start block has to be solid");
             return null;
         }

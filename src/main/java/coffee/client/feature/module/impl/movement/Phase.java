@@ -9,6 +9,7 @@ import coffee.client.CoffeeMain;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
 import coffee.client.helper.event.impl.NoclipQueryEvent;
+import coffee.client.helper.event.impl.PacketEvent;
 import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.EntityPose;
@@ -32,7 +33,7 @@ public class Phase extends Module {
     }
 
     @MessageSubscription
-    void onPacketSend(coffee.client.helper.event.impl.PacketEvent.Sent pe) {
+    void onPacketSend(PacketEvent.Sent pe) {
         if (CoffeeMain.client.player == null || !CoffeeMain.client.player.getAbilities().flying) {
             return;
         }

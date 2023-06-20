@@ -77,7 +77,7 @@ public class Flattener extends Module {
                 }
                 BlockPos c = BlockPos.ofFloored(actual);
                 BlockState state = Objects.requireNonNull(client.world).getBlockState(c);
-                if (state.getMaterial().isReplaceable()) {
+                if (state.isReplaceable()) {
                     toPlace.add(c);
                 }
                 if (makeSame.getValue() && inHand != null && !state.isAir() && state.getBlock() != inHand && state.getBlock().getHardness() > 0) {

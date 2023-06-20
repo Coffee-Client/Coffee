@@ -70,7 +70,7 @@ public abstract class BlockMixin extends AbstractBlock {
 
     @Inject(method = "onEntityLand", at = @At("HEAD"), cancellable = true)
     void coffee_onEntityLandBounce(BlockView world, Entity entity, CallbackInfo ci) {
-        if (getBoing().isEnabled() && entity.world.isClient()) {
+        if (getBoing().isEnabled() && entity.getWorld().isClient()) {
             bounce(entity);
             ci.cancel();
         }

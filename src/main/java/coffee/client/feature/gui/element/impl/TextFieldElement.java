@@ -31,7 +31,7 @@ public class TextFieldElement extends Element implements HasSpecialCursor {
     };
 
     @Setter
-    public Function<String, Boolean> contentFilter = (newText) -> true;
+    public Function<String, Boolean> contentFilter = newText -> true;
     protected String text = "";
     protected boolean focused;
     protected int cursor;
@@ -193,7 +193,7 @@ public class TextFieldElement extends Element implements HasSpecialCursor {
             if (cursor > 0 && cursor == selectionStart && cursor == selectionEnd) {
                 String preText = text;
 
-                int count = (mods == isCtrlPressed) ? cursor : (mods == (SystemUtils.IS_OS_WINDOWS ? GLFW.GLFW_MOD_CONTROL : GLFW.GLFW_MOD_ALT)) ? countToNextSpace(true) : 1;
+                int count = mods == isCtrlPressed ? cursor : mods == (SystemUtils.IS_OS_WINDOWS ? GLFW.GLFW_MOD_CONTROL : GLFW.GLFW_MOD_ALT) ? countToNextSpace(true) : 1;
 
                 text = text.substring(0, cursor - count) + text.substring(cursor);
                 cursor -= count;
@@ -214,7 +214,7 @@ public class TextFieldElement extends Element implements HasSpecialCursor {
                     if (cursor == selectionStart && cursor == selectionEnd) {
                         String preText = text;
 
-                        int count = ctrl ? text.length() - cursor : (mods == (SystemUtils.IS_OS_WINDOWS ? GLFW.GLFW_MOD_CONTROL : GLFW.GLFW_MOD_ALT)) ? countToNextSpace(
+                        int count = ctrl ? text.length() - cursor : mods == (SystemUtils.IS_OS_WINDOWS ? GLFW.GLFW_MOD_CONTROL : GLFW.GLFW_MOD_ALT) ? countToNextSpace(
                             false) : 1;
 
                         text = text.substring(0, cursor) + text.substring(cursor + count);
@@ -393,9 +393,9 @@ public class TextFieldElement extends Element implements HasSpecialCursor {
         ClipStack.globalInstance.addWindow(stack, new Rectangle(getPositionX() + pad, getPositionY(), getPositionX() + width - pad, getPositionY() + height));
         // Text content
         if (!text.isEmpty()) {
-            FontRenderers.getRenderer().drawString(stack, text, (float) (getPositionX() + pad - overflowWidth), (float) (centerY), 0xFFFFFF, false);
+            FontRenderers.getRenderer().drawString(stack, text, (float) (getPositionX() + pad - overflowWidth), (float) centerY, 0xFFFFFF, false);
         } else {
-            FontRenderers.getRenderer().drawString(stack, suggestion, (float) (getPositionX() + pad - overflowWidth), (float) (centerY), 0xAAAAAA, false);
+            FontRenderers.getRenderer().drawString(stack, suggestion, (float) (getPositionX() + pad - overflowWidth), (float) centerY, 0xAAAAAA, false);
         }
 
         // Text highlighting

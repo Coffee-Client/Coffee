@@ -8,6 +8,7 @@ package coffee.client.feature.module.impl.movement;
 import coffee.client.CoffeeMain;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
+import coffee.client.helper.event.impl.PacketEvent;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.Utils;
 import me.x150.jmessenger.MessageSubscription;
@@ -30,7 +31,7 @@ public class Backtrack extends Module {
     }
 
     @MessageSubscription
-    void onPacket(coffee.client.helper.event.impl.PacketEvent.Sent pe) {
+    void onPacket(PacketEvent.Sent pe) {
         if (pe.getPacket() instanceof PlayerMoveC2SPacket) {
             pe.setCancelled(true);
         }

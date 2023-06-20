@@ -30,7 +30,7 @@ public class Socks5PasswordAuthResponseDecoder extends ReplayingDecoder<Socks5Pa
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) {
         try {
             switch (state()) {
-                case INIT: {
+                case INIT:
                     final byte version = in.readByte();
                     if (version != 1) {
                         throw new DecoderException("unsupported subnegotiation version: " + version + " (expected: 1)");
@@ -38,18 +38,15 @@ public class Socks5PasswordAuthResponseDecoder extends ReplayingDecoder<Socks5Pa
 
                     out.add(new DefaultSocks5PasswordAuthResponse(Socks5PasswordAuthStatus.valueOf(in.readByte())));
                     checkpoint(State.SUCCESS);
-                }
-                case SUCCESS: {
+                case SUCCESS:
                     int readableBytes = actualReadableBytes();
                     if (readableBytes > 0) {
                         out.add(in.readRetainedSlice(readableBytes));
                     }
                     break;
-                }
-                case FAILURE: {
+                case FAILURE:
                     in.skipBytes(actualReadableBytes());
                     break;
-                }
             }
         } catch (Exception e) {
             fail(out, e);

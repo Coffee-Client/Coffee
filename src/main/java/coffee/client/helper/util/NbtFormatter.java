@@ -38,7 +38,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 public class NbtFormatter implements NbtElementVisitor {
-    private static final Map<String, List<String>> ENTRY_ORDER_OVERRIDES = Util.make(Maps.newHashMap(), (map) -> {
+    private static final Map<String, List<String>> ENTRY_ORDER_OVERRIDES = Util.make(Maps.newHashMap(), map -> {
         map.put("{}", Lists.newArrayList("DataVersion", "author", "size", "data", "entities", "palette", "palettes"));
         map.put("{}.data.[].{}", Lists.newArrayList("pos", "state", "nbt"));
         map.put("{}.entities.[].{}", Lists.newArrayList("blockPos", "pos"));
@@ -100,7 +100,7 @@ public class NbtFormatter implements NbtElementVisitor {
     }
 
     public void visitByteArray(NbtByteArray element) {
-        RGBColorText stringBuilder = (new RGBColorText("[")).append("B", TYPE_SUFFIX_COLOR).append(";");
+        RGBColorText stringBuilder = new RGBColorText("[").append("B", TYPE_SUFFIX_COLOR).append(";");
         byte[] bs = element.getByteArray();
 
         for (int i = 0; i < bs.length; ++i) {
@@ -115,7 +115,7 @@ public class NbtFormatter implements NbtElementVisitor {
     }
 
     public void visitIntArray(NbtIntArray element) {
-        RGBColorText stringBuilder = (new RGBColorText("[")).append("I", TYPE_SUFFIX_COLOR).append(";");
+        RGBColorText stringBuilder = new RGBColorText("[").append("I", TYPE_SUFFIX_COLOR).append(";");
         int[] is = element.getIntArray();
 
         for (int i = 0; i < is.length; ++i) {
@@ -130,7 +130,7 @@ public class NbtFormatter implements NbtElementVisitor {
     }
 
     public void visitLongArray(NbtLongArray element) {
-        RGBColorText stringBuilder = (new RGBColorText("[")).append("L", TYPE_SUFFIX_COLOR).append(";");
+        RGBColorText stringBuilder = new RGBColorText("[").append("L", TYPE_SUFFIX_COLOR).append(";");
         long[] ls = element.getLongArray();
 
         for (int i = 0; i < ls.length; ++i) {
@@ -157,7 +157,7 @@ public class NbtFormatter implements NbtElementVisitor {
 
             for (int i = 0; i < element.size(); ++i) {
                 stringBuilder.append(Strings.repeat(string, this.indentationLevel + 1));
-                stringBuilder.append((new NbtFormatter(string, this.indentationLevel + 1, this.pathParts)).apply(element.get(i)));
+                stringBuilder.append(new NbtFormatter(string, this.indentationLevel + 1, this.pathParts).apply(element.get(i)));
                 if (i != element.size() - 1) {
                     stringBuilder.append(ENTRY_SEPARATOR).append(string.isEmpty() ? " " : "\n");
                 }
@@ -195,7 +195,7 @@ public class NbtFormatter implements NbtElementVisitor {
                     .append(escapeName(string2), NAME_COLOR)
                     .append(KEY_VALUE_SEPARATOR)
                     .append(" ")
-                    .append((new NbtFormatter(string, this.indentationLevel + 1, this.pathParts)).apply(Objects.requireNonNull(nbtElement)));
+                    .append(new NbtFormatter(string, this.indentationLevel + 1, this.pathParts).apply(Objects.requireNonNull(nbtElement)));
                 this.popPathPart();
                 if (iterator.hasNext()) {
                     stringBuilder.append(ENTRY_SEPARATOR).append(string.isEmpty() ? " " : "\n");

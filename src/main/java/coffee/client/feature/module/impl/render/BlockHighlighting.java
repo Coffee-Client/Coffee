@@ -8,6 +8,7 @@ package coffee.client.feature.module.impl.render;
 import coffee.client.CoffeeMain;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
+import coffee.client.helper.event.impl.PacketEvent;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.Utils;
 import coffee.client.mixin.render.IWorldRendererMixin;
@@ -31,7 +32,7 @@ public class BlockHighlighting extends Module {
     }
 
     @MessageSubscription
-    void onP(coffee.client.helper.event.impl.PacketEvent.Received event) {
+    void onP(PacketEvent.Received event) {
         if (event.getPacket() instanceof BlockUpdateS2CPacket packet) {
             BlockPos real = packet.getPos();
             Renderer.R3D.renderFadingBlock(

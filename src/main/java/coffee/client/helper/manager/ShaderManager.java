@@ -15,7 +15,7 @@ public class ShaderManager {
     });
 
     public static final Shader OUTLINE = Shader.create("outline", managedShaderEffect -> {
-        ((ShaderEffectDuck) managedShaderEffect.getShader()).addFakeTarget("bufIn", CoffeeMain.client.worldRenderer.getEntityOutlinesFramebuffer());
-        ((ShaderEffectDuck) managedShaderEffect.getShader()).addFakeTarget("bufOut", CoffeeMain.client.worldRenderer.getEntityOutlinesFramebuffer());
+        ((ShaderEffectDuck) managedShaderEffect.getShader()).coffee_addFakeTarget("bufIn", CoffeeMain.client.worldRenderer.getEntityOutlinesFramebuffer());
+        ((ShaderEffectDuck) managedShaderEffect.getShader()).coffee_addFakeTarget("bufOut", CoffeeMain.client.worldRenderer.getEntityOutlinesFramebuffer());
     });
 }

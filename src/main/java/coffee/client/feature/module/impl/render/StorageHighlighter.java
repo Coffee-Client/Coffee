@@ -135,7 +135,6 @@ public class StorageHighlighter extends Module {
 
     @Override
     public void tick() {
-        //positions.removeIf(blockPos -> !(client.world.getBlockState(blockPos).getBlock() instanceof ChestBlock));
         positions.removeIf(blockPos -> !isStorage(client.world.getBlockState(blockPos).getBlock()) && !isStorage(client.world.getBlockEntity(blockPos)));
     }
 
@@ -159,7 +158,7 @@ public class StorageHighlighter extends Module {
         for (BlockPos position : positions) {
             Block b = client.world.getBlockState(position).getBlock();
             BlockEntity be = client.world.getBlockEntity(position);
-            Color c = isStorage(b) ? colors.get(b.getClass()) : (be != null && isStorage(be)) ? colors.get(be.getClass()) : null;
+            Color c = isStorage(b) ? colors.get(b.getClass()) : be != null && isStorage(be) ? colors.get(be.getClass()) : null;
             if (c != null) {
                 Renderer.R3D.renderFadingBlock(c, Renderer.Util.modify(c, -1, -1, -1, 100).darker(), Vec3d.of(position), new Vec3d(1, 1, 1), 500);
             }

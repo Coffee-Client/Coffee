@@ -59,7 +59,7 @@ public class AutoTrap extends Module {
 
         boolean smallMatches = Arrays.stream(buildOffsetsSmall).allMatch(ints -> {
             BlockPos a = bp.add((int) ints[0], (int) ints[1], (int) ints[2]);
-            return Objects.requireNonNull(CoffeeMain.client.world).getBlockState(a).getMaterial().blocksMovement();
+            return Objects.requireNonNull(CoffeeMain.client.world).getBlockState(a).blocksMovement();
         });
         if (smallMatches) {
             return true;
@@ -70,7 +70,7 @@ public class AutoTrap extends Module {
             Vec3d potentialHome = entityPos.add(ints[0], ints[1], ints[2]);
             boolean matches = Arrays.stream(buildOffsetsBig).allMatch(ints1 -> {
                 BlockPos a = BlockPos.ofFloored(potentialHome.add(ints1[0], ints1[1], ints1[2]));
-                return CoffeeMain.client.world.getBlockState(a).getMaterial().blocksMovement();
+                return CoffeeMain.client.world.getBlockState(a).blocksMovement();
             });
             if (matches) {
                 return true;

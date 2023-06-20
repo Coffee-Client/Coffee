@@ -93,7 +93,6 @@ public class ProxyManagerScreen extends CenterOverlayScreen {
 
     @Override
     public void renderInternal(MatrixStack stack, int mouseX, int mouseY, float delta) {
-        //Renderer.R2D.renderQuad(stack, Color.WHITE, 0, 0, width, height);
         super.renderInternal(stack, mouseX, mouseY, delta);
     }
 

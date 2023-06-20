@@ -15,6 +15,7 @@ import coffee.client.helper.render.textures.Texture;
 import coffee.client.helper.util.Transitions;
 import coffee.client.helper.util.Utils;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
@@ -64,7 +65,7 @@ public class NotificationScreen extends AAScreen {
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+    public void render(DrawContext matrices, int mouseX, int mouseY, float delta) {
         double anim = Transitions.easeOutExpo(this.anim);
         if (anim == 0 && closing) {
             client.setScreen(parent);
@@ -75,11 +76,11 @@ public class NotificationScreen extends AAScreen {
         }
         ShaderManager.BLUR.setUniformf("progress", (float) anim);
         ShaderManager.BLUR.render(delta);
-        matrices.push();
-        matrices.translate(this.width / 2d * (1 - anim), this.height / 2d * (1 - anim), 0);
-        matrices.scale((float) anim, (float) anim, 1);
+        matrices.getMatrices().push();
+        matrices.getMatrices().translate(this.width / 2d * (1 - anim), this.height / 2d * (1 - anim), 0);
+        matrices.getMatrices().scale((float) anim, (float) anim, 1);
         super.render(matrices, mouseX, mouseY, delta);
-        matrices.pop();
+        matrices.getMatrices().pop();
     }
 
     @Override
@@ -97,10 +98,10 @@ public class NotificationScreen extends AAScreen {
         double texDims = 12;
         Color c = icon.getC();
         RenderSystem.setShaderColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, 1f);
-        Texture.NOTIFICATION_TYPES.bindAndDraw(stack, startX + pad, startY + pad + (headheight) / 2d - texDims / 2d, texDims, texDims, icon.getSpriteName());
+        Texture.NOTIFICATION_TYPES.bindAndDraw(stack, startX + pad, startY + pad + headheight / 2d - texDims / 2d, texDims, texDims, icon.getSpriteName());
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
         FontRenderers.getRenderer()
-            .drawString(stack, title, startX + pad + texDims + pad, startY + pad + (headheight) / 2d - FontRenderers.getRenderer().getFontHeight() / 2d, 0xCCCCCC);
+            .drawString(stack, title, startX + pad + texDims + pad, startY + pad + headheight / 2d - FontRenderers.getRenderer().getFontHeight() / 2d, 0xCCCCCC);
         double yOffset = 0;
         for (String s : contentSplit) {
             FontRenderers.getRenderer().drawString(stack, s, startX + pad, startY + FontRenderers.getRenderer().getFontHeight() + pad * 2 + yOffset, 0xFFFFFF);

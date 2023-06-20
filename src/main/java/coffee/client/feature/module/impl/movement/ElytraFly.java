@@ -67,9 +67,9 @@ public class ElytraFly extends Module {
                 Vec3d verticalSpeed = CoffeeMain.client.player.getVelocity();
 
                 if (CoffeeMain.client.options.jumpKey.isPressed()) {
-                    CoffeeMain.client.player.setVelocity(verticalSpeed.x, verticalSpeed.y + (this.verticalSpeed.getValue() / 40), verticalSpeed.z);
+                    CoffeeMain.client.player.setVelocity(verticalSpeed.x, verticalSpeed.y + this.verticalSpeed.getValue() / 40, verticalSpeed.z);
                 } else if (CoffeeMain.client.options.sneakKey.isPressed()) {
-                    CoffeeMain.client.player.setVelocity(verticalSpeed.x, verticalSpeed.y - (this.verticalSpeed.getValue() / 40), verticalSpeed.z);
+                    CoffeeMain.client.player.setVelocity(verticalSpeed.x, verticalSpeed.y - this.verticalSpeed.getValue() / 40, verticalSpeed.z);
                 }
             }
         }

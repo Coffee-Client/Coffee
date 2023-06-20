@@ -87,7 +87,7 @@ public class ListSetting<T extends Enum<?>> extends SettingBase<ListSetting.Flag
         }
     }
 
-    public static class Builder<T extends Enum<?>> extends SettingBase.Builder<coffee.client.feature.config.ListSetting.Builder<T>, FlagSet<T>, ListSetting<T>> {
+    public static class Builder<T extends Enum<?>> extends SettingBase.Builder<ListSetting.Builder<T>, FlagSet<T>, ListSetting<T>> {
         Class<T> componentType;
 
         /**

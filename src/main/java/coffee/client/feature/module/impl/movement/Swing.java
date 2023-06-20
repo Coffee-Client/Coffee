@@ -10,6 +10,7 @@ import coffee.client.feature.gui.theme.ThemeManager;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
 import coffee.client.helper.event.impl.MouseEvent;
+import coffee.client.helper.event.impl.PacketEvent;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.Utils;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -32,14 +33,14 @@ public class Swing extends Module {
     }
 
     @MessageSubscription
-    void onA(coffee.client.helper.event.impl.PacketEvent.Sent pe) {
+    void onA(PacketEvent.Sent pe) {
         if (pe.getPacket() instanceof ClientCommandC2SPacket e && e.getMode() == ClientCommandC2SPacket.Mode.PRESS_SHIFT_KEY) {
             pe.setCancelled(true);
         }
     }
 
     @MessageSubscription
-    void on(coffee.client.helper.event.impl.MouseEvent me) {
+    void on(MouseEvent me) {
         if (me.getButton() == 0 && me.getType() == MouseEvent.Type.CLICK) {
             try {
                 HitResult hit = Objects.requireNonNull(CoffeeMain.client.player).raycast(200, CoffeeMain.client.getTickDelta(), true);

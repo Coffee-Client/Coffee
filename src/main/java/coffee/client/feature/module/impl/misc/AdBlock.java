@@ -7,6 +7,7 @@ package coffee.client.feature.module.impl.misc;
 
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
+import coffee.client.helper.event.impl.PacketEvent;
 import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.packet.s2c.play.GameMessageS2CPacket;
@@ -19,7 +20,7 @@ public class AdBlock extends Module {
     }
 
     @MessageSubscription
-    void onP(coffee.client.helper.event.impl.PacketEvent.Received pe) {
+    void onP(PacketEvent.Received pe) {
         if (pe.getPacket() instanceof GameMessageS2CPacket msg) {
             if (msg.content().getString().contains("[AD]")) {
                 pe.setCancelled(true);

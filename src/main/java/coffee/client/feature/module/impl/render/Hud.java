@@ -15,8 +15,10 @@ import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleRegistry;
 import coffee.client.feature.module.ModuleType;
 import coffee.client.helper.event.EventSystem;
+import coffee.client.helper.event.impl.PacketEvent;
 import coffee.client.helper.font.FontRenderers;
 import coffee.client.helper.render.Renderer;
+import coffee.client.helper.render.textures.Texture;
 import coffee.client.helper.util.AccurateFrameRateCounter;
 import coffee.client.helper.util.Timer;
 import coffee.client.helper.util.Transitions;
@@ -62,7 +64,7 @@ public class Hud extends Module {
 
         EventSystem.manager.registerSubscribers(new Object() { // don't unregister when disabled
             @MessageSubscription
-            void on(coffee.client.helper.event.impl.PacketEvent.Received event) {
+            void on(PacketEvent.Received event) {
                 if (event.getPacket() instanceof WorldTimeUpdateS2CPacket) {
                     lastTimePacketReceived = System.currentTimeMillis();
                 }
@@ -205,7 +207,7 @@ public class Hud extends Module {
         double width = pad + newWidth + 5 + FontRenderers.getRenderer().getStringWidth(desc) + pad;
         double height = pad * 2 + Math.max(newHeight, FontRenderers.getRenderer().getFontHeight());
         Renderer.R2D.renderRoundedQuadWithShadow(ms, ThemeManager.getMainTheme().getConfig(), 0, 0, width, height, 5, 20);
-        coffee.client.helper.render.textures.Texture.ICON.bind();
+        Texture.ICON.bind();
         Renderer.R2D.renderTexture(ms, pad, height / 2d - newHeight / 2d, newWidth, newHeight, 0, 0, newWidth, newHeight, newWidth, newHeight);
         FontRenderers.getRenderer().drawString(ms, desc, pad + newWidth + 5, height / 2d - FontRenderers.getRenderer().getMarginHeight() / 2d, 0xFFFFFF);
     }
@@ -223,7 +225,7 @@ public class Hud extends Module {
             }
             double expandProg = MathHelper.clamp(prog, 0, 1); // 0-1 as 0-1 from 0-2
             double slideProg = MathHelper.clamp(prog - 1, 0, 1); // 1-2 as 0-1 from 0-2
-            double hei = (FontRenderers.getRenderer().getMarginHeight() + 2);
+            double hei = FontRenderers.getRenderer().getMarginHeight() + 2;
             double wid = moduleEntry.getValue().getRenderWidth() + 2;
             Renderer.R2D.renderQuad(ms, ThemeManager.getMainTheme().getActive(), width - (wid + 1), y, width, y + hei * expandProg);
             ms.push();

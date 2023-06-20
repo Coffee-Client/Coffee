@@ -14,6 +14,7 @@ import coffee.client.feature.gui.screen.base.AAScreen;
 import coffee.client.helper.font.FontRenderers;
 import coffee.client.helper.manager.ShaderManager;
 import coffee.client.helper.render.Renderer;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Util;
@@ -75,7 +76,7 @@ public class HelpScreen extends AAScreen {
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+    public void render(DrawContext matrices, int mouseX, int mouseY, float delta) {
         if (parent != null) {
             parent.render(matrices, -999, -999, delta);
         }

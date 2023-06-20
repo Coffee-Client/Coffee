@@ -31,7 +31,7 @@ public class Socks4ClientDecoder extends ReplayingDecoder<Socks4ClientDecoder.St
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) {
         try {
             switch (state()) {
-                case START: {
+                case START:
                     final int version = in.readUnsignedByte();
                     if (version != 0) {
                         throw new DecoderException("unsupported reply version: " + version + " (expected: 0)");
@@ -43,18 +43,15 @@ public class Socks4ClientDecoder extends ReplayingDecoder<Socks4ClientDecoder.St
 
                     out.add(new DefaultSocks4CommandResponse(status, dstAddr, dstPort));
                     checkpoint(State.SUCCESS);
-                }
-                case SUCCESS: {
+                case SUCCESS:
                     int readableBytes = actualReadableBytes();
                     if (readableBytes > 0) {
                         out.add(in.readRetainedSlice(readableBytes));
                     }
                     break;
-                }
-                case FAILURE: {
+                case FAILURE:
                     in.skipBytes(actualReadableBytes());
                     break;
-                }
             }
         } catch (Exception e) {
             fail(out, e);

@@ -52,7 +52,6 @@ public class Search extends Command {
         if (!indexer.isEnabled()) {
             throw new CommandException("ChestIndexer needs to be enabled");
         }
-        //        indexer.wipeDistant();
         BlockPos origin = client.player.getBlockPos();
         Map<BlockPos, Int2ObjectMap<ItemStack>> stacks = new HashMap<>(indexer.stacks);
         int omitted = 0;

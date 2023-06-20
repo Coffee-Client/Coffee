@@ -19,6 +19,7 @@ import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.Transitions;
 import coffee.client.helper.util.Utils;
 import lombok.Getter;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.glfw.GLFW;
@@ -199,10 +200,11 @@ public class ClickGUI extends AAScreen {
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+    public void render(DrawContext m1atrices, int mouseX, int mouseY, float delta) {
         if (closing && progress == 0) {
             super.close();
         }
+        MatrixStack matrices = m1atrices.getMatrices();
         double interpolated = Transitions.easeOutExpo(progress);
         ShaderManager.BLUR.setUniformf("progress", (float) interpolated);
         ShaderManager.BLUR.render(delta);
@@ -215,7 +217,7 @@ public class ClickGUI extends AAScreen {
         matrices.scale((float) scale, (float) scale, 1);
         AlphaOverride.pushAlphaMul((float) interpolated);
 
-        super.render(matrices, mouseX, mouseY, delta);
+        super.render(m1atrices, mouseX, mouseY, delta);
         AlphaOverride.popAlphaMul();
         matrices.pop();
 

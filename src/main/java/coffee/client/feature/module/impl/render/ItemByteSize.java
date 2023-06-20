@@ -7,6 +7,7 @@ package coffee.client.feature.module.impl.render;
 
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
+import coffee.client.helper.event.impl.LoreQueryEvent;
 import coffee.client.helper.util.ByteCounter;
 import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.client.util.math.MatrixStack;
@@ -34,7 +35,7 @@ public class ItemByteSize extends Module {
     }
 
     @MessageSubscription
-    void onLoreQuery(coffee.client.helper.event.impl.LoreQueryEvent e) {
+    void onLoreQuery(LoreQueryEvent e) {
         ByteCounter inst = ByteCounter.instance();
         inst.reset();
         boolean error = false;

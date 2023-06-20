@@ -223,7 +223,7 @@ public class Utils {
     }
 
     public static void setClientTps(float tps) {
-        IRenderTickCounterMixin accessor = ((IRenderTickCounterMixin) ((IMinecraftClientMixin) CoffeeMain.client).getRenderTickCounter());
+        IRenderTickCounterMixin accessor = (IRenderTickCounterMixin) ((IMinecraftClientMixin) CoffeeMain.client).getRenderTickCounter();
         accessor.setTickTime(1000f / tps);
     }
 

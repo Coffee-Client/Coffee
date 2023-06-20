@@ -11,6 +11,7 @@ import coffee.client.feature.config.EnumSetting;
 import coffee.client.feature.gui.notifications.Notification;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
+import coffee.client.helper.event.impl.MouseEvent;
 import coffee.client.helper.util.Utils;
 import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.client.util.math.MatrixStack;
@@ -48,8 +49,8 @@ public class Boom extends Module {
     }
 
     @MessageSubscription
-    void onMouse(coffee.client.helper.event.impl.MouseEvent me) {
-        if (me.getButton() == 0 && me.getType() == coffee.client.helper.event.impl.MouseEvent.Type.CLICK) {
+    void onMouse(MouseEvent me) {
+        if (me.getButton() == 0 && me.getType() == MouseEvent.Type.CLICK) {
             if (mode.getValue() == Mode.FireballGhast) {
                 fbGhast();
             } else {
@@ -67,7 +68,7 @@ public class Boom extends Module {
         Vec3d n = hr.getPos();
         String nbt = String.format(
             "{EntityTag:{id:\"minecraft:fireball\",ExplosionPower:%db,Motion:[%sd,%sd,%sd],Pos:[%s,%s,%s],Item:{id:\"minecraft:egg\",Count:1b}}}",
-            ((int) Math.floor(power.getValue())),
+            (int) Math.floor(power.getValue()),
             0,
             -2,
             0,
@@ -101,7 +102,7 @@ public class Boom extends Module {
         v = v.multiply(speed.getValue() / 10d);
         String nbt = String.format(
             "{EntityTag:{id:\"minecraft:fireball\",ExplosionPower:%db,power:[%s,%s,%s],Item:{id:\"minecraft:egg\",Count:1b}}}",
-            ((int) Math.floor(power.getValue())),
+            (int) Math.floor(power.getValue()),
             v.x,
             v.y,
             v.z
@@ -144,7 +145,7 @@ public class Boom extends Module {
 
     @Override
     public String getContext() {
-        return ((int) (this.power.getValue() + 0)) + "!".repeat((int) Math.floor(this.power.getValue() / 20d));
+        return (int) (this.power.getValue() + 0) + "!".repeat((int) Math.floor(this.power.getValue() / 20d));
     }
 
     @Override

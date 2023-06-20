@@ -55,7 +55,6 @@ public class PathFinder {
 
     void addEntry(Entry e) {
         visited.add(e.pos);
-        //        while(visited.size() > 1000) visited.remove(0);
         e.previous = last;
         if (last != null) {
             last.next = e;
@@ -122,14 +121,14 @@ public class PathFinder {
         public Entry next, previous;
 
         public float calculateFitness() {
-            return -(distance);
+            return -distance;
         }
 
         public boolean canTraverse() {
             BlockPos above = pos.up();
             BlockState bs = CoffeeMain.client.world.getBlockState(pos);
             BlockState bs1 = CoffeeMain.client.world.getBlockState(above);
-            return !bs.getMaterial().blocksMovement() && !bs1.getMaterial().blocksMovement();
+            return !bs.blocksMovement() && !bs1.blocksMovement();
         }
 
         @Override

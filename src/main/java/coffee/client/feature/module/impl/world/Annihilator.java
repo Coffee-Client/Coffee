@@ -10,6 +10,7 @@ import coffee.client.feature.config.DoubleSetting;
 import coffee.client.feature.config.StringSetting;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
+import coffee.client.helper.event.impl.MouseEvent;
 import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.hit.HitResult;
@@ -30,8 +31,8 @@ public class Annihilator extends Module {
     }
 
     @MessageSubscription
-    void on(coffee.client.helper.event.impl.MouseEvent event1) {
-        if (event1.getButton() == 0 && event1.getType() == coffee.client.helper.event.impl.MouseEvent.Type.CLICK) {
+    void on(MouseEvent event1) {
+        if (event1.getButton() == 0 && event1.getType() == MouseEvent.Type.CLICK) {
             mousePressed();
         }
     }

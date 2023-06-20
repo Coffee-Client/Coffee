@@ -14,6 +14,7 @@ import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.Transitions;
 import lombok.Getter;
 import lombok.Setter;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
@@ -119,11 +120,12 @@ public class RoundButton implements Element, Drawable, Selectable, FastTickable,
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+    public void render(DrawContext matrices1, int mouseX, int mouseY, float delta) {
         isHovered = inBounds(mouseX, mouseY) && isEnabled();
         if (!isVisible()) {
             return;
         }
+        MatrixStack matrices = matrices1.getMatrices();
         matrices.push();
         matrices.translate(x + width / 2d, y + height / 2d, 0);
         float animProgress = (float) Transitions.easeOutExpo(this.animProgress);
@@ -148,7 +150,7 @@ public class RoundButton implements Element, Drawable, Selectable, FastTickable,
             .drawString(
                 matrices,
                 text,
-                -(FontRenderers.getRenderer().getStringWidth(text)) / 2f,
+                -FontRenderers.getRenderer().getStringWidth(text) / 2f,
                 -FontRenderers.getRenderer().getMarginHeight() / 2f,
                 isEnabled() ? textColor.getRGB() : 0xAAAAAA,
                 false

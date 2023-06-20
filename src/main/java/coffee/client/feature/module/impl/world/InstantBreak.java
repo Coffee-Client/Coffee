@@ -8,6 +8,7 @@ package coffee.client.feature.module.impl.world;
 import coffee.client.feature.config.EnumSetting;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
+import coffee.client.helper.event.impl.PacketEvent;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.Utils;
 import coffee.client.mixin.IClientPlayerInteractionManagerMixin;
@@ -35,7 +36,7 @@ public class InstantBreak extends Module {
     }
 
     @MessageSubscription
-    void onPSe(coffee.client.helper.event.impl.PacketEvent.Sent pe) {
+    void onPSe(PacketEvent.Sent pe) {
         if (pe.getPacket() instanceof PlayerActionC2SPacket packet) {
             if (!whitelist.contains(packet)) {
                 if (packet.getAction() == PlayerActionC2SPacket.Action.START_DESTROY_BLOCK && prio.getValue() == Priority.Order) {

@@ -9,6 +9,7 @@ import coffee.client.CoffeeMain;
 import coffee.client.feature.config.annotation.Setting;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
+import coffee.client.helper.event.impl.MouseEvent;
 import coffee.client.helper.util.Rotations;
 import coffee.client.helper.util.Utils;
 import me.x150.jmessenger.MessageSubscription;
@@ -41,7 +42,7 @@ public class AnyPlacer extends Module {
     }
 
     @MessageSubscription
-    void on(coffee.client.helper.event.impl.MouseEvent me) {
+    void on(MouseEvent me) {
         if (me.getButton() == 1) {
             ItemStack sex = CoffeeMain.client.player.getMainHandStack();
             if (sex.getItem() instanceof SpawnEggItem) {

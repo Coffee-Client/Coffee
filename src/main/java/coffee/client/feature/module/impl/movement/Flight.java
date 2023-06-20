@@ -13,6 +13,7 @@ import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleRegistry;
 import coffee.client.feature.module.ModuleType;
 import coffee.client.feature.module.impl.exploit.Robowalk;
+import coffee.client.helper.event.impl.PacketEvent;
 import coffee.client.helper.util.Timer;
 import coffee.client.helper.util.Utils;
 import coffee.client.mixin.network.IPlayerMoveC2SPacketMixin;
@@ -63,7 +64,7 @@ public class Flight extends Module {
     }
 
     @MessageSubscription
-    void onPacketSend(coffee.client.helper.event.impl.PacketEvent.Sent pe) {
+    void onPacketSend(PacketEvent.Sent pe) {
         Packet<?> packet = pe.getPacket();
         if (packet instanceof ClientCommandC2SPacket p && p.getMode() == ClientCommandC2SPacket.Mode.PRESS_SHIFT_KEY) {
             pe.setCancelled(true);
@@ -76,7 +77,7 @@ public class Flight extends Module {
                     p = upgrade(p);
                     y = p.getY(lsp.y);
                     pe.setPacket(p);
-                    IPlayerMoveC2SPacketMixin pp = ((IPlayerMoveC2SPacketMixin) p);
+                    IPlayerMoveC2SPacketMixin pp = (IPlayerMoveC2SPacketMixin) p;
                     if (endModifyCycle - System.currentTimeMillis() < 0) {
                         holdModify = false;
                         endModifyCycle = System.currentTimeMillis();
@@ -97,10 +98,10 @@ public class Flight extends Module {
                     lastModify = System.currentTimeMillis();
                     endModifyCycle = System.currentTimeMillis() + 50;
                     this.holdModify = true;
-                    if (!client.world.getBlockState(client.player.getBlockPos().down()).getMaterial().blocksMovement()) {
+                    if (!client.world.getBlockState(client.player.getBlockPos().down()).blocksMovement()) {
                         double delta = Math.max(0, y - lastY);
                         delta += 0.05d;
-                        IPlayerMoveC2SPacketMixin pp = ((IPlayerMoveC2SPacketMixin) p);
+                        IPlayerMoveC2SPacketMixin pp = (IPlayerMoveC2SPacketMixin) p;
                         pp.setX(p.getX(lsp.x)); // default to last known server pos in case this one does NOT change position
                         pp.setZ(p.getZ(lsp.z));
                         pp.setY(y - delta);
@@ -117,7 +118,6 @@ public class Flight extends Module {
 
     @Override
     public void tick() {
-        // Utils.setClientTps(20F);
         if (CoffeeMain.client.player == null || CoffeeMain.client.world == null || CoffeeMain.client.getNetworkHandler() == null) {
             return;
         }
@@ -174,9 +174,9 @@ public class Flight extends Module {
                             vp.x,
                             vp.y,
                             vp.z,
-                            (r.nextDouble() * 0.25) - .125,
-                            (r.nextDouble() * 0.25) - .125,
-                            (r.nextDouble() * 0.25) - .125
+                            r.nextDouble() * 0.25 - .125,
+                            r.nextDouble() * 0.25 - .125,
+                            r.nextDouble() * 0.25 - .125
                         );
                     }
                 }
@@ -258,7 +258,7 @@ public class Flight extends Module {
     }
 
     @MessageSubscription
-    void giveTwoShits(coffee.client.helper.event.impl.PacketEvent.Sent event) {
+    void giveTwoShits(PacketEvent.Sent event) {
         if (mode.getValue() == FlightMode.Walk) {
             if (!this.isEnabled()) {
                 return;

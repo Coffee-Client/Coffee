@@ -37,7 +37,7 @@ public class AutoElytra extends Module {
     public void tick() {
         if (Objects.requireNonNull(CoffeeMain.client.player).fallDistance > fallDist.getValue()) {
             if (!equippedElytra()) { // do we not have an elytra equipped?
-                for (int i = 0; i < (9 * 4 + 1); i++) { // gotta equip
+                for (int i = 0; i < 9 * 4 + 1; i++) { // gotta equip
                     ItemStack stack = CoffeeMain.client.player.getInventory().getStack(i); // is it an elytra?
                     if (stack.getItem() == Items.ELYTRA) {
                         Utils.Inventory.moveStackToOther(Utils.Inventory.slotIndexToId(i), 6); // equip

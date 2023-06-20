@@ -39,7 +39,6 @@ public abstract class AGenericContainerScreenMixin extends Screen implements Fas
 
     boolean keyPressed(KeyBinding bind) {
         int code = ((IKeyBindingMixin) bind).getBoundKey().getCode();
-        //        return bind.isPressed();
         return InputUtil.isKeyPressed(CoffeeMain.client.getWindow().getHandle(), code);
     }
 

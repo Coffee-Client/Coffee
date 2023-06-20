@@ -22,6 +22,7 @@ import coffee.client.helper.render.Renderer;
 import coffee.client.helper.render.textures.Texture;
 import coffee.client.helper.util.Transitions;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
@@ -79,8 +80,8 @@ public class SpotlightScreen extends ClientScreen implements FastTickable {
             String[] cmdArgs = action.split(" +");
             String firstPart = cmdArgs[0].toLowerCase();
             for (StaticEntry staticEntry : staticEntries) {
-                if (Arrays.stream(staticEntry.triggers()).anyMatch(s -> (s).startsWith(firstPart))) {
-                    String matchingEntry = Arrays.stream(staticEntry.triggers()).filter(s -> (s).startsWith(firstPart)).findFirst().orElseThrow();
+                if (Arrays.stream(staticEntry.triggers()).anyMatch(s -> s.startsWith(firstPart))) {
+                    String matchingEntry = Arrays.stream(staticEntry.triggers()).filter(s -> s.startsWith(firstPart)).findFirst().orElseThrow();
                     entries.add(new SuggestionsEntry(staticEntry.desc(), staticEntry.texture(), staticEntry.type(), () -> {
                         staticEntry.onRun().run();
                         close();
@@ -100,7 +101,7 @@ public class SpotlightScreen extends ClientScreen implements FastTickable {
             }
             for (Command command1 : CommandRegistry.getCommands()) {
                 for (String alias : command1.getAliases()) {
-                    if ((alias).toLowerCase().startsWith(firstPart)) {
+                    if (alias.toLowerCase().startsWith(firstPart)) {
                         entries.add(new SuggestionsEntry(
                             alias + " " + String.join(" ", Arrays.copyOfRange(cmdArgs, 1, cmdArgs.length)),
                             "command.png",
@@ -143,7 +144,7 @@ public class SpotlightScreen extends ClientScreen implements FastTickable {
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+    public void render(DrawContext matrices, int mouseX, int mouseY, float delta) {
         double anim = ease(this.anim);
         if (anim == 0 && closing) {
             client.setScreen(null);
@@ -154,7 +155,8 @@ public class SpotlightScreen extends ClientScreen implements FastTickable {
     }
 
     @Override
-    public void renderInternal(MatrixStack stack, int mouseX, int mouseY, float delta) {
+    public void renderInternal(DrawContext stack2, int mouseX, int mouseY, float delta) {
+        MatrixStack stack = stack2.getMatrices();
         double anim = ease(this.anim);
         stack.translate(width / 2d * (1 - anim), (command.y + command.height / 2d) * (1 - anim), 0);
         stack.scale((float) anim, (float) anim, 1f);
@@ -203,7 +205,7 @@ public class SpotlightScreen extends ClientScreen implements FastTickable {
         }
         ClipStack.globalInstance.popWindow();
         stack.pop();
-        super.renderInternal(stack, mouseX, mouseY, delta);
+        super.renderInternal(stack2, mouseX, mouseY, delta);
     }
 
     @Override
@@ -423,7 +425,7 @@ public class SpotlightScreen extends ClientScreen implements FastTickable {
                 if (cursor > 0 && cursor == selectionStart && cursor == selectionEnd) {
                     String preText = text;
 
-                    int count = (mods == isCtrlPressed) ? cursor : (mods == (SystemUtils.IS_OS_WINDOWS ? GLFW.GLFW_MOD_CONTROL : GLFW.GLFW_MOD_ALT)) ? countToNextSpace(
+                    int count = mods == isCtrlPressed ? cursor : mods == (SystemUtils.IS_OS_WINDOWS ? GLFW.GLFW_MOD_CONTROL : GLFW.GLFW_MOD_ALT) ? countToNextSpace(
                         true) : 1;
 
                     text = text.substring(0, cursor - count) + text.substring(cursor);
@@ -445,7 +447,7 @@ public class SpotlightScreen extends ClientScreen implements FastTickable {
                         if (cursor == selectionStart && cursor == selectionEnd) {
                             String preText = text;
 
-                            int count = ctrl ? text.length() - cursor : (mods == (SystemUtils.IS_OS_WINDOWS ? GLFW.GLFW_MOD_CONTROL : GLFW.GLFW_MOD_ALT)) ? countToNextSpace(
+                            int count = ctrl ? text.length() - cursor : mods == (SystemUtils.IS_OS_WINDOWS ? GLFW.GLFW_MOD_CONTROL : GLFW.GLFW_MOD_ALT) ? countToNextSpace(
                                 false) : 1;
 
                             text = text.substring(0, cursor) + text.substring(cursor + count);
@@ -629,7 +631,8 @@ public class SpotlightScreen extends ClientScreen implements FastTickable {
         }
 
         @Override
-        public void render(MatrixStack stack, int mouseX, int mouseY, float delta) {
+        public void render(DrawContext s1tack, int mouseX, int mouseY, float delta) {
+            MatrixStack stack = s1tack.getMatrices();
             mouseOver = inBounds(mouseX, mouseY);
             double pad = pad();
             double overflowWidth = getOverflowWidthForRender();
@@ -639,9 +642,9 @@ public class SpotlightScreen extends ClientScreen implements FastTickable {
             ClipStack.globalInstance.addWindow(stack, new Rectangle(x + pad, y, x + width - pad, y + height));
             // Text content
             if (!text.isEmpty()) {
-                fa.drawString(stack, text, (float) (x + pad - overflowWidth), (float) (centerY), 1f, 1f, 1f, opacity, false);
+                fa.drawString(stack, text, (float) (x + pad - overflowWidth), (float) centerY, 1f, 1f, 1f, opacity, false);
             } else {
-                fa.drawString(stack, suggestion, (float) (x + pad - overflowWidth), (float) (centerY), 1f, 1f, 1f, opacity, false);
+                fa.drawString(stack, suggestion, (float) (x + pad - overflowWidth), (float) centerY, 1f, 1f, 1f, opacity, false);
             }
 
             // Text highlighting

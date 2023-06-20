@@ -171,7 +171,6 @@ public class CoffeeMain implements ModInitializer {
         CommandRegistry.init();
         log(Level.INFO, "Sending post window init");
         EventSystem.manager.send(new WindowInitEvent());
-        //        Events.fireEvent(EventType.POST_INIT, new NonCancellableEvent());
         for (Module module : new ArrayList<>(ModuleRegistry.getModules())) {
             module.postInit();
         }

@@ -13,6 +13,7 @@ import coffee.client.helper.render.Renderer;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 
@@ -31,7 +32,7 @@ public class CenterOverlayScreen extends AAScreen {
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+    public void render(DrawContext matrices, int mouseX, int mouseY, float delta) {
         if (parent != null) {
             parent.render(matrices, mouseX, mouseY, delta);
         }
@@ -70,8 +71,8 @@ public class CenterOverlayScreen extends AAScreen {
         double maxY = getElements().stream().map(element -> element.getPositionY() + element.getHeight()).max(Comparator.comparingDouble(value -> value)).orElse(0d);
         double centerX = width / 2d;
         double centerY = height / 2d;
-        double elementWidth = (maxX - minX);
-        double elementHeight = (maxY - minY);
+        double elementWidth = maxX - minX;
+        double elementHeight = maxY - minY;
         double currentCenterX = minX + elementWidth / 2d;
         double currentCenterY = minY + elementHeight / 2d;
         double offsetX = centerX - currentCenterX;

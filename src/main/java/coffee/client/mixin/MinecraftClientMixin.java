@@ -87,21 +87,21 @@ public abstract class MinecraftClientMixin {
         return original;
     }
 
-    @ModifyArg(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V"), index = 0)
+    @ModifyArg(method = "onInitFinished", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V", ordinal = 1), index = 0)
     Screen coffee_replaceTitleScreenNormal(Screen screen) {
         return obtain(screen);
     }
 
-    @ModifyArg(method = "method_45026", at = @At(value = "INVOKE",
-                                                 target = "Lnet/minecraft/client/gui/screen/ConnectScreen;connect(Lnet/minecraft/client/gui/screen/Screen;Lnet/minecraft/client/MinecraftClient;Lnet/minecraft/client/network/ServerAddress;Lnet/minecraft/client/network/ServerInfo;)V"),
-               index = 0)
-    Screen coffee_replaceTitleScreenDirectConnect(Screen screen) {
-        return obtain(screen);
-    }
-
-    @ModifyArg(method = "method_44648", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V"), index = 0)
-    Screen coffee_replaceTitleScreenBannedNotice(Screen screen) {
-        return obtain(screen);
-    }
+//    @ModifyArg(method = "method_45026", at = @At(value = "INVOKE",
+//                                                 target = "Lnet/minecraft/client/gui/screen/ConnectScreen;connect(Lnet/minecraft/client/gui/screen/Screen;Lnet/minecraft/client/MinecraftClient;Lnet/minecraft/client/network/ServerAddress;Lnet/minecraft/client/network/ServerInfo;)V"),
+//               index = 0)
+//    Screen coffee_replaceTitleScreenDirectConnect(Screen screen) {
+//        return obtain(screen);
+//    }
+//
+//    @ModifyArg(method = "method_44648", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V"), index = 0)
+//    Screen coffee_replaceTitleScreenBannedNotice(Screen screen) {
+//        return obtain(screen);
+//    }
 
 }

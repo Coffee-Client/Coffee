@@ -104,7 +104,7 @@ public class ParticleRenderer {
             long startDelta = Math.min(origLife - life, fadeTime);
             long endDelta = Math.min(life, fadeTime);
             long deltaOverall = Math.min(startDelta, endDelta);
-            double pk = (deltaOverall / (double) fadeTime);
+            double pk = deltaOverall / (double) fadeTime;
             pk = Transitions.easeOutExpo(pk);
             Theme theme = ThemeManager.getMainTheme();
             stack.push();

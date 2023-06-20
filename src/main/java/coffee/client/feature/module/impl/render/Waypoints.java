@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Waypoints extends Module {
-    static final List<Sightpoint> staticSightpoints = Util.make(new ArrayList<>(), (e) -> {
+    static final List<Sightpoint> staticSightpoints = Util.make(new ArrayList<>(), e -> {
         e.add(new Sightpoint("0°", 0, Color.WHITE, true));
         e.add(new Sightpoint("90°", 90, Color.WHITE, true));
         e.add(new Sightpoint("180°", 180, Color.WHITE, true));
@@ -52,7 +52,7 @@ public class Waypoints extends Module {
         super("Waypoints", "Allows you to save locations on servers", ModuleType.RENDER);
         conf.reload();
         Config config1 = conf.get(Config.class);
-        waypoints = (config1 == null || config1.getWaypoints() == null) ? new ArrayList<>() : new ArrayList<>(config1.getWaypoints());
+        waypoints = config1 == null || config1.getWaypoints() == null ? new ArrayList<>() : new ArrayList<>(config1.getWaypoints());
 
         EventSystem.manager.registerSubscribers(new Object() { // keep registered
             @MessageSubscription
@@ -106,7 +106,6 @@ public class Waypoints extends Module {
                     Renderer.R3D.renderLine(matrices, waypoint.color, Renderer.R3D.getCrosshairVector(), waypoint.position);
                 }
 
-                //                double distancePlayer = waypoint.position.distanceTo(Utils.getInterpolatedEntityPosition(client.player));
                 Vec3d interpolatedEntityPosition = Utils.getInterpolatedEntityPosition(client.player);
                 double distancePlayer = Utils.dist(waypoint.position.x, waypoint.position.z, interpolatedEntityPosition.x, interpolatedEntityPosition.z);
                 double subbed1 = (fadeDistancePlayer - distancePlayer) / fadeDistancePlayer;
@@ -181,7 +180,7 @@ public class Waypoints extends Module {
 
     double calculateInterest(float targetYaw) {
         float yaw = MathHelper.wrapDegrees(client.gameRenderer.getCamera().getYaw() - targetYaw) + 180;
-        double i = (.5 - Math.abs((yaw) / 360 - .5)) * 2; // 0-1
+        double i = (.5 - Math.abs(yaw / 360 - .5)) * 2; // 0-1
         i = i * 1.5; // 0-1.5
         i -= 0.5; // -.5-1
         return MathHelper.clamp(i, 0, 1); // [-0.5]-0-1

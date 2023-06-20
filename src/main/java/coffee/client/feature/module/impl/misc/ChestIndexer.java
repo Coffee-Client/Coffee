@@ -63,14 +63,13 @@ public class ChestIndexer extends Module {
     }
 
     @MessageSubscription
-    void recv(coffee.client.helper.event.impl.PacketEvent.Received pe) {
+    void recv(PacketEvent.Received pe) {
         Packet<?> packet = pe.getPacket();
         if (packet instanceof OpenScreenS2CPacket os2) {
             if (this.currentPosClicked == null) {
                 return;
             }
             this.currentSid = os2.getSyncId();
-            //            System.out.println("Opening screen: "+os2.getSyncId());
             this.stacks.putIfAbsent(this.currentPosClicked, new Int2ObjectArrayMap<>());
             this.stacks.get(this.currentPosClicked).clear();
         } else if (packet instanceof ScreenHandlerSlotUpdateS2CPacket e && e.getSyncId() == this.currentSid) {
@@ -79,7 +78,6 @@ public class ChestIndexer extends Module {
             }
             this.stacks.putIfAbsent(this.currentPosClicked, new Int2ObjectArrayMap<>());
             Int2ObjectMap<ItemStack> itemStackInt2ObjectMap = this.stacks.get(this.currentPosClicked);
-            //            System.out.println("Slot "+e.getSlot()+" to "+e.getItemStack().toString());
             if (e.getItemStack().isEmpty()) {
                 itemStackInt2ObjectMap.remove(e.getSlot());
             } else {
@@ -99,11 +97,9 @@ public class ChestIndexer extends Module {
                 if (copy.isEmpty()) {
                     continue;
                 }
-                //                System.out.println("Slot "+i+" to "+copy);
                 itemStackInt2ObjectMap.put(i, copy);
             }
         } else if (packet instanceof CloseScreenS2CPacket cs2 && cs2.getSyncId() == this.currentSid) {
-            //            System.out.println("Closed: "+cs2.getSyncId());
             this.currentPosClicked = null;
             this.currentSid = -1;
         }
@@ -152,7 +148,7 @@ public class ChestIndexer extends Module {
                         default -> throw new IllegalStateException("This should never happen");
                     };
                     double v1 = Math.toRadians(neighbourOffset);
-                    int x = (int) (-Math.round(Math.sin(v1)));
+                    int x = (int) -Math.round(Math.sin(v1));
                     int z = (int) Math.round(Math.cos(v1));
                     BlockPos secondPos = lastPos.add(x, 0, z);
                     BlockState bs1 = client.world.getBlockState(secondPos);

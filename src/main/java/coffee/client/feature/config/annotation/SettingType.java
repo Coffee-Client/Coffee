@@ -53,7 +53,7 @@ public enum SettingType {
             .upperMax(maxB)
             .precision(setting.precision());
     }),
-    MULTIVALUE(ListSetting.FlagSet.class, (setting, inputField, declaringClass) -> new ListSetting.Builder<>(((ListSetting.FlagSet<?>) inputField.get(declaringClass))));
+    MULTIVALUE(ListSetting.FlagSet.class, (setting, inputField, declaringClass) -> new ListSetting.Builder<>((ListSetting.FlagSet<?>) inputField.get(declaringClass)));
     @Getter
     final Class<?> acceptedType;
     @Getter

@@ -17,6 +17,7 @@ import coffee.client.helper.render.Rectangle;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.NbtFormatter;
 import coffee.client.helper.util.Transitions;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
@@ -392,7 +393,8 @@ public class NbtEditorScreen extends ClientScreen implements FastTickable {
     }
 
     @Override
-    public void renderInternal(MatrixStack stack, int mouseX, int mouseY, float delta) {
+    public void renderInternal(DrawContext stack1, int mouseX, int mouseY, float delta) {
+        MatrixStack stack = stack1.getMatrices();
         Renderer.R2D.renderRoundedQuad(stack, new Color(20, 20, 20, 200), 5, 5, width - 5, height - 30, 5, 20);
         ClipStack.globalInstance.addWindow(stack, new Rectangle(5, 5, width - 5, height - 30));
         double initY = 7 - smoothScroll;
@@ -448,6 +450,6 @@ public class NbtEditorScreen extends ClientScreen implements FastTickable {
         double cy = FontRenderers.getMono().getMarginHeight() * editorY + initY;
         ClipStack.globalInstance.popWindow();
         Renderer.R2D.renderQuad(stack, Color.WHITE, cx, cy, cx + 1, cy + FontRenderers.getMono().getMarginHeight());
-        super.renderInternal(stack, mouseX, mouseY, delta);
+        super.renderInternal(stack1, mouseX, mouseY, delta);
     }
 }

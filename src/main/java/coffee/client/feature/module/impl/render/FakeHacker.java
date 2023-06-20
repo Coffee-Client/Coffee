@@ -33,7 +33,7 @@ public class FakeHacker extends Module {
     }
 
     @MessageSubscription
-    void on(coffee.client.helper.event.impl.MouseEvent me) {
+    void on(MouseEvent me) {
         if (CoffeeMain.client.player == null || CoffeeMain.client.world == null) {
             return;
         }

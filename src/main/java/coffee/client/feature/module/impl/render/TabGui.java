@@ -9,6 +9,7 @@ import coffee.client.feature.gui.theme.ThemeManager;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleRegistry;
 import coffee.client.feature.module.ModuleType;
+import coffee.client.helper.event.impl.KeyboardEvent;
 import coffee.client.helper.font.FontRenderers;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.Transitions;
@@ -84,8 +85,8 @@ public class TabGui extends Module {
     }
 
     @MessageSubscription
-    void handleKey(coffee.client.helper.event.impl.KeyboardEvent me) {
-        if (me.getType() == coffee.client.helper.event.impl.KeyboardEvent.Type.RELEASE) {
+    void handleKey(KeyboardEvent me) {
+        if (me.getType() == KeyboardEvent.Type.RELEASE) {
             return;
         }
         if (tabStack.isEmpty()) {

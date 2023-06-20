@@ -11,6 +11,7 @@ import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleRegistry;
 import coffee.client.feature.module.ModuleType;
 import coffee.client.feature.module.impl.movement.NoFall;
+import coffee.client.helper.event.impl.PacketEvent;
 import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
@@ -26,7 +27,7 @@ public class Criticals extends Module {
     }
 
     @MessageSubscription
-    void onPacketSend(coffee.client.helper.event.impl.PacketEvent.Sent event) {
+    void onPacketSend(PacketEvent.Sent event) {
         if (CoffeeMain.client.player == null || CoffeeMain.client.getNetworkHandler() == null) {
             return;
         }

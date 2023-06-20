@@ -50,7 +50,7 @@ public class MicrosoftAuthenticator extends Authenticator<XboxToken> {
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             InputStream inputStream = httpURLConnection.getResponseCode() == 200 ? httpURLConnection.getInputStream() : httpURLConnection.getErrorStream();
             this.loginCookie = httpURLConnection.getHeaderField("set-cookie");
-            String responseData = (new BufferedReader(new InputStreamReader(inputStream))).lines().collect(Collectors.joining());
+            String responseData = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
             Matcher bodyMatcher = Pattern.compile("sFTTag: ?'.*value=\"(.*)\"/>'").matcher(responseData);
             if (bodyMatcher.find()) {
                 this.loginPPFT = bodyMatcher.group(1);
@@ -84,7 +84,7 @@ public class MicrosoftAuthenticator extends Authenticator<XboxToken> {
         String authToken;
         try {
             byte[] data = postData.getBytes(StandardCharsets.UTF_8);
-            HttpURLConnection connection = (HttpURLConnection) (new URL(this.loginUrl)).openConnection();
+            HttpURLConnection connection = (HttpURLConnection) new URL(this.loginUrl).openConnection();
             connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
             connection.setRequestProperty("Content-Length", String.valueOf(data.length));
             connection.setRequestProperty("Cookie", this.loginCookie);

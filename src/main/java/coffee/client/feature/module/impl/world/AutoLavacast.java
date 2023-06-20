@@ -44,10 +44,10 @@ public class AutoLavacast extends Module {
 
     BlockPos getNextPosition() {
         int y = 0;
-        while ((y + start.getY()) < CoffeeMain.client.world.getTopY()) {
+        while (y + start.getY() < CoffeeMain.client.world.getTopY()) {
             Vec3i ie = incr.multiply(y + 1);
             BlockPos next = start.add(ie).add(0, y, 0);
-            if (CoffeeMain.client.world.getBlockState(next).getMaterial().isReplaceable()) {
+            if (CoffeeMain.client.world.getBlockState(next).isReplaceable()) {
                 return next;
             }
             y++;
@@ -69,7 +69,7 @@ public class AutoLavacast extends Module {
         Vec3d placeCenter = Vec3d.of(next).add(.5, .5, .5);
         if (mode.getValue() == Mode.Bypass) {
             Rotations.lookAtPositionSmooth(placeCenter, 6);
-            if (((CoffeeMain.client.player.horizontalCollision && moveForwards) || CoffeeMain.client.player.getBoundingBox()
+            if ((CoffeeMain.client.player.horizontalCollision && moveForwards || CoffeeMain.client.player.getBoundingBox()
                 .intersects(Vec3d.of(next), Vec3d.of(next).add(1, 1, 1))) &&
                 CoffeeMain.client.player.isOnGround()) {
                 CoffeeMain.client.player.jump();

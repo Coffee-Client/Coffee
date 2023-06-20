@@ -139,8 +139,6 @@ public class HomeScreen extends AAScreen {
     @Override
     public void renderInternal(MatrixStack stack, int mouseX, int mouseY, float delta) {
 
-        //        Renderer.R2D.renderQuad(stack, new Color(20, 20, 20), 0, 0, width, height);
-
         coffee.client.helper.render.textures.Texture.BACKGROUND.bind();
         Renderer.R2D.renderTexture(stack, 0, 0, width, height, 0, 0, width, height, width, height);
         RenderSystem.defaultBlendFunc();

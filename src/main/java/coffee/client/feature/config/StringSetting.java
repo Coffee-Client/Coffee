@@ -19,7 +19,7 @@ public class StringSetting extends SettingBase<String> {
         return value;
     }
 
-    public static class Builder extends SettingBase.Builder<coffee.client.feature.config.StringSetting.Builder, String, StringSetting> {
+    public static class Builder extends SettingBase.Builder<StringSetting.Builder, String, StringSetting> {
 
         public Builder(String defaultValue) {
             super(defaultValue);

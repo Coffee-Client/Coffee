@@ -101,7 +101,6 @@ public class CaveMapper extends Module {
         for (int i = 0; i < 10; i++) {
             if (scannedBlocks.size() > cacheSize.getValue() || toScan.isEmpty()) {
                 toScan.clear();
-                //hits.clear();
                 if (!scanned) {
                     Notification.create(6000, "CaveMapper", false, Notification.Type.SUCCESS, "done scanning");
                 }
@@ -127,7 +126,7 @@ public class CaveMapper extends Module {
                     }
                     y++;
                 }
-                if (hadObstacle && (bs(pos).isAir() || (includeTranslucent.getValue() && !bs(pos).getMaterial().blocksLight()))) {
+                if (hadObstacle && (bs(pos).isAir() || includeTranslucent.getValue() && !bs(pos).isOpaque())) {
                     if (!scannedBlocks.contains(pos)) {
                         toScan.add(pos);
                         scannedBlocks.add(pos);
@@ -331,17 +330,15 @@ public class CaveMapper extends Module {
                 p += s;
                 p %= 1;
                 Color c = Renderer.Util.modify(Color.getHSBColor(p, 0.5f, 1f), -1, -1, -1, (int) (dist * 255));
-                {
-                    float red = c.getRed() / 255f;
-                    float green = c.getGreen() / 255f;
-                    float blue = c.getBlue() / 255f;
-                    float alpha = c.getAlpha() / 255f;
-                    Vec3d camPos = cam.getPos();
+                float red = c.getRed() / 255f;
+                float green = c.getGreen() / 255f;
+                float blue = c.getBlue() / 255f;
+                float alpha = c.getAlpha() / 255f;
+                Vec3d camPos = cam.getPos();
 
-                    for (Vec3d vec3d : entry.getValue()) {
-                        Vec3d pp = vec3d.subtract(camPos);
-                        buffer.vertex(matrix, (float) pp.x, (float) pp.y, (float) pp.z).color(red, green, blue, alpha).next();
-                    }
+                for (Vec3d vec3d : entry.getValue()) {
+                    Vec3d pp = vec3d.subtract(camPos);
+                    buffer.vertex(matrix, (float) pp.x, (float) pp.y, (float) pp.z).color(red, green, blue, alpha).next();
                 }
             }
         }
@@ -369,7 +366,7 @@ public class CaveMapper extends Module {
                     -1,
                     -1,
                     -1,
-                    (int) ((dist / 30d) * 200)
+                    (int) (dist / 30d * 200)
                 ),
                 p,
                 new Vec3d(1, 1, 1)

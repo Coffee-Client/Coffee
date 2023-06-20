@@ -99,7 +99,7 @@ public class Tracers extends Module {
     }
 
     boolean isEntityApplicable(Entity v) {
-        return (v instanceof PlayerEntity && players.getValue()) || entities.getValue();
+        return v instanceof PlayerEntity && players.getValue() || entities.getValue();
     }
 
     @Override

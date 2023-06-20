@@ -7,10 +7,11 @@ package coffee.client.mixin.screen;
 
 import coffee.client.feature.module.ModuleRegistry;
 import coffee.client.feature.module.impl.world.AutoSign;
+import net.minecraft.block.entity.SignText;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.AbstractSignEditScreen;
 import net.minecraft.text.Text;
-import org.spongepowered.asm.mixin.Final;
+import net.minecraft.util.DyeColor;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Shadow;
@@ -18,13 +19,14 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Arrays;
+
 @Mixin(AbstractSignEditScreen.class)
 public abstract class SignEditScreenMixin extends Screen {
 
     @Mutable
     @Shadow
-    @Final
-    protected String[] text;
+    private SignText text;
 
     protected SignEditScreenMixin(Text title) {
         super(title);
@@ -36,7 +38,8 @@ public abstract class SignEditScreenMixin extends Screen {
     @Inject(at = @At("HEAD"), method = "init")
     private void coffee_preInit(CallbackInfo ci) {
         if (ModuleRegistry.getByClass(AutoSign.class).isEnabled()) {
-            text = ModuleRegistry.getByClass(AutoSign.class).getText();
+            Text[] array = Arrays.stream(ModuleRegistry.getByClass(AutoSign.class).getText()).map(Text::of).toArray(Text[]::new);
+            text = new SignText(array, array, DyeColor.BLACK, false);
             finishEditing();
         }
     }

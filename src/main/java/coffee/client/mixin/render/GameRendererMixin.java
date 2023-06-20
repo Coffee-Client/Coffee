@@ -25,6 +25,7 @@ import coffee.client.helper.util.Rotations;
 import coffee.client.helper.util.Utils;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.render.Camera;
@@ -97,8 +98,8 @@ public abstract class GameRendererMixin {
         loadProjectionMatrix(ms.peek().getPositionMatrix());
     }
 
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;renderWithTooltip(Lnet/minecraft/client/util/math/MatrixStack;IIF)V"))
-    void coffee_msaaScreenRender(Screen instance, MatrixStack matrices, int mouseX, int mouseY, float delta) {
+    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;renderWithTooltip(Lnet/minecraft/client/gui/DrawContext;IIF)V"))
+    void coffee_msaaScreenRender(Screen instance, DrawContext context, int mouseX, int mouseY, float delta) {
         boolean shouldMsaa = false;
         for (Element child : instance.children()) {
             if (child instanceof DoesMSAA) {
@@ -107,9 +108,9 @@ public abstract class GameRendererMixin {
             }
         }
         if (shouldMsaa && !(instance instanceof ClientScreen)) { // only do msaa if we dont already do it and need it
-            MSAAFramebuffer.use(() -> instance.render(matrices, mouseX, mouseY, delta));
+            MSAAFramebuffer.use(() -> instance.render(context, mouseX, mouseY, delta));
         } else {
-            instance.render(matrices, mouseX, mouseY, delta);
+            instance.render(context, mouseX, mouseY, delta);
         }
     }
 
@@ -126,7 +127,6 @@ public abstract class GameRendererMixin {
 
             NotificationRenderer.render();
         });
-        //        Events.fireEvent(EventType.HUD_RENDER_NOMSAA, new NonCancellableEvent());
     }
 
     @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;raycast(DFZ)Lnet/minecraft/util/hit/HitResult;"), method = "updateTargetedEntity", require = 0)
@@ -135,7 +135,7 @@ public abstract class GameRendererMixin {
             Vec3d vec3d = instance.getCameraPosVec(tickDelta);
             Vec3d vec3d2 = Utils.Math.getRotationVector(Rotations.getClientPitch(), Rotations.getClientYaw());
             Vec3d vec3d3 = vec3d.add(vec3d2.x * maxDistance, vec3d2.y * maxDistance, vec3d2.z * maxDistance);
-            return instance.world.raycast(new RaycastContext(
+            return instance.getWorld().raycast(new RaycastContext(
                 vec3d,
                 vec3d3,
                 RaycastContext.ShapeType.OUTLINE,

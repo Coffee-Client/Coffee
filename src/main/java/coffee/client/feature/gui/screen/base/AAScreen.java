@@ -12,6 +12,7 @@ import coffee.client.feature.gui.element.Element;
 import coffee.client.helper.render.Cursor;
 import coffee.client.helper.render.MSAAFramebuffer;
 import lombok.Getter;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
@@ -19,6 +20,7 @@ import net.minecraft.text.Text;
 import org.apache.commons.lang3.NotImplementedException;
 import org.lwjgl.glfw.GLFW;
 
+import java.awt.image.renderable.RenderContext;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Function;
 
@@ -158,15 +160,15 @@ public class AAScreen extends Screen implements FastTickable {
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+    public void render(DrawContext matrices, int mouseX, int mouseY, float delta) {
         if (samples != -1) {
             if (!MSAAFramebuffer.framebufferInUse()) {
-                MSAAFramebuffer.use(() -> renderInternal(matrices, mouseX, mouseY, delta));
+                MSAAFramebuffer.use(() -> renderInternal(matrices.getMatrices(), mouseX, mouseY, delta));
             } else {
-                renderInternal(matrices, mouseX, mouseY, delta);
+                renderInternal(matrices.getMatrices(), mouseX, mouseY, delta);
             }
         } else {
-            renderInternal(matrices, mouseX, mouseY, delta);
+            renderInternal(matrices.getMatrices(), mouseX, mouseY, delta);
         }
     }
 }

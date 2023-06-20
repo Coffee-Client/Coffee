@@ -52,7 +52,7 @@ public class ColorSetting extends SettingBase<Color> {
         this.setValue(new Color(stream.readInt()));
     }
 
-    public static class Builder extends SettingBase.Builder<coffee.client.feature.config.ColorSetting.Builder, Color, ColorSetting> {
+    public static class Builder extends SettingBase.Builder<ColorSetting.Builder, Color, ColorSetting> {
 
         public Builder(Color defaultValue) {
             super(defaultValue);

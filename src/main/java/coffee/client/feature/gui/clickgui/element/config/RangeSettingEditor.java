@@ -50,7 +50,7 @@ public class RangeSettingEditor extends SettingEditor<RangeSetting> {
     void handleClickA(double translated) {
         double cumMin = Math.min(configValue.getMin(), configValue.getMin1());
         double cumMax = Math.max(configValue.getMax(), configValue.getMax1());
-        double perIn = MathHelper.clamp(translated / (getWidth()), 0, 1);
+        double perIn = MathHelper.clamp(translated / getWidth(), 0, 1);
         double v = MathHelper.lerp(perIn, cumMin, cumMax);
         double b = configValue.getValue().getMax();
         double p = Utils.Math.roundToDecimal(v, configValue.getPrecision());
@@ -65,7 +65,7 @@ public class RangeSettingEditor extends SettingEditor<RangeSetting> {
     void handleClickB(double translated) {
         double cumMin = Math.min(configValue.getMin(), configValue.getMin1());
         double cumMax = Math.max(configValue.getMax(), configValue.getMax1());
-        double perIn = MathHelper.clamp(translated / (getWidth()), 0, 1);
+        double perIn = MathHelper.clamp(translated / getWidth(), 0, 1);
         double v = MathHelper.lerp(perIn, cumMin, cumMax);
         double a = configValue.getValue().getMin();
         double p = Utils.Math.roundToDecimal(v, configValue.getPrecision());

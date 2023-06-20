@@ -8,6 +8,7 @@ package coffee.client.feature.module.impl.render;
 import coffee.client.CoffeeMain;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
+import coffee.client.helper.event.impl.PacketEvent;
 import coffee.client.helper.font.FontRenderers;
 import coffee.client.helper.render.Renderer;
 import coffee.client.helper.util.Utils;
@@ -56,7 +57,7 @@ public class ShowTntPrime extends Module {
 
         RenderSystem.setShader(GameRenderer::getPositionColorProgram);
         bufferBuilder.begin(VertexFormat.DrawMode.TRIANGLE_STRIP, VertexFormats.POSITION_COLOR);
-        for (double r = 0; r < toRad1; r += Math.min(360 / segments1, (toRad1 - r))) {
+        for (double r = 0; r < toRad1; r += Math.min(360 / segments1, toRad1 - r)) {
             double rad1 = Math.toRadians(r);
             double sin = Math.sin(rad1);
             double cos = Math.cos(rad1);
@@ -73,7 +74,7 @@ public class ShowTntPrime extends Module {
     }
 
     @MessageSubscription
-    void onA(coffee.client.helper.event.impl.PacketEvent.Received pe) {
+    void onA(PacketEvent.Received pe) {
         if (pe.getPacket() instanceof EntityTrackerUpdateS2CPacket p && CoffeeMain.client.world != null) {
             Entity e = CoffeeMain.client.world.getEntityById(p.id());
             if (e == null) {
@@ -109,7 +110,7 @@ public class ShowTntPrime extends Module {
 
     @Override
     public String getContext() {
-        return (String.valueOf(i2iamp.size()));
+        return String.valueOf(i2iamp.size());
     }
 
     @Override
@@ -144,7 +145,7 @@ public class ShowTntPrime extends Module {
             .drawString(
                 nothing,
                 txt,
-                root.x + cWidth / 2d - (FontRenderers.getRenderer().getStringWidth(txt)) / 2d,
+                root.x + cWidth / 2d - FontRenderers.getRenderer().getStringWidth(txt) / 2d,
                 root.y + cHeight / 2d - FontRenderers.getRenderer().getMarginHeight() / 2d,
                 0xFFFFFF
             );

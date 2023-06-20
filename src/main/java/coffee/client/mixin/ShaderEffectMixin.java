@@ -32,12 +32,12 @@ public class ShaderEffectMixin implements ShaderEffectDuck {
     private List<PostEffectPass> passes;
 
     @Override
-    public List<PostEffectPass> getPasses() {
+    public List<PostEffectPass> coffee_getPasses() {
         return passes;
     }
 
     @Override
-    public void addFakeTarget(String name, Framebuffer buffer) {
+    public void coffee_addFakeTarget(String name, Framebuffer buffer) {
         Framebuffer previousFramebuffer = this.targetsByName.get(name);
         if (previousFramebuffer == buffer) {
             return; // no need to do anything

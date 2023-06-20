@@ -10,6 +10,7 @@ import coffee.client.feature.module.ModuleRegistry;
 import coffee.client.feature.module.impl.render.FreeLook;
 import coffee.client.helper.Rotation;
 import coffee.client.helper.event.EventSystem;
+import coffee.client.helper.event.impl.PacketEvent;
 import lombok.Getter;
 import me.x150.jmessenger.MessageSubscription;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
@@ -35,7 +36,7 @@ public class Rotations {
         EventSystem.manager.registerSubscribers(new Object() {
             @MessageSubscription(priority = 1000)
                 // call latest
-            void onPacketSend(coffee.client.helper.event.impl.PacketEvent.Sent event) {
+            void onPacketSend(PacketEvent.Sent event) {
                 if (event.getPacket() instanceof PlayerMoveC2SPacket packet) {
                     clientYaw = packet.getYaw(clientYaw);
                     clientPitch = packet.getPitch(clientPitch);
@@ -47,7 +48,7 @@ public class Rotations {
 
             @MessageSubscription(priority = -1000)
                 // call first
-            void onPacketRecv(coffee.client.helper.event.impl.PacketEvent.Received pe) {
+            void onPacketRecv(PacketEvent.Received pe) {
                 if (pe.getPacket() instanceof PlayerPositionLookS2CPacket p) {
                     clientYaw = p.getYaw();
                     clientPitch = p.getPitch();
@@ -107,7 +108,7 @@ public class Rotations {
         delta = MathHelper.wrapDegrees(required - clientYaw);
         speed = Math.abs(delta / laziness);
         add = speed * (delta >= 0 ? 1 : -1);
-        if ((add >= 0 && add > delta) || (add < 0 && add < delta)) {
+        if (add >= 0 && add > delta || add < 0 && add < delta) {
             add = delta;
         }
         setClientYaw(clientYaw + (float) add);
@@ -117,7 +118,7 @@ public class Rotations {
         delta = MathHelper.wrapDegrees(required - clientPitch);
         speed = Math.abs(delta / laziness);
         add = speed * (delta >= 0 ? 1 : -1);
-        if ((add >= 0 && add > delta) || (add < 0 && add < delta)) {
+        if (add >= 0 && add > delta || add < 0 && add < delta) {
             add = delta;
         }
         setClientPitch(clientPitch + (float) add);
@@ -129,7 +130,7 @@ public class Rotations {
         delta = MathHelper.wrapDegrees(yaw - CoffeeMain.client.player.getYaw());
         speed = Math.abs(delta / laziness);
         add = speed * (delta >= 0 ? 1 : -1);
-        if ((add >= 0 && add > delta) || (add < 0 && add < delta)) {
+        if (add >= 0 && add > delta || add < 0 && add < delta) {
             add = delta;
         }
         CoffeeMain.client.player.setYaw(CoffeeMain.client.player.getYaw() + (float) add);
@@ -138,7 +139,7 @@ public class Rotations {
         delta = MathHelper.wrapDegrees(pitch - CoffeeMain.client.player.getPitch());
         speed = Math.abs(delta / laziness);
         add = speed * (delta >= 0 ? 1 : -1);
-        if ((add >= 0 && add > delta) || (add < 0 && add < delta)) {
+        if (add >= 0 && add > delta || add < 0 && add < delta) {
             add = delta;
         }
         CoffeeMain.client.player.setPitch(CoffeeMain.client.player.getPitch() + (float) add);
@@ -159,26 +160,26 @@ public class Rotations {
             delta = MathHelper.wrapDegrees(required - fl.newyaw);
             speed = Math.abs(delta / laziness);
             add = speed * (delta >= 0 ? 1 : -1);
-            if ((add >= 0 && add > delta) || (add < 0 && add < delta)) {
+            if (add >= 0 && add > delta || add < 0 && add < delta) {
                 add = delta;
             }
-            fl.newyaw = (fl.newyaw + (float) add);
+            fl.newyaw = fl.newyaw + (float) add;
 
             // setting pitch
             required = degTan;
             delta = MathHelper.wrapDegrees(required - fl.newpitch);
             speed = Math.abs(delta / laziness);
             add = speed * (delta >= 0 ? 1 : -1);
-            if ((add >= 0 && add > delta) || (add < 0 && add < delta)) {
+            if (add >= 0 && add > delta || add < 0 && add < delta) {
                 add = delta;
             }
-            fl.newpitch = (fl.newpitch + (float) add);
+            fl.newpitch = fl.newpitch + (float) add;
         } else {
             // setting yaw
             delta = MathHelper.wrapDegrees(required - CoffeeMain.client.player.getYaw());
             speed = Math.abs(delta / laziness);
             add = speed * (delta >= 0 ? 1 : -1);
-            if ((add >= 0 && add > delta) || (add < 0 && add < delta)) {
+            if (add >= 0 && add > delta || add < 0 && add < delta) {
                 add = delta;
             }
             CoffeeMain.client.player.setYaw(CoffeeMain.client.player.getYaw() + (float) add);
@@ -188,7 +189,7 @@ public class Rotations {
             delta = MathHelper.wrapDegrees(required - CoffeeMain.client.player.getPitch());
             speed = Math.abs(delta / laziness);
             add = speed * (delta >= 0 ? 1 : -1);
-            if ((add >= 0 && add > delta) || (add < 0 && add < delta)) {
+            if (add >= 0 && add > delta || add < 0 && add < delta) {
                 add = delta;
             }
             CoffeeMain.client.player.setPitch(CoffeeMain.client.player.getPitch() + (float) add);
@@ -214,7 +215,7 @@ public class Rotations {
         double vec = 57.2957763671875;
         Vec3d target = targetV3.subtract(eyePos);
         double square = Math.sqrt(target.x * target.x + target.z * target.z);
-        float pitch = MathHelper.wrapDegrees((float) (-(MathHelper.atan2(target.y, square) * vec)));
+        float pitch = MathHelper.wrapDegrees((float) -(MathHelper.atan2(target.y, square) * vec));
         float yaw = MathHelper.wrapDegrees((float) (MathHelper.atan2(target.z, target.x) * vec) - 90.0F);
         return new Rotation(pitch, yaw);
     }

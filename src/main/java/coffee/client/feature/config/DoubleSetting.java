@@ -65,7 +65,7 @@ public class DoubleSetting extends SettingBase<Double> {
         super.setValue(value);
     }
 
-    public static class Builder extends SettingBase.Builder<coffee.client.feature.config.DoubleSetting.Builder, Double, DoubleSetting> {
+    public static class Builder extends SettingBase.Builder<DoubleSetting.Builder, Double, DoubleSetting> {
         double min = Double.NEGATIVE_INFINITY, max = Double.POSITIVE_INFINITY;
         int precision = 2;
 
@@ -73,17 +73,17 @@ public class DoubleSetting extends SettingBase<Double> {
             super(defaultValue);
         }
 
-        public coffee.client.feature.config.DoubleSetting.Builder precision(int precision) {
+        public DoubleSetting.Builder precision(int precision) {
             this.precision = precision;
             return this;
         }
 
-        public coffee.client.feature.config.DoubleSetting.Builder min(double min) {
+        public DoubleSetting.Builder min(double min) {
             this.min = min;
             return this;
         }
 
-        public coffee.client.feature.config.DoubleSetting.Builder max(double max) {
+        public DoubleSetting.Builder max(double max) {
             this.max = max;
             return this;
         }

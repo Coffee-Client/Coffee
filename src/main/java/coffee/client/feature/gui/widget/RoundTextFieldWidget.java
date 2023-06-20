@@ -14,6 +14,7 @@ import coffee.client.helper.render.Cursor;
 import coffee.client.helper.render.Rectangle;
 import coffee.client.helper.render.Renderer;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
@@ -146,7 +147,7 @@ public class RoundTextFieldWidget implements Element, Drawable, Selectable, Does
             if (cursor > 0 && cursor == selectionStart && cursor == selectionEnd) {
                 String preText = text;
 
-                int count = (mods == isCtrlPressed) ? cursor : (mods == (SystemUtils.IS_OS_WINDOWS ? GLFW.GLFW_MOD_CONTROL : GLFW.GLFW_MOD_ALT)) ? countToNextSpace(true) : 1;
+                int count = mods == isCtrlPressed ? cursor : mods == (SystemUtils.IS_OS_WINDOWS ? GLFW.GLFW_MOD_CONTROL : GLFW.GLFW_MOD_ALT) ? countToNextSpace(true) : 1;
 
                 text = text.substring(0, cursor - count) + text.substring(cursor);
                 cursor -= count;
@@ -167,7 +168,7 @@ public class RoundTextFieldWidget implements Element, Drawable, Selectable, Does
                     if (cursor == selectionStart && cursor == selectionEnd) {
                         String preText = text;
 
-                        int count = ctrl ? text.length() - cursor : (mods == (SystemUtils.IS_OS_WINDOWS ? GLFW.GLFW_MOD_CONTROL : GLFW.GLFW_MOD_ALT)) ? countToNextSpace(
+                        int count = ctrl ? text.length() - cursor : mods == (SystemUtils.IS_OS_WINDOWS ? GLFW.GLFW_MOD_CONTROL : GLFW.GLFW_MOD_ALT) ? countToNextSpace(
                             false) : 1;
 
                         text = text.substring(0, cursor) + text.substring(cursor + count);
@@ -351,7 +352,8 @@ public class RoundTextFieldWidget implements Element, Drawable, Selectable, Does
     }
 
     @Override
-    public void render(MatrixStack stack, int mouseX, int mouseY, float delta) {
+    public void render(DrawContext stack1, int mouseX, int mouseY, float delta) {
+        MatrixStack stack = stack1.getMatrices();
         mouseOver = inBounds(mouseX, mouseY);
         double pad = 2;
         double overflowWidth = getOverflowWidthForRender();
@@ -362,9 +364,9 @@ public class RoundTextFieldWidget implements Element, Drawable, Selectable, Does
         ClipStack.globalInstance.addWindow(stack, new Rectangle(x + pad, y, x + width - pad, y + height));
         // Text content
         if (!text.isEmpty()) {
-            FontRenderers.getRenderer().drawString(stack, text, (float) (x + pad - overflowWidth), (float) (centerY), 0xFFFFFF, false);
+            FontRenderers.getRenderer().drawString(stack, text, (float) (x + pad - overflowWidth), (float) centerY, 0xFFFFFF, false);
         } else {
-            FontRenderers.getRenderer().drawString(stack, suggestion, (float) (x + pad - overflowWidth), (float) (centerY), 0xAAAAAA, false);
+            FontRenderers.getRenderer().drawString(stack, suggestion, (float) (x + pad - overflowWidth), (float) centerY, 0xAAAAAA, false);
         }
 
         // Text highlighting

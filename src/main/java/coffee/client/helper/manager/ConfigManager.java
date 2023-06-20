@@ -107,7 +107,6 @@ public class ConfigManager {
             CoffeeMain.log(Level.ERROR, "Failed to save config!");
         }
         EventSystem.manager.send(new ConfigSaveEvent());
-        //        Events.fireEvent(EventType.CONFIG_SAVE, new NonCancellableEvent());
     }
 
     /**

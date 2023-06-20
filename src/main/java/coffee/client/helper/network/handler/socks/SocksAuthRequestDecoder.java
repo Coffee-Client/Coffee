@@ -26,27 +26,24 @@ public class SocksAuthRequestDecoder extends ReplayingDecoder<SocksAuthRequestDe
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf byteBuf, List<Object> out) {
         switch (state()) {
-            case CHECK_PROTOCOL_VERSION: {
+            case CHECK_PROTOCOL_VERSION:
                 if (byteBuf.readByte() != SocksSubnegotiationVersion.AUTH_PASSWORD.byteValue()) {
                     out.add(SocksCommonUtils.UNKNOWN_SOCKS_REQUEST);
                     break;
                 }
                 checkpoint(State.READ_USERNAME);
-            }
             case READ_USERNAME: {
                 int fieldLength = byteBuf.readByte();
                 username = SocksCommonUtils.readUsAscii(byteBuf, fieldLength);
                 checkpoint(State.READ_PASSWORD);
             }
-            case READ_PASSWORD: {
+            case READ_PASSWORD:
                 int fieldLength = byteBuf.readByte();
                 String password = SocksCommonUtils.readUsAscii(byteBuf, fieldLength);
                 out.add(new SocksAuthRequest(username, password));
                 break;
-            }
-            default: {
+            default:
                 throw new Error();
-            }
         }
         ctx.pipeline().remove(this);
     }

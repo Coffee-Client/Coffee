@@ -27,7 +27,6 @@ public class Shader {
 
     @SneakyThrows
     private Shader(Identifier ident, Consumer<Shader> init) {
-        //        this.effect = ShaderEffectManager.getInstance().manage(ident, init);
         this.shader = new PostEffectProcessor(CoffeeMain.client.getTextureManager(), CoffeeMain.client.getResourceManager(), CoffeeMain.client.getFramebuffer(), ident);
         checkUpdateDimensions();
         init.accept(this);
@@ -48,7 +47,7 @@ public class Shader {
     }
 
     public void setUniformf(String name, float value) {
-        List<PostEffectPass> passes = ((ShaderEffectDuck) shader).getPasses();
+        List<PostEffectPass> passes = ((ShaderEffectDuck) shader).coffee_getPasses();
         passes.stream().map(postEffectPass -> postEffectPass.getProgram().getUniformByName(name)).filter(Objects::nonNull).forEach(glUniform -> glUniform.set(value));
     }
 

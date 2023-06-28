@@ -17,7 +17,12 @@ A very based 1.20 build with some of the best visuals currently on the market.
 2. Drag `latest-dev.jar` into your mods folder
 3. Launch Minecraft with your Fabric launcher profile
 
-## How to get a release from a dev build
+## How to get a release from a dev build (without Github Account)
+https://nightly.link/Coffee-Client/Coffee/workflows/gradle/master/latest-dev.zip
+
+or you can download it directly from Github using the method below (Github Account needed)
+
+## How to get a release from a dev build (directly with Github)
 1. Click the "Actions" tab
    ![grafik](https://user-images.githubusercontent.com/99053360/185212546-648c489e-f114-4698-9e8a-5c5edbe14a3f.png)
 2. Click the latest entry
@@ -25,10 +30,7 @@ A very based 1.20 build with some of the best visuals currently on the market.
 3. Click on the "latest-dev.jar" artifact and download it
    ![grafik](https://user-images.githubusercontent.com/99053360/185212721-ca33a534-d563-4290-a042-515381664a73.png)
 
-Note that you have to be logged in to download artifacts or you can download it from nightly.link directly down below.
-
-## Dev Build without Github Account
-https://nightly.link/Coffee-Client/Coffee/workflows/gradle/master/latest-dev.zip
+Note that you have to be logged in to download artifacts or you can download it from nightly.link using the link from the above section.
 
 ## Using
 The ClickGUI is **not** bound by default. To bind it, run `.bind ClickGUI` and press the desired hotkey to bind to.

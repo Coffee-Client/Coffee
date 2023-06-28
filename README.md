@@ -1,5 +1,5 @@
 # Coffee Client
-A very based 1.19.3 build with some of the best visuals currently on the market.
+A very based 1.20 build with some of the best visuals currently on the market.
 
 ![](https://komarev.com/ghpvc/?username=Coffee-Client&style=for-the-badge&label=Views)
 

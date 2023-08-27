@@ -41,7 +41,7 @@ public class ItemStackMixin {
     }
 
     // these 2 look incredibly fucked but they work
-    @Redirect(method = "getTooltip", at = @At(value = "INVOKE", target = "Lcom/google/common/collect/Multimap;entries()Ljava/util/Collection;"))
+    @Redirect(method = "getTooltip", at = @At(value = "INVOKE", target = "Lcom/google/common/collect/Multimap;entries()Ljava/util/Collection;", remap = false))
     Collection<Map.Entry<EntityAttribute, EntityAttributeModifier>> coffee_limitCollectionLength(Multimap<EntityAttribute, EntityAttributeModifier> instance) {
         Collection<Map.Entry<EntityAttribute, EntityAttributeModifier>> normalEntries = instance.entries();
         if (AntiCrash.instance().isEnabled() && AntiCrash.instance().getCapAttributes().getValue()) {
@@ -55,7 +55,7 @@ public class ItemStackMixin {
         return normalEntries;
     }
 
-    @Inject(method = "getTooltip", at = @At(value = "INVOKE", target = "Lcom/google/common/collect/Multimap;entries()Ljava/util/Collection;", shift = At.Shift.AFTER),
+    @Inject(method = "getTooltip", at = @At(value = "INVOKE", target = "Lcom/google/common/collect/Multimap;entries()Ljava/util/Collection;", shift = At.Shift.AFTER, remap = false),
             locals = LocalCapture.CAPTURE_FAILEXCEPTION)
     void coffee_addOmittedTooltip(@Nullable PlayerEntity player, TooltipContext context, CallbackInfoReturnable<List<Text>> cir, List<Text> list) {
         if (omitted != 0) {

@@ -53,7 +53,7 @@ public class WorldRendererMixin {
         }
     }
 
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lit/unimi/dsi/fastutil/longs/Long2ObjectMap;long2ObjectEntrySet()Lit/unimi/dsi/fastutil/objects/ObjectSet;"))
+    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lit/unimi/dsi/fastutil/longs/Long2ObjectMap;long2ObjectEntrySet()Lit/unimi/dsi/fastutil/objects/ObjectSet;", remap = false))
     ObjectSet<Long2ObjectMap.Entry<SortedSet<BlockBreakingInfo>>> coffee_highlightBlocks(Long2ObjectMap<SortedSet<BlockBreakingInfo>> instance, MatrixStack matrices) {
         BlockHighlighting bbr = ModuleRegistry.getByClass(BlockHighlighting.class);
         if (bbr.isEnabled()) {

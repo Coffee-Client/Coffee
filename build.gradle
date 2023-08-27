@@ -23,10 +23,11 @@ repositories {
 	}
 	maven {
 		name = 'Ladysnake Mods'
-		url = 'https://ladysnake.jfrog.io/artifactory/mods'
+		url = 'https://maven.ladysnake.org/releases'
 		content {
 			includeGroup 'io.github.ladysnake'
-			includeGroupByRegex 'io\\.github\\.onyxstudios.*'
+			includeGroup 'org.ladysnake'
+			includeGroupByRegex 'dev\\.onyxstudios.*'
 		}
 	}
 	maven { url 'https://jitpack.io' }
@@ -55,7 +56,7 @@ dependencies {
 	]
 	// Add each module we need
 	apiModules.forEach {
-		modImpl(fabricApi.module(it, project.fabric_api_version))
+		modImpl(fabricApi.module(it, project.fabric_version))
 	}
 
 	// 3rd party
@@ -63,7 +64,7 @@ dependencies {
 	libImpl(name: "NetMC-1.0.1")
 	libImpl(project(":Authlib"))
 	libImpl(project(":Eventlib"))
-	modImpl("com.github.0x3C50:Renderer:master-SNAPSHOT")
+	modImpl("com.github.0x3C50:Renderer:2273f5e562")
 
 //	modImpl(group: "io.github.ladysnake", name: "satin", version: "1.9.0") {
 //		transitive = false

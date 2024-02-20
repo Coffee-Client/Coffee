@@ -56,9 +56,15 @@ public class AimAssist extends Module {
         .description("Where to aim")
         .get());
     final DoubleSetting aimHeight = this.config.create(new DoubleSetting.Builder(1).name("Aim Height")
-        .description("Where to aim (in %)")
+        .description("Where to aim (% of height)")
         .min(0.1)
         .max(100)
+        .precision(1)
+        .get());
+    final DoubleSetting range = this.config.create(new DoubleSetting.Builder(3).name("Range")
+        .description("How far away an entity has to be to aim at it")
+        .min(1)
+        .max(10)
         .precision(1)
         .get());
     final EnumSetting<PriorityMode> priority = this.config.create(new EnumSetting.Builder<>(PriorityMode.Distance).name("Priority")
@@ -74,11 +80,11 @@ public class AimAssist extends Module {
         .description("Whether or not to aim instantly instead of smoothly")
         .get());
     final BooleanSetting aimRandom = this.config.create(new BooleanSetting.Builder(false).name("Aim random")
-        .description("Whether or not the laziness should have randomness")
+        .description("Whether or not to randomize speed when aiming")
         .get());
     RangeSetting.Range defaultValue = new RangeSetting.Range(1, 100);
     final RangeSetting aimRandomness = this.config.create(new RangeSetting.Builder(defaultValue).name("Randomness")
-        .description("The amount of randomness the lazyness should have")
+        .description("How strongly to affect the speed when randomizing")
         .lowerMin(1)
         .lowerMax(100)
         .upperMin(1)
@@ -118,7 +124,7 @@ public class AimAssist extends Module {
                 if (!entity.isAlive()) {
                     continue;
                 }
-                if (entity.getPos().distanceTo(CoffeeMain.client.player.getPos()) > Objects.requireNonNull(CoffeeMain.client.interactionManager).getReachDistance()) {
+                if (entity.getPos().distanceTo(CoffeeMain.client.player.getPos()) > range.getValue()) {
                     continue;
                 }
                 boolean checked = false;
@@ -190,99 +196,63 @@ public class AimAssist extends Module {
     }
 
     void aimAtTarget() {
-        if (aimRandom.getValue())
-        {
-            double randomOffset = ThreadLocalRandom.current().nextDouble(aimRandomness.getValue().getMin(), aimRandomness.getValue().getMax());
-            double modifiedLaziness = laziness.getValue() + (randomOffset * 2);
 
-            if (!aimInstant.getValue()) {
-                if(aimMode.getValue() == AimMode.Top)
-                {
-                    Rotations.lookAtPositionSmooth(le.getPos().add(0, (le.getHeight() / 1.3d), 0), (float) (modifiedLaziness));
-                }
-                if(aimMode.getValue() == AimMode.Middle)
-                {
-                    Rotations.lookAtPositionSmooth(le.getPos().add(0, (le.getHeight() / 2d), 0), (float) (modifiedLaziness));
-                }
-                else if(aimMode.getValue() == AimMode.Bottom)
-                {
-                    Rotations.lookAtPositionSmooth(le.getPos().add(0, (le.getHeight() / 4d), 0), (float) (modifiedLaziness));
-                }
-                else if(aimMode.getValue() == AimMode.Custom)
-                {
-                    Rotations.lookAtPositionSmooth(le.getPos().add(0, (le.getHeight() / 100) * aimHeight.getValue(), 0), (float) (modifiedLaziness));
-                }
-            } else {
-                if(aimMode.getValue() == AimMode.Top)
-                {
-                    Rotation py = Rotations.getPitchYaw(le.getPos().add(0, (le.getHeight() / 1.3d), 0));
-                    Objects.requireNonNull(CoffeeMain.client.player).setPitch(py.getPitch());
-                    CoffeeMain.client.player.setYaw(py.getYaw());
-                }
-                else if(aimMode.getValue() == AimMode.Middle)
-                {
-                    Rotation py = Rotations.getPitchYaw(le.getPos().add(0, (le.getHeight() / 2d), 0));
-                    Objects.requireNonNull(CoffeeMain.client.player).setPitch(py.getPitch());
-                    CoffeeMain.client.player.setYaw(py.getYaw());
-                }
-                else if(aimMode.getValue() == AimMode.Bottom)
-                {
-                    Rotation py = Rotations.getPitchYaw(le.getPos().add(0, (le.getHeight() / 4d), 0));
-                    Objects.requireNonNull(CoffeeMain.client.player).setPitch(py.getPitch());
-                    CoffeeMain.client.player.setYaw(py.getYaw());
-                }
-                else if(aimMode.getValue() == AimMode.Custom)
-                {
-                    Rotation py = Rotations.getPitchYaw(le.getPos().add(0, (le.getHeight() / 100) * aimHeight.getValue(), 0));
-                    Objects.requireNonNull(CoffeeMain.client.player).setPitch(py.getPitch());
-                    CoffeeMain.client.player.setYaw(py.getYaw());
-                }
-            }
+        double modifiedLaziness = laziness.getValue() + 0;
+        if (aimRandom.getValue()) {
+            double randomOffset = ThreadLocalRandom.current().nextDouble(aimRandomness.getValue().getMin(), aimRandomness.getValue().getMax());
+            modifiedLaziness = laziness.getValue() + (randomOffset * 2);
         }
-        else if (!aimRandom.getValue())
-        {
-            if (!aimInstant.getValue()) {
-                if(aimMode.getValue() == AimMode.Top)
-                {
-                    Rotations.lookAtPositionSmooth(le.getPos().add(0, (le.getHeight() / 1.3d), 0), (float) (laziness.getValue() + 0));
-                }
-                if(aimMode.getValue() == AimMode.Middle)
-                {
-                    Rotations.lookAtPositionSmooth(le.getPos().add(0, (le.getHeight() / 2d), 0), (float) (laziness.getValue() + 0));
-                }
-                else if(aimMode.getValue() == AimMode.Bottom)
-                {
-                    Rotations.lookAtPositionSmooth(le.getPos().add(0, (le.getHeight() / 4d), 0), (float) (laziness.getValue() + 0));
-                }
-                else if(aimMode.getValue() == AimMode.Bottom)
-                {
-                    Rotations.lookAtPositionSmooth(le.getPos().add(0, (le.getHeight() / 100) * aimHeight.getValue(), 0), (float) (laziness.getValue() + 0));
-                }
-            } else {
-                if(aimMode.getValue() == AimMode.Top)
-                {
-                    Rotation py = Rotations.getPitchYaw(le.getPos().add(0, (le.getHeight() / 1.3d), 0));
-                    Objects.requireNonNull(CoffeeMain.client.player).setPitch(py.getPitch());
-                    CoffeeMain.client.player.setYaw(py.getYaw());
-                }
-                else if(aimMode.getValue() == AimMode.Middle)
-                {
-                    Rotation py = Rotations.getPitchYaw(le.getPos().add(0, le.getHeight() / 2d, 0));
-                    Objects.requireNonNull(CoffeeMain.client.player).setPitch(py.getPitch());
-                    CoffeeMain.client.player.setYaw(py.getYaw());
-                }
-                else if(aimMode.getValue() == AimMode.Bottom)
-                {
-                    Rotation py = Rotations.getPitchYaw(le.getPos().add(0, le.getHeight() / 4d, 0));
-                    Objects.requireNonNull(CoffeeMain.client.player).setPitch(py.getPitch());
-                    CoffeeMain.client.player.setYaw(py.getYaw());
-                }
-                else if(aimMode.getValue() == AimMode.Custom)
-                {
-                    Rotation py = Rotations.getPitchYaw(le.getPos().add(0, (le.getHeight() / 100) * aimHeight.getValue(), 0));
-                    Objects.requireNonNull(CoffeeMain.client.player).setPitch(py.getPitch());
-                    CoffeeMain.client.player.setYaw(py.getYaw());
-                }
+        if (!aimInstant.getValue()) {
+            if(aimMode.getValue() == AimMode.Top)
+            {
+                Rotations.lookAtPositionSmooth(le.getPos().add(0, (le.getHeight() / 1.3d), 0), (float) (modifiedLaziness));
+            }
+            if(aimMode.getValue() == AimMode.Middle)
+            {
+                Rotations.lookAtPositionSmooth(le.getPos().add(0, (le.getHeight() / 2d), 0), (float) (modifiedLaziness));
+            }
+            else if(aimMode.getValue() == AimMode.Bottom)
+            {
+                Rotations.lookAtPositionSmooth(le.getPos().add(0, (le.getHeight() / 4d), 0), (float) (modifiedLaziness));
+            }
+            else if(aimMode.getValue() == AimMode.Custom)
+            {
+                Rotations.lookAtPositionSmooth(le.getPos().add(0, (le.getHeight() / 100) * aimHeight.getValue(), 0), (float) (modifiedLaziness));
+            }
+            else if (aimMode.getValue() == AimMode.Eyes)
+            {
+                Rotations.lookAtPositionSmooth(le.getEyePos(), (float) (modifiedLaziness));
+            }
+        } else {
+            if(aimMode.getValue() == AimMode.Top)
+            {
+                Rotation py = Rotations.getPitchYaw(le.getPos().add(0, (le.getHeight() / 1.3d), 0));
+                Objects.requireNonNull(CoffeeMain.client.player).setPitch(py.getPitch());
+                CoffeeMain.client.player.setYaw(py.getYaw());
+            }
+            else if(aimMode.getValue() == AimMode.Middle)
+            {
+                Rotation py = Rotations.getPitchYaw(le.getPos().add(0, (le.getHeight() / 2d), 0));
+                Objects.requireNonNull(CoffeeMain.client.player).setPitch(py.getPitch());
+                CoffeeMain.client.player.setYaw(py.getYaw());
+            }
+            else if(aimMode.getValue() == AimMode.Bottom)
+            {
+                Rotation py = Rotations.getPitchYaw(le.getPos().add(0, (le.getHeight() / 4d), 0));
+                Objects.requireNonNull(CoffeeMain.client.player).setPitch(py.getPitch());
+                CoffeeMain.client.player.setYaw(py.getYaw());
+            }
+            else if(aimMode.getValue() == AimMode.Custom)
+            {
+                Rotation py = Rotations.getPitchYaw(le.getPos().add(0, (le.getHeight() / 100) * aimHeight.getValue(), 0));
+                Objects.requireNonNull(CoffeeMain.client.player).setPitch(py.getPitch());
+                CoffeeMain.client.player.setYaw(py.getYaw());
+            }
+            else if (aimMode.getValue() == AimMode.Eyes)
+            {
+                Rotation py = Rotations.getPitchYaw(le.getEyePos());
+                Objects.requireNonNull(CoffeeMain.client.player).setPitch(py.getPitch());
+                CoffeeMain.client.player.setYaw(py.getYaw());
             }
         }
 
@@ -307,7 +277,8 @@ public class AimAssist extends Module {
     }
 
     public enum AimMode {
-        Top, Middle, Bottom, Custom
+        Top, Middle, Bottom, Custom, Eyes
     }
 }
+
 

@@ -9,6 +9,7 @@ import coffee.client.CoffeeMain;
 import coffee.client.feature.config.BooleanSetting;
 import coffee.client.feature.config.DoubleSetting;
 import coffee.client.feature.config.EnumSetting;
+import coffee.client.feature.config.RangeSetting;
 import coffee.client.feature.module.Module;
 import coffee.client.feature.module.ModuleType;
 import coffee.client.helper.Rotation;
@@ -29,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class AimAssist extends Module {
 
@@ -50,17 +52,44 @@ public class AimAssist extends Module {
     final BooleanSetting aimAtCombatPartner = this.config.create(new BooleanSetting.Builder(true).name("Aim at combat")
         .description("Whether or not to only aim at the combat partner")
         .get());
+    final EnumSetting<AimMode> aimMode = this.config.create(new EnumSetting.Builder<>(AimMode.Top).name("Aim Mode")
+        .description("Where to aim")
+        .get());
+    final DoubleSetting aimHeight = this.config.create(new DoubleSetting.Builder(1).name("Aim Height")
+        .description("Where to aim (% of height)")
+        .min(0.1)
+        .max(100)
+        .precision(1)
+        .get());
+    final DoubleSetting range = this.config.create(new DoubleSetting.Builder(3).name("Range")
+        .description("How far away an entity has to be to aim at it")
+        .min(1)
+        .max(10)
+        .precision(1)
+        .get());
     final EnumSetting<PriorityMode> priority = this.config.create(new EnumSetting.Builder<>(PriorityMode.Distance).name("Priority")
         .description("What to prioritize when aiminig")
         .get());
     final DoubleSetting laziness = this.config.create(new DoubleSetting.Builder(1).name("Laziness")
         .description("How lazy to get when aiming")
         .min(0.1)
-        .max(5)
+        .max(100)
         .precision(1)
         .get());
     final BooleanSetting aimInstant = this.config.create(new BooleanSetting.Builder(false).name("Aim instantly")
         .description("Whether or not to aim instantly instead of smoothly")
+        .get());
+    final BooleanSetting aimRandom = this.config.create(new BooleanSetting.Builder(false).name("Aim random")
+        .description("Whether or not to randomize speed when aiming")
+        .get());
+    RangeSetting.Range defaultValue = new RangeSetting.Range(1, 100);
+    final RangeSetting aimRandomness = this.config.create(new RangeSetting.Builder(defaultValue).name("Randomness")
+        .description("How strongly to affect the speed when randomizing")
+        .lowerMin(1)
+        .lowerMax(100)
+        .upperMin(1)
+        .upperMax(100)
+        .precision(1)
         .get());
     Entity le;
 
@@ -72,6 +101,9 @@ public class AimAssist extends Module {
         attackPassive.showIf(() -> !aimAtCombatPartner.getValue());
         attackEverything.showIf(() -> !aimAtCombatPartner.getValue());
         laziness.showIf(() -> !aimInstant.getValue());
+        aimRandom.showIf(() -> !aimInstant.getValue());
+        aimHeight.showIf(() -> aimMode.getValue() == AimMode.Custom);
+
     }
 
     @Override
@@ -92,7 +124,7 @@ public class AimAssist extends Module {
                 if (!entity.isAlive()) {
                     continue;
                 }
-                if (entity.getPos().distanceTo(CoffeeMain.client.player.getPos()) > Objects.requireNonNull(CoffeeMain.client.interactionManager).getReachDistance()) {
+                if (entity.getPos().distanceTo(CoffeeMain.client.player.getPos()) > range.getValue()) {
                     continue;
                 }
                 boolean checked = false;
@@ -120,6 +152,7 @@ public class AimAssist extends Module {
                     attacks.add(entity);
                 }
             }
+
         }
         if (attacks.isEmpty()) {
             le = null;
@@ -163,13 +196,66 @@ public class AimAssist extends Module {
     }
 
     void aimAtTarget() {
-        if (!aimInstant.getValue()) {
-            Rotations.lookAtPositionSmooth(le.getPos().add(0, le.getHeight() / 2d, 0), (float) (laziness.getValue() + 0));
-        } else {
-            Rotation py = Rotations.getPitchYaw(le.getPos().add(0, le.getHeight() / 2d, 0));
-            Objects.requireNonNull(CoffeeMain.client.player).setPitch(py.getPitch());
-            CoffeeMain.client.player.setYaw(py.getYaw());
+
+        double modifiedLaziness = laziness.getValue() + 0;
+        if (aimRandom.getValue()) {
+            double randomOffset = ThreadLocalRandom.current().nextDouble(aimRandomness.getValue().getMin(), aimRandomness.getValue().getMax());
+            modifiedLaziness = laziness.getValue() + (randomOffset * 2);
         }
+        if (!aimInstant.getValue()) {
+            if(aimMode.getValue() == AimMode.Top)
+            {
+                Rotations.lookAtPositionSmooth(le.getPos().add(0, (le.getHeight() / 1.3d), 0), (float) (modifiedLaziness));
+            }
+            if(aimMode.getValue() == AimMode.Middle)
+            {
+                Rotations.lookAtPositionSmooth(le.getPos().add(0, (le.getHeight() / 2d), 0), (float) (modifiedLaziness));
+            }
+            else if(aimMode.getValue() == AimMode.Bottom)
+            {
+                Rotations.lookAtPositionSmooth(le.getPos().add(0, (le.getHeight() / 4d), 0), (float) (modifiedLaziness));
+            }
+            else if(aimMode.getValue() == AimMode.Custom)
+            {
+                Rotations.lookAtPositionSmooth(le.getPos().add(0, (le.getHeight() / 100) * aimHeight.getValue(), 0), (float) (modifiedLaziness));
+            }
+            else if (aimMode.getValue() == AimMode.Eyes)
+            {
+                Rotations.lookAtPositionSmooth(le.getEyePos(), (float) (modifiedLaziness));
+            }
+        } else {
+            if(aimMode.getValue() == AimMode.Top)
+            {
+                Rotation py = Rotations.getPitchYaw(le.getPos().add(0, (le.getHeight() / 1.3d), 0));
+                Objects.requireNonNull(CoffeeMain.client.player).setPitch(py.getPitch());
+                CoffeeMain.client.player.setYaw(py.getYaw());
+            }
+            else if(aimMode.getValue() == AimMode.Middle)
+            {
+                Rotation py = Rotations.getPitchYaw(le.getPos().add(0, (le.getHeight() / 2d), 0));
+                Objects.requireNonNull(CoffeeMain.client.player).setPitch(py.getPitch());
+                CoffeeMain.client.player.setYaw(py.getYaw());
+            }
+            else if(aimMode.getValue() == AimMode.Bottom)
+            {
+                Rotation py = Rotations.getPitchYaw(le.getPos().add(0, (le.getHeight() / 4d), 0));
+                Objects.requireNonNull(CoffeeMain.client.player).setPitch(py.getPitch());
+                CoffeeMain.client.player.setYaw(py.getYaw());
+            }
+            else if(aimMode.getValue() == AimMode.Custom)
+            {
+                Rotation py = Rotations.getPitchYaw(le.getPos().add(0, (le.getHeight() / 100) * aimHeight.getValue(), 0));
+                Objects.requireNonNull(CoffeeMain.client.player).setPitch(py.getPitch());
+                CoffeeMain.client.player.setYaw(py.getYaw());
+            }
+            else if (aimMode.getValue() == AimMode.Eyes)
+            {
+                Rotation py = Rotations.getPitchYaw(le.getEyePos());
+                Objects.requireNonNull(CoffeeMain.client.player).setPitch(py.getPitch());
+                CoffeeMain.client.player.setYaw(py.getYaw());
+            }
+        }
+
     }
 
     @Override
@@ -189,4 +275,10 @@ public class AimAssist extends Module {
     public enum PriorityMode {
         Distance, Health_ascending, Health_descending
     }
+
+    public enum AimMode {
+        Top, Middle, Bottom, Custom, Eyes
+    }
 }
+
+
